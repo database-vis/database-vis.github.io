@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>link · DVL</title>
+  <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="app-name" href="../index.html">DVL</a>
+    <nav class="sidebar-nav">
+    
+      <h2>Introduction</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../what-is-dvl.html">What is DVL?</a></li>
+        
+      
+        
+        
+        <li><a href="../getting-started.html">Getting started</a></li>
+        
+      
+        
+        
+        <li><a href="../architecture.html">Architecture</a></li>
+        
+      
+      </ul>
+    
+      <h2>Features</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#channels">Channels</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#scales">Scales</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#data">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        
+      
+      </ul>
+    
+      <h2>Marks</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../marks/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/area.html">area</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/arrow.html">arrow</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/bar.html">bar</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/cell.html">cell</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/connect.html">connect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/dot.html">dot</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/image.html">image</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/line.html">line</a></li>
+        
+      
+        
+        
+        <li class="active"><a href="../marks/link.html">link</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/path.html">path</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rect.html">rect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rule.html">rule</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/text.html">text</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/tick.html">tick</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/vector.html">vector</a></li>
+        
+      
+      </ul>
+    
+      <h2>Layouts</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../layouts/README.html">Overview</a></li>
+        
+      
+        
+        <li><strong>Produce</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/bandX.html">bandX</a></li>
+          
+            
+            <li><a href="../layouts/bandY.html">bandY</a></li>
+          
+            
+            <li><a href="../layouts/barX.html">barX</a></li>
+          
+            
+            <li><a href="../layouts/barY.html">barY</a></li>
+          
+            
+            <li><a href="../layouts/stackX.html">stackX</a></li>
+          
+            
+            <li><a href="../layouts/stackY.html">stackY</a></li>
+          
+            
+            <li><a href="../layouts/pitchX.html">pitchX</a></li>
+          
+            
+            <li><a href="../layouts/pitchY.html">pitchY</a></li>
+          
+            
+            <li><a href="../layouts/eqX.html">eqX</a></li>
+          
+            
+            <li><a href="../layouts/eqY.html">eqY</a></li>
+          
+            
+            <li><a href="../layouts/proportionalX.html">proportionalX</a></li>
+          
+            
+            <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
+          
+            
+            <li><a href="../layouts/force.html">force</a></li>
+          
+            
+            <li><a href="../layouts/treemap.html">treemap</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Refine</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Resolver</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/hull.html">hull</a></li>
+          
+          </ul>
+        </li>
+        
+      
+      </ul>
+    
+      <h2>Scales</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../scales/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/linear.html">linear</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/log.html">log</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/sqrt.html">sqrt</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/pow.html">pow</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/symlog.html">symlog</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/ordinal.html">ordinal</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/point.html">point</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/color.html">color</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/quantize.html">quantize</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/threshold.html">threshold</a></li>
+        
+      
+      </ul>
+    
+      <h2>Examples</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../examples/README.html">Gallery</a></li>
+        
+      
+      </ul>
+    
+    </nav>
+  </aside>
+
+  <header id="topbar">
+    <button class="sidebar-toggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+    <div class="topbar-spacer"></div>
+    <a class="github-link" href="https://github.com/cudbg/database-vis" target="_blank" rel="noopener" aria-label="GitHub repository">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+  </header>
+
+  <main class="content">
+    <article class="markdown-section">
+      <h1 id="link">link</h1>
+<p>The <strong>link</strong> mark draws a stroked segment from <code>(x1, y1)</code> to <code>(x2, y2)</code>. Unlike <code>rule</code> (which
+carries both endpoints on one row), a link's endpoints are almost always <strong>borrowed</strong> from other
+plots with <code>via()</code>: the position of a node in one plot becomes an endpoint here. That makes <code>link</code>
+DVL's connector primitive — the edge of a node-link diagram, the strand of a parallel-coordinates
+plot, the arc of an FK join — drawn from PLACED positions, never from coordinates computed in SQL.</p>
+<pre data-lang="dvl"><code class="lang-dvl">// FK join: each link starts at a solved dot position (borrowed via a join predicate) and
+// ends at its own coordinates.
+const highlights = db.table(&quot;penguins&quot;).top(1, { col: &quot;body_mass_g&quot;, desc: true }, { partition: [&quot;species&quot;] });
+const v = canvas(640, 460);
+const dots = v.dot(&quot;penguins&quot;, {
+  x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), fill: ordinal(&quot;species&quot;),
+}).axis(&quot;x&quot;).axis(&quot;y&quot;);
+v.link(highlights, {
+  ...dots.via(eq(&quot;highlights.species&quot;, &quot;penguins.species&quot;)).pick({ x1: &quot;x&quot;, y1: &quot;y&quot; }),
+  x2: linear(&quot;bill_length_mm&quot;), y2: linear(&quot;body_mass_g&quot;),
+  stroke: &quot;#e15759&quot;,
+});
+return v;
+</code></pre>
+<p>A scatter with a red link from each species' heaviest bird back to the corresponding dot.</p>
+<h2 id="options">Options</h2>
+<p><code>link</code> draws <code>drawSegment(&quot;x1&quot;, &quot;y1&quot;, &quot;x2&quot;, &quot;y2&quot;)</code>. If <code>x2</code>/<code>y2</code> are omitted they fall back to
+<code>x1</code>/<code>y1</code> (a degenerate zero-length segment). Every endpoint is affine — but the idiomatic source
+of an endpoint is a <code>via().pick({...})</code> spread, not a literal.</p>
+<table>
+<thead>
+<tr>
+<th>Channel</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>x1</code></td>
+<td>positional-x</td>
+<td>—</td>
+<td>start x</td>
+</tr>
+<tr>
+<td><code>y1</code></td>
+<td>positional-y</td>
+<td>—</td>
+<td>start y</td>
+</tr>
+<tr>
+<td><code>x2</code></td>
+<td>positional-x</td>
+<td><code>x1</code></td>
+<td>end x</td>
+</tr>
+<tr>
+<td><code>y2</code></td>
+<td>positional-y</td>
+<td><code>y1</code></td>
+<td>end y</td>
+</tr>
+<tr>
+<td><code>stroke</code></td>
+<td>color</td>
+<td>—</td>
+<td>line colour (scale binding or literal)</td>
+</tr>
+<tr>
+<td><code>strokeWidth</code></td>
+<td>pixel</td>
+<td>1</td>
+<td>line thickness in px</td>
+</tr>
+<tr>
+<td><code>strokeDasharray</code></td>
+<td>text</td>
+<td>—</td>
+<td>SVG dash pattern</td>
+</tr>
+<tr>
+<td><code>opacity</code></td>
+<td>number</td>
+<td>1</td>
+<td>overall opacity</td>
+</tr>
+<tr>
+<td><code>strokeOpacity</code></td>
+<td>number</td>
+<td>1</td>
+<td>stroke-only opacity</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td>text</td>
+<td>—</td>
+<td>per-segment hover tooltip</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-via-pattern">The <code>via()</code> pattern</h3>
+<p><code>plot.via(pred, opts?)</code> returns a <strong>borrowed reference</strong> to another plot's solved rows, joined by
+<code>pred</code> (an <code>eq</code>, <code>fk</code>, or <code>path</code>). <code>.pick({ x1: &quot;x&quot;, y1: &quot;y&quot; })</code> maps that plot's output columns
+(here its solved pixel <code>x</code>/<code>y</code>) onto THIS mark's channels. Spread two vias — one per endpoint — to
+connect a row's placement in one plot to its placement in another:</p>
+<pre data-lang="js"><code class="language-js">...axes[i].via(eq(&quot;id&quot;, &quot;id&quot;)).pick({ x1: &quot;x&quot;, y1: &quot;y&quot; }),
+...axes[i + 1].via(eq(&quot;id&quot;, &quot;id&quot;)).pick({ x2: &quot;x&quot;, y2: &quot;y&quot; }),
+</code></pre>
+<p><code>pick</code> accepts an OBJECT (rename: borrowed <code>x</code> → channel <code>x1</code>) or bare strings (same name). Pass a
+<code>resolve</code> in the via's second argument to COMPUTE an endpoint from the borrowed box (e.g. a
+box's midpoint) rather than take a solved column verbatim.</p>
+<h2 id="examples">Examples</h2>
+<p><strong>Parallel coordinates.</strong> One normalized dot plot per attribute at a fixed x; then a link per
+tuple between adjacent axes, both endpoints borrowed on the shared tuple key.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const p = db.table(&quot;penguins&quot;).withKey(&quot;id&quot;);
+const attrs = [&quot;bill_length_mm&quot;, &quot;bill_depth_mm&quot;, &quot;flipper_length_mm&quot;, &quot;body_mass_g&quot;];
+const xs = [90, 300, 500, 670];
+const v = canvas(740, 460);
+
+const axes = attrs.map((a, i) =&gt; v.dot(p, {
+  x: xs[i], y: linear(a, { axis: false }),
+  r: 3, fill: ordinal(&quot;species&quot;), fillOpacity: 0.85,
+  title: field(&quot;id&quot;),               // carry the key so via() can join on it
+}));
+
+for (let i = 0; i &lt; attrs.length - 1; i++) {
+  v.link(p, {
+    ...axes[i].via(eq(&quot;id&quot;, &quot;id&quot;)).pick({ x1: &quot;x&quot;, y1: &quot;y&quot; }),
+    ...axes[i + 1].via(eq(&quot;id&quot;, &quot;id&quot;)).pick({ x2: &quot;x&quot;, y2: &quot;y&quot; }),
+    stroke: ordinal(&quot;species&quot;), strokeWidth: 1, strokeOpacity: 0.3,
+  });
+}
+return v;
+</code></pre>
+<p><strong>FK join with a coloured endpoint.</strong> Same shape as the opener, but the link inherits the dot's
+categorical colour by re-binding the fill scale on <code>x2</code>.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const highlights = db.table(&quot;penguins&quot;).top(1, { col: &quot;body_mass_g&quot;, desc: true }, { partition: [&quot;species&quot;] });
+const v = canvas(640, 460);
+const dots = v.dot(&quot;penguins&quot;, {
+  x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), fill: ordinal(&quot;species&quot;),
+}).axis(&quot;x&quot;).axis(&quot;y&quot;);
+v.link(highlights, {
+  ...dots.via(eq(&quot;highlights.species&quot;, &quot;penguins.species&quot;)).pick({ x1: &quot;x&quot;, y1: &quot;y&quot; }),
+  x2: linear(&quot;bill_length_mm&quot;), y2: linear(&quot;body_mass_g&quot;),
+  stroke: ordinal(&quot;species&quot;), strokeWidth: 2,
+});
+return v;
+</code></pre>
+<p><strong>Node-link diagram over a force layout.</strong> Force places the member nodes; each edge borrows its
+two endpoints from the node plot through the declared FK, computing each node's CENTER with a
+<code>resolve</code>.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(760, 420);
+const nodes = v.rect(&quot;members&quot;, {
+  ...force(&quot;follows&quot;).pick(&quot;x&quot;, &quot;y&quot;),
+  w: 92, h: 64, fill: &quot;#fff&quot;, stroke: ordinal(&quot;community&quot;), strokeWidth: 2,
+});
+const center = { resolve: { cx: { fn: &quot;avg&quot;, arg: expr`f.x + 46` },
+                            cy: { fn: &quot;avg&quot;, arg: expr`f.y + 32` } } };
+v.link(&quot;follows&quot;, {
+  ...nodes.via(eq(&quot;follows.src&quot;, &quot;members.id&quot;), center).pick({ x1: &quot;cx&quot;, y1: &quot;cy&quot; }),
+  ...nodes.via(eq(&quot;follows.dst&quot;, &quot;members.id&quot;), center).pick({ x2: &quot;cx&quot;, y2: &quot;cy&quot; }),
+  stroke: &quot;#b6bdc9&quot;,
+});
+return v;
+</code></pre>
+<p><strong>Owner vs within partitioning.</strong> In a faceted force diagram, a top-level link with <code>frame:</code> opts
+OUT of the nest's partition (all edges, assigned to the src's panel), drawn under a nested link
+that keeps only within-panel edges.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const communities = db.table(&quot;members&quot;).groupby([&quot;community&quot;], {});
+db.declareFK({ fromTable: &quot;members&quot;, fromCols: [&quot;community&quot;], toTable: communities.name, toCols: [&quot;community&quot;] });
+const v = canvas(760, 360);
+const panel = v.rect(communities, { ...eqX(&quot;community&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: 12, h: 330, fill: &quot;#f5f6fa&quot; });
+const np = panel.nest(&quot;members&quot;, { on: eq(&quot;community&quot;, &quot;community&quot;) }).dot({
+  ...force(&quot;follows&quot;).pick(&quot;x&quot;, &quot;y&quot;), r: 6, fill: ordinal(&quot;community&quot;),
+});
+const src = np.via(eq(&quot;follows.src&quot;, &quot;members.id&quot;));
+v.link(&quot;follows&quot;, {                        // owner: every edge, in its src's panel
+  ...src.pick({ x1: &quot;x&quot;, y1: &quot;y&quot; }),
+  ...np.via(eq(&quot;follows.dst&quot;, &quot;members.id&quot;)).pick({ x2: &quot;x&quot;, y2: &quot;y&quot; }),
+  stroke: &quot;#dfe3ec&quot;,
+}, { frame: src });
+panel.link(&quot;follows&quot;, {                    // within: σ derived from the FK catalog
+  ...np.via(eq(&quot;follows.src&quot;, &quot;members.id&quot;)).pick({ x1: &quot;x&quot;, y1: &quot;y&quot; }),
+  ...np.via(eq(&quot;follows.dst&quot;, &quot;members.id&quot;)).pick({ x2: &quot;x&quot;, y2: &quot;y&quot; }),
+  stroke: &quot;#b6bdc9&quot;,
+});
+return v;
+</code></pre>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="./rule.html">rule</a> — a segment whose endpoints ride on one row (reference lines, whiskers).</li>
+<li><a href="./arrow.html">arrow</a> — a directed link with a head; same <code>x1,y1→x2,y2</code> channels.</li>
+<li><a href="./connect.html">connect</a> — links consecutive points within a group via a LEAD window.</li>
+<li><a href="../layouts/force.html">force</a> — the node placement links usually connect.</li>
+</ul>
+
+    </article>
+  </main>
+
+  <script src="../assets/docs.js"></script>
+  <script src="../assets/dvl-example.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
+</body>
+</html>

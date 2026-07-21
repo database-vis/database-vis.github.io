@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>point · DVL</title>
+  <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="app-name" href="../index.html">DVL</a>
+    <nav class="sidebar-nav">
+    
+      <h2>Introduction</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../what-is-dvl.html">What is DVL?</a></li>
+        
+      
+        
+        
+        <li><a href="../getting-started.html">Getting started</a></li>
+        
+      
+        
+        
+        <li><a href="../architecture.html">Architecture</a></li>
+        
+      
+      </ul>
+    
+      <h2>Features</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#channels">Channels</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#scales">Scales</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#data">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        
+      
+      </ul>
+    
+      <h2>Marks</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../marks/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/area.html">area</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/arrow.html">arrow</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/bar.html">bar</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/cell.html">cell</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/connect.html">connect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/dot.html">dot</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/image.html">image</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/line.html">line</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/link.html">link</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/path.html">path</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rect.html">rect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rule.html">rule</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/text.html">text</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/tick.html">tick</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/vector.html">vector</a></li>
+        
+      
+      </ul>
+    
+      <h2>Layouts</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../layouts/README.html">Overview</a></li>
+        
+      
+        
+        <li><strong>Produce</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/bandX.html">bandX</a></li>
+          
+            
+            <li><a href="../layouts/bandY.html">bandY</a></li>
+          
+            
+            <li><a href="../layouts/barX.html">barX</a></li>
+          
+            
+            <li><a href="../layouts/barY.html">barY</a></li>
+          
+            
+            <li><a href="../layouts/stackX.html">stackX</a></li>
+          
+            
+            <li><a href="../layouts/stackY.html">stackY</a></li>
+          
+            
+            <li><a href="../layouts/pitchX.html">pitchX</a></li>
+          
+            
+            <li><a href="../layouts/pitchY.html">pitchY</a></li>
+          
+            
+            <li><a href="../layouts/eqX.html">eqX</a></li>
+          
+            
+            <li><a href="../layouts/eqY.html">eqY</a></li>
+          
+            
+            <li><a href="../layouts/proportionalX.html">proportionalX</a></li>
+          
+            
+            <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
+          
+            
+            <li><a href="../layouts/force.html">force</a></li>
+          
+            
+            <li><a href="../layouts/treemap.html">treemap</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Refine</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Resolver</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/hull.html">hull</a></li>
+          
+          </ul>
+        </li>
+        
+      
+      </ul>
+    
+      <h2>Scales</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../scales/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/linear.html">linear</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/log.html">log</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/sqrt.html">sqrt</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/pow.html">pow</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/symlog.html">symlog</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/ordinal.html">ordinal</a></li>
+        
+      
+        
+        
+        <li class="active"><a href="../scales/point.html">point</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/color.html">color</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/quantize.html">quantize</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/threshold.html">threshold</a></li>
+        
+      
+      </ul>
+    
+      <h2>Examples</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../examples/README.html">Gallery</a></li>
+        
+      
+      </ul>
+    
+    </nav>
+  </aside>
+
+  <header id="topbar">
+    <button class="sidebar-toggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+    <div class="topbar-spacer"></div>
+    <a class="github-link" href="https://github.com/cudbg/database-vis" target="_blank" rel="noopener" aria-label="GitHub repository">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+  </header>
+
+  <main class="content">
+    <article class="markdown-section">
+      <h1 id="point">point</h1>
+<p><code>point</code> maps a <strong>categorical</strong> column to a single <strong>evenly-spaced position</strong> — D3/VL <code>scalePoint</code>,
+like a <code>band</code> with zero bandwidth. Each category sits at its band <strong>center</strong>: <code>pos(i) = (idx + 0.5)/n</code>,
+so a categorical dot/line/tick plot centers every category in its slot. It trains the keyed category
+table <code>(value, idx, n)</code> and applies a keyed join, so both the data points and the axis ticks land at
+the same position (no anchor split). Single output — a position, no width — so it binds like <code>linear</code>:
+<code>x: point(&quot;species&quot;)</code>, no <code>.pick()</code>.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
+v.dot(&quot;penguins&quot;, {
+  x: point(&quot;species&quot;),          // 3 categories → x at 1/6, 3/6, 5/6 of the frame
+  y: linear(&quot;body_mass_g&quot;),
+}).axis(&quot;x&quot;).axis(&quot;y&quot;);
+return v;
+</code></pre>
+<p>Body mass by species, each species centered in its third of the x-axis.</p>
+<h2 id="options">Options</h2>
+<p><code>point(column, opts?)</code>. The column is the categorical field whose distinct values form the domain.</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>shared</code></td>
+<td>boolean</td>
+<td>—</td>
+<td>reuse the object across bindings to declare &quot;same categories&quot; (one unioned domain, one axis)</td>
+</tr>
+<tr>
+<td><code>side</code></td>
+<td><code>&quot;top&quot; | &quot;right&quot; | &quot;bottom&quot; | &quot;left&quot;</code></td>
+<td>—</td>
+<td>pin the axis side</td>
+</tr>
+<tr>
+<td><code>domain</code></td>
+<td>domain treatment</td>
+<td><code>&quot;data&quot;</code></td>
+<td>domain treatment (recorded intent)</td>
+</tr>
+<tr>
+<td><code>axis</code></td>
+<td><code>AxisOptions | false</code></td>
+<td>—</td>
+<td>tick/label config; each category labels its own position</td>
+</tr>
+</tbody>
+</table>
+<p>The domain is <code>categorical</code> with <code>ordered: true</code> — categories carry positional meaning (order along
+the axis). Train is the keyed <code>(value, idx, n)</code> table; apply computes <code>pos = (idx + 0.5) / n</code>. Ticks
+are <code>ordinal</code> (one per category), placed at the same centers as the data.</p>
+<h2 id="examples">Examples</h2>
+<p>Point scale on <code>x</code>, continuous on <code>y</code> — a category-vs-quantity scatter:</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
+v.dot(&quot;penguins&quot;, {
+  x: point(&quot;species&quot;),
+  y: linear(&quot;bill_length_mm&quot;),
+}).axis(&quot;x&quot;).axis(&quot;y&quot;);
+return v;
+</code></pre>
+<p>Add a categorical colour so the point position and the fill agree:</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
+v.dot(&quot;penguins&quot;, {
+  x: point(&quot;species&quot;),
+  y: linear(&quot;body_mass_g&quot;),
+  fill: ordinal(&quot;species&quot;),
+}).axis(&quot;x&quot;).axis(&quot;y&quot;);
+return v;
+</code></pre>
+<p>Point on <code>y</code> for a horizontal categorical layout:</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
+v.dot(&quot;penguins&quot;, {
+  x: linear(&quot;bill_length_mm&quot;),
+  y: point(&quot;island&quot;),          // Torgersen / Biscoe / Dream centered on y
+}).axis(&quot;x&quot;).axis(&quot;y&quot;);
+return v;
+</code></pre>
+<p>Ticks as a categorical mark — <code>tick</code> at each category center:</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
+v.tick(&quot;penguins&quot;, {
+  x: point(&quot;species&quot;),
+  y: linear(&quot;flipper_length_mm&quot;),
+}).axis(&quot;x&quot;).axis(&quot;y&quot;);
+return v;
+</code></pre>
+<p><code>point</code> vs <code>bandX</code>: <code>point</code> gives one centered coordinate (no width — for dots/lines/ticks), whereas
+<a href="../layouts/bandX.html"><code>bandX</code></a> gives an <code>(x, w)</code> pair (for bars/rects that fill their slot). Use <code>point</code>
+when the mark is a glyph at a position, <code>bandX</code> when the mark spans the category's width.</p>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="ordinal.html">ordinal</a> — category → a discrete range (palette or slot), indexed by rank.</li>
+<li><a href="../layouts/bandX.html">bandX</a> — category → positional band <strong>with width</strong> (bars, rects).</li>
+<li><a href="color.html">color</a> — colour as an output space.</li>
+</ul>
+
+    </article>
+  </main>
+
+  <script src="../assets/docs.js"></script>
+  <script src="../assets/dvl-example.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
+</body>
+</html>

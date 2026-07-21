@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Via: cross-plot and cross-table references · DVL</title>
+  <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="app-name" href="../index.html">DVL</a>
+    <nav class="sidebar-nav">
+    
+      <h2>Introduction</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../what-is-dvl.html">What is DVL?</a></li>
+        
+      
+        
+        
+        <li><a href="../getting-started.html">Getting started</a></li>
+        
+      
+        
+        
+        <li><a href="../architecture.html">Architecture</a></li>
+        
+      
+      </ul>
+    
+      <h2>Features</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#channels">Channels</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#scales">Scales</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#data">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        
+      
+      </ul>
+    
+      <h2>Marks</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../marks/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/area.html">area</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/arrow.html">arrow</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/bar.html">bar</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/cell.html">cell</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/connect.html">connect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/dot.html">dot</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/image.html">image</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/line.html">line</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/link.html">link</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/path.html">path</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rect.html">rect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rule.html">rule</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/text.html">text</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/tick.html">tick</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/vector.html">vector</a></li>
+        
+      
+      </ul>
+    
+      <h2>Layouts</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../layouts/README.html">Overview</a></li>
+        
+      
+        
+        <li><strong>Produce</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/bandX.html">bandX</a></li>
+          
+            
+            <li><a href="../layouts/bandY.html">bandY</a></li>
+          
+            
+            <li><a href="../layouts/barX.html">barX</a></li>
+          
+            
+            <li><a href="../layouts/barY.html">barY</a></li>
+          
+            
+            <li><a href="../layouts/stackX.html">stackX</a></li>
+          
+            
+            <li><a href="../layouts/stackY.html">stackY</a></li>
+          
+            
+            <li><a href="../layouts/pitchX.html">pitchX</a></li>
+          
+            
+            <li><a href="../layouts/pitchY.html">pitchY</a></li>
+          
+            
+            <li><a href="../layouts/eqX.html">eqX</a></li>
+          
+            
+            <li><a href="../layouts/eqY.html">eqY</a></li>
+          
+            
+            <li><a href="../layouts/proportionalX.html">proportionalX</a></li>
+          
+            
+            <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
+          
+            
+            <li><a href="../layouts/force.html">force</a></li>
+          
+            
+            <li><a href="../layouts/treemap.html">treemap</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Refine</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Resolver</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/hull.html">hull</a></li>
+          
+          </ul>
+        </li>
+        
+      
+      </ul>
+    
+      <h2>Scales</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../scales/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/linear.html">linear</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/log.html">log</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/sqrt.html">sqrt</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/pow.html">pow</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/symlog.html">symlog</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/ordinal.html">ordinal</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/point.html">point</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/color.html">color</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/quantize.html">quantize</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/threshold.html">threshold</a></li>
+        
+      
+      </ul>
+    
+      <h2>Examples</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../examples/README.html">Gallery</a></li>
+        
+      
+      </ul>
+    
+    </nav>
+  </aside>
+
+  <header id="topbar">
+    <button class="sidebar-toggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+    <div class="topbar-spacer"></div>
+    <a class="github-link" href="https://github.com/cudbg/database-vis" target="_blank" rel="noopener" aria-label="GitHub repository">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+  </header>
+
+  <main class="content">
+    <article class="markdown-section">
+      <h1 id="via-cross-plot-and-cross-table-references">Via: cross-plot and cross-table references</h1>
+<p><code>via()</code> is DVL's one verb for <strong>borrowing values through a relational join</strong>: a layer names a
+referent, a join path, and the outputs it wants; the compiler emits the joins. Everything else —
+what arrives, when it resolves, and which rows the layer even <em>has</em> — is decided by two
+classifications, not by extra API: <strong>what the referent is</strong> (a plot or a table) and <strong>where the
+consuming layer lives</strong> (top-level or nested inside a panel template).</p>
+<pre data-lang="js"><code class="language-js">// the shape: referent.via(path…, opts?).pick({ channel: output, … })
+np.via(eq('follows.src', 'members.id')).pick({ x1: 'x', y1: 'y' })
+</code></pre>
+<p>Paths are the same <a href="README.html#join-paths">join-path vocabulary</a> as everywhere else —
+<code>eq</code>/<code>lt</code>/…, <code>on('col')</code>, <code>fk('table')</code>, multi-hop <code>path(...)</code> — resolved once against the FK
+catalog.</p>
+<h2 id="the-referent-axis-plot-vs-table">The referent axis: plot vs table</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Plot referent — <code>np.via(…)</code></th>
+<th>Table referent — <code>db.table('t').via(…)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Borrows</td>
+<td>the referent's <strong>solved</strong> channels</td>
+<td>the table's <strong>raw</strong> columns</td>
+</tr>
+<tr>
+<td>Arrives in</td>
+<td><strong>pixel</strong> space (post-affine — never re-placed)</td>
+<td><strong>data</strong> space (free to feed a scale, train a domain, be placed)</td>
+</tr>
+<tr>
+<td>Joins</td>
+<td>the referent plot's placed marks, <strong>after</strong> placement</td>
+<td>a table leaf, <strong>in the pre-affine chain</strong></td>
+</tr>
+<tr>
+<td>Typical use</td>
+<td>edge endpoints, connectors, annotations on placed marks</td>
+<td>denormalization-free attribute lookup across an FK</td>
+</tr>
+</tbody>
+</table>
+<p>Same verb, same pick, same resolution grammar — the borrowed column's <strong>Space</strong> carries the
+difference, so the compiler knows a pixel borrow must never pass through the affine again while
+a data borrow still may. This is the type system doing the deciding, not a mode flag.</p>
+<pre data-lang="dvl"><code class="lang-dvl">// both timings in one figure: every bird LINKS to its species centroid. x1/y1 borrow the
+// dot's own solved position (a single-match via on the tuple key); x2/y2 borrow the
+// CENTROID — a multi-match via reduced by resolve: 'avg'. All four arrive in pixels.
+const p = db.table(&quot;penguins&quot;).withKey(&quot;id&quot;);
+const v = canvas(640, 360);
+const dots = v.dot(p, { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), fill: ordinal(&quot;species&quot;), title: field(&quot;id&quot;) });
+v.link(p, {
+  ...dots.via(eq(&quot;id&quot;, &quot;id&quot;)).pick({ x1: &quot;x&quot;, y1: &quot;y&quot; }),
+  ...dots.via(eq(&quot;species&quot;, &quot;species&quot;), { resolve: &quot;avg&quot; }).pick({ x2: &quot;x&quot;, y2: &quot;y&quot; }),
+  stroke: &quot;#bbb&quot;, strokeOpacity: 0.5,
+});
+return v;
+</code></pre>
+<h2 id="the-consumer-axis-top-level-vs-nested">The consumer axis: top-level vs nested</h2>
+<p>Where the consuming layer is authored decides <strong>which rows it has</strong> and <strong>which panel each row
+belongs to</strong> — the receiver <em>is</em> the declaration:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Rows</th>
+<th>Panel identity</th>
+<th>Authoring</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>top-level</strong></td>
+<td>the whole relation</td>
+<td>none</td>
+<td><code>v.link('follows', { …vias… })</code></td>
+</tr>
+<tr>
+<td><strong>top-level + <code>frame:</code></strong></td>
+<td>the whole relation</td>
+<td>ASSIGNED — one reference names the owner panel</td>
+<td><code>v.link('follows', { …vias… }, { frame: srcVia })</code></td>
+</tr>
+<tr>
+<td><strong>nested</strong></td>
+<td>the panel's <strong>sub-database</strong> σ</td>
+<td>implied by membership</td>
+<td><code>panel.link('follows', { …vias… })</code></td>
+</tr>
+<tr>
+<td><strong>nested + <code>scope: 'union'</code></strong></td>
+<td>σ, any-path membership</td>
+<td>one row per touching panel</td>
+<td><code>panel.link('follows', { …vias… }, { scope: 'union' })</code></td>
+</tr>
+</tbody>
+</table>
+<p>The nested rows come from taking the partition seriously: a template cell scopes the <em>whole
+database</em>, so inside a panel a table name denotes its restriction, derived through the declared
+FK paths (conjoined by default — a row belongs where <strong>all</strong> its references land; a cross-panel
+edge simply isn't in either panel's data). No <code>on</code>, no reserved channel: nesting the layer is
+the whole declaration. Rows the partition drops are reported as data (the layer's
+<code>sigmaDropped</code> diagnostics relation), never silently.</p>
+<p><code>frame:</code> is the explicit opt-out — global rows, each assigned a panel by the named reference
+(the via handle, or the predicate itself). It is an <em>opts</em> key, not a channel, so exactly one
+assignment per layer is structurally guaranteed. The old <code>pick({ cell: 'dvl_cell' })</code> spelling
+still works with a deprecation warning.</p>
+<h2 id="timing-one-declared-join-read-at-two-times">Timing: one declared join, read at two times</h2>
+<p>A single FK can serve two roles, resolved at different points in the pipeline:</p>
+<ul>
+<li>the <strong>frame</strong> reads it <em>early</em> — before layout — because the referent's panel (<code>dvl_cell</code>)
+is known as soon as the referent is nested;</li>
+<li>the <strong>positions</strong> read it <em>late</em> — post-affine — because pixels exist only after placement.</li>
+</ul>
+<p>So <code>frame: src</code> plus <code>src.pick({ x1: 'x', y1: 'y' })</code> is one relationship, read twice. Cross-node
+references (a top-level layer borrowing from a plot nested in a later-compiled panel) work
+because the compiler patches late-bound plot references after the full walk — see
+<a href="../architecture.html#late-bound-plot-references--placeholder-reads">Architecture → late-bound plot references</a>.</p>
+<h2 id="multiplicity-and-resolutions">Multiplicity and resolutions</h2>
+<p>A via join that can match <strong>several</strong> referent rows per mark must declare how the match set
+reduces to one value — a bare AggFn, an ordered positional form, a named expression over the
+two-sided <code>(m, f)</code> row, or an opaque JS function (inline, or a named reducer registered in
+<code>registries.reducers</code>). Provably multi-match joins without a resolution are a build error, never a silent
+fan-out; the lenient default for <em>unprovable</em> joins tightens to an error under
+<code>{ strictMultiplicity: true }</code>. The full grammar with examples is in
+<a href="README.html#cross-mark-and-cross-table-references">Cross-mark &amp; cross-table references</a>; the design rationale
+(input schema, naming of computed outputs, the emitted SQL) is in
+<code>design/CELL_KEY_VIA.html</code> §3b–§3c.</p>
+<h2 id="choosing-quickly">Choosing, quickly</h2>
+<ul>
+<li>Draw edges between placed marks in one frame → top-level layer + position vias.</li>
+<li>Same, but each edge should <em>belong</em> to a panel (per-panel stats, clipping) → add <code>frame:</code>.</li>
+<li>Small multiples where each panel shows only its own subgraph → nest the layer; done.</li>
+<li>Each panel shows its local subgraph <em>including</em> edges that touch it → nested + <code>scope: 'union'</code>.</li>
+<li>Look up an attribute across an FK without denormalizing → <code>db.table(...).via(...)</code>, data space.</li>
+<li>Aggregate over a one-to-many relationship → any of the above + <code>{ resolve: … }</code>.</li>
+</ul>
+
+    </article>
+  </main>
+
+  <script src="../assets/docs.js"></script>
+  <script src="../assets/dvl-example.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
+</body>
+</html>

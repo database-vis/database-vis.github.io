@@ -1,0 +1,131 @@
+/* DVL documentation — static site styles (replaces the docsify vue theme). Owns the whole
+   layout: fixed sidebar + fixed topbar, the markdown typography, and the <dvl-example> cards. */
+:root {
+  --theme-color: #2f5d8a;
+  --topbar-h: 48px;
+  --sidebar-w: 300px;
+  --sidebar-bg: #f6f6f7;
+  --divider: #e2e2e3;
+  --text-1: #3c3c43;
+  --text-2: rgba(60, 60, 67, .78);
+  --content-bg: #fff;
+}
+
+* { box-sizing: border-box; }
+html { scroll-padding-top: calc(var(--topbar-h) + 12px); } /* native anchor lands below the topbar */
+body {
+  margin: 0; color: var(--text-1); background: var(--content-bg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px; line-height: 1.6;
+}
+
+/* ── Sidebar (Observable-Plot / VitePress style): fixed, scrolls on its own ── */
+.sidebar {
+  position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w); z-index: 20;
+  overflow-y: auto; background: var(--sidebar-bg); border-right: 1px solid var(--divider);
+  font-size: 15px; transition: transform .25s ease-out;
+}
+.app-name {
+  position: sticky; top: 0; z-index: 2;
+  display: flex; align-items: center; height: var(--topbar-h); padding: 0 24px;
+  background: var(--sidebar-bg); border-bottom: 1px solid var(--divider);
+  font-size: 18px; font-weight: 700; color: var(--theme-color); text-decoration: none;
+}
+.sidebar-nav { padding: 10px 16px 32px 24px; }
+.sidebar-nav ul { margin: 0; padding: 0; list-style: none; }
+.sidebar-nav ul ul { padding-left: 14px; }
+.sidebar-nav h2 {
+  margin: 18px 0 4px; padding: 0;
+  font-size: 14.5px; font-weight: 600; color: var(--text-1);
+}
+.sidebar-nav li { margin: 0; line-height: 1.9; }
+.sidebar-nav li a { color: var(--text-2); font-size: 15px; text-decoration: none; }
+.sidebar-nav li a:hover { color: var(--theme-color); }
+.sidebar-nav li strong { display: block; margin: 8px 0 2px; font-size: 13px; font-weight: 600; color: var(--text-1); }
+.sidebar-nav li.active > a { color: var(--theme-color); font-weight: 600; }
+
+/* ── Topbar: fixed, follows the sidebar edge; hamburger (left) · GitHub (right) ── */
+#topbar {
+  position: fixed; top: 0; left: var(--sidebar-w); right: 0; z-index: 40;
+  height: var(--topbar-h); display: flex; align-items: center; gap: 8px; padding: 0 16px 0 8px;
+  background: #fff; border-bottom: 1px solid var(--divider); transition: left .25s ease-out;
+}
+.topbar-spacer { flex: 1; }
+.sidebar-toggle {
+  width: 36px; height: 36px; padding: 8px; display: flex; flex-direction: column;
+  justify-content: center; align-items: center; gap: 4px;
+  background: transparent; border: none; border-radius: 6px; cursor: pointer; transition: background-color .15s;
+}
+.sidebar-toggle:hover { background: rgba(47, 93, 138, .08); }
+.sidebar-toggle span { display: block; width: 18px; height: 2px; background: var(--theme-color); border-radius: 1px; }
+.github-link {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: 6px; color: var(--text-1); transition: background-color .15s, color .15s;
+}
+.github-link:hover { background: rgba(47, 93, 138, .08); color: var(--theme-color); }
+.github-link svg { width: 20px; height: 20px; fill: currentColor; }
+
+/* Collapsed state (hamburger toggles body.nav-collapsed) — sidebar off-canvas, content full width */
+body.nav-collapsed .sidebar { transform: translateX(-100%); }
+body.nav-collapsed #topbar { left: 0; }
+body.nav-collapsed .content { margin-left: 0; }
+
+/* ── Content ── */
+.content { margin-left: var(--sidebar-w); padding-top: var(--topbar-h); transition: margin-left .25s ease-out; }
+.markdown-section { max-width: 60em; margin: 0 auto; padding: 24px 40px 80px; }
+
+/* Markdown typography */
+.markdown-section h1 { font-size: 2em; margin: .4em 0 .6em; font-weight: 700; }
+.markdown-section h2 { font-size: 1.5em; margin: 1.6em 0 .6em; padding-bottom: .3em; border-bottom: 1px solid var(--divider); font-weight: 650; }
+.markdown-section h3 { font-size: 1.2em; margin: 1.4em 0 .5em; font-weight: 650; }
+.markdown-section h4 { font-size: 1.05em; margin: 1.2em 0 .5em; font-weight: 650; }
+.markdown-section p, .markdown-section ul, .markdown-section ol { margin: .7em 0; }
+.markdown-section li { margin: .25em 0; }
+.markdown-section a { color: var(--theme-color); text-decoration: none; }
+.markdown-section a:hover { text-decoration: underline; }
+.markdown-section code {
+  font-family: "SF Mono", "Fira Mono", Menlo, Consolas, monospace; font-size: .88em;
+  color: var(--theme-color); background: #f2f4f6; padding: .15em .4em; border-radius: 4px;
+}
+.markdown-section pre { background: #f6f8fa; border: 1px solid var(--divider); border-radius: 8px; padding: 14px 16px; overflow-x: auto; margin: 1.2em 0; }
+.markdown-section pre code { background: none; color: inherit; padding: 0; font-size: 13.5px; }
+.markdown-section blockquote { margin: 1em 0; padding: .2em 1em; border-left: 4px solid var(--divider); color: var(--text-2); }
+.markdown-section table { border-collapse: collapse; margin: 1.2em 0; width: 100%; font-size: .95em; }
+.markdown-section th, .markdown-section td { border: 1px solid var(--divider); padding: 6px 10px; text-align: left; vertical-align: top; }
+.markdown-section th { background: var(--sidebar-bg); font-weight: 650; }
+.markdown-section img { max-width: 100%; }
+.markdown-section hr { border: none; border-top: 1px solid var(--divider); margin: 2em 0; }
+
+/* ── <dvl-example> live example cards (assets/dvl-example.js) ── */
+.dvl-example { position: relative; border: 1px solid var(--divider); border-radius: 8px; margin: 1.4em 0; overflow: hidden; }
+.dvl-example-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: 4px 8px 4px 12px; background: #f6f8fa; border-bottom: 1px solid var(--divider);
+}
+.dvl-example-hint { font-size: 11px; color: #9aa3ad; }
+.dvl-example-open { font-size: 11.5px; color: var(--text-2); text-decoration: none; padding: 1px 8px; border-radius: 5px; border: 1px solid var(--divider); }
+.dvl-example-open:hover { color: var(--theme-color); border-color: var(--theme-color); }
+.dvl-example-editor {
+  --text: #333b4d; --text-dim: #8892a6; --hover: #eef1f7;
+  --cm-caret: #3a6ea5; --cm-sel: #3a6ea522;
+  --syn-comment: #8892a6; --syn-keyword: #2f5d8a; --syn-func: #1b4f78; --syn-string: #2a7d4f;
+  --syn-number: #b2571e; --syn-type: #8a6d00; --syn-name: #333b4d; --syn-prop: #434c60; --syn-punct: #667089;
+  background: #fff;
+}
+.dvl-example-editor .cm-editor { height: auto; background: transparent; font-size: 13.5px; }
+.dvl-example-editor .cm-scroller { overflow-x: auto; overflow-y: hidden; }
+.dvl-example-editor .cm-content { padding: 14px 0; line-height: 1.7; }
+.dvl-example-editor .cm-line { padding: 0 16px; }
+.dvl-example-editor > pre { margin: 0 !important; border: none; border-radius: 0; padding: 14px 16px; background: transparent; font-size: 13.5px; line-height: 1.7; }
+.dvl-example-output { padding: 12px; background: #fff; overflow-x: auto; }
+.dvl-example-output svg { display: block; max-width: 100%; height: auto; }
+.dvl-example-status { color: #9aa3ad; font-size: 12.5px; padding: 6px 2px; }
+.markdown-section .dvl-example-error { margin: 0; padding: 10px 12px; background: #fff5f5; color: #b42318; font-size: 12.5px; white-space: pre-wrap; border: none; }
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .sidebar { transform: translateX(-100%); }
+  #topbar { left: 0; }
+  .content { margin-left: 0; }
+  body.nav-open .sidebar { transform: translateX(0); }
+}

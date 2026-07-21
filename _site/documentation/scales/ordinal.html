@@ -1,0 +1,538 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ordinal · DVL</title>
+  <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="app-name" href="../index.html">DVL</a>
+    <nav class="sidebar-nav">
+    
+      <h2>Introduction</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../what-is-dvl.html">What is DVL?</a></li>
+        
+      
+        
+        
+        <li><a href="../getting-started.html">Getting started</a></li>
+        
+      
+        
+        
+        <li><a href="../architecture.html">Architecture</a></li>
+        
+      
+      </ul>
+    
+      <h2>Features</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#channels">Channels</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#scales">Scales</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#data">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        
+      
+      </ul>
+    
+      <h2>Marks</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../marks/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/area.html">area</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/arrow.html">arrow</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/bar.html">bar</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/cell.html">cell</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/connect.html">connect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/dot.html">dot</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/image.html">image</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/line.html">line</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/link.html">link</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/path.html">path</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rect.html">rect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rule.html">rule</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/text.html">text</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/tick.html">tick</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/vector.html">vector</a></li>
+        
+      
+      </ul>
+    
+      <h2>Layouts</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../layouts/README.html">Overview</a></li>
+        
+      
+        
+        <li><strong>Produce</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/bandX.html">bandX</a></li>
+          
+            
+            <li><a href="../layouts/bandY.html">bandY</a></li>
+          
+            
+            <li><a href="../layouts/barX.html">barX</a></li>
+          
+            
+            <li><a href="../layouts/barY.html">barY</a></li>
+          
+            
+            <li><a href="../layouts/stackX.html">stackX</a></li>
+          
+            
+            <li><a href="../layouts/stackY.html">stackY</a></li>
+          
+            
+            <li><a href="../layouts/pitchX.html">pitchX</a></li>
+          
+            
+            <li><a href="../layouts/pitchY.html">pitchY</a></li>
+          
+            
+            <li><a href="../layouts/eqX.html">eqX</a></li>
+          
+            
+            <li><a href="../layouts/eqY.html">eqY</a></li>
+          
+            
+            <li><a href="../layouts/proportionalX.html">proportionalX</a></li>
+          
+            
+            <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
+          
+            
+            <li><a href="../layouts/force.html">force</a></li>
+          
+            
+            <li><a href="../layouts/treemap.html">treemap</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Refine</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Resolver</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/hull.html">hull</a></li>
+          
+          </ul>
+        </li>
+        
+      
+      </ul>
+    
+      <h2>Scales</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../scales/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/linear.html">linear</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/log.html">log</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/sqrt.html">sqrt</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/pow.html">pow</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/symlog.html">symlog</a></li>
+        
+      
+        
+        
+        <li class="active"><a href="../scales/ordinal.html">ordinal</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/point.html">point</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/color.html">color</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/quantize.html">quantize</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/threshold.html">threshold</a></li>
+        
+      
+      </ul>
+    
+      <h2>Examples</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../examples/README.html">Gallery</a></li>
+        
+      
+      </ul>
+    
+    </nav>
+  </aside>
+
+  <header id="topbar">
+    <button class="sidebar-toggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+    <div class="topbar-spacer"></div>
+    <a class="github-link" href="https://github.com/cudbg/database-vis" target="_blank" rel="noopener" aria-label="GitHub repository">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+  </header>
+
+  <main class="content">
+    <article class="markdown-section">
+      <h1 id="ordinal">ordinal</h1>
+<p><code>ordinal</code> maps a <strong>categorical</strong> column to a <strong>discrete range</strong> indexed by category rank. It trains an
+indexed category table (<code>value, idx, n</code>) in SQL, then applies a keyed join to look up each row's rank
+and index into a range — a <strong>palette</strong> on a colour channel (<code>fill</code>/<code>stroke</code>), or a discrete position on
+a positional channel. The range is a parameter, not baked-in colour: <code>ordinal</code> is <em>binding-polymorphic</em>,
+so the output space is decided by the channel the instance serves (<code>style⟨color⟩</code> → palette,
+<code>relative⟨x|y⟩</code> → position). Single output, so it binds like <code>linear</code> — <code>fill: ordinal(&quot;species&quot;)</code>,
+no <code>.pick()</code>.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
+v.dot(&quot;penguins&quot;, {
+  x: linear(&quot;bill_length_mm&quot;),
+  y: linear(&quot;flipper_length_mm&quot;),
+  fill: ordinal(&quot;species&quot;),   // Adelie / Chinstrap / Gentoo → tableau10[0..2]
+});
+return v;
+</code></pre>
+<p>A scatter where the three species get the first three distinct hues of the default categorical
+palette (<code>tableau10</code>).</p>
+<h2 id="options">Options</h2>
+<p><code>ordinal(column, opts?)</code>. The column is the categorical field whose distinct values form the domain.
+On a colour channel the range is the resolved <strong>scheme</strong> palette; the default is <code>tableau10</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>scheme</code></td>
+<td>scheme name</td>
+<td><code>&quot;tableau10&quot;</code></td>
+<td>named categorical palette (see below); resolved once to a fixed hue array</td>
+</tr>
+<tr>
+<td><code>range</code></td>
+<td>array</td>
+<td>—</td>
+<td>explicit palette/positions — an author override that wins over the scheme</td>
+</tr>
+<tr>
+<td><code>shared</code></td>
+<td>boolean</td>
+<td>—</td>
+<td>reuse the object across bindings to declare &quot;same categories&quot; (one unioned domain, one legend)</td>
+</tr>
+<tr>
+<td><code>domain</code></td>
+<td>domain treatment</td>
+<td><code>&quot;data&quot;</code></td>
+<td>domain treatment (recorded intent)</td>
+</tr>
+<tr>
+<td><code>axis</code></td>
+<td><code>AxisOptions | false</code></td>
+<td>—</td>
+<td>tick/label config when the scale is positional</td>
+</tr>
+</tbody>
+</table>
+<p>The domain is <code>categorical</code> — the N-row indexed table <code>(value, idx, n)</code>, JOINed on the value column
+(shape <code>keyed</code>), <strong>set-unionable</strong>, ordinal ticks, <strong>unordered</strong> by default (categories carry no
+positional meaning). Category rank indexes the range <strong>mod n</strong>, so a palette shorter than the domain
+cycles.</p>
+<h3 id="categorical-schemes">Categorical schemes</h3>
+<p>Distinct fixed-length hue arrays (from <code>src/lib/dvl/components/schemes.ts</code>), indexed by category rank:</p>
+<table>
+<thead>
+<tr>
+<th>Scheme</th>
+<th>Hues</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tableau10</code> <em>(default)</em></td>
+<td><code>#4e79a7 #f28e2b #e15759 #76b7b2 #59a14f #edc949 #af7aa1 #ff9da7 #9c755f #bab0ab</code></td>
+</tr>
+<tr>
+<td><code>observable10</code></td>
+<td><code>#4269d0 #efb118 #ff725c #6cc5b0 #3ca951 …</code></td>
+</tr>
+<tr>
+<td><code>category10</code></td>
+<td><code>#1f77b4 #ff7f0e #2ca02c #d62728 #9467bd …</code></td>
+</tr>
+</tbody>
+</table>
+<p>The fallback when no scheme resolves is <code>CATEGORICAL_PALETTE</code> (tableau10-ish, in
+<code>scales/_shared.ts</code>).</p>
+<h2 id="examples">Examples</h2>
+<p>Ordinal fill — the canonical categorical colour encoding:</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
+v.dot(&quot;penguins&quot;, {
+  x: linear(&quot;bill_length_mm&quot;),
+  y: linear(&quot;body_mass_g&quot;),
+  fill: ordinal(&quot;species&quot;),
+});
+return v;
+</code></pre>
+<p>Ordinal on the <code>rect</code> mark (same encoding, squares instead of dots):</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
+v.rect(&quot;penguins&quot;, {
+  x: linear(&quot;bill_length_mm&quot;),
+  y: linear(&quot;body_mass_g&quot;),
+  w: 10, h: 10,
+  fill: ordinal(&quot;species&quot;),
+});
+return v;
+</code></pre>
+<p>Pick a different categorical scheme:</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
+v.dot(&quot;penguins&quot;, {
+  x: linear(&quot;bill_length_mm&quot;),
+  y: linear(&quot;flipper_length_mm&quot;),
+  fill: ordinal(&quot;species&quot;, { scheme: &quot;observable10&quot; }),
+});
+return v;
+</code></pre>
+<p>Explicit palette via <code>range</code> — override the scheme with your own hues:</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
+v.dot(&quot;penguins&quot;, {
+  x: linear(&quot;bill_length_mm&quot;),
+  y: linear(&quot;flipper_length_mm&quot;),
+  fill: ordinal(&quot;species&quot;, { range: [&quot;#1b9e77&quot;, &quot;#d95f02&quot;, &quot;#7570b3&quot;] }),
+});
+return v;
+</code></pre>
+<p>Ordinal driving <code>stroke</code> instead of <code>fill</code>:</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
+v.dot(&quot;penguins&quot;, {
+  x: linear(&quot;bill_length_mm&quot;),
+  y: linear(&quot;body_mass_g&quot;),
+  stroke: ordinal(&quot;species&quot;),
+});
+return v;
+</code></pre>
+<p>Ordinal for <strong>position</strong> — <code>ordinal</code> on a positional channel yields a discrete coordinate (categories
+placed at range slots). For evenly-spaced, band-centered positions prefer <a href="point.html"><code>point</code></a>; for a
+category → x-band-plus-width use the <a href="../layouts/bandX.html"><code>bandX</code></a> layout:</p>
+<pre data-lang="dvl"><code class="lang-dvl">// categorical fill + a positional band for x — the usual bar recipe.
+const bySpecies = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;], { mean_mass: avg(&quot;body_mass_g&quot;) });
+const v = canvas(640, 460);
+v.bar(bySpecies, {
+  ...bandX(&quot;species&quot;, { paddingInner: 0.2 }).pick(&quot;x&quot;, &quot;w&quot;),
+  ...barY(&quot;mean_mass&quot;).pick(&quot;y&quot;, &quot;h&quot;),
+  fill: ordinal(&quot;species&quot;),   // colour matches the x category
+});
+return v;
+</code></pre>
+<p>Categorical legend — ask the channel for its legend; the swatch set is lowered as an ordinary plot
+over the scale's domain:</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(680, 460);
+const p = v.dot(&quot;penguins&quot;, {
+  x: linear(&quot;bill_length_mm&quot;),
+  y: linear(&quot;body_mass_g&quot;),
+  fill: ordinal(&quot;species&quot;),
+});
+p.legend(&quot;fill&quot;, { placement: &quot;right&quot; });   // 3 swatches + labels in a right gutter
+return v;
+</code></pre>
+<p>Legend as an in-plot overlay (consumes no layout space):</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
+const p = v.dot(&quot;penguins&quot;, {
+  x: linear(&quot;bill_length_mm&quot;),
+  y: linear(&quot;flipper_length_mm&quot;),
+  fill: ordinal(&quot;species&quot;),
+});
+p.legend(&quot;fill&quot;, { placement: &quot;inside&quot; });
+return v;
+</code></pre>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="point.html">point</a> — categories → evenly-spaced band-centered positions.</li>
+<li><a href="color.html">color</a> — colour as an output space; continuous ramps vs. categorical palettes.</li>
+<li><a href="../layouts/bandX.html">bandX</a> — category → positional band with width.</li>
+</ul>
+
+    </article>
+  </main>
+
+  <script src="../assets/docs.js"></script>
+  <script src="../assets/dvl-example.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
+</body>
+</html>

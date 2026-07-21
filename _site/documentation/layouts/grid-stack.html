@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>grid-stack · DVL</title>
+  <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="app-name" href="../index.html">DVL</a>
+    <nav class="sidebar-nav">
+    
+      <h2>Introduction</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../what-is-dvl.html">What is DVL?</a></li>
+        
+      
+        
+        
+        <li><a href="../getting-started.html">Getting started</a></li>
+        
+      
+        
+        
+        <li><a href="../architecture.html">Architecture</a></li>
+        
+      
+      </ul>
+    
+      <h2>Features</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#channels">Channels</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#scales">Scales</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#data">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        
+      
+      </ul>
+    
+      <h2>Marks</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../marks/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/area.html">area</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/arrow.html">arrow</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/bar.html">bar</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/cell.html">cell</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/connect.html">connect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/dot.html">dot</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/image.html">image</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/line.html">line</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/link.html">link</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/path.html">path</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rect.html">rect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rule.html">rule</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/text.html">text</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/tick.html">tick</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/vector.html">vector</a></li>
+        
+      
+      </ul>
+    
+      <h2>Layouts</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../layouts/README.html">Overview</a></li>
+        
+      
+        
+        <li><strong>Produce</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/bandX.html">bandX</a></li>
+          
+            
+            <li><a href="../layouts/bandY.html">bandY</a></li>
+          
+            
+            <li><a href="../layouts/barX.html">barX</a></li>
+          
+            
+            <li><a href="../layouts/barY.html">barY</a></li>
+          
+            
+            <li><a href="../layouts/stackX.html">stackX</a></li>
+          
+            
+            <li><a href="../layouts/stackY.html">stackY</a></li>
+          
+            
+            <li><a href="../layouts/pitchX.html">pitchX</a></li>
+          
+            
+            <li><a href="../layouts/pitchY.html">pitchY</a></li>
+          
+            
+            <li><a href="../layouts/eqX.html">eqX</a></li>
+          
+            
+            <li><a href="../layouts/eqY.html">eqY</a></li>
+          
+            
+            <li><a href="../layouts/proportionalX.html">proportionalX</a></li>
+          
+            
+            <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
+          
+            
+            <li><a href="../layouts/force.html">force</a></li>
+          
+            
+            <li><a href="../layouts/treemap.html">treemap</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Refine</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li class="active"><a href="../layouts/grid-stack.html">grid-stack</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Resolver</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/hull.html">hull</a></li>
+          
+          </ul>
+        </li>
+        
+      
+      </ul>
+    
+      <h2>Scales</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../scales/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/linear.html">linear</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/log.html">log</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/sqrt.html">sqrt</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/pow.html">pow</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/symlog.html">symlog</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/ordinal.html">ordinal</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/point.html">point</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/color.html">color</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/quantize.html">quantize</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/threshold.html">threshold</a></li>
+        
+      
+      </ul>
+    
+      <h2>Examples</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../examples/README.html">Gallery</a></li>
+        
+      
+      </ul>
+    
+    </nav>
+  </aside>
+
+  <header id="topbar">
+    <button class="sidebar-toggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+    <div class="topbar-spacer"></div>
+    <a class="github-link" href="https://github.com/cudbg/database-vis" target="_blank" rel="noopener" aria-label="GitHub repository">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+  </header>
+
+  <main class="content">
+    <article class="markdown-section">
+      <h1 id="grid-stack">grid-stack</h1>
+<p><code>grid-stack</code> is a <strong>refine/placement layout</strong>: it packs already-materialized items into absolute
+pixel boxes by stacking them row- or column-major in a gutter (or as an inside overlay). It reads the
+content box's four extent cells at execution and emits <code>x, y, w, h</code> per item. Its distinguishing
+feature is that the item <strong>pitch is MEASURED from the real text extents</strong> of the labels — the widest
+label sets the column width — so items never overlap regardless of label length.</p>
+<p>This is the layout behind the <strong>auto-legend</strong>. You almost never author it directly: <code>.legend(channel)</code>
+lowers to a vtable + apply-only scale + a <code>grid-stack</code> (item boxes) + swatch/text plots + a gutter
+reservation. It is documented here because it is the engine that sizes and arranges legend items.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 480);
+v.dot(&quot;penguins&quot;, {
+  x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;),
+  fill: ordinal(&quot;species&quot;),
+}).axis(&quot;x&quot;).axis(&quot;y&quot;).legend(&quot;fill&quot;, { placement: &quot;right&quot; });
+return v;
+</code></pre>
+<p>The <code>.legend(&quot;fill&quot;, …)</code> produces a right-gutter legend: one swatch + text row per species, each row
+sized to the measured label width (<code>Adelie</code>, <code>Chinstrap</code>, <code>Gentoo</code>), stacked at that measured pitch.
+The <code>grid-stack</code> is what lays those rows out.</p>
+<h2 id="the-measured-pitch-model-vs-pitchy">The measured-pitch model — vs <code>pitchY</code></h2>
+<p>There are two item-stack layouts, and they differ in one axis:</p>
+<ul>
+<li><strong><code>grid-stack</code></strong> packs in 2-D, reads the content box, and <strong>measures</strong> the item width from the
+actual (optionally truncated) labels at execution. It is JS-only because it reads extent cells and
+calls the measurement provider. Use it when items have variable-width text and must not overlap.</li>
+<li><strong><a href="../layouts/pitchY.html"><code>pitchY</code></a></strong> is a 1-D <strong>fixed-pitch</strong> stack: <code>y = pad + rank·(pitch+gap)</code>,
+height <code>= pitch</code>, independent of the content box. It needs no box and lowers to pure SQL (a
+windowed <code>rank</code>). Use it when the pitch is known up front.</li>
+</ul>
+<p>The legend uses <code>grid-stack</code> precisely because label widths aren't known until measured; <code>itemW</code> is
+only a seed/fallback used when no measurement provider is available.</p>
+<h2 id="options">Options</h2>
+<p><code>grid-stack</code> is a plan-only operator — it has no authoring factory. Its options are populated by the
+legend-lowering pass (<code>lower-legends.ts</code>) from <code>.legend(channel, opts)</code>. The outputs and the
+<code>GridStackOpts</code> shape:</p>
+<h3 id="outputs-x-y-w-h">Outputs (<code>x, y, w, h</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>output</th>
+<th>space</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>x</code></td>
+<td><code>pixel(coord x)</code></td>
+<td>box origin x (+ <code>inset.x</code>)</td>
+</tr>
+<tr>
+<td><code>y</code></td>
+<td><code>pixel(coord y)</code></td>
+<td>box origin y (+ <code>inset.y</code>)</td>
+</tr>
+<tr>
+<td><code>w</code></td>
+<td><code>pixel(len x)</code></td>
+<td>item width — the measured pitch (uniform across items)</td>
+</tr>
+<tr>
+<td><code>h</code></td>
+<td><code>pixel(len y)</code></td>
+<td>item height (<code>itemH</code>)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="gridstackopts"><code>GridStackOpts</code></h3>
+<table>
+<thead>
+<tr>
+<th>option</th>
+<th>type</th>
+<th>default</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>contentEdges</code></td>
+<td><code>{left,right,top,bottom}</code> cells</td>
+<td>—</td>
+<td>the content box read at execution to size/anchor the grid</td>
+</tr>
+<tr>
+<td><code>itemW</code></td>
+<td>number</td>
+<td>—</td>
+<td>seed item width; the fallback pitch when no measure provider is present</td>
+</tr>
+<tr>
+<td><code>itemH</code></td>
+<td>number</td>
+<td>—</td>
+<td>item height (fixed)</td>
+</tr>
+<tr>
+<td><code>pad</code></td>
+<td>number</td>
+<td><code>4</code></td>
+<td>inset from the anchor edge</td>
+</tr>
+<tr>
+<td><code>major</code></td>
+<td><code>&quot;column&quot;</code> | <code>&quot;row&quot;</code></td>
+<td>side-derived</td>
+<td>wrap axis. left/right ⇒ <code>column</code> (stack down); top/bottom ⇒ <code>row</code> (stack across)</td>
+</tr>
+<tr>
+<td><code>side</code></td>
+<td><code>&quot;left&quot;</code>|<code>&quot;right&quot;</code>|<code>&quot;top&quot;</code>|<code>&quot;bottom&quot;</code></td>
+<td><code>&quot;right&quot;</code></td>
+<td>which gutter the grid occupies (determines the anchor)</td>
+</tr>
+<tr>
+<td><code>inside</code></td>
+<td><code>&quot;top-left&quot;</code>|<code>&quot;top-right&quot;</code>|<code>&quot;bottom-left&quot;</code>|<code>&quot;bottom-right&quot;</code></td>
+<td>—</td>
+<td>an overlay in a content-box corner; consumes no layout space; <code>side</code> is ignored</td>
+</tr>
+<tr>
+<td><code>label</code></td>
+<td><code>{column, fontSize, family?, base, k?}</code></td>
+<td>—</td>
+<td>measure item width from REAL text extents: <code>w = base + max measured label width</code>. <code>k</code> truncates (<code>LEFT(label,k)</code>) before measuring</td>
+</tr>
+<tr>
+<td><code>inset</code></td>
+<td><code>{x, y}</code></td>
+<td><code>{0,0}</code></td>
+<td>glyph anchor inside each box; the emitted <code>x/y</code> shift by this, <code>w/h</code> stay box-sized</td>
+</tr>
+</tbody>
+</table>
+<h3 id="legendchannel-opts-the-authoring-surface"><code>.legend(channel, opts)</code> — the authoring surface</h3>
+<table>
+<thead>
+<tr>
+<th>option</th>
+<th>maps to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>placement: left|right|top|bottom|inside</code> (alias <code>position</code>)</td>
+<td><code>side</code> / <code>inside</code> (which gutter or corner)</td>
+</tr>
+<tr>
+<td><code>swatchSize</code></td>
+<td>swatch diameter</td>
+</tr>
+<tr>
+<td><code>fontSize</code></td>
+<td>label font size (also feeds the measure)</td>
+</tr>
+<tr>
+<td><code>pad</code>, <code>itemGap</code></td>
+<td>item padding / gap</td>
+</tr>
+<tr>
+<td><code>cols</code>, <code>major</code></td>
+<td>wrap capacity / axis</td>
+</tr>
+<tr>
+<td><code>maxLabelChars</code></td>
+<td>truncation <code>k</code> for the measure</td>
+</tr>
+</tbody>
+</table>
+<p>An unknown <code>placement</code> value throws (silent typos cost a debugging session).</p>
+<h2 id="examples">Examples</h2>
+<h3 id="a-right-gutter-categorical-legend">A right-gutter categorical legend</h3>
+<p>The default placement. One row per category, packed column-major (stacked down), pitch measured from
+the species names:</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 480);
+v.dot(&quot;penguins&quot;, {
+  x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), fill: ordinal(&quot;species&quot;),
+}).axis(&quot;x&quot;).axis(&quot;y&quot;).legend(&quot;fill&quot;, { placement: &quot;right&quot; });
+return v;
+</code></pre>
+<h3 id="top-placement-items-stack-across-row-major">Top placement — items stack across (row-major)</h3>
+<p>A top/bottom gutter wraps row-major, and the whole grid grows AWAY from the plot (a second row climbs
+up, never onto the content):</p>
+<pre data-lang="js"><code class="language-js">v.dot(&quot;penguins&quot;, { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), fill: ordinal(&quot;species&quot;) })
+ .legend(&quot;fill&quot;, { placement: &quot;top&quot; });
+</code></pre>
+<h3 id="inside-overlay">Inside overlay</h3>
+<p><code>placement: &quot;inside&quot;</code> anchors the grid in a content-box corner, consuming no layout space:</p>
+<pre data-lang="js"><code class="language-js">v.dot(&quot;penguins&quot;, { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), fill: ordinal(&quot;species&quot;) })
+ .legend(&quot;fill&quot;, { placement: &quot;inside&quot; });
+</code></pre>
+<h3 id="a-size-legend">A size legend</h3>
+<p>Non-fill channels work too; <code>size</code>/<code>opacity</code> map to the swatch's <code>r</code>/<code>fillOpacity</code>, with a neutral
+swatch fill:</p>
+<pre data-lang="js"><code class="language-js">v.dot(&quot;penguins&quot;, { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), size: linear(&quot;body_mass_g&quot;) })
+ .legend(&quot;size&quot;, { placement: &quot;right&quot; });
+</code></pre>
+<h3 id="bound-long-labels-with-maxlabelchars">Bound long labels with <code>maxLabelChars</code></h3>
+<p>Truncate labels before measuring so a very long category name doesn't blow out the gutter width — the
+pitch is <code>base + max(LEFT(label, k))</code>:</p>
+<pre data-lang="js"><code class="language-js">v.dot(&quot;orders&quot;, { x: linear(&quot;qty&quot;), y: linear(&quot;year&quot;), fill: ordinal(&quot;cust_id&quot;) })
+ .legend(&quot;fill&quot;, { placement: &quot;right&quot;, maxLabelChars: 12 });
+</code></pre>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="../layouts/pitchY.html">pitchY</a> — the fixed-pitch 1-D sibling (SQL-lowerable; no box, no measure)</li>
+<li><a href="../layouts/fitText.html">fitText</a> — the other refine layout (fits text to a placed box)</li>
+<li><a href="../layouts/bandX.html">bandX</a> — the data-driven categorical placement layout</li>
+</ul>
+
+    </article>
+  </main>
+
+  <script src="../assets/docs.js"></script>
+  <script src="../assets/dvl-example.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
+</body>
+</html>

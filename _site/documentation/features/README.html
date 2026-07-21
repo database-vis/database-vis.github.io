@@ -1,0 +1,709 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Features · DVL</title>
+  <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="app-name" href="../index.html">DVL</a>
+    <nav class="sidebar-nav">
+    
+      <h2>Introduction</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../what-is-dvl.html">What is DVL?</a></li>
+        
+      
+        
+        
+        <li><a href="../getting-started.html">Getting started</a></li>
+        
+      
+        
+        
+        <li><a href="../architecture.html">Architecture</a></li>
+        
+      
+      </ul>
+    
+      <h2>Features</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#channels">Channels</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#scales">Scales</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#data">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        
+      
+      </ul>
+    
+      <h2>Marks</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../marks/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/area.html">area</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/arrow.html">arrow</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/bar.html">bar</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/cell.html">cell</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/connect.html">connect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/dot.html">dot</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/image.html">image</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/line.html">line</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/link.html">link</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/path.html">path</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rect.html">rect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rule.html">rule</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/text.html">text</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/tick.html">tick</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/vector.html">vector</a></li>
+        
+      
+      </ul>
+    
+      <h2>Layouts</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../layouts/README.html">Overview</a></li>
+        
+      
+        
+        <li><strong>Produce</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/bandX.html">bandX</a></li>
+          
+            
+            <li><a href="../layouts/bandY.html">bandY</a></li>
+          
+            
+            <li><a href="../layouts/barX.html">barX</a></li>
+          
+            
+            <li><a href="../layouts/barY.html">barY</a></li>
+          
+            
+            <li><a href="../layouts/stackX.html">stackX</a></li>
+          
+            
+            <li><a href="../layouts/stackY.html">stackY</a></li>
+          
+            
+            <li><a href="../layouts/pitchX.html">pitchX</a></li>
+          
+            
+            <li><a href="../layouts/pitchY.html">pitchY</a></li>
+          
+            
+            <li><a href="../layouts/eqX.html">eqX</a></li>
+          
+            
+            <li><a href="../layouts/eqY.html">eqY</a></li>
+          
+            
+            <li><a href="../layouts/proportionalX.html">proportionalX</a></li>
+          
+            
+            <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
+          
+            
+            <li><a href="../layouts/force.html">force</a></li>
+          
+            
+            <li><a href="../layouts/treemap.html">treemap</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Refine</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Resolver</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/hull.html">hull</a></li>
+          
+          </ul>
+        </li>
+        
+      
+      </ul>
+    
+      <h2>Scales</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../scales/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/linear.html">linear</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/log.html">log</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/sqrt.html">sqrt</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/pow.html">pow</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/symlog.html">symlog</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/ordinal.html">ordinal</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/point.html">point</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/color.html">color</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/quantize.html">quantize</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/threshold.html">threshold</a></li>
+        
+      
+      </ul>
+    
+      <h2>Examples</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../examples/README.html">Gallery</a></li>
+        
+      
+      </ul>
+    
+    </nav>
+  </aside>
+
+  <header id="topbar">
+    <button class="sidebar-toggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+    <div class="topbar-spacer"></div>
+    <a class="github-link" href="https://github.com/cudbg/database-vis" target="_blank" rel="noopener" aria-label="GitHub repository">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+  </header>
+
+  <main class="content">
+    <article class="markdown-section">
+      <h1 id="features">Features</h1>
+<p>Concept pages. Each will grow into its own document; the outlines below say what each covers so
+the set is navigable now.</p>
+<h2 id="plots-and-marks">Plots and marks</h2>
+<p>A <strong>plot</strong> is one mark type over one source relation; a <strong>canvas</strong> hosts plots and solves their
+shared frame. Marks are deliberately simple — a channel list and a draw function — so all
+intelligence about position lives in scales and layouts. Covers: <code>canvas</code>, the mark methods,
+layering order, containers (<code>rect</code>/<code>bar</code>/<code>cell</code> can host nested plots), and <code>params</code>.</p>
+<pre data-lang="dvl"><code class="lang-dvl">// three layers over one canvas share a frame: the cloud, a per-species highlight
+// (modelled inline on the db branch), and labels riding the highlight's scales.
+const heaviest = db.table(&quot;penguins&quot;).top(1, { col: &quot;body_mass_g&quot;, desc: true }, { partition: [&quot;species&quot;] });
+const v = canvas(640, 360);
+const x = linear(&quot;bill_length_mm&quot;), y = linear(&quot;body_mass_g&quot;);
+v.dot(&quot;penguins&quot;, { x, y, fill: &quot;#cfd3dc&quot; });
+v.dot(heaviest, { x, y, r: 5, fill: &quot;#e15759&quot; });
+v.text(heaviest, { x, y, text: field(&quot;species&quot;), dx: 8, anchor: &quot;start&quot;, fontSize: 10, fill: &quot;#333&quot; });
+return v;
+</code></pre>
+<h2 id="channels">Channels</h2>
+<p><em>This is the concept outline; the full channel-value language — every expression kind, the
+data/pixel and resolution model, and a reference table — has <a href="features/channels.html">its own page</a>.</em></p>
+<p>How channel values bind: literals (positional literals are pixels), scale bindings, layout
+outputs via <code>.pick()</code>, expressions (<code>col()</code> from <code>ir/expr</code>), and cross-mark references. The
+bare-string rule (strings are literals everywhere — including <code>text</code>), channel kinds
+(positional-x/y, pixel, color, shape, text), and how a mark's channel kinds type-check what you
+bind. <strong>Arithmetic channels</strong>: an expression may combine columns and literals —
+<code>x: binary(&quot;+&quot;, col(&quot;total&quot;), literal(5))</code> — and compiles to both substrates (SQL + JS) through
+the one <code>ScalarExpr</code> lowering; a <code>via</code>/aggregate nested inside arithmetic is <strong>lifted</strong> into its
+own join automatically, so <code>y: borrowed + 5</code> works (a pixel offset on a placed value, a data
+offset on a borrowed column).</p>
+<pre data-lang="dvl"><code class="lang-dvl">// literal vs scale vs column: x/y are SCALE bindings; r: 4 and fill: '#4e79a7' are
+// LITERALS (a bare string is never a column read); the label reads a column with field().
+const v = canvas(640, 320);
+const x = linear(&quot;bill_length_mm&quot;), y = linear(&quot;body_mass_g&quot;);
+v.dot(&quot;penguins&quot;, { x, y, r: 4, fill: &quot;#4e79a7&quot;, fillOpacity: 0.6 });
+v.text(&quot;penguins&quot;, { x, y, text: field(&quot;island&quot;), dy: -8, fontSize: 8, fill: &quot;#888&quot; });
+return v;
+</code></pre>
+<pre data-lang="dvl"><code class="lang-dvl">// ARITHMETIC channels: each arrow's head is a data expression — cexpr`…` builds the tree (bare
+// names are columns), compiling once to both substrates (SQL + JS) via the ScalarExpr lowering.
+// Feeding it through the SAME scale as the tail (x()/y()) puts both endpoints in one domain — one coupled axis.
+const flow = db.derive(&quot;flow&quot;, `
+  SELECT bill_length_mm AS x, body_mass_g AS y,
+         (bill_depth_mm - 17) * 0.3 AS dx, (flipper_length_mm - 200) * 40 AS dy
+  FROM penguins`);
+const v = canvas(640, 360);
+const x = linear(), y = linear();
+v.arrow(flow, {
+  x1: x(&quot;x&quot;), y1: y(&quot;y&quot;),
+  x2: x(cexpr`x + dx`),
+  y2: y(cexpr`y + dy`),
+  headType: &quot;barb&quot;, headSize: 5, stroke: &quot;#4e79a7&quot;, strokeOpacity: 0.6,
+}).axis(&quot;x&quot;).axis(&quot;y&quot;);
+return v;
+</code></pre>
+<h2 id="scales">Scales</h2>
+<p>Operators that train a <strong>domain</strong> from data and apply a normalization per row. Continuous
+(<code>linear</code>, <code>log</code>, <code>sqrt</code>, <code>pow</code>, <code>symlog</code>), categorical (<code>ordinal</code>, <code>point</code>), and binned
+(<code>quantize</code>, <code>threshold</code>) families; on a <strong>color channel</strong> any continuous scale is a sequential
+ramp and <code>ordinal</code> is a categorical palette (a <code>scheme</code> names the palette) — color is an output
+space, not a scale family. Domain sharing (object identity, facet defaults, <code>shared: false</code>);
+domain treatments (<code>nice</code>, <code>zero</code>, explicit). Reference: <a href="scales/README.html">scales/</a>.</p>
+<pre data-lang="dvl"><code class="lang-dvl">// ONE scale object bound across two relations declares &quot;the same quantity&quot;: the domains
+// UNION and both layers share a frame — the species means land exactly on the cloud.
+const bySpecies = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;], { bill: avg(&quot;bill_length_mm&quot;), mass: avg(&quot;body_mass_g&quot;) });
+const v = canvas(640, 360);
+const x = linear(), y = linear();
+v.dot(&quot;penguins&quot;, { x: x(&quot;bill_length_mm&quot;), y: y(&quot;body_mass_g&quot;), fill: &quot;#cfd3dc&quot; });
+v.dot(bySpecies, { x: x(&quot;bill&quot;), y: y(&quot;mass&quot;), r: 6, fill: ordinal(&quot;species&quot;) })
+ .axis(&quot;x&quot;).axis(&quot;y&quot;).legend(&quot;fill&quot;);
+return v;
+</code></pre>
+<h2 id="layouts">Layouts</h2>
+<p>Operators that compute <em>arrangements</em> — usually multi-output (<code>.pick(&quot;x&quot;, &quot;w&quot;)</code>). The three
+classes: <strong>produce</strong> (data → normalized positions: <code>bandX</code>, <code>barY</code>, <code>stackY</code>, <code>eqX</code>, <code>force</code>,
+<code>treemap</code>, <code>proportional*</code>), <strong>refine</strong> (positions → positions, post-placement: <code>fitText</code>,
+<code>grid-stack</code>), <strong>measure</strong> (positions → sizes, feeding the demand loop). Reference:
+<a href="layouts/README.html">layouts/</a>.</p>
+<p>Each 1-D producer is an <strong>X/Y pair</strong> — <code>bandX</code>/<code>bandY</code>, <code>barX</code>/<code>barY</code>, <code>stackX</code>/<code>stackY</code>,
+<code>pitchX</code>/<code>pitchY</code>, <code>eqX</code>/<code>eqY</code> — so a vertical bar (<code>bandX</code> + <code>barY</code>) mirrors to a horizontal one
+(<code>bandY</code> + <code>barX</code>) by swapping the axis; <code>eqX</code> splits columns, <code>eqY</code> rows.</p>
+<pre data-lang="dvl"><code class="lang-dvl">// multi-output layouts spread into channels with .pick(): bandX gives {x, w}, stackY {y, h}.
+const stacks = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;, &quot;island&quot;], { n: count() });
+const v = canvas(640, 340);
+v.rect(stacks, {
+  ...bandX(&quot;species&quot;, { paddingInner: 0.2 }).pick(&quot;x&quot;, &quot;w&quot;),
+  ...stackY({ weight: &quot;n&quot;, group: &quot;species&quot;, order: &quot;island&quot; }).pick(&quot;y&quot;, &quot;h&quot;),
+  fill: ordinal(&quot;island&quot;),
+}).axis(&quot;x&quot;).legend(&quot;fill&quot;);
+return v;
+</code></pre>
+<h2 id="the-frame">The frame</h2>
+<p>Where pixels come from: operators emit normalized [0, 1] coordinates; a constraint solver
+arranges boxes (canvas, panels, axis gutters, margins); the affine maps normalized → pixel per
+plot and axis. Axes are ordinary plots over a scale's tick relation — placement, merging of
+duplicate sibling axes, tick-count-from-extent, and label measurement all flow through the same
+dataflow as your marks. Covers <code>.axis()</code>, axis options, margins/insets, and pixel-passthrough
+channels for precomputed geometry.</p>
+<pre data-lang="dvl"><code class="lang-dvl">// axes are ordinary plots over the scale's tick relation: pin a tick count on x, place
+// the y axis on the RIGHT — the gutters are solved from measured labels, not guessed.
+const v = canvas(640, 320);
+v.dot(&quot;penguins&quot;, { x: linear(&quot;flipper_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), fill: &quot;#4e79a7&quot; })
+ .axis(&quot;x&quot;, { ticks: { count: 4 } })
+ .axis(&quot;y&quot;, { placement: &quot;right&quot; });
+return v;
+</code></pre>
+<p><strong>Axis options</strong> — pass them to the <code>.axis(dim, opts)</code> directive or scale-level as
+<code>linear(&quot;c&quot;, { axis: {…} })</code> (the directive wins on conflict; <code>axis: false</code> suppresses the axis):</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>title</code></td>
+<td><code>boolean</code> | <code>string</code> | object</td>
+<td>none</td>
+<td>axis title — <code>true</code> derives the text from the scale's column, a string sets it, an object styles the text mark (<code>text</code>, <code>fontSize</code> 11, <code>fill</code>/<code>color</code> <code>#333</code>, <code>opacity</code>, <code>dx</code>/<code>dy</code> nudge, <code>rotate</code>, <code>anchor</code>, <code>baseline</code>)</td>
+</tr>
+<tr>
+<td><code>ticks</code></td>
+<td><code>number</code> | <code>{ count, algorithm }</code></td>
+<td>auto</td>
+<td>tick count, or a count + a registered tick algorithm</td>
+</tr>
+<tr>
+<td><code>tickLength</code></td>
+<td><code>number</code></td>
+<td><code>5</code></td>
+<td>tick-mark length; label nudges and the gutter pad derive from it</td>
+</tr>
+<tr>
+<td><code>fontSize</code></td>
+<td><code>number</code></td>
+<td><code>10</code></td>
+<td>tick-label font size</td>
+</tr>
+<tr>
+<td><code>placement</code></td>
+<td><code>&quot;top&quot;</code>|<code>&quot;right&quot;</code>|<code>&quot;bottom&quot;</code>|<code>&quot;left&quot;</code></td>
+<td>auto</td>
+<td>pin the axis to a side (the <code>.axis()</code> directive; scale-level uses <code>side</code>)</td>
+</tr>
+<tr>
+<td><code>place</code></td>
+<td><code>&quot;inside&quot;</code> | <code>&quot;outside&quot;</code></td>
+<td>role rank</td>
+<td>order among co-located bands on the same side</td>
+</tr>
+<tr>
+<td><code>gap</code></td>
+<td><code>number</code></td>
+<td><code>0</code></td>
+<td>px before the band along the stack normal</td>
+</tr>
+<tr>
+<td><code>pad</code></td>
+<td><code>number</code> | per-side</td>
+<td><code>0</code></td>
+<td>inner padding between the band edges and its ticks/labels</td>
+</tr>
+</tbody>
+</table>
+<pre data-lang="dvl"><code class="lang-dvl">// axis TITLES: `true` derives the title from the column; a string sets it explicitly.
+const v = canvas(640, 340);
+v.dot(&quot;penguins&quot;, { x: linear(&quot;flipper_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), fill: &quot;#4e79a7&quot; })
+ .axis(&quot;x&quot;, { title: true })
+ .axis(&quot;y&quot;, { title: &quot;body mass (g)&quot; });
+return v;
+</code></pre>
+<h2 id="join-paths">Join paths</h2>
+<p>&quot;Relate this relation to that one, on these columns, possibly through intermediates&quot; is <strong>one
+concept</strong> — a <code>Path</code> — and every join site in DVL consumes it: nest keys, cross-mark and
+cross-table <code>via</code>, layout aux inputs (force's edges). One constructor vocabulary:</p>
+<pre data-lang="js"><code class="language-js">eq('penguins.island', 'islands.island')   // an explicit predicate (also lt/le/gt/ge/neq)
+on('island')                              // same-column eq shorthand
+fk('islands')                             // a named FK hop — expands against the catalog
+path('friends', 'penguins', 'islands')    // a multi-hop chain of FK hops
+// …and OMITTING the path infers the unique FK between source and target
+</code></pre>
+<p>Paths resolve once (against the database's FK catalog — see <a href="#data">Data</a>); what varies per
+site is <em>policy</em>, not type: a <strong>nest key</strong> must resolve to all-eq conditions (it feeds a
+partition key), while a <strong>via</strong> admits any predicate — a range join just matches a <em>set</em>, which
+is what <a href="#cross-mark-and-cross-table-references">resolutions</a> are for. The resolver also judges <strong>multiplicity</strong>:
+a hop that lands on a known key (an FK's target) is provably single-match; a non-eq hop is
+provably multi; multi without a declared resolution is a build-time error, never a silent
+fan-out.</p>
+<pre data-lang="dvl"><code class="lang-dvl">// a node-link diagram: force places the members; each edge borrows its two endpoints
+// from that plot through a JOIN PATH. The `eq('follows.src','members.id')` predicates ARE
+// the paths — `on('col')` (same-column eq), `fk('table')` (named hop), and `path(...)`
+// (multi-hop) are the shorthands the section lists, resolved against the same FK catalog.
+const v = canvas(640, 420);
+const nodes = v.dot(&quot;members&quot;, { ...force(&quot;follows&quot;).pick(&quot;x&quot;, &quot;y&quot;), r: 8, fill: ordinal(&quot;community&quot;) });
+v.link(&quot;follows&quot;, {
+  ...nodes.via(eq(&quot;follows.src&quot;, &quot;members.id&quot;)).pick({ x1: &quot;x&quot;, y1: &quot;y&quot; }),
+  ...nodes.via(eq(&quot;follows.dst&quot;, &quot;members.id&quot;)).pick({ x2: &quot;x&quot;, y2: &quot;y&quot; }),
+  stroke: &quot;#bbb&quot;, strokeOpacity: 0.6,
+});
+return v;
+</code></pre>
+<h2 id="facets-and-nesting">Facets and nesting</h2>
+<p>Small multiples are a container plot plus a <strong>nest key</strong> — any <a href="#join-paths">join path</a>:</p>
+<pre data-lang="js"><code class="language-js">panel.nest('penguins', { on: on('island') })       // same-column eq shorthand
+panel.nest('penguins', { on: fk('islands') })      // a named FK hop
+panel.nest('penguins')                             // infer the unique FK from the catalog
+panel.link('friends', { on: path('friends', 'penguins', 'islands') })  // MULTI-HOP: the link
+// needn't carry a denormalized panel column — the key travels friends.src → penguins → islands
+</code></pre>
+<p>A multi-hop key compiles to one join per hop; the panel key (<code>dvl_cell</code>) threads through scales,
+ticks, and placement. Better still, a layer whose <em>referent</em> is already nested can <strong>borrow the
+referent's cell</strong> instead of re-deriving it — pick the reserved <code>cell</code> output:</p>
+<pre data-lang="js"><code class="language-js">panel.link('friends', {
+  ...np.via(eq('friends.src', 'penguins.id')).pick({ x1: 'x', y1: 'y', cell: 'dvl_cell' }),
+  ...np.via(eq('friends.dst', 'penguins.id')).pick({ x2: 'x', y2: 'y' }),
+})
+</code></pre>
+<p>One declared FK, read twice: the <strong>cell</strong> resolves early (it stands in for the nest key, before
+layout), the <strong>positions</strong> resolve late (post-placement pixels). The borrow path must be provably
+single-match end to end — declare the FKs it walks. Also covers <code>.nest()</code> multi-layer panels and
+per-panel vs shared domains (<code>shared: false</code>).</p>
+<p><strong>Which rows belong to a panel?</strong> Take the partition seriously: a nested subplot scopes the
+<em>whole database</em> — inside a panel, a table name denotes its restriction to that panel, derived
+through the declared FK paths. A nested layer over an edge table needs <strong>no <code>on</code> and no
+borrow</strong>: <code>panel.link('follows', { …position vias… })</code> derives its partition, and a cross-panel
+edge doesn't get filtered — it simply doesn't exist in either panel's data (the strict,
+conjoin-the-paths default). <code>{ scope: 'union' }</code> puts a multi-path row in <em>every</em> panel it
+touches (local-subgraph small multiples). A layer that genuinely wants global data with a
+per-panel identity is a <strong>top-level layer with a <code>frame:</code> opt</strong> naming its assigning path
+(<code>v.link('follows', …, { frame: srcVia })</code>) — an explicit opt-out of the partition. The rows a
+conjoin drops are reported as data (the layer's <code>sigmaDropped</code> diagnostics relation), and the
+old <code>pick({ cell: 'dvl_cell' })</code> spelling still works with a deprecation warning.</p>
+<pre data-lang="dvl"><code class="lang-dvl">// a container rect per species + a nest key (any join path): panels partition the data,
+// and the shared x/y scales keep every panel comparable.
+const species = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;], {});
+const v = canvas(760, 280);
+v.rect(species, { ...eqX(&quot;species&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: 12, h: 236, fill: &quot;#f5f6fa&quot; })
+ .dot(&quot;penguins&quot;, { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), fill: ordinal(&quot;species&quot;) },
+      { on: eq(&quot;species&quot;, &quot;species&quot;) });
+return v;
+</code></pre>
+<h2 id="cross-mark-and-cross-table-references">Cross-mark and cross-table references</h2>
+<p><em>This section keeps the resolution grammar reference; the full mechanism — both referent kinds,
+top-level vs nested consumers, frame assignments, timing, and the placeholder machinery — has
+<a href="features/via.html">its own page</a>.</em></p>
+<p>One verb, two referent kinds — the receiver says which, and the <strong>type system carries the
+difference</strong> (same mechanism, different Space):</p>
+<pre data-lang="js"><code class="language-js">// PLOT referent: borrow SOLVED positions — results arrive in PIXELS, never re-placed
+np.via(eq('friends.src', 'penguins.id')).pick({ x1: 'x', y1: 'y' })
+
+// TABLE referent: borrow DATA values — results arrive in DATA space, free to feed a scale
+db.table('penguins').via(eq('friends.src', 'penguins.id')).pick({ w: 'mass' })
+</code></pre>
+<p>Composite keys, multi-hop paths, and nested referents are supported. A join that can match
+<strong>several</strong> referent rows per mark must declare its <strong>resolution</strong> — how the match set reduces
+to one value:</p>
+<pre data-lang="js"><code class="language-js">// a bare AggFn applies to EVERY picked channel independently (centroid of my cities)
+cityDots.via(eq('regions.id', 'cities.region'), { resolve: 'avg' }).pick({ cx: 'x', cy: 'y' })
+
+// positional forms order within the match set (each order's LAST quote before it)
+quoteDots.via(gt('orders.ts', 'quotes.ts'), { resolve: { fn: 'last', order: 'ts' } })
+         .pick({ fill: 'price' })
+
+// an EXPRESSION argument over the two-sided row — m is your mark, f is one match;
+// a computed resolution declares a NEW output name (the map key) and is picked by it
+quoteDots.via(gt('orders.ts', 'quotes.ts'),
+              { resolve: { spend: { fn: 'sum', arg: expr`f.price * f.qty` } } }).pick('spend')
+
+// an opaque JS reduce — a bare function as the map value: (matches, mark) =&gt; value
+cityDots.via(eq('regions.id', 'cities.region'), {
+  resolve: { far: (matches, mark) =&gt;
+    Math.max(...matches.map(c =&gt; Math.hypot(c.x - mark.x, c.y - mark.y))) },
+}).pick({ r: 'far' })
+
+// a NAMED reducer — a string map value looks up a registered JS reducer by name
+// (register with registries.reducers; keeps the spec serializable, unlike an inline fn)
+cityDots.via(eq('regions.id', 'cities.region'), { resolve: { pick: 'mode' } }).pick({ fill: 'pick' })
+</code></pre>
+<p>Declarative resolutions lower entirely to SQL (a staged join, one <code>GROUP BY dvl_mark</code> reduce,
+a LEFT-JOIN attach — a mark with no matches gets NULL, never dropped); a JS reduce (inline
+function or named registered reducer) materializes its match sets. The <code>expr</code> tagged template
+writes arguments as plain strings — <code>m.&lt;col&gt;</code>/<code>f.&lt;col&gt;</code> reference the two sides. A computed
+output's space defaults to data; declare one with <code>{ fn, arg, space: pixelSpace(len('x')) }</code> when
+the value is really a pixel quantity. If a borrowed name collides with an existing mark column,
+the referent's value wins (that's the point of the via) — with a one-time warning. A provably
+multi-match join <strong>without</strong> a resolution is a build error; the lenient single-match default for
+<em>unprovable</em> joins can be tightened by passing <code>{ strictMultiplicity: true }</code> to <code>renderSpec</code>/<code>compileSpec</code>, which makes
+every unprovable multiplicity a build error too. The basis for node-link diagrams, annotations,
+connectors, and ER-style diagrams.</p>
+<pre data-lang="dvl"><code class="lang-dvl">// PLOT referent + a resolution, live: each species label sits at the CENTROID of its
+// dots — the via matches MANY dots per species; resolve: 'avg' reduces every picked
+// channel independently. The borrowed values are solved pixels, never re-placed.
+const species = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;], {});
+const v = canvas(640, 360);
+const dots = v.dot(&quot;penguins&quot;, { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), fill: ordinal(&quot;species&quot;), fillOpacity: 0.5 });
+v.text(species, {
+  ...dots.via(eq(&quot;species&quot;, &quot;species&quot;), { resolve: &quot;avg&quot; }).pick({ x: &quot;x&quot;, y: &quot;y&quot; }),
+  text: field(&quot;species&quot;), fontSize: 12, fill: &quot;#333&quot;, anchor: &quot;middle&quot;,
+});
+return v;
+</code></pre>
+<h2 id="subplots">Subplots</h2>
+<p><code>v.subplot()</code> appends a row to a virtual panels table and hosts a child plot in it;
+<code>v.subplots({ ...eqX(&quot;i&quot;).pick(&quot;x&quot;, &quot;w&quot;) })</code> chooses the panels' layout exactly the way any plot
+chooses one. Auto row/column when no layout is bound.</p>
+<pre data-lang="dvl"><code class="lang-dvl">// two panels over the panel-index virtual table; both encode body_mass on y, so the
+// solver UNIONS that scale and the interior y-axis merges away — ONE axis speaks for both.
+const v = canvas(720, 300);
+v.subplot().dot(&quot;penguins&quot;, { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;) });
+v.subplot().dot(&quot;penguins&quot;, { x: linear(&quot;flipper_length_mm&quot;), y: linear(&quot;body_mass_g&quot;) });
+v.subplots({ ...eqX(&quot;i&quot;).pick(&quot;x&quot;, &quot;w&quot;) });
+return v;
+</code></pre>
+<h2 id="data">Data</h2>
+<p>The <code>Database</code> wrapper: <code>fromRows</code>, <code>fromColumnar</code>, <code>table</code>, <code>fromQuery</code>; backends (DuckDB-Wasm
+in the browser, the same engine in Node); schema introspection; when data crosses between SQL
+and JS and what it costs.</p>
+<p><strong>The FK catalog</strong> is what <a href="#join-paths">join paths</a> resolve against — it powers <code>fk()</code> hops,
+inferred nest keys, and the multiplicity judgment (FK targets are keys, so landing on one proves
+single-match):</p>
+<pre data-lang="js"><code class="language-js">const db = new Database({ backend });
+db.declareFK({ fromTable: 'friends', fromCols: ['src'], toTable: 'penguins', toCols: ['id'] });
+await db.loadFKs();                     // or introspect the backend's declared FKs
+const v = canvas(640, 480, { db });     // hand the catalog to the builder/resolver
+</code></pre>
+<p>Without a catalog, explicit predicates still work everywhere; only inference and provability
+degrade (unprovable joins compile as single-match — today's lenient default).</p>
+<pre data-lang="dvl"><code class="lang-dvl">// the Database wrapper in the small: `db.fromRows` builds a relation from literal rows,
+// and the canvas queries it like any base table — the front door the section opens with
+// (fromRows / fromColumnar / table / fromQuery). The FK catalog above is what join paths
+// then resolve against.
+db.fromRows(&quot;quarters&quot;, [
+  { q: &quot;Q1&quot;, rev: 120 }, { q: &quot;Q2&quot;, rev: 180 }, { q: &quot;Q3&quot;, rev: 90 }, { q: &quot;Q4&quot;, rev: 210 },
+]);
+const v = canvas(420, 300);
+v.bar(&quot;quarters&quot;, {
+  ...bandX(&quot;q&quot;).pick(&quot;x&quot;, &quot;w&quot;),
+  ...barY(&quot;rev&quot;, { zero: true }).pick(&quot;y&quot;, &quot;h&quot;),
+  fill: &quot;#4e79a7&quot;,
+}).axis(&quot;x&quot;).axis(&quot;y&quot;);
+return v;
+</code></pre>
+<h2 id="debugging">Debugging</h2>
+<p>Pass a <code>DuckDbSink</code> to <code>renderSpec</code> and every compile pass, operator run, SQL statement, cell
+write, and solver iteration is recorded into <code>dvl_*</code> tables — then explore them with SQL, or
+with DVL's own self-visualizations (<code>spanTimeline</code>, <code>sqlProfile</code>, <code>convergenceTrace</code>,
+<code>convergenceResidual</code>, <code>entityCounts</code>, <code>erDiagram</code>).</p>
+
+    </article>
+  </main>
+
+  <script src="../assets/docs.js"></script>
+  <script src="../assets/dvl-example.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
+</body>
+</html>

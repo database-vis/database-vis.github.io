@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>hull · DVL</title>
+  <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="app-name" href="../index.html">DVL</a>
+    <nav class="sidebar-nav">
+    
+      <h2>Introduction</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../what-is-dvl.html">What is DVL?</a></li>
+        
+      
+        
+        
+        <li><a href="../getting-started.html">Getting started</a></li>
+        
+      
+        
+        
+        <li><a href="../architecture.html">Architecture</a></li>
+        
+      
+      </ul>
+    
+      <h2>Features</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#channels">Channels</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#scales">Scales</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#data">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        
+      
+      </ul>
+    
+      <h2>Marks</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../marks/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/area.html">area</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/arrow.html">arrow</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/bar.html">bar</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/cell.html">cell</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/connect.html">connect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/dot.html">dot</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/image.html">image</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/line.html">line</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/link.html">link</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/path.html">path</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rect.html">rect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rule.html">rule</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/text.html">text</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/tick.html">tick</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/vector.html">vector</a></li>
+        
+      
+      </ul>
+    
+      <h2>Layouts</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../layouts/README.html">Overview</a></li>
+        
+      
+        
+        <li><strong>Produce</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/bandX.html">bandX</a></li>
+          
+            
+            <li><a href="../layouts/bandY.html">bandY</a></li>
+          
+            
+            <li><a href="../layouts/barX.html">barX</a></li>
+          
+            
+            <li><a href="../layouts/barY.html">barY</a></li>
+          
+            
+            <li><a href="../layouts/stackX.html">stackX</a></li>
+          
+            
+            <li><a href="../layouts/stackY.html">stackY</a></li>
+          
+            
+            <li><a href="../layouts/pitchX.html">pitchX</a></li>
+          
+            
+            <li><a href="../layouts/pitchY.html">pitchY</a></li>
+          
+            
+            <li><a href="../layouts/eqX.html">eqX</a></li>
+          
+            
+            <li><a href="../layouts/eqY.html">eqY</a></li>
+          
+            
+            <li><a href="../layouts/proportionalX.html">proportionalX</a></li>
+          
+            
+            <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
+          
+            
+            <li><a href="../layouts/force.html">force</a></li>
+          
+            
+            <li><a href="../layouts/treemap.html">treemap</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Refine</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Resolver</strong>
+          <ul>
+          
+            
+            <li class="active"><a href="../layouts/hull.html">hull</a></li>
+          
+          </ul>
+        </li>
+        
+      
+      </ul>
+    
+      <h2>Scales</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../scales/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/linear.html">linear</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/log.html">log</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/sqrt.html">sqrt</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/pow.html">pow</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/symlog.html">symlog</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/ordinal.html">ordinal</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/point.html">point</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/color.html">color</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/quantize.html">quantize</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/threshold.html">threshold</a></li>
+        
+      
+      </ul>
+    
+      <h2>Examples</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../examples/README.html">Gallery</a></li>
+        
+      
+      </ul>
+    
+    </nav>
+  </aside>
+
+  <header id="topbar">
+    <button class="sidebar-toggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+    <div class="topbar-spacer"></div>
+    <a class="github-link" href="https://github.com/cudbg/database-vis" target="_blank" rel="noopener" aria-label="GitHub repository">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+  </header>
+
+  <main class="content">
+    <article class="markdown-section">
+      <h1 id="hull">hull</h1>
+<p><code>hull</code> draws a <strong>polygon around a set of points</strong> — a convex hull or a bounding box. It is not a
+<code>.pick()</code> layout like <code>bandX</code>/<code>force</code>; it is a <strong>mark</strong> fed by a <strong>geometry via resolver</strong>. The
+pattern is pure DVL: <code>via()</code> joins each group row to its member points and borrows their <strong>solved
+(pixel) positions</strong>, and the resolver reduces that match set to one polygon the <code>hull</code> mark draws.
+It is the <strong>resolver</strong> class of layout (see the <a href="README.html#the-four-classes">layouts overview</a>) —
+a reduction of a matched set to one shape per row, not a <code>.pick()</code> placement operator.</p>
+<pre data-lang="dvl"><code class="lang-dvl">// Convex hull per species, over a bill-length × body-mass scatter.
+const species = db.table('penguins').groupby(['species'], {});   // one row per species = the hull anchors
+const v = canvas(640, 460);
+const dots = v.dot('penguins', {
+  x: linear('bill_length_mm'), y: linear('body_mass_g'), fill: ordinal('species'),
+});
+v.hull(species, {
+  ...dots.via(on('species'), { resolve: 'convex' }).pick('path'),
+  stroke: ordinal('species'), fill: ordinal('species'), fillOpacity: 0.12,
+}).axis('x').axis('y');
+return v;
+</code></pre>
+<p>The <code>dot</code> plot places the points; <code>species</code> is one row per group (the hull anchors). Each hull
+borrows its species' dots through <code>via(on('species'))</code> and the <code>convex</code> resolver reduces them to a
+polygon. Because the borrowed positions are already <strong>placed pixels</strong>, the hull is drawn as-is — no
+paired scale, no re-placement.</p>
+<h2 id="the-resolver">The resolver</h2>
+<p>A <strong>geometry resolver</strong> reduces the matched point set to a polygon — an array of <code>[x, y]</code> vertices
+in drawing order, closed by the mark. Name it as the bare <code>resolve</code> — <code>{ resolve: 'convex' }</code>. The
+resolver declares its <strong>default output</strong> (<code>path</code>) and <strong>default inputs</strong> (the placed <code>x</code>/<code>y</code>
+channels), so neither the <code>{ path: … }</code> wrapper nor <code>cols</code> is needed in the common case:</p>
+<table>
+<thead>
+<tr>
+<th>Resolver</th>
+<th>What it computes</th>
+<th>Output</th>
+<th>Substrate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>convex</code></td>
+<td>the convex hull (Andrew's monotone chain)</td>
+<td>hull vertices; ≤2 unique points draw as-is (no degenerate triangle)</td>
+<td><strong>SQL</strong> (spatial) or JS</td>
+</tr>
+<tr>
+<td><code>bbox</code></td>
+<td>the axis-aligned bounding box</td>
+<td>the 4 corners enclosing every point</td>
+<td>JS</td>
+</tr>
+</tbody>
+</table>
+<p>Override the inputs only when the point columns are not <code>x</code>/<code>y</code>: <code>{ resolve: { hull: { js: 'convex', cols: ['px', 'py'] } } }</code> (the map form also renames the output). An empty match set yields no polygon.</p>
+<h2 id="the-mark">The mark</h2>
+<p><code>hull</code> is a <strong>per-row</strong> mark: one polygon per source row. Its <code>path</code> channel carries the polygon
+(bound from the via <code>.pick('path')</code>); it <strong>strokes and fills</strong> like a closed shape, so it takes the
+full paint set (<code>stroke</code>, <code>fill</code>, <code>fillOpacity</code>, <code>strokeWidth</code>, …). Position lives in the vertices,
+so there are no <code>x</code>/<code>y</code> channels.</p>
+<table>
+<thead>
+<tr>
+<th>Channel</th>
+<th>Kind</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>path</code></td>
+<td>geometry</td>
+<td>the polygon vertices (a via geometry resolution), drawn closed</td>
+</tr>
+<tr>
+<td><code>stroke</code>, <code>fill</code>, <code>fillOpacity</code>, <code>strokeWidth</code>, …</td>
+<td>paint</td>
+<td>the usual paint channels</td>
+</tr>
+</tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<p>A bounding box per species instead of a hull — same call, <code>bbox</code> for <code>convex</code>:</p>
+<pre data-lang="dvl"><code class="lang-dvl">const species = db.table('penguins').groupby(['species'], {});
+const v = canvas(640, 460);
+const dots = v.dot('penguins', { x: linear('bill_length_mm'), y: linear('body_mass_g'), fill: ordinal('species') });
+v.hull(species, {
+  ...dots.via(on('species'), { resolve: 'bbox' }).pick('path'),
+  stroke: ordinal('species'), fill: 'none', strokeWidth: 1.5,
+}).axis('x').axis('y');
+return v;
+</code></pre>
+<p>One hull over <strong>all</strong> points — anchor on <code>UNIT</code> (the built-in single-row table) and match every
+point with the <code>on('*')</code> CROSS product; no grouping or join key at all. A hull with an unfilled
+interior reads as an outline:</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
+const dots = v.dot('penguins', { x: linear('bill_length_mm'), y: linear('body_mass_g'), fill: '#4e79a7', fillOpacity: 0.6 });
+v.hull(UNIT, {
+  ...dots.via(on('*'), { resolve: 'convex' }).pick('path'),
+  stroke: '#e15759', fill: 'none', strokeWidth: 2,
+}).axis('x').axis('y');
+return v;
+</code></pre>
+<p><code>UNIT</code> is a one-row, one-column (<code>value: 1</code>) table — the anchor for a mark with no table of its
+own; <code>UNIT(v)</code> carries a different scalar.</p>
+<h2 id="substrate">Substrate</h2>
+<p><code>convex</code> is <strong>SQL-pushed</strong>: the bare <code>resolve: 'convex'</code> runs <code>ST_ConvexHull</code> in DuckDB (the
+<code>spatial</code> extension, loaded on demand — an unavailable extension throws, it never silently falls
+back), returning the hull as WKT the mark parses. To force the client-side reduce instead (the JS
+<strong>escape hatch</strong> — e.g. no extension, offline), pass the reducer inline:
+<code>{ resolve: { path: { js: (matches, mark) =&gt; … } } }</code>. <code>bbox</code> is JS (min/max needs no extension).
+Concave/α-shape hulls (<code>ST_ConcaveHull</code>, multi-ring paths) are deferred — see
+<code>design/2026-07-20-convexhull-resolver.html</code>.</p>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a> — the borrow-and-reduce mechanism the hull rides on</li>
+<li><a href="force.html">force</a> — the other set-of-rows → computed-shape operator</li>
+<li><a href="../marks/dot.html">dot</a> — the point plot a hull is usually drawn over</li>
+</ul>
+
+    </article>
+  </main>
+
+  <script src="../assets/docs.js"></script>
+  <script src="../assets/dvl-example.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
+</body>
+</html>

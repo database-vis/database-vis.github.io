@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>fitText · DVL</title>
+  <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="app-name" href="../index.html">DVL</a>
+    <nav class="sidebar-nav">
+    
+      <h2>Introduction</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../what-is-dvl.html">What is DVL?</a></li>
+        
+      
+        
+        
+        <li><a href="../getting-started.html">Getting started</a></li>
+        
+      
+        
+        
+        <li><a href="../architecture.html">Architecture</a></li>
+        
+      
+      </ul>
+    
+      <h2>Features</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#channels">Channels</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#scales">Scales</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#data">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        
+      
+      </ul>
+    
+      <h2>Marks</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../marks/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/area.html">area</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/arrow.html">arrow</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/bar.html">bar</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/cell.html">cell</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/connect.html">connect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/dot.html">dot</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/image.html">image</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/line.html">line</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/link.html">link</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/path.html">path</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rect.html">rect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rule.html">rule</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/text.html">text</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/tick.html">tick</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/vector.html">vector</a></li>
+        
+      
+      </ul>
+    
+      <h2>Layouts</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../layouts/README.html">Overview</a></li>
+        
+      
+        
+        <li><strong>Produce</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/bandX.html">bandX</a></li>
+          
+            
+            <li><a href="../layouts/bandY.html">bandY</a></li>
+          
+            
+            <li><a href="../layouts/barX.html">barX</a></li>
+          
+            
+            <li><a href="../layouts/barY.html">barY</a></li>
+          
+            
+            <li><a href="../layouts/stackX.html">stackX</a></li>
+          
+            
+            <li><a href="../layouts/stackY.html">stackY</a></li>
+          
+            
+            <li><a href="../layouts/pitchX.html">pitchX</a></li>
+          
+            
+            <li><a href="../layouts/pitchY.html">pitchY</a></li>
+          
+            
+            <li><a href="../layouts/eqX.html">eqX</a></li>
+          
+            
+            <li><a href="../layouts/eqY.html">eqY</a></li>
+          
+            
+            <li><a href="../layouts/proportionalX.html">proportionalX</a></li>
+          
+            
+            <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
+          
+            
+            <li><a href="../layouts/force.html">force</a></li>
+          
+            
+            <li><a href="../layouts/treemap.html">treemap</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Refine</strong>
+          <ul>
+          
+            
+            <li class="active"><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Resolver</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/hull.html">hull</a></li>
+          
+          </ul>
+        </li>
+        
+      
+      </ul>
+    
+      <h2>Scales</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../scales/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/linear.html">linear</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/log.html">log</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/sqrt.html">sqrt</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/pow.html">pow</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/symlog.html">symlog</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/ordinal.html">ordinal</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/point.html">point</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/color.html">color</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/quantize.html">quantize</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/threshold.html">threshold</a></li>
+        
+      
+      </ul>
+    
+      <h2>Examples</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../examples/README.html">Gallery</a></li>
+        
+      
+      </ul>
+    
+    </nav>
+  </aside>
+
+  <header id="topbar">
+    <button class="sidebar-toggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+    <div class="topbar-spacer"></div>
+    <a class="github-link" href="https://github.com/cudbg/database-vis" target="_blank" rel="noopener" aria-label="GitHub repository">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+  </header>
+
+  <main class="content">
+    <article class="markdown-section">
+      <h1 id="fittext">fitText</h1>
+<p><code>fitText</code> is a <strong>refine layout</strong>: it consumes a mark's already-<em>placed</em> channels (post-placement
+pixels) rather than data. For every row it solves the largest <code>fontSize</code>, an optional <code>rotate</code>, and
+a line-<code>wrap</code> so the mark's own <code>text</code> fits inside its <code>w</code>×<code>h</code> box. Because it is a refine layout its
+inputs default to the <strong>same-named channel columns</strong> the mark already draws — so a bare <code>fitText()</code>
+sizes exactly the <code>text</code> this mark renders against the <code>w</code>/<code>h</code> box it sits in. You bind its outputs
+with <code>.pick(&quot;fontSize&quot;, &quot;rotate&quot;, &quot;lines&quot;)</code>.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const revenue = db.table(&quot;orders&quot;).rollup(
+  db.table(&quot;products&quot;), { left: &quot;product_id&quot;, right: &quot;id&quot; },
+  &quot;category&quot;, { amount: sum({ sql: &quot;qty * price&quot; }) });
+
+const v = canvas(640, 460);
+const bars = v.bar(revenue, {
+  ...bandX(&quot;category&quot;, { paddingInner: 0.15 }).pick(&quot;x&quot;, &quot;w&quot;),
+  ...barY(&quot;amount&quot;, { zero: true }).pick(&quot;y&quot;, &quot;h&quot;),
+  fill: ordinal(&quot;category&quot;),
+});
+// Borrow each bar's SOLVED box, compute its midpoint, fit the label inside it.
+const center = { resolve: { cx: { fn: &quot;avg&quot;, arg: expr`f.x + f.w / 2` },
+                            cy: { fn: &quot;avg&quot;, arg: expr`f.y + f.h / 2` } } };
+v.text(revenue, {
+  ...bars.via(eq(&quot;category&quot;, &quot;category&quot;), center).pick({ x: &quot;cx&quot;, y: &quot;cy&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
+  ...fitText().pick(&quot;fontSize&quot;, &quot;rotate&quot;),
+  text: field(&quot;category&quot;),
+  anchor: &quot;middle&quot;, baseline: &quot;middle&quot;, fill: &quot;#fff&quot;,
+});
+return v;
+</code></pre>
+<p>Each category label is sized to its own bar: tall bars take a big font, narrow tall bars rotate to
+<code>-90°</code>, short bars stay small and horizontal. This is the <code>fit-text</code> demo preset.</p>
+<h2 id="the-refine-model-where-the-box-comes-from">The refine model — where the box comes from</h2>
+<p><code>fitText</code> reads <code>text</code>, <code>w</code>, and <code>h</code> from the mark it decorates. It never touches data or a domain
+(it trains nothing and is not tickable — <code>fontSize</code>/<code>rotate</code>/<code>lines</code> are terminal style outputs). The
+<code>w</code>/<code>h</code> must therefore already be <strong>pixel</strong> boxes. In practice you get them by <code>.via(...).pick(...)</code>
+from another mark's placed geometry — a bar's <code>barY</code> height, a treemap tile, a legend item — and
+<code>fitText</code> fits the string into that borrowed box. The label's <code>text</code> channel can be a literal
+(<code>text: &quot;Total&quot;</code>) or a column (<code>text: field(&quot;category&quot;)</code>); <code>fitText</code> sizes whichever the mark draws.</p>
+<h2 id="options">Options</h2>
+<p><code>fitText(bag, options?)</code>. The single <code>bag</code> mixes <strong>input overrides</strong> and <strong>option keys</strong> freely
+because the two sets are disjoint — <code>fitText({ rotate: true, maxFontSize: 14 })</code> reads naturally, and
+the two-arg <code>fitText({ text: &quot;label&quot; }, { rotate: true })</code> form still works.</p>
+<h3 id="pick-outputs"><code>.pick(...)</code> outputs</h3>
+<table>
+<thead>
+<tr>
+<th>output</th>
+<th>space</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fontSize</code></td>
+<td><code>style(fontSize)</code></td>
+<td>solved point size (px), rounded to 0.5</td>
+</tr>
+<tr>
+<td><code>rotate</code></td>
+<td><code>style(rotate)</code></td>
+<td><code>0</code> or <code>-90</code> — set when a rotated fit is larger</td>
+</tr>
+<tr>
+<td><code>lines</code></td>
+<td><code>style(text)</code></td>
+<td>JSON array of wrapped lines (bind to a text mark that reads it)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="input-overrides-default-to-the-marks-same-named-channel">Input overrides (default to the mark's same-named channel)</h3>
+<table>
+<thead>
+<tr>
+<th>input</th>
+<th>default</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>text</code></td>
+<td>the <code>text</code> channel</td>
+<td>the string to fit (<code>{ text: &quot;other_col&quot; }</code> to fit a different column)</td>
+</tr>
+<tr>
+<td><code>w</code></td>
+<td>the <code>w</code> channel</td>
+<td>box width in px</td>
+</tr>
+<tr>
+<td><code>h</code></td>
+<td>the <code>h</code> channel</td>
+<td>box height in px</td>
+</tr>
+</tbody>
+</table>
+<h3 id="options-bag">Options bag</h3>
+<table>
+<thead>
+<tr>
+<th>option</th>
+<th>type</th>
+<th>default</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>rotate</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>try a <code>-90°</code> fit; keep it when it yields a larger font. <code>false</code> pins horizontal</td>
+</tr>
+<tr>
+<td><code>maxFontSize</code></td>
+<td>number</td>
+<td><code>Infinity</code></td>
+<td>ceiling. Uncapped means &quot;as big as fits&quot; — the box height still bounds it (<code>fs·1.2 ≤ h</code>), so the solve stays finite</td>
+</tr>
+<tr>
+<td><code>minFontSize</code></td>
+<td>number</td>
+<td><code>6</code></td>
+<td>floor; a label that cannot fit is truncated with <code>…</code> rather than going below this</td>
+</tr>
+<tr>
+<td><code>shared</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>opt into ONE uniform size across all rows — the tightest box's solve caps the whole set</td>
+</tr>
+<tr>
+<td><code>wrap</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>break <code>text</code> on spaces into multiple <code>lines</code> to fit width</td>
+</tr>
+<tr>
+<td><code>padding</code></td>
+<td>number</td>
+<td><code>2</code></td>
+<td>px inset subtracted from <code>w</code>/<code>h</code> before fitting</td>
+</tr>
+</tbody>
+</table>
+<p>Defaults (a bare <code>fitText()</code>): per-box (<code>shared: false</code>), rotation tried (<code>rotate: true</code>), uncapped
+size bounded by the box (<code>maxFontSize: Infinity</code>).</p>
+<h2 id="examples">Examples</h2>
+<h3 id="fit-a-label-in-a-box">Fit a label in a box</h3>
+<p>Bare <code>fitText()</code> — infer everything from the mark's channels, pick just the size:</p>
+<pre data-lang="dvl"><code class="lang-dvl">const revenue = db.table(&quot;orders&quot;).rollup(
+  db.table(&quot;products&quot;), { left: &quot;product_id&quot;, right: &quot;id&quot; },
+  &quot;category&quot;, { amount: sum({ sql: &quot;qty * price&quot; }) });
+const v = canvas(640, 460);
+const rects = v.rect(revenue, {
+  ...treemap(&quot;amount&quot;).pick(&quot;x&quot;, &quot;y&quot;, &quot;w&quot;, &quot;h&quot;),
+  fill: ordinal(&quot;category&quot;), stroke: &quot;#fff&quot;,
+});
+const center = { resolve: { cx: { fn: &quot;avg&quot;, arg: expr`f.x + f.w / 2` },
+                            cy: { fn: &quot;avg&quot;, arg: expr`f.y + f.h / 2` } } };
+v.text(revenue, {
+  ...rects.via(eq(&quot;category&quot;, &quot;category&quot;), center).pick({ x: &quot;cx&quot;, y: &quot;cy&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
+  ...fitText().pick(&quot;fontSize&quot;),
+  text: field(&quot;category&quot;), anchor: &quot;middle&quot;, baseline: &quot;middle&quot;, fill: &quot;#333&quot;,
+});
+return v;
+</code></pre>
+<p>Each tile's label is sized to that tile. This is the <code>treemap</code> demo preset.</p>
+<h3 id="rotate-to-fit-a-tall-narrow-box">Rotate to fit a tall, narrow box</h3>
+<p>Rotation is on by default, so narrow tall boxes rotate automatically. Pick <code>rotate</code> too and apply it:</p>
+<pre data-lang="js"><code class="language-js">v.text(revenue, {
+  ...bars.via(eq(&quot;category&quot;, &quot;category&quot;), center).pick({ x: &quot;cx&quot;, y: &quot;cy&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
+  ...fitText().pick(&quot;fontSize&quot;, &quot;rotate&quot;),
+  text: field(&quot;category&quot;), anchor: &quot;middle&quot;, baseline: &quot;middle&quot;, fill: &quot;#fff&quot;,
+});
+</code></pre>
+<p>A long category over a slim tall bar is fitted at <code>-90°</code>; a short label in a wide box stays at <code>0°</code>.</p>
+<h3 id="pin-horizontal">Pin horizontal</h3>
+<p>Turn rotation off when you never want sideways text:</p>
+<pre data-lang="js"><code class="language-js">v.text(revenue, {
+  ...bars.via(eq(&quot;category&quot;, &quot;category&quot;), center).pick({ x: &quot;cx&quot;, y: &quot;cy&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
+  ...fitText({ rotate: false }).pick(&quot;fontSize&quot;),
+  text: field(&quot;category&quot;), anchor: &quot;middle&quot;, baseline: &quot;middle&quot;, fill: &quot;#fff&quot;,
+});
+</code></pre>
+<h3 id="cap-the-size-a-finite-ceiling">Cap the size (a finite ceiling)</h3>
+<p>Uncapped, a big box gives a big font. Cap it so labels never exceed 14px even when the box could hold
+more:</p>
+<pre data-lang="js"><code class="language-js">...fitText({ maxFontSize: 14 }).pick(&quot;fontSize&quot;),
+</code></pre>
+<h3 id="raise-the-floor-avoid-tiny-truncated-text">Raise the floor / avoid tiny truncated text</h3>
+<p><code>minFontSize</code> (default 6) is the floor; below it, a too-long label is truncated with <code>…</code> instead of
+shrinking further:</p>
+<pre data-lang="js"><code class="language-js">...fitText({ minFontSize: 5, rotate: false }).pick(&quot;fontSize&quot;),
+</code></pre>
+<h3 id="shared-sizing-across-a-set-uniform-typography">Shared sizing across a set (uniform typography)</h3>
+<p><code>shared: true</code> opts INTO one size for every row — the tightest box's solve caps the whole set, so all
+labels match. Useful across a facet or a group of tiles where varying font sizes would read as noise:</p>
+<pre data-lang="js"><code class="language-js">...fitText({ shared: true, maxFontSize: 14 }).pick(&quot;fontSize&quot;),
+</code></pre>
+<p>Contrast the default (<code>shared: false</code>): each label solves against its own box, so sizes vary.</p>
+<h3 id="wrap-onto-multiple-lines">Wrap onto multiple lines</h3>
+<p><code>wrap: true</code> breaks the text on spaces to fit width, and <code>lines</code> carries the wrapped array:</p>
+<pre data-lang="js"><code class="language-js">...fitText({ wrap: true }).pick(&quot;fontSize&quot;, &quot;lines&quot;),
+</code></pre>
+<p>Bind <code>lines</code> to a text mark that renders a multi-line label; <code>fontSize</code> is chosen so all lines fit
+the box height.</p>
+<h3 id="override-the-fitted-text-column">Override the fitted text column</h3>
+<p>By default <code>fitText</code> fits the same string the mark draws. Name <code>text</code> to fit a DIFFERENT column than
+the one rendered (e.g. size against a short code, draw the long name):</p>
+<pre data-lang="js"><code class="language-js">...fitText({ text: &quot;code&quot; }).pick(&quot;fontSize&quot;),
+text: field(&quot;name&quot;),
+</code></pre>
+<h3 id="override-the-box-columns">Override the box columns</h3>
+<p>If the borrowed box columns are not named <code>w</code>/<code>h</code>, point <code>fitText</code> at them:</p>
+<pre data-lang="js"><code class="language-js">...someMark.via(eq(&quot;id&quot;, &quot;id&quot;)).pick({ x: &quot;cx&quot;, y: &quot;cy&quot;, w: &quot;boxW&quot;, h: &quot;boxH&quot; }),
+...fitText({ w: &quot;boxW&quot;, h: &quot;boxH&quot; }).pick(&quot;fontSize&quot;),
+</code></pre>
+<h3 id="tighten-the-padding">Tighten the padding</h3>
+<p><code>padding</code> (default 2px) is inset from the box before fitting; set it to 0 for edge-to-edge text or
+higher to keep margin:</p>
+<pre data-lang="js"><code class="language-js">...fitText({ padding: 6 }).pick(&quot;fontSize&quot;),
+</code></pre>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="../layouts/treemap.html">treemap</a> — the tile boxes commonly fed to <code>fitText</code></li>
+<li><a href="../layouts/bandX.html">bandX</a> + <a href="../layouts/barY.html">barY</a> — the bar boxes in the <code>fit-text</code> preset</li>
+<li><a href="../layouts/grid-stack.html">grid-stack</a> — the other refine/placement layout (legend items)</li>
+</ul>
+
+    </article>
+  </main>
+
+  <script src="../assets/docs.js"></script>
+  <script src="../assets/dvl-example.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
+</body>
+</html>

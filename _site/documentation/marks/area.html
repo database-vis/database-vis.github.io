@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>area · DVL</title>
+  <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="app-name" href="../index.html">DVL</a>
+    <nav class="sidebar-nav">
+    
+      <h2>Introduction</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../what-is-dvl.html">What is DVL?</a></li>
+        
+      
+        
+        
+        <li><a href="../getting-started.html">Getting started</a></li>
+        
+      
+        
+        
+        <li><a href="../architecture.html">Architecture</a></li>
+        
+      
+      </ul>
+    
+      <h2>Features</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#channels">Channels</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#scales">Scales</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#data">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        
+      
+      </ul>
+    
+      <h2>Marks</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../marks/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li class="active"><a href="../marks/area.html">area</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/arrow.html">arrow</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/bar.html">bar</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/cell.html">cell</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/connect.html">connect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/dot.html">dot</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/image.html">image</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/line.html">line</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/link.html">link</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/path.html">path</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rect.html">rect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rule.html">rule</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/text.html">text</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/tick.html">tick</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/vector.html">vector</a></li>
+        
+      
+      </ul>
+    
+      <h2>Layouts</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../layouts/README.html">Overview</a></li>
+        
+      
+        
+        <li><strong>Produce</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/bandX.html">bandX</a></li>
+          
+            
+            <li><a href="../layouts/bandY.html">bandY</a></li>
+          
+            
+            <li><a href="../layouts/barX.html">barX</a></li>
+          
+            
+            <li><a href="../layouts/barY.html">barY</a></li>
+          
+            
+            <li><a href="../layouts/stackX.html">stackX</a></li>
+          
+            
+            <li><a href="../layouts/stackY.html">stackY</a></li>
+          
+            
+            <li><a href="../layouts/pitchX.html">pitchX</a></li>
+          
+            
+            <li><a href="../layouts/pitchY.html">pitchY</a></li>
+          
+            
+            <li><a href="../layouts/eqX.html">eqX</a></li>
+          
+            
+            <li><a href="../layouts/eqY.html">eqY</a></li>
+          
+            
+            <li><a href="../layouts/proportionalX.html">proportionalX</a></li>
+          
+            
+            <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
+          
+            
+            <li><a href="../layouts/force.html">force</a></li>
+          
+            
+            <li><a href="../layouts/treemap.html">treemap</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Refine</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Resolver</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/hull.html">hull</a></li>
+          
+          </ul>
+        </li>
+        
+      
+      </ul>
+    
+      <h2>Scales</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../scales/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/linear.html">linear</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/log.html">log</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/sqrt.html">sqrt</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/pow.html">pow</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/symlog.html">symlog</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/ordinal.html">ordinal</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/point.html">point</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/color.html">color</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/quantize.html">quantize</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/threshold.html">threshold</a></li>
+        
+      
+      </ul>
+    
+      <h2>Examples</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../examples/README.html">Gallery</a></li>
+        
+      
+      </ul>
+    
+    </nav>
+  </aside>
+
+  <header id="topbar">
+    <button class="sidebar-toggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+    <div class="topbar-spacer"></div>
+    <a class="github-link" href="https://github.com/cudbg/database-vis" target="_blank" rel="noopener" aria-label="GitHub repository">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+  </header>
+
+  <main class="content">
+    <article class="markdown-section">
+      <h1 id="area">area</h1>
+<p>The <code>area</code> mark turns an <strong>ordered point set into a filled band</strong>. Like <code>line</code>/<code>path</code> it is an
+AGGREGATE: its N rows collapse to a single filled <code>&lt;path&gt;</code> per series (an <code>array_agg</code> over the
+sorted points, in SQL). The band runs along the top edge <code>(x, y)</code> forward, then back along the
+baseline <code>(x, y2)</code>, and closes into a filled region. Points sort by the <code>order</code> channel, which
+<strong>defaults to <code>x</code></strong>. Bind <code>y2</code> to a <strong>column for a ribbon</strong> (a data-driven lower edge) or to a
+<strong>constant for a floor</strong>. A <code>stroke</code> (or <code>fill</code>) colour splits the input into one band per
+series.</p>
+<pre data-lang="dvl"><code class="lang-dvl">// The top edge (x, y) forward, then the baseline (x, y2) back, closed into a filled band.
+// The series is modelled inline (avg mass per species-year); y2 is a sloped baseline here.
+const series = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;, &quot;year&quot;], { mass: avg(&quot;body_mass_g&quot;) });
+const v = canvas(640, 460);
+v.area(series, {
+  x: linear(&quot;year&quot;),
+  y: linear(&quot;mass&quot;),
+  y2: linear(&quot;year&quot;),   // a baseline — use a column (ribbon) or a constant (floor)
+  fill: &quot;#9ecae1&quot;,
+  stroke: &quot;#4e79a7&quot;,
+}).axis(&quot;x&quot;).axis(&quot;y&quot;);
+return v;
+</code></pre>
+<p>A filled band between the mass curve and the <code>y2</code> baseline.</p>
+<h2 id="options">Options</h2>
+<p><code>area</code> is the one aggregate that is <strong>filled</strong>: it binds the full <code>fill</code> paint group (both
+<code>fill</code> and <code>stroke</code>). It carries an extra baseline pair — <code>x2</code>/<code>y2</code> — so the region is the area
+between two edges. Distinct fill/stroke values partition into series; points sort by <code>order</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Channel</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>x</code></td>
+<td>positional-x</td>
+<td>—</td>
+<td>top-edge x position</td>
+</tr>
+<tr>
+<td><code>y</code></td>
+<td>positional-y</td>
+<td>—</td>
+<td>top-edge y position</td>
+</tr>
+<tr>
+<td><code>x2</code></td>
+<td>positional-x</td>
+<td><code>x</code></td>
+<td>baseline x (usually left equal to <code>x</code>)</td>
+</tr>
+<tr>
+<td><code>y2</code></td>
+<td>positional-y</td>
+<td>—</td>
+<td>baseline y — the lower edge (column = ribbon, constant = floor)</td>
+</tr>
+<tr>
+<td><code>order</code></td>
+<td>number</td>
+<td><code>x</code></td>
+<td>the SEQUENCE column — points sort by this before aggregating</td>
+</tr>
+<tr>
+<td><code>fill</code></td>
+<td>color</td>
+<td>—</td>
+<td>band fill; distinct values split into one band per series</td>
+</tr>
+<tr>
+<td><code>stroke</code></td>
+<td>color</td>
+<td>—</td>
+<td>outline colour</td>
+</tr>
+<tr>
+<td><code>strokeWidth</code></td>
+<td>pixel</td>
+<td>1</td>
+<td>outline thickness (px)</td>
+</tr>
+<tr>
+<td><code>strokeDasharray</code></td>
+<td>text</td>
+<td>—</td>
+<td>outline dash pattern</td>
+</tr>
+<tr>
+<td><code>opacity</code></td>
+<td>number</td>
+<td>1</td>
+<td>whole-mark alpha</td>
+</tr>
+<tr>
+<td><code>fillOpacity</code></td>
+<td>number</td>
+<td>1</td>
+<td>fill alpha</td>
+</tr>
+<tr>
+<td><code>strokeOpacity</code></td>
+<td>number</td>
+<td>1</td>
+<td>outline alpha</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td>text</td>
+<td>—</td>
+<td>per-band <code>&lt;title&gt;</code> hover tooltip</td>
+</tr>
+</tbody>
+</table>
+<p><code>order</code> is an EXPRESSION channel — <code>field(&quot;t&quot;)</code> (aka <code>col(&quot;t&quot;)</code>) names a raw column; a bare
+string is a literal. Positionally, <code>y2</code> is the baseline: leave <code>x2</code> unbound and it tracks <code>x</code>.</p>
+<h2 id="examples">Examples</h2>
+<p>Area to a constant floor — the classic filled curve down to a pixel baseline:</p>
+<pre data-lang="dvl"><code class="lang-dvl">const yearly = db.table(&quot;penguins&quot;).groupby([&quot;year&quot;], { mass: avg(&quot;body_mass_g&quot;) });
+const v = canvas(480, 320);
+v.area(yearly, {
+  x: linear(&quot;year&quot;),
+  y: linear(&quot;mass&quot;),
+  y2: 320,               // constant floor (pixel literal, bottom of the canvas)
+  fill: &quot;#cfe2f3&quot;,
+  stroke: &quot;#4e79a7&quot;,
+}).axis(&quot;x&quot;).axis(&quot;y&quot;);
+return v;
+</code></pre>
+<p>Ribbon — bind <code>y2</code> to a column so the band has a data-driven lower edge (here min→max mass per
+year):</p>
+<pre data-lang="dvl"><code class="lang-dvl">const ribbon = db.table(&quot;penguins&quot;).groupby([&quot;year&quot;],
+  { lo: min(&quot;body_mass_g&quot;), hi: max(&quot;body_mass_g&quot;) });
+const y = linear();      // one domain for both edges (union of lo and hi)
+const v = canvas(480, 320);
+v.area(ribbon, {
+  x: linear(&quot;year&quot;),
+  y: y(&quot;hi&quot;),            // upper edge
+  y2: y(&quot;lo&quot;),           // lower edge — a true ribbon
+  fill: &quot;#d9e6f2&quot;, fillOpacity: 0.7, stroke: &quot;#4e79a7&quot;,
+}).axis(&quot;x&quot;).axis(&quot;y&quot;);
+return v;
+</code></pre>
+<p>Multi-series bands by fill, with a legend — one band per species:</p>
+<pre data-lang="dvl"><code class="lang-dvl">const series = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;, &quot;year&quot;], { mass: avg(&quot;body_mass_g&quot;) });
+const v = canvas(640, 460);
+const p = v.area(series, {
+  x: linear(&quot;year&quot;),
+  y: linear(&quot;mass&quot;),
+  y2: 460,
+  fill: ordinal(&quot;species&quot;),
+  fillOpacity: 0.5,
+});
+p.axis(&quot;x&quot;).axis(&quot;y&quot;).legend(&quot;fill&quot;, { placement: &quot;right&quot; });
+return v;
+</code></pre>
+<p>Time-ordered ribbon — sequence the edges by an explicit <code>order</code> channel so the band follows
+time, not x:</p>
+<pre data-lang="dvl"><code class="lang-dvl">const track = db.derive(&quot;track&quot;, `
+  SELECT * FROM (VALUES (1,0,2,6),(2,10,1,5),(3,5,3,9))
+  AS t(step, xpos, lo, hi)`);
+const y = linear();
+const v = canvas(320, 260);
+v.area(track, {
+  x: linear(&quot;xpos&quot;), y: y(&quot;hi&quot;), y2: y(&quot;lo&quot;),
+  order: field(&quot;step&quot;),          // walk the edges in step order
+  fill: &quot;#9ecae1&quot;, stroke: &quot;#4e79a7&quot;,
+}).axis(&quot;x&quot;).axis(&quot;y&quot;);
+return v;
+</code></pre>
+<p>Area under a line — layer <code>area</code> (fill) then <code>line</code> (crisp top edge) over shared scales:</p>
+<pre data-lang="dvl"><code class="lang-dvl">const yearly = db.table(&quot;penguins&quot;).groupby([&quot;year&quot;], { mass: avg(&quot;body_mass_g&quot;) });
+const x = linear(), y = linear();
+const v = canvas(480, 320);
+v.area(yearly, { x: x(&quot;year&quot;), y: y(&quot;mass&quot;), y2: 320, fill: &quot;#e8eef5&quot; });
+v.line(yearly, { x: x(&quot;year&quot;), y: y(&quot;mass&quot;), stroke: &quot;#4e79a7&quot;, strokeWidth: 2 })
+ .axis(&quot;x&quot;).axis(&quot;y&quot;);
+return v;
+</code></pre>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="./line.html">line</a> — the stroked aggregate (just the top edge, no fill)</li>
+<li><a href="./path.html">path</a> — the aggregate primitive; <code>area</code> adds a baseline and a fill</li>
+<li><a href="./connect.html">connect</a> — the pairwise sibling: N points → N−1 styleable segments</li>
+</ul>
+
+    </article>
+  </main>
+
+  <script src="../assets/docs.js"></script>
+  <script src="../assets/dvl-example.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
+</body>
+</html>

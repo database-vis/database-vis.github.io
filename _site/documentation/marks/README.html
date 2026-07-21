@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Marks · DVL</title>
+  <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="app-name" href="../index.html">DVL</a>
+    <nav class="sidebar-nav">
+    
+      <h2>Introduction</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../what-is-dvl.html">What is DVL?</a></li>
+        
+      
+        
+        
+        <li><a href="../getting-started.html">Getting started</a></li>
+        
+      
+        
+        
+        <li><a href="../architecture.html">Architecture</a></li>
+        
+      
+      </ul>
+    
+      <h2>Features</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#channels">Channels</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#scales">Scales</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#data">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        
+      
+      </ul>
+    
+      <h2>Marks</h2>
+      <ul>
+      
+        
+        
+        <li class="active"><a href="../marks/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/area.html">area</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/arrow.html">arrow</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/bar.html">bar</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/cell.html">cell</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/connect.html">connect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/dot.html">dot</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/image.html">image</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/line.html">line</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/link.html">link</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/path.html">path</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rect.html">rect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rule.html">rule</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/text.html">text</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/tick.html">tick</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/vector.html">vector</a></li>
+        
+      
+      </ul>
+    
+      <h2>Layouts</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../layouts/README.html">Overview</a></li>
+        
+      
+        
+        <li><strong>Produce</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/bandX.html">bandX</a></li>
+          
+            
+            <li><a href="../layouts/bandY.html">bandY</a></li>
+          
+            
+            <li><a href="../layouts/barX.html">barX</a></li>
+          
+            
+            <li><a href="../layouts/barY.html">barY</a></li>
+          
+            
+            <li><a href="../layouts/stackX.html">stackX</a></li>
+          
+            
+            <li><a href="../layouts/stackY.html">stackY</a></li>
+          
+            
+            <li><a href="../layouts/pitchX.html">pitchX</a></li>
+          
+            
+            <li><a href="../layouts/pitchY.html">pitchY</a></li>
+          
+            
+            <li><a href="../layouts/eqX.html">eqX</a></li>
+          
+            
+            <li><a href="../layouts/eqY.html">eqY</a></li>
+          
+            
+            <li><a href="../layouts/proportionalX.html">proportionalX</a></li>
+          
+            
+            <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
+          
+            
+            <li><a href="../layouts/force.html">force</a></li>
+          
+            
+            <li><a href="../layouts/treemap.html">treemap</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Refine</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Resolver</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/hull.html">hull</a></li>
+          
+          </ul>
+        </li>
+        
+      
+      </ul>
+    
+      <h2>Scales</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../scales/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/linear.html">linear</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/log.html">log</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/sqrt.html">sqrt</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/pow.html">pow</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/symlog.html">symlog</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/ordinal.html">ordinal</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/point.html">point</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/color.html">color</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/quantize.html">quantize</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/threshold.html">threshold</a></li>
+        
+      
+      </ul>
+    
+      <h2>Examples</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../examples/README.html">Gallery</a></li>
+        
+      
+      </ul>
+    
+    </nav>
+  </aside>
+
+  <header id="topbar">
+    <button class="sidebar-toggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+    <div class="topbar-spacer"></div>
+    <a class="github-link" href="https://github.com/cudbg/database-vis" target="_blank" rel="noopener" aria-label="GitHub repository">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+  </header>
+
+  <main class="content">
+    <article class="markdown-section">
+      <h1 id="marks">Marks</h1>
+<p>A mark is a channel list plus a draw function — nothing more; position intelligence belongs to
+<a href="../scales/README.html">scales</a> and <a href="../layouts/README.html">layouts</a>. Each mark has its own reference
+page (linked below); this table is the at-a-glance index.
+Channels marked <em>positional</em> participate in the frame; <em>pixel</em> channels are raw pixel values;
+<em>style</em> channels pass to the pen.</p>
+<p>Positional channels accept scales, layout outputs, literals (pixels), or via-references. The
+<strong>sequence marks</strong> (<code>line</code>/<code>path</code>/<code>area</code>/<code>connect</code>) also take an <code>order</code> channel — the column the
+points sort by (default <code>x</code>), so a trajectory whose <code>x</code> is not monotone still draws in sequence.</p>
+<table>
+<thead>
+<tr>
+<th>Mark</th>
+<th>Channels</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a id="dot"></a><a href="dot.html"><strong>dot</strong></a></td>
+<td>x, y, r, shape, fill…</td>
+<td>circles; <code>r</code> in pixels (default 3)</td>
+</tr>
+<tr>
+<td><a id="rect"></a><a href="rect.html"><strong>rect</strong></a></td>
+<td>x, y, x2, y2, w, h, fill, stroke…</td>
+<td>container-eligible (can host nested plots)</td>
+</tr>
+<tr>
+<td><a id="bar"></a><a href="bar.html"><strong>bar</strong></a></td>
+<td>same as rect</td>
+<td>container-eligible; pairs with <code>bandX</code>/<code>barY</code> layouts</td>
+</tr>
+<tr>
+<td><a id="cell"></a><a href="cell.html"><strong>cell</strong></a></td>
+<td>x, y, fill…</td>
+<td>grid cell; container-eligible</td>
+</tr>
+<tr>
+<td><a id="line"></a><a href="line.html"><strong>line</strong></a></td>
+<td>x, y, order, stroke…</td>
+<td>aggregate: N rows → one path per series (<code>order</code> sets sequence, default x)</td>
+</tr>
+<tr>
+<td><a id="path"></a><a href="path.html"><strong>path</strong></a></td>
+<td>x, y, order, stroke…</td>
+<td>the aggregate primitive — an ordered point set → one open polyline (<code>line</code> = <code>path</code>); bind <code>order</code> for tracks/trajectories</td>
+</tr>
+<tr>
+<td><a id="area"></a><a href="area.html"><strong>area</strong></a></td>
+<td>x, y, x2, y2, order, fill…</td>
+<td>aggregate: band between two y's, ordered</td>
+</tr>
+<tr>
+<td><a id="connect"></a><a href="connect.html"><strong>connect</strong></a></td>
+<td>x, y, order, stroke…</td>
+<td>N points → N−1 segments between successive points (a <code>LEAD</code> window per series, ordered by <code>order</code>); the pair sibling of <code>line</code></td>
+</tr>
+<tr>
+<td><a id="rule"></a><a href="rule.html"><strong>rule</strong></a></td>
+<td>x, y, x2, y2, stroke…</td>
+<td>a segment (reference lines, underlines)</td>
+</tr>
+<tr>
+<td><a id="link"></a><a href="link.html"><strong>link</strong></a></td>
+<td>x1, y1, x2, y2, stroke…</td>
+<td>a connector; endpoints usually via-references</td>
+</tr>
+<tr>
+<td><a id="arrow"></a><a href="arrow.html"><strong>arrow</strong></a></td>
+<td>x1, y1, x2, y2, headType, headSize, stroke…</td>
+<td>directed link</td>
+</tr>
+<tr>
+<td><a id="vector"></a><a href="vector.html"><strong>vector</strong></a></td>
+<td>x, y, length, angle, stroke…</td>
+<td>length px, angle radians (0 = +x)</td>
+</tr>
+<tr>
+<td><a id="tick"></a><a href="tick.html"><strong>tick</strong></a></td>
+<td>x, y, len, orient, stroke…</td>
+<td>short axis-style tick</td>
+</tr>
+<tr>
+<td><a id="text"></a><a href="text.html"><strong>text</strong></a></td>
+<td>x, y, dx, dy, text, anchor, baseline, fontSize, rotate, fill, opacity</td>
+<td><code>text:</code> takes an expression — a bare string is a <strong>literal</strong> (use <code>col(&quot;name&quot;)</code> for column values)</td>
+</tr>
+<tr>
+<td><a id="image"></a><a href="image.html"><strong>image</strong></a></td>
+<td>x, y, w, h, src, opacity</td>
+<td><code>&lt;image href&gt;</code> box</td>
+</tr>
+</tbody>
+</table>
+<p>Each per-mark page follows the shared shape: model → minimal example → options/channels → many
+worked examples → see also.</p>
+<h2 id="adding-your-own-mark">Adding your own mark</h2>
+<p>A mark is a descriptor — a channel list plus a <code>draw</code> — built with <code>defineMark</code>. The renderer
+never changes; adding a mark is purely local.</p>
+<pre data-lang="js"><code class="language-js">import { defineMark } from &quot;$lib/dvl/ir/mark&quot;;
+import { num, styleOf } from &quot;$lib/dvl/ir/pen&quot;;
+
+const wedge = defineMark({
+  type: &quot;wedge&quot;,
+  channels: { x: &quot;positional-x&quot;, y: &quot;positional-y&quot;, r: &quot;pixel&quot;, angle: &quot;number&quot;, fill: &quot;color&quot;, stroke: &quot;color&quot; },
+  pixelAxes: { r: &quot;xy&quot; },   // r scales on both axes
+  draw: (row, pen) =&gt; pen.path(wedgePath(num(row, &quot;x&quot;), num(row, &quot;y&quot;), num(row, &quot;r&quot;), num(row, &quot;angle&quot;)), styleOf(row)),
+});
+</code></pre>
+<ul>
+<li><strong><code>channels</code></strong> maps each channel name to a <strong>kind</strong> — <code>positional-x</code>/<code>positional-y</code> (join the
+frame), <code>pixel</code> (raw pixels), and <code>color</code>/<code>shape</code>/<code>text</code>/<code>number</code> (style). The kind type-checks
+what a binding may be: a scale, a layout output, a literal, or a via-reference.</li>
+<li><strong><code>draw(row, pen)</code></strong> is the only place geometry is emitted. The <code>row</code> is fully resolved (pixels,
+colours), and the <code>Pen</code> (<code>circle</code>/<code>rect</code>/<code>line</code>/<code>path</code>/<code>text</code>/…) is substrate-agnostic — the
+same draw feeds the SVG renderer and the bounding-box measurer.</li>
+<li>Opt into behaviours with <code>cardinality: &quot;aggregate&quot;</code> (N rows → one path, like <code>line</code>) or
+<code>containerEligible: true</code> (can host nested plots, like <code>rect</code>).</li>
+</ul>
+<p>Register the descriptor, then bind it — the built-in <code>v.dot</code>/<code>v.rect</code>/… are sugar over the
+generic <code>v.mark</code>:</p>
+<pre data-lang="js"><code class="language-js">registries.marks.register(wedge.type, wedge);
+v.mark(&quot;wedge&quot;, &quot;penguins&quot;, { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), r: 6, angle: field(&quot;year&quot;) });
+</code></pre>
+
+    </article>
+  </main>
+
+  <script src="../assets/docs.js"></script>
+  <script src="../assets/dvl-example.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
+</body>
+</html>

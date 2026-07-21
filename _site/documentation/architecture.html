@@ -1,0 +1,585 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Architecture · DVL</title>
+  <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="app-name" href="index.html">DVL</a>
+    <nav class="sidebar-nav">
+    
+      <h2>Introduction</h2>
+      <ul>
+      
+        
+        
+        <li><a href="what-is-dvl.html">What is DVL?</a></li>
+        
+      
+        
+        
+        <li><a href="getting-started.html">Getting started</a></li>
+        
+      
+        
+        
+        <li class="active"><a href="architecture.html">Architecture</a></li>
+        
+      
+      </ul>
+    
+      <h2>Features</h2>
+      <ul>
+      
+        
+        
+        <li><a href="features/README.html#plots-and-marks">Plots and marks</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#channels">Channels</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#scales">Scales</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#layouts">Layouts</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#the-frame">The frame</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#join-paths">Join paths</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#subplots">Subplots</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#data">Data</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#debugging">Debugging</a></li>
+        
+      
+      </ul>
+    
+      <h2>Marks</h2>
+      <ul>
+      
+        
+        
+        <li><a href="marks/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="marks/area.html">area</a></li>
+        
+      
+        
+        
+        <li><a href="marks/arrow.html">arrow</a></li>
+        
+      
+        
+        
+        <li><a href="marks/bar.html">bar</a></li>
+        
+      
+        
+        
+        <li><a href="marks/cell.html">cell</a></li>
+        
+      
+        
+        
+        <li><a href="marks/connect.html">connect</a></li>
+        
+      
+        
+        
+        <li><a href="marks/dot.html">dot</a></li>
+        
+      
+        
+        
+        <li><a href="marks/image.html">image</a></li>
+        
+      
+        
+        
+        <li><a href="marks/line.html">line</a></li>
+        
+      
+        
+        
+        <li><a href="marks/link.html">link</a></li>
+        
+      
+        
+        
+        <li><a href="marks/path.html">path</a></li>
+        
+      
+        
+        
+        <li><a href="marks/rect.html">rect</a></li>
+        
+      
+        
+        
+        <li><a href="marks/rule.html">rule</a></li>
+        
+      
+        
+        
+        <li><a href="marks/text.html">text</a></li>
+        
+      
+        
+        
+        <li><a href="marks/tick.html">tick</a></li>
+        
+      
+        
+        
+        <li><a href="marks/vector.html">vector</a></li>
+        
+      
+      </ul>
+    
+      <h2>Layouts</h2>
+      <ul>
+      
+        
+        
+        <li><a href="layouts/README.html">Overview</a></li>
+        
+      
+        
+        <li><strong>Produce</strong>
+          <ul>
+          
+            
+            <li><a href="layouts/bandX.html">bandX</a></li>
+          
+            
+            <li><a href="layouts/bandY.html">bandY</a></li>
+          
+            
+            <li><a href="layouts/barX.html">barX</a></li>
+          
+            
+            <li><a href="layouts/barY.html">barY</a></li>
+          
+            
+            <li><a href="layouts/stackX.html">stackX</a></li>
+          
+            
+            <li><a href="layouts/stackY.html">stackY</a></li>
+          
+            
+            <li><a href="layouts/pitchX.html">pitchX</a></li>
+          
+            
+            <li><a href="layouts/pitchY.html">pitchY</a></li>
+          
+            
+            <li><a href="layouts/eqX.html">eqX</a></li>
+          
+            
+            <li><a href="layouts/eqY.html">eqY</a></li>
+          
+            
+            <li><a href="layouts/proportionalX.html">proportionalX</a></li>
+          
+            
+            <li><a href="layouts/proportionalY.html">proportionalY</a></li>
+          
+            
+            <li><a href="layouts/force.html">force</a></li>
+          
+            
+            <li><a href="layouts/treemap.html">treemap</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Refine</strong>
+          <ul>
+          
+            
+            <li><a href="layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="layouts/grid-stack.html">grid-stack</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Resolver</strong>
+          <ul>
+          
+            
+            <li><a href="layouts/hull.html">hull</a></li>
+          
+          </ul>
+        </li>
+        
+      
+      </ul>
+    
+      <h2>Scales</h2>
+      <ul>
+      
+        
+        
+        <li><a href="scales/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="scales/linear.html">linear</a></li>
+        
+      
+        
+        
+        <li><a href="scales/log.html">log</a></li>
+        
+      
+        
+        
+        <li><a href="scales/sqrt.html">sqrt</a></li>
+        
+      
+        
+        
+        <li><a href="scales/pow.html">pow</a></li>
+        
+      
+        
+        
+        <li><a href="scales/symlog.html">symlog</a></li>
+        
+      
+        
+        
+        <li><a href="scales/ordinal.html">ordinal</a></li>
+        
+      
+        
+        
+        <li><a href="scales/point.html">point</a></li>
+        
+      
+        
+        
+        <li><a href="scales/color.html">color</a></li>
+        
+      
+        
+        
+        <li><a href="scales/quantize.html">quantize</a></li>
+        
+      
+        
+        
+        <li><a href="scales/threshold.html">threshold</a></li>
+        
+      
+      </ul>
+    
+      <h2>Examples</h2>
+      <ul>
+      
+        
+        
+        <li><a href="examples/README.html">Gallery</a></li>
+        
+      
+      </ul>
+    
+    </nav>
+  </aside>
+
+  <header id="topbar">
+    <button class="sidebar-toggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+    <div class="topbar-spacer"></div>
+    <a class="github-link" href="https://github.com/cudbg/database-vis" target="_blank" rel="noopener" aria-label="GitHub repository">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+  </header>
+
+  <main class="content">
+    <article class="markdown-section">
+      <h1 id="architecture">Architecture</h1>
+<p>DVL is organized like a database engine, because it is one: an authoring frontend produces a
+spec, the spec is rewritten and planned into a dataflow of operators, an optimizer decides
+where each operator runs, and a scheduler executes the graph to a fixpoint. This page describes
+the architecture the codebase is converging on — the refactor's target — so that each concept
+has exactly one home. (Rationale and the migration plan live in
+<code>docs/2026-07-13-codebase-reorg-review.html</code>.)</p>
+<h2 id="the-pipeline">The pipeline</h2>
+<pre><code>author ──▶ rewrite ──▶ resolve ──▶ plan ──▶ optimize ──▶ bind ──▶ execute ──▶ emit
+builder     axes→plots   catalog     OpSpec    substrate,   impls    SCC          scene
++ spec      (desugar)    lookup      graph     fusion, DCE           fixpoint     → SVG
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>What it does</th>
+<th>DB analog</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>author</strong></td>
+<td>the fluent builder populates a <code>Spec</code> — nodes, plots, channel expressions, scale/layout instances, and <em>cells</em> (solver variables)</td>
+<td>parser / binder</td>
+</tr>
+<tr>
+<td><strong>rewrite</strong></td>
+<td>spec→spec desugaring: axes (and legends) become ordinary plots over tick relations</td>
+<td>rewriter</td>
+</tr>
+<tr>
+<td><strong>resolve</strong></td>
+<td>every by-name component reference is resolved against the registries once; downstream never touches a registry</td>
+<td>catalog lookup</td>
+</tr>
+<tr>
+<td><strong>plan</strong></td>
+<td>each node's plots compile to operator descriptions (<code>OpSpec</code>: id, reads, writes, payload) — one logical dataflow graph, nothing executed</td>
+<td>logical planner</td>
+</tr>
+<tr>
+<td><strong>optimize</strong></td>
+<td>rule passes choose each edge's substrate (SQL or JS), insert conversions, fuse, and eliminate dead ops</td>
+<td>optimizer</td>
+</tr>
+<tr>
+<td><strong>bind</strong></td>
+<td>descriptions become runnables: payload kind → registered handler</td>
+<td>physical plan</td>
+</tr>
+<tr>
+<td><strong>execute</strong></td>
+<td>the scheduler condenses the graph into SCCs and runs them in topological order; cyclic components iterate to a residual fixpoint (this is how measurement-driven sizing converges)</td>
+<td>executor</td>
+</tr>
+<tr>
+<td><strong>emit</strong></td>
+<td>placed marks materialize into a scene graph; a pen walks it into SVG</td>
+<td>client</td>
+</tr>
+</tbody>
+</table>
+<p>Two supporting systems sit beside the pipeline: the <strong>data layer</strong> (backend adapter, dialect,
+SQL fragments with fold/emit composition — the only place SQL text is produced) and the
+<strong>debug harness</strong> (a sink that records every pass, statement, and solver iteration into
+<code>dvl_*</code> tables, off by default at zero cost).</p>
+<h2 id="the-attribute-type-system">The attribute type system</h2>
+<p>The engine's central discipline is that every column and cell carries a type with three
+orthogonal axes:</p>
+<ul>
+<li><strong>carrier</strong> — the physical representation (<code>double</code>, <code>varchar</code>, …). The database sees only
+this.</li>
+<li><strong>space</strong> — the semantic world the value lives in:
+<strong>data</strong> (source values and identity keys) · <strong>domain</strong> (fitted metadata <em>about</em> data:
+envelopes, category indexes) · <strong>relative</strong> (normalized [0, 1] frame positions) ·
+<strong>pixel</strong> (placed geometry, extents, demands) · <strong>style</strong> (color/shape/text/opacity — final
+values the pen consumes) · <strong>scene</strong> (the artifact).</li>
+<li><strong>geom</strong> — spatial shape (<code>coord⟨x|y⟩</code>, <code>len⟨x|y⟩</code>, <code>area</code>), present only in the relative and
+pixel spaces.</li>
+</ul>
+<p>A <code>double</code> can be data, domain, relative, or pixel — carrier and space never constrain each
+other. The pipeline <em>is</em> the space transitions:</p>
+<pre><code>data ──fit──▶ domain ──apply──▶ relative ──affine──▶ pixel ──emit──▶ scene
+                                            ▲                    │
+                                            └──── measure ◀──────┘   (demands re-enter the solver)
+</code></pre>
+<p>Mixed-space arithmetic is ill-typed except through registered <strong>coercions</strong>: the affine is the
+unique relative→pixel coercion (it flips space and preserves geom), exactly as
+materialize/inject are the unique SQL⇄JS coercions on the substrate axis. Planning is
+demand-driven insertion at mismatches: a positional channel demands pixel, the bound expression
+yields relative, so the planner inserts the affine — the same mechanism that inserts substrate
+crossings.</p>
+<h2 id="operators">Operators</h2>
+<p>Scales, layouts, tick generators, and measurement providers share <strong>one component contract</strong>:
+an <code>Operator</code> is a catalog entry carrying dual execution implementations (<code>sql</code> and/or <code>js</code>)
+plus a declared signature over attribute spaces. Signatures are row-polymorphic — they name the
+columns an operator requires and the columns it adds; everything else flows through:</p>
+<pre><code>train   : {v: data | ρ}                        → {lo, hi: domain(over v)}
+apply   : {v: data | ρ} × domain(over v)       → {out: relative⟨geom⟩ | v | ρ}
+refine  : {x: pixel⟨g⟩ | ρ} (× extents)        → {x′: pixel | ρ}
+measure : {…pixel geoms… | ρ}                  → pixel scalars (demands)
+</code></pre>
+<p>The three layout classes fall out of the signatures rather than being a taxonomy:
+<strong>produce</strong> (data → relative: scales, bandX, stackY, force, treemap),
+<strong>refine</strong> (pixel → pixel, post-placement: fitText, grid packing, size-aware layouts), and
+<strong>measure</strong> (pixel → data: text extents, bounding boxes feeding the demand loop). A domain, when
+an operator trains one, <em>owns</em> its derivation — &quot;a train without a domain&quot; is unrepresentable.</p>
+<h2 id="the-plan-and-its-payloads">The plan and its payloads</h2>
+<p>The dataflow graph's nodes are <code>OpSpec</code>s — <code>{id, reads, writes, payload}</code> over <strong>cells</strong> (the
+graph's edges: scalar solver variables, or relation handles). The payload vocabulary is small
+and closed:</p>
+<table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>Signature</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>transform</code></td>
+<td>relations → relation; output attrs derived from a serializable relational-algebra tree</td>
+<td>every framework data transform: derived columns, joins (via, nest keys), aggregates, the affine</td>
+</tr>
+<tr>
+<td><code>call</code></td>
+<td>whatever the component declares</td>
+<td>the extension boundary: scale/layout train &amp; apply, ticks, measurement, decisions</td>
+</tr>
+<tr>
+<td><code>solve</code></td>
+<td>pixel scalars → pixel scalars</td>
+<td>one node's box constraints (propagation or Cassowary), re-run inside fixpoints</td>
+</tr>
+<tr>
+<td><code>emit</code></td>
+<td>pixel relations → scene</td>
+<td>the render sink</td>
+</tr>
+<tr>
+<td><code>crossing</code></td>
+<td>attr-identity, substrate conversion</td>
+<td>SQL⇄JS materialization</td>
+</tr>
+</tbody>
+</table>
+<p>Only <code>transform</code> is structurally rewritable by the optimizer (fusion, pushdown); the rest
+participate in substrate and liveness decisions but are semantically opaque.</p>
+<h2 id="execution">Execution</h2>
+<ul>
+<li><strong>Cells</strong> are the dataflow's edges and the constraint system's variables at once. Operators
+read and write cells; the scheduler orders execution purely from those declarations.</li>
+<li><strong>Cycles are features.</strong> Measurement→demand→arrange→placement→measurement is a genuine loop;
+the scheduler runs each strongly-connected component as a Gauss–Seidel fixpoint with a
+residual threshold, then seals its cells.</li>
+<li><strong>Two substrates, one meaning.</strong> Every algebra-built operator gets SQL and JS
+implementations from the same description; opaque algorithms (d3-force, treemap) declare
+what they can run on. The optimizer picks per edge; a keyed (per-panel) edge over a non-keyed
+implementation runs the correlated per-group definition automatically, in the
+implementation's own substrate.</li>
+</ul>
+<h2 id="late-bound-plot-references-placeholder-reads">Late-bound plot references (<code>$…</code> placeholder reads)</h2>
+<p>The plan walk visits nodes parent-first (a child's compile needs the parent's host cells), but
+a plot may reference a plot the walk hasn't reached yet: a top-level edge layer whose <code>frame:</code>
+or position <code>via()</code> points at a mark nested inside a template child. At emission time the
+referent's cells don't exist, so the compiler writes a <strong>placeholder read</strong> — a string in the
+<code>reads</code> slot that names a <em>plot's build product</em> instead of a cell:</p>
+<table>
+<thead>
+<tr>
+<th>Placeholder</th>
+<th>Resolves to</th>
+<th>Emitted by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$plot-keyed:&lt;plotId&gt;</code></td>
+<td>the referent plot's <strong>post-cell-key marks</strong> (the relation carrying <code>dvl_cell</code>) — what a <code>frame:</code> borrow joins</td>
+<td>the frame-assignment borrow</td>
+</tr>
+<tr>
+<td><code>$ref:&lt;plotId&gt;</code></td>
+<td>the referent plot's <strong>final placed marks</strong> (post-affine pixels) — what a position <code>via()</code> joins</td>
+<td>cross-node position vias</td>
+</tr>
+</tbody>
+</table>
+<p><strong>General semantics.</strong> A placeholder is a promise resolved exactly once: after the full node
+walk, <code>compileSpec</code> patches every placeholder read to the built plot's cell and <em>throws</em> if one
+cannot be satisfied (unknown plot, or a <code>frame:</code> referent that carries no <code>dvl_cell</code> because it
+was never nested). The invariants that keep the mechanism honest:</p>
+<ul>
+<li>placeholders appear only in <code>reads</code>, never in <code>writes</code> — a plot may <em>depend on</em> a later plot,
+but only the owning pipeline writes its cells;</li>
+<li>they name plots, not cells — the indirection is &quot;this plot's keyed/placed relation&quot;, chosen
+by the patch, so pipelines stay free to allocate cells incrementally;</li>
+<li>they are gone before the optimizer or scheduler ever see the graph — downstream, every read
+is a real cell, and an unresolved placeholder is a compile error, never a runtime mystery;</li>
+<li>cyclic references (A vias B while B vias A) still resolve — patching is name lookup, not
+execution order; the scheduler's SCC machinery owns any resulting cycle.</li>
+</ul>
+<p>To add a new build product to the vocabulary: emit <code>$plot-&lt;name&gt;:&lt;plotId&gt;</code>, expose the cell on
+<code>PlotBuild</code>, and add its arm to the patch loop in <code>executor/compile-spec.ts</code> with a loud error
+for the unsatisfiable case.</p>
+<h2 id="module-map-target">Module map (target)</h2>
+<pre><code>src/lib/dvl/
+├── types/        the attribute system: Attr = carrier ⊥ space ⊥ geom; typed schemas; ids
+├── data/         storage seam: backend, dialect, database, SQL fragments (fold/emit)
+├── ir/           the authored spec: nodes, plots, channel exprs, instances, cells
+├── api/          the fluent builder + validation (the authoring frontend)
+├── algebra/      the relational op algebra + its SQL/JS lowering + Relation/crossings
+├── operator/     the component contract: Operator, op(), bindings, registries + resolve
+├── plan/         OpSpec, typed payloads, spec→plan compiler, rewrite + plan passes
+├── layout/       the spatial engine: frame/affine, arrange (constraints + solvers), measure
+├── optimizer/    rule passes: substrate choice, crossings, fusion, DCE
+├── executor/     handler dispatch + the SCC/fixpoint scheduler
+├── components/   the pluggable instances: scales/, layouts/, marks/, ticks/
+├── render/       scene graph, pens (SVG), rasterization
+└── debug/        the recording sink, dvl_* schema, self-visualizations
+</code></pre>
+<p>The rule the map enforces: <strong>one concept, one module</strong> — to understand scales you read
+<code>operator/</code> + <code>components/scales/</code>; to understand placement you read <code>layout/</code>; to understand
+&quot;where does my SQL come from&quot; you read <code>algebra/</code> + <code>data/</code>. Marks stay deliberately dumb
+(channels + a draw function); everything smart about position is an operator.</p>
+
+    </article>
+  </main>
+
+  <script src="assets/docs.js"></script>
+  <script src="assets/dvl-example.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
+</body>
+</html>

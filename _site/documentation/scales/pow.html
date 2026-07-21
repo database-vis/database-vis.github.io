@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>pow · DVL</title>
+  <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="app-name" href="../index.html">DVL</a>
+    <nav class="sidebar-nav">
+    
+      <h2>Introduction</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../what-is-dvl.html">What is DVL?</a></li>
+        
+      
+        
+        
+        <li><a href="../getting-started.html">Getting started</a></li>
+        
+      
+        
+        
+        <li><a href="../architecture.html">Architecture</a></li>
+        
+      
+      </ul>
+    
+      <h2>Features</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#channels">Channels</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#scales">Scales</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#data">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        
+      
+      </ul>
+    
+      <h2>Marks</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../marks/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/area.html">area</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/arrow.html">arrow</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/bar.html">bar</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/cell.html">cell</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/connect.html">connect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/dot.html">dot</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/image.html">image</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/line.html">line</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/link.html">link</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/path.html">path</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rect.html">rect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rule.html">rule</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/text.html">text</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/tick.html">tick</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/vector.html">vector</a></li>
+        
+      
+      </ul>
+    
+      <h2>Layouts</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../layouts/README.html">Overview</a></li>
+        
+      
+        
+        <li><strong>Produce</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/bandX.html">bandX</a></li>
+          
+            
+            <li><a href="../layouts/bandY.html">bandY</a></li>
+          
+            
+            <li><a href="../layouts/barX.html">barX</a></li>
+          
+            
+            <li><a href="../layouts/barY.html">barY</a></li>
+          
+            
+            <li><a href="../layouts/stackX.html">stackX</a></li>
+          
+            
+            <li><a href="../layouts/stackY.html">stackY</a></li>
+          
+            
+            <li><a href="../layouts/pitchX.html">pitchX</a></li>
+          
+            
+            <li><a href="../layouts/pitchY.html">pitchY</a></li>
+          
+            
+            <li><a href="../layouts/eqX.html">eqX</a></li>
+          
+            
+            <li><a href="../layouts/eqY.html">eqY</a></li>
+          
+            
+            <li><a href="../layouts/proportionalX.html">proportionalX</a></li>
+          
+            
+            <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
+          
+            
+            <li><a href="../layouts/force.html">force</a></li>
+          
+            
+            <li><a href="../layouts/treemap.html">treemap</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Refine</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Resolver</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/hull.html">hull</a></li>
+          
+          </ul>
+        </li>
+        
+      
+      </ul>
+    
+      <h2>Scales</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../scales/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/linear.html">linear</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/log.html">log</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/sqrt.html">sqrt</a></li>
+        
+      
+        
+        
+        <li class="active"><a href="../scales/pow.html">pow</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/symlog.html">symlog</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/ordinal.html">ordinal</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/point.html">point</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/color.html">color</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/quantize.html">quantize</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/threshold.html">threshold</a></li>
+        
+      
+      </ul>
+    
+      <h2>Examples</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../examples/README.html">Gallery</a></li>
+        
+      
+      </ul>
+    
+    </nav>
+  </aside>
+
+  <header id="topbar">
+    <button class="sidebar-toggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+    <div class="topbar-spacer"></div>
+    <a class="github-link" href="https://github.com/cudbg/database-vis" target="_blank" rel="noopener" aria-label="GitHub repository">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+  </header>
+
+  <main class="content">
+    <article class="markdown-section">
+      <h1 id="pow">pow</h1>
+<p>The <code>pow</code> scale trains the same continuous <code>{lo, hi}</code> domain as <a href="linear.html"><code>linear</code></a> but applies a
+<strong>power transform</strong> before normalizing: <code>t = (valueᵏ − loᵏ) / (hiᵏ − loᵏ)</code>, mapped to <code>[0, 1]</code>,
+where <code>k</code> is the exponent (<strong>default 2</strong>). It emphasizes the top of the range (k &gt; 1) or the bottom
+(k &lt; 1). <code>sqrt</code> is <code>pow</code> with <code>k = ½</code>; <code>linear</code> is <code>pow</code> with <code>k = 1</code>.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
+v.dot(&quot;penguins&quot;, {
+  x: linear(&quot;bill_length_mm&quot;),
+  y: pow(&quot;body_mass_g&quot;),           // exponent defaults to 2
+}).axis(&quot;x&quot;).axis(&quot;y&quot;);
+return v;
+</code></pre>
+<p>Body mass under a squared transform — larger values are pushed apart, smaller ones compressed.</p>
+<h2 id="options">Options</h2>
+<ul>
+<li><strong>Fitted</strong> — <code>pow(&quot;col&quot;)</code> fits its domain now.</li>
+<li><strong>Deferred / shared</strong> — <code>const S = pow(); S(&quot;col&quot;)</code> shares; reuse to union domains. <code>S(4000)</code> is a
+datum in the domain.</li>
+</ul>
+<p><code>ScaleOpts</code> (second argument):</p>
+<table>
+<thead>
+<tr>
+<th>option</th>
+<th>type</th>
+<th>default</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>shared</code></td>
+<td>boolean</td>
+<td>solver decides</td>
+<td>pin (<code>true</code>) or forbid (<code>false</code>) domain sharing</td>
+</tr>
+<tr>
+<td><code>side</code></td>
+<td><code>&quot;top&quot;</code>|<code>&quot;right&quot;</code>|<code>&quot;bottom&quot;</code>|<code>&quot;left&quot;</code></td>
+<td>auto</td>
+<td>pin the axis side</td>
+</tr>
+<tr>
+<td><code>domain</code></td>
+<td>domain treatment</td>
+<td><code>&quot;nice&quot;</code></td>
+<td><code>&quot;data&quot;</code>, <code>&quot;nice&quot;</code>, <code>&quot;zero&quot;</code>, <code>&quot;unbounded&quot;</code>, or <code>{ explicit: [lo, hi] }</code></td>
+</tr>
+<tr>
+<td><code>params</code></td>
+<td><code>Record&lt;string, Expr&gt;</code></td>
+<td><code>{}</code></td>
+<td>carries scale parameters (see the exponent note below)</td>
+</tr>
+<tr>
+<td><code>axis</code></td>
+<td><code>AxisOptions</code> | <code>false</code></td>
+<td>drawn</td>
+<td>axis config, or <code>false</code> to hide</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exponent (<code>k</code>).</strong> The transform reads <code>exponent</code> from the binding options; it defaults to <strong>2</strong>.
+Two exponents are exact today: <code>k = 1</code> (identity, same as <code>linear</code>) and <code>k = 2</code> (<code>x·x</code>). Other
+exponents fall back to a <strong>placeholder</strong> approximation (<code>√(x²) ≈ |x|</code>) — the source has no <code>pow</code>
+leaf in its scalar algebra, so <code>k ∉ {1, 2}</code> is not yet faithful. For the common <code>k = ½</code> case use the
+dedicated <a href="sqrt.html"><code>sqrt</code></a> scale, which is exact. Ticks use <code>nice-linear</code>.</p>
+<p><strong>On a colour channel</strong> <code>pow</code> is a sequential ramp (default <code>blues</code>); its legend is a gradient bar.</p>
+<h2 id="examples">Examples</h2>
+<p>Anchor the domain at zero — a squared scale is usually read against a zero baseline.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
+v.dot(&quot;penguins&quot;, {
+  x: linear(&quot;bill_length_mm&quot;),
+  y: pow(&quot;body_mass_g&quot;, { domain: &quot;zero&quot; }),
+}).axis(&quot;x&quot;).axis(&quot;y&quot;);
+return v;
+</code></pre>
+<p>Explicit domain so the emphasis is stable across renders.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
+v.dot(&quot;penguins&quot;, {
+  x: linear(&quot;bill_length_mm&quot;),
+  y: pow(&quot;body_mass_g&quot;, { domain: { explicit: [2500, 6500] } }),
+}).axis(&quot;x&quot;).axis(&quot;y&quot;);
+return v;
+</code></pre>
+<p>Shared squared domain across two tables.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const heavy = db.table(&quot;penguins&quot;).top(1, { col: &quot;body_mass_g&quot;, desc: true }, { partition: [&quot;species&quot;] });
+const v = canvas(640, 440);
+const x = linear(&quot;bill_length_mm&quot;);
+const y = pow(&quot;body_mass_g&quot;);
+v.dot(&quot;penguins&quot;, { x, y, fill: &quot;#cfd3dc&quot; });
+v.dot(heavy,      { x, y, fill: &quot;#e15759&quot; });
+return v;
+</code></pre>
+<p><code>pow</code> colour ramp — a squared emphasis on the fill channel.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(680, 460);
+const p = v.dot(&quot;penguins&quot;, {
+  x: linear(&quot;bill_length_mm&quot;),
+  y: linear(&quot;flipper_length_mm&quot;),
+  fill: pow(&quot;body_mass_g&quot;),
+  r: 5,
+});
+p.legend(&quot;fill&quot;, { placement: &quot;right&quot; });
+return v;
+</code></pre>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="sqrt.html">sqrt</a> — exact <code>k = ½</code> (prefer it over <code>pow</code> for square roots)</li>
+<li><a href="linear.html">linear</a> — <code>k = 1</code>, same train</li>
+<li><a href="log.html">log</a> — stronger compression than any moderate power</li>
+</ul>
+
+    </article>
+  </main>
+
+  <script src="../assets/docs.js"></script>
+  <script src="../assets/dvl-example.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
+</body>
+</html>

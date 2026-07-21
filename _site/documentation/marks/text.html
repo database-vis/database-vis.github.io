@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>text · DVL</title>
+  <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="app-name" href="../index.html">DVL</a>
+    <nav class="sidebar-nav">
+    
+      <h2>Introduction</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../what-is-dvl.html">What is DVL?</a></li>
+        
+      
+        
+        
+        <li><a href="../getting-started.html">Getting started</a></li>
+        
+      
+        
+        
+        <li><a href="../architecture.html">Architecture</a></li>
+        
+      
+      </ul>
+    
+      <h2>Features</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#channels">Channels</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#scales">Scales</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#data">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        
+      
+      </ul>
+    
+      <h2>Marks</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../marks/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/area.html">area</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/arrow.html">arrow</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/bar.html">bar</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/cell.html">cell</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/connect.html">connect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/dot.html">dot</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/image.html">image</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/line.html">line</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/link.html">link</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/path.html">path</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rect.html">rect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rule.html">rule</a></li>
+        
+      
+        
+        
+        <li class="active"><a href="../marks/text.html">text</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/tick.html">tick</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/vector.html">vector</a></li>
+        
+      
+      </ul>
+    
+      <h2>Layouts</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../layouts/README.html">Overview</a></li>
+        
+      
+        
+        <li><strong>Produce</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/bandX.html">bandX</a></li>
+          
+            
+            <li><a href="../layouts/bandY.html">bandY</a></li>
+          
+            
+            <li><a href="../layouts/barX.html">barX</a></li>
+          
+            
+            <li><a href="../layouts/barY.html">barY</a></li>
+          
+            
+            <li><a href="../layouts/stackX.html">stackX</a></li>
+          
+            
+            <li><a href="../layouts/stackY.html">stackY</a></li>
+          
+            
+            <li><a href="../layouts/pitchX.html">pitchX</a></li>
+          
+            
+            <li><a href="../layouts/pitchY.html">pitchY</a></li>
+          
+            
+            <li><a href="../layouts/eqX.html">eqX</a></li>
+          
+            
+            <li><a href="../layouts/eqY.html">eqY</a></li>
+          
+            
+            <li><a href="../layouts/proportionalX.html">proportionalX</a></li>
+          
+            
+            <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
+          
+            
+            <li><a href="../layouts/force.html">force</a></li>
+          
+            
+            <li><a href="../layouts/treemap.html">treemap</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Refine</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Resolver</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/hull.html">hull</a></li>
+          
+          </ul>
+        </li>
+        
+      
+      </ul>
+    
+      <h2>Scales</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../scales/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/linear.html">linear</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/log.html">log</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/sqrt.html">sqrt</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/pow.html">pow</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/symlog.html">symlog</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/ordinal.html">ordinal</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/point.html">point</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/color.html">color</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/quantize.html">quantize</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/threshold.html">threshold</a></li>
+        
+      
+      </ul>
+    
+      <h2>Examples</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../examples/README.html">Gallery</a></li>
+        
+      
+      </ul>
+    
+    </nav>
+  </aside>
+
+  <header id="topbar">
+    <button class="sidebar-toggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+    <div class="topbar-spacer"></div>
+    <a class="github-link" href="https://github.com/cudbg/database-vis" target="_blank" rel="noopener" aria-label="GitHub repository">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+  </header>
+
+  <main class="content">
+    <article class="markdown-section">
+      <h1 id="text">text</h1>
+<p>The <code>text</code> mark draws a string at each row's <code>(x, y)</code>. It is the mark where the
+<strong>bare-string-is-a-literal</strong> rule bites hardest: <code>text: &quot;species&quot;</code> writes the literal word
+<em>&quot;species&quot;</em> on every point, while <code>text: field(&quot;species&quot;)</code> reads the <strong>species column</strong> and writes
+each row's value. (<code>field</code> is <code>col</code> from <code>$lib/dvl/ir/expr</code> — the EXPRESSION column, not the builder
+layout <code>barY</code>.) Because a label almost always sits <em>on top of</em> an existing point or box, <code>text</code> is
+typically a second layer that reuses the first layer's <code>x</code>/<code>y</code> scales, then nudges itself off the
+anchor with <code>dx</code>/<code>dy</code>.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
+const x = linear(&quot;bill_length_mm&quot;), y = linear(&quot;body_mass_g&quot;);
+v.dot(&quot;penguins&quot;,  { x, y, fill: &quot;#cfd3dc&quot; });
+v.text(&quot;penguins&quot;, {
+  x, y,                                  // SAME scale objects → label lands on its dot
+  text: field(&quot;species&quot;),                // reads the species COLUMN
+  dx: 6, dy: -6, anchor: &quot;start&quot;, fontSize: 10, fill: &quot;#333&quot;,
+});
+return v;
+</code></pre>
+<p>A grey dot cloud with each point labelled by its species, the text nudged 6px up-and-right of the
+dot so it does not sit under the marker.</p>
+<h2 id="options">Options</h2>
+<p>Positional <code>x</code>/<code>y</code> place the anchor; <code>dx</code>/<code>dy</code> are <strong>pixel</strong> nudges the draw applies <em>after</em>
+placement (so an axis label can sit a few px off its baseline). <code>text</code> is the content channel:
+bind it to <code>field(&quot;col&quot;)</code> for column values, or pass a bare string for a constant label. <code>anchor</code>
+and <code>baseline</code> set the SVG <code>text-anchor</code> / dominant-baseline; <code>rotate</code> spins the glyph in place.
+Multiline content arrives via the <code>lines</code> output of <code>fitText</code> (below) — you rarely set it by hand.</p>
+<table>
+<thead>
+<tr>
+<th>channel</th>
+<th>type</th>
+<th>default</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>x</code></td>
+<td>positional-x</td>
+<td>—</td>
+<td>anchor x (scale binding, layout output, or pixel literal)</td>
+</tr>
+<tr>
+<td><code>y</code></td>
+<td>positional-y</td>
+<td>—</td>
+<td>anchor y</td>
+</tr>
+<tr>
+<td><code>dx</code></td>
+<td>pixel</td>
+<td><code>0</code></td>
+<td>horizontal nudge applied after placement (+ = right)</td>
+</tr>
+<tr>
+<td><code>dy</code></td>
+<td>pixel</td>
+<td><code>0</code></td>
+<td>vertical nudge (− = up, + = down)</td>
+</tr>
+<tr>
+<td><code>text</code></td>
+<td>text</td>
+<td><code>&quot;&quot;</code></td>
+<td>the string. <code>field(&quot;col&quot;)</code> = column; bare string = literal on every row</td>
+</tr>
+<tr>
+<td><code>anchor</code></td>
+<td>shape</td>
+<td><code>middle</code>*</td>
+<td>text-anchor: <code>start</code> | <code>middle</code> | <code>end</code></td>
+</tr>
+<tr>
+<td><code>baseline</code></td>
+<td>shape</td>
+<td>—</td>
+<td>dominant-baseline: <code>top</code> | <code>middle</code> | <code>bottom</code> (<code>alphabetic</code> if unset)</td>
+</tr>
+<tr>
+<td><code>fontSize</code></td>
+<td>fontSize</td>
+<td><code>10</code>*</td>
+<td>glyph size in px (terminal pen param — never affine-placed)</td>
+</tr>
+<tr>
+<td><code>rotate</code></td>
+<td>rotate</td>
+<td><code>0</code></td>
+<td>rotation in degrees</td>
+</tr>
+<tr>
+<td><code>fill</code></td>
+<td>color</td>
+<td>—</td>
+<td>glyph colour</td>
+</tr>
+<tr>
+<td><code>opacity</code></td>
+<td>number</td>
+<td><code>1</code></td>
+<td>glyph opacity</td>
+</tr>
+</tbody>
+</table>
+<p>* pen defaults; <code>anchor</code>/<code>fontSize</code>/<code>fill</code> inherit the renderer's font style when unset.</p>
+<p>The mark also reads a <code>lines</code> field (a JSON array of strings) when present: more than one line
+triggers the multiline draw. <code>fitText</code> produces <code>lines</code>; you normally get multiline text by
+composing with that layout rather than writing the channel directly.</p>
+<h2 id="examples">Examples</h2>
+<p>A bare label layer — one constant word tagging a region of the plot. <code>text: &quot;Adelie&quot;</code> is a LITERAL,
+so it is written once at the given pixel point, not per row.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
+const x = linear(&quot;bill_length_mm&quot;), y = linear(&quot;body_mass_g&quot;);
+v.dot(&quot;penguins&quot;, { x, y, r: 3, fill: &quot;#cfd3dc&quot; });
+v.text(&quot;penguins&quot;, { x: 200, y: 40, text: &quot;penguin body mass&quot;, fontSize: 14, fill: &quot;#333&quot; });
+return v;
+</code></pre>
+<p>Column labels nudged off their points. <code>dx</code>/<code>dy</code> push the text to the dot's upper-right; <code>anchor: &quot;start&quot;</code> grows it rightward so it never overlaps the marker.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
+const x = linear(&quot;bill_length_mm&quot;), y = linear(&quot;body_mass_g&quot;);
+v.dot(&quot;penguins&quot;,  { x, y, fill: ordinal(&quot;species&quot;) }).axis(&quot;x&quot;).axis(&quot;y&quot;);
+v.text(&quot;penguins&quot;, {
+  x, y, text: field(&quot;island&quot;),
+  dx: 5, dy: -4, anchor: &quot;start&quot;, fontSize: 9, fill: &quot;#555&quot;,
+});
+return v;
+</code></pre>
+<p>Rotated tick-style labels. <code>rotate</code> spins each glyph; combine with <code>anchor: &quot;end&quot;</code> for angled
+category labels that read up toward their point.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
+const x = linear(&quot;bill_length_mm&quot;), y = linear(&quot;body_mass_g&quot;);
+v.dot(&quot;penguins&quot;,  { x, y, r: 3, fill: &quot;#cfd3dc&quot; });
+v.text(&quot;penguins&quot;, {
+  x, y, text: field(&quot;species&quot;),
+  rotate: -35, anchor: &quot;end&quot;, fontSize: 9, fill: &quot;#333&quot;,
+});
+return v;
+</code></pre>
+<p>Centred labels inside a box. <code>anchor: &quot;middle&quot;</code> + <code>baseline: &quot;middle&quot;</code> centre the text on a computed
+box midpoint — the position pattern used by every fitted-label example below.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
+const bars = v.bar(&quot;penguins&quot;, {
+  ...bandX(&quot;species&quot;, { paddingInner: 0.15 }).pick(&quot;x&quot;, &quot;w&quot;),
+  ...barY(&quot;body_mass_g&quot;).pick(&quot;y&quot;, &quot;h&quot;),
+  fill: ordinal(&quot;species&quot;),
+});
+const center = { resolve: { cx: { fn: &quot;avg&quot;, arg: expr`f.x + f.w / 2` },
+                            cy: { fn: &quot;avg&quot;, arg: expr`f.y + f.h / 2` } } };
+v.text(&quot;penguins&quot;, {
+  ...bars.via(eq(&quot;species&quot;, &quot;species&quot;), center).pick({ x: &quot;cx&quot;, y: &quot;cy&quot; }),
+  text: field(&quot;species&quot;), anchor: &quot;middle&quot;, baseline: &quot;middle&quot;, fill: &quot;#fff&quot;, fontSize: 11,
+});
+return v;
+</code></pre>
+<p><strong>Fit text in a box.</strong> <code>text</code> composes with the <code>fitText</code> refine layout, which sizes the string to
+its own <code>w</code>/<code>h</code> box. Inputs (<code>text</code>, <code>w</code>, <code>h</code>) are inferred from the mark's channels; <code>.pick( &quot;fontSize&quot;, &quot;rotate&quot;)</code> binds the solved size and per-box rotation. Long names in tall bars rotate to
+fit, short ones stay horizontal; the box itself bounds the (uncapped) solve.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const revenue = db.table(&quot;orders&quot;).rollup(
+  db.table(&quot;products&quot;), { left: &quot;product_id&quot;, right: &quot;id&quot; },
+  &quot;category&quot;, { amount: sum({ sql: &quot;qty * price&quot; }) });
+const v = canvas(640, 460);
+const bars = v.bar(revenue, {
+  ...bandX(&quot;category&quot;, { paddingInner: 0.15 }).pick(&quot;x&quot;, &quot;w&quot;),
+  ...barY(&quot;amount&quot;, { zero: true }).pick(&quot;y&quot;, &quot;h&quot;),   // zero anchors baseline so small bars have a box
+  fill: ordinal(&quot;category&quot;),
+});
+const center = { resolve: { cx: { fn: &quot;avg&quot;, arg: expr`f.x + f.w / 2` },
+                            cy: { fn: &quot;avg&quot;, arg: expr`f.y + f.h / 2` } } };
+v.text(revenue, {
+  ...bars.via(eq(&quot;category&quot;, &quot;category&quot;), center).pick({ x: &quot;cx&quot;, y: &quot;cy&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
+  ...fitText({ rotate: true }).pick(&quot;fontSize&quot;, &quot;rotate&quot;),
+  text: field(&quot;category&quot;), anchor: &quot;middle&quot;, baseline: &quot;middle&quot;, fill: &quot;#fff&quot;,
+});
+return v;
+</code></pre>
+<p>Uniform typography instead of per-box sizes: <code>fitText({ shared: true })</code> solves ONE font size across
+all labels (capped at 14, no rotation). Pick just <code>fontSize</code>.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const revenue = db.table(&quot;orders&quot;).rollup(
+  db.table(&quot;products&quot;), { left: &quot;product_id&quot;, right: &quot;id&quot; },
+  &quot;category&quot;, { amount: sum({ sql: &quot;qty * price&quot; }) });
+const v = canvas(640, 460);
+const rects = v.rect(revenue, {
+  ...treemap(&quot;amount&quot;).pick(&quot;x&quot;, &quot;y&quot;, &quot;w&quot;, &quot;h&quot;),
+  fill: ordinal(&quot;category&quot;), stroke: &quot;#fff&quot;,
+});
+const center = { resolve: { cx: { fn: &quot;avg&quot;, arg: expr`f.x + f.w / 2` },
+                            cy: { fn: &quot;avg&quot;, arg: expr`f.y + f.h / 2` } } };
+v.text(revenue, {
+  ...rects.via(eq(&quot;category&quot;, &quot;category&quot;), center).pick({ x: &quot;cx&quot;, y: &quot;cy&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
+  ...fitText({ shared: true }).pick(&quot;fontSize&quot;),
+  text: field(&quot;category&quot;), anchor: &quot;middle&quot;, baseline: &quot;middle&quot;, fill: &quot;#333&quot;,
+});
+return v;
+</code></pre>
+<p>Multiline labels: <code>fitText</code> can wrap long strings into <code>lines</code>, which the mark draws stacked. Pick
+<code>lines</code> alongside <code>fontSize</code>.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const revenue = db.table(&quot;orders&quot;).rollup(
+  db.table(&quot;products&quot;), { left: &quot;product_id&quot;, right: &quot;id&quot; },
+  &quot;category&quot;, { amount: sum({ sql: &quot;qty * price&quot; }) });
+const v = canvas(640, 460);
+const rects = v.rect(revenue, {
+  ...treemap(&quot;amount&quot;).pick(&quot;x&quot;, &quot;y&quot;, &quot;w&quot;, &quot;h&quot;),
+  fill: ordinal(&quot;category&quot;), stroke: &quot;#fff&quot;,
+});
+const center = { resolve: { cx: { fn: &quot;avg&quot;, arg: expr`f.x + f.w / 2` },
+                            cy: { fn: &quot;avg&quot;, arg: expr`f.y + f.h / 2` } } };
+v.text(revenue, {
+  ...rects.via(eq(&quot;category&quot;, &quot;category&quot;), center).pick({ x: &quot;cx&quot;, y: &quot;cy&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
+  ...fitText({ wrap: true }).pick(&quot;fontSize&quot;, &quot;lines&quot;),
+  text: field(&quot;category&quot;), anchor: &quot;middle&quot;, baseline: &quot;middle&quot;, fill: &quot;#333&quot;,
+});
+return v;
+</code></pre>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="./image.html">image</a> — the sibling glyph mark (a box with an <code>&lt;image href&gt;</code> instead of a string)</li>
+<li><a href="./dot.html">dot</a> — the point layer labels usually ride on top of</li>
+<li><a href="../layouts/fitText.html">fitText</a> — the refine layout that solves <code>fontSize</code>/<code>rotate</code>/<code>lines</code></li>
+<li><a href="../layouts/bandX.html">bandX</a> / <a href="../layouts/barY.html">barY</a> — the box layouts fitted labels sit inside</li>
+</ul>
+
+    </article>
+  </main>
+
+  <script src="../assets/docs.js"></script>
+  <script src="../assets/dvl-example.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
+</body>
+</html>

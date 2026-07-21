@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Scales · DVL</title>
+  <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="app-name" href="../index.html">DVL</a>
+    <nav class="sidebar-nav">
+    
+      <h2>Introduction</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../what-is-dvl.html">What is DVL?</a></li>
+        
+      
+        
+        
+        <li><a href="../getting-started.html">Getting started</a></li>
+        
+      
+        
+        
+        <li><a href="../architecture.html">Architecture</a></li>
+        
+      
+      </ul>
+    
+      <h2>Features</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#channels">Channels</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#scales">Scales</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#data">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        
+      
+      </ul>
+    
+      <h2>Marks</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../marks/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/area.html">area</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/arrow.html">arrow</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/bar.html">bar</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/cell.html">cell</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/connect.html">connect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/dot.html">dot</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/image.html">image</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/line.html">line</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/link.html">link</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/path.html">path</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rect.html">rect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rule.html">rule</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/text.html">text</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/tick.html">tick</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/vector.html">vector</a></li>
+        
+      
+      </ul>
+    
+      <h2>Layouts</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../layouts/README.html">Overview</a></li>
+        
+      
+        
+        <li><strong>Produce</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/bandX.html">bandX</a></li>
+          
+            
+            <li><a href="../layouts/bandY.html">bandY</a></li>
+          
+            
+            <li><a href="../layouts/barX.html">barX</a></li>
+          
+            
+            <li><a href="../layouts/barY.html">barY</a></li>
+          
+            
+            <li><a href="../layouts/stackX.html">stackX</a></li>
+          
+            
+            <li><a href="../layouts/stackY.html">stackY</a></li>
+          
+            
+            <li><a href="../layouts/pitchX.html">pitchX</a></li>
+          
+            
+            <li><a href="../layouts/pitchY.html">pitchY</a></li>
+          
+            
+            <li><a href="../layouts/eqX.html">eqX</a></li>
+          
+            
+            <li><a href="../layouts/eqY.html">eqY</a></li>
+          
+            
+            <li><a href="../layouts/proportionalX.html">proportionalX</a></li>
+          
+            
+            <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
+          
+            
+            <li><a href="../layouts/force.html">force</a></li>
+          
+            
+            <li><a href="../layouts/treemap.html">treemap</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Refine</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Resolver</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/hull.html">hull</a></li>
+          
+          </ul>
+        </li>
+        
+      
+      </ul>
+    
+      <h2>Scales</h2>
+      <ul>
+      
+        
+        
+        <li class="active"><a href="../scales/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/linear.html">linear</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/log.html">log</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/sqrt.html">sqrt</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/pow.html">pow</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/symlog.html">symlog</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/ordinal.html">ordinal</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/point.html">point</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/color.html">color</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/quantize.html">quantize</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/threshold.html">threshold</a></li>
+        
+      
+      </ul>
+    
+      <h2>Examples</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../examples/README.html">Gallery</a></li>
+        
+      
+      </ul>
+    
+    </nav>
+  </aside>
+
+  <header id="topbar">
+    <button class="sidebar-toggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+    <div class="topbar-spacer"></div>
+    <a class="github-link" href="https://github.com/cudbg/database-vis" target="_blank" rel="noopener" aria-label="GitHub repository">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+  </header>
+
+  <main class="content">
+    <article class="markdown-section">
+      <h1 id="scales">Scales</h1>
+<p>Scales are operators that <strong>train</strong> a domain from your data (in SQL, in the database) and
+<strong>apply</strong> a per-row normalization. Bind one to a channel — <code>x: linear(&quot;bill_length_mm&quot;)</code> — or
+share one across layers by reusing the object. Options ride the second argument:
+<code>linear(&quot;col&quot;, { shared: false, domain: &quot;nice&quot;, axis: { ticks: 4 } })</code>, and on a <strong>color channel</strong>
+a <code>scheme</code> names the palette: <code>linear(&quot;mass&quot;, { scheme: &quot;viridis&quot; })</code>.</p>
+<h2 id="continuous-train-minmax">Continuous (train min/max)</h2>
+<table>
+<thead>
+<tr>
+<th>Scale</th>
+<th>Apply</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a id="linear"></a><a href="linear.html"><strong>linear</strong></a></td>
+<td>(v − lo) / (hi − lo)</td>
+<td>the workhorse</td>
+</tr>
+<tr>
+<td><a id="log"></a><a href="log.html"><strong>log</strong></a></td>
+<td>interpolates in ln-space</td>
+<td>positive domains</td>
+</tr>
+<tr>
+<td><a id="sqrt"></a><a href="sqrt.html"><strong>sqrt</strong></a></td>
+<td>square-root transform</td>
+<td></td>
+</tr>
+<tr>
+<td><a id="pow"></a><a href="pow.html"><strong>pow</strong></a></td>
+<td>power transform</td>
+<td>exponent option (default 2)</td>
+</tr>
+<tr>
+<td><a id="symlog"></a><a href="symlog.html"><strong>symlog</strong></a></td>
+<td>bi-symmetric log</td>
+<td>handles zero and negatives</td>
+</tr>
+<tr>
+<td><a id="color"></a><a href="color.html"><strong>color</strong></a></td>
+<td>position on a color ramp</td>
+<td><em>continuous</em> fill — a <code>linear</code> with a sequential-scheme default; any continuous scale on a color channel behaves the same (see <a href="#color">Color</a>)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="categorical-train-distinct">Categorical (train distinct)</h2>
+<table>
+<thead>
+<tr>
+<th>Scale</th>
+<th>Apply</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a id="ordinal"></a><a href="ordinal.html"><strong>ordinal</strong></a></td>
+<td>category → range[index]</td>
+<td>palette for fill, or any discrete range</td>
+</tr>
+<tr>
+<td><a id="point"></a><a href="point.html"><strong>point</strong></a></td>
+<td>category → centered position</td>
+<td>band with zero width</td>
+</tr>
+</tbody>
+</table>
+<h2 id="binned">Binned</h2>
+<table>
+<thead>
+<tr>
+<th>Scale</th>
+<th>Apply</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a id="quantize"></a><a href="quantize.html"><strong>quantize</strong></a></td>
+<td>N equal-width bins over [lo, hi]</td>
+<td>trained</td>
+</tr>
+<tr>
+<td><a id="threshold"></a><a href="threshold.html"><strong>threshold</strong></a></td>
+<td>authored breakpoints → bins</td>
+<td>no training (a static domain)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="color">Color</h2>
+<p><strong>Color is an output space, not a scale family.</strong> The <em>same</em> scale emits a number on a positional
+channel and a <strong>color</strong> on a color channel (<code>fill</code>/<code>stroke</code>) — decided by the channel, not the scale
+name. So <code>fill: linear(&quot;mass&quot;)</code> is a sequential ramp (not a stray number), <code>fill: ordinal(&quot;species&quot;)</code>
+is a categorical palette, and <code>color(&quot;mass&quot;)</code> is just <code>linear</code> with a sequential default. The palette
+comes from a named <code>scheme</code> (resolved once to a 256-step ramp for continuous, a fixed array for
+categorical); override with <code>{ scheme }</code> or an explicit <code>{ range: [...] }</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Family</th>
+<th>Channel →</th>
+<th>Default scheme</th>
+<th>Schemes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>continuous (<code>linear</code>/<code>log</code>/<code>sqrt</code>/<code>pow</code>/<code>symlog</code>/<code>color</code>)</td>
+<td>sequential ramp</td>
+<td><code>blues</code></td>
+<td><code>blues</code>, <code>viridis</code>, <code>turbo</code>, diverging <code>rdbu</code>/<code>blueorange</code></td>
+</tr>
+<tr>
+<td>categorical (<code>ordinal</code>)</td>
+<td>discrete palette</td>
+<td><code>tableau10</code></td>
+<td><code>tableau10</code>, <code>observable10</code>, <code>category10</code></td>
+</tr>
+<tr>
+<td>binned (<code>quantize</code>/<code>threshold</code>)</td>
+<td>discrete bins</td>
+<td>(sequential)</td>
+<td>any sequential, sampled to the bin count</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sharing.</strong> Reusing one scale <em>object</em> across bindings declares &quot;same quantity&quot; — one unioned
+domain, one axis. Facet panels share domains by default; <code>{ shared: false }</code> gives each panel
+its own. <strong>Choosing fill:</strong> a categorical column → <code>ordinal</code>; a numeric intensity → <code>color</code> (or any
+continuous scale — they all ramp on a color channel). A string column under <code>color()</code>/<code>linear()</code>
+still fails at train time (min/max over text) — that is a data-type error, not the old type-lie
+(a continuous scale on <code>fill</code> now always yields a color, never a raw number).</p>
+<h2 id="adding-your-own-scale">Adding your own scale</h2>
+<p>A scale is an <strong>operator</strong> — the same <code>op({ … })</code> factory layouts use — with a trained <code>domain</code>
+and an <code>apply</code> that normalizes each row against the fit.</p>
+<pre data-lang="js"><code class="language-js">import { op } from &quot;$lib/dvl/operator/operator&quot;;
+import { continuous } from &quot;$lib/dvl/components/scales/types&quot;;
+import { scaledOut } from &quot;$lib/dvl/components/scales/_shared&quot;;
+import { inputCol } from &quot;$lib/dvl/algebra/impl&quot;;
+
+const clampLinear = op({
+  name: &quot;clampLinear&quot;,
+  domain: continuous((b) =&gt; ({ kind: &quot;reduce&quot;, aggs: {
+    lo: { fn: &quot;min&quot;, col: inputCol(b, &quot;value&quot;) }, hi: { fn: &quot;max&quot;, col: inputCol(b, &quot;value&quot;) } } })),
+  apply: (b) =&gt; scaledOut(b, /* clamp((v − lo) / (hi − lo), 0, 1) — a ScalarExpr */ …),
+  ticks: &quot;nice-linear&quot;,   // earns a labelled axis
+  scheme: &quot;blues&quot;,        // default palette when bound to a colour channel
+});
+</code></pre>
+<ul>
+<li><strong><code>domain</code></strong> — <code>continuous(trainFn)</code> (a 1-row <code>{lo, hi}</code> fit) or <code>categorical(trainFn)</code> (the
+keyed value table). The train runs in SQL, in the database.</li>
+<li><strong><code>apply(b)</code></strong> returns a <code>RelOp</code> computing the normalized <code>t</code>; wrapping it in <code>scaledOut(b, t)</code>
+makes the SAME operator emit a number on a positional channel and a <strong>colour</strong> on a colour
+channel — the binding-polymorphic apply (<a href="#color">Color</a>).</li>
+<li><strong><code>ticks</code></strong> names the tick algo for the axis; <strong><code>scheme</code></strong> the default palette.</li>
+</ul>
+<p>Register it and expose a factory — exactly like a layout:</p>
+<pre data-lang="js"><code class="language-js">registries.operators.register(clampLinear.name, clampLinear);
+export const clampLinear = scaleFactory(&quot;clampLinear&quot;);   // → clampLinear(&quot;mass&quot;)
+</code></pre>
+<p>Marks (<code>defineMark</code>), scales, and layouts (<code>op</code>) are the three extension points; all three
+register into the <code>Registries</code> and surface through a builder factory.</p>
+
+    </article>
+  </main>
+
+  <script src="../assets/docs.js"></script>
+  <script src="../assets/dvl-example.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
+</body>
+</html>

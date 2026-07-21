@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DVL Documentation · DVL</title>
+  <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="app-name" href="index.html">DVL</a>
+    <nav class="sidebar-nav">
+    
+      <h2>Introduction</h2>
+      <ul>
+      
+        
+        
+        <li><a href="what-is-dvl.html">What is DVL?</a></li>
+        
+      
+        
+        
+        <li><a href="getting-started.html">Getting started</a></li>
+        
+      
+        
+        
+        <li><a href="architecture.html">Architecture</a></li>
+        
+      
+      </ul>
+    
+      <h2>Features</h2>
+      <ul>
+      
+        
+        
+        <li><a href="features/README.html#plots-and-marks">Plots and marks</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#channels">Channels</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#scales">Scales</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#layouts">Layouts</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#the-frame">The frame</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#join-paths">Join paths</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#subplots">Subplots</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#data">Data</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#debugging">Debugging</a></li>
+        
+      
+      </ul>
+    
+      <h2>Marks</h2>
+      <ul>
+      
+        
+        
+        <li><a href="marks/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="marks/area.html">area</a></li>
+        
+      
+        
+        
+        <li><a href="marks/arrow.html">arrow</a></li>
+        
+      
+        
+        
+        <li><a href="marks/bar.html">bar</a></li>
+        
+      
+        
+        
+        <li><a href="marks/cell.html">cell</a></li>
+        
+      
+        
+        
+        <li><a href="marks/connect.html">connect</a></li>
+        
+      
+        
+        
+        <li><a href="marks/dot.html">dot</a></li>
+        
+      
+        
+        
+        <li><a href="marks/image.html">image</a></li>
+        
+      
+        
+        
+        <li><a href="marks/line.html">line</a></li>
+        
+      
+        
+        
+        <li><a href="marks/link.html">link</a></li>
+        
+      
+        
+        
+        <li><a href="marks/path.html">path</a></li>
+        
+      
+        
+        
+        <li><a href="marks/rect.html">rect</a></li>
+        
+      
+        
+        
+        <li><a href="marks/rule.html">rule</a></li>
+        
+      
+        
+        
+        <li><a href="marks/text.html">text</a></li>
+        
+      
+        
+        
+        <li><a href="marks/tick.html">tick</a></li>
+        
+      
+        
+        
+        <li><a href="marks/vector.html">vector</a></li>
+        
+      
+      </ul>
+    
+      <h2>Layouts</h2>
+      <ul>
+      
+        
+        
+        <li><a href="layouts/README.html">Overview</a></li>
+        
+      
+        
+        <li><strong>Produce</strong>
+          <ul>
+          
+            
+            <li><a href="layouts/bandX.html">bandX</a></li>
+          
+            
+            <li><a href="layouts/bandY.html">bandY</a></li>
+          
+            
+            <li><a href="layouts/barX.html">barX</a></li>
+          
+            
+            <li><a href="layouts/barY.html">barY</a></li>
+          
+            
+            <li><a href="layouts/stackX.html">stackX</a></li>
+          
+            
+            <li><a href="layouts/stackY.html">stackY</a></li>
+          
+            
+            <li><a href="layouts/pitchX.html">pitchX</a></li>
+          
+            
+            <li><a href="layouts/pitchY.html">pitchY</a></li>
+          
+            
+            <li><a href="layouts/eqX.html">eqX</a></li>
+          
+            
+            <li><a href="layouts/eqY.html">eqY</a></li>
+          
+            
+            <li><a href="layouts/proportionalX.html">proportionalX</a></li>
+          
+            
+            <li><a href="layouts/proportionalY.html">proportionalY</a></li>
+          
+            
+            <li><a href="layouts/force.html">force</a></li>
+          
+            
+            <li><a href="layouts/treemap.html">treemap</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Refine</strong>
+          <ul>
+          
+            
+            <li><a href="layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="layouts/grid-stack.html">grid-stack</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Resolver</strong>
+          <ul>
+          
+            
+            <li><a href="layouts/hull.html">hull</a></li>
+          
+          </ul>
+        </li>
+        
+      
+      </ul>
+    
+      <h2>Scales</h2>
+      <ul>
+      
+        
+        
+        <li><a href="scales/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="scales/linear.html">linear</a></li>
+        
+      
+        
+        
+        <li><a href="scales/log.html">log</a></li>
+        
+      
+        
+        
+        <li><a href="scales/sqrt.html">sqrt</a></li>
+        
+      
+        
+        
+        <li><a href="scales/pow.html">pow</a></li>
+        
+      
+        
+        
+        <li><a href="scales/symlog.html">symlog</a></li>
+        
+      
+        
+        
+        <li><a href="scales/ordinal.html">ordinal</a></li>
+        
+      
+        
+        
+        <li><a href="scales/point.html">point</a></li>
+        
+      
+        
+        
+        <li><a href="scales/color.html">color</a></li>
+        
+      
+        
+        
+        <li><a href="scales/quantize.html">quantize</a></li>
+        
+      
+        
+        
+        <li><a href="scales/threshold.html">threshold</a></li>
+        
+      
+      </ul>
+    
+      <h2>Examples</h2>
+      <ul>
+      
+        
+        
+        <li><a href="examples/README.html">Gallery</a></li>
+        
+      
+      </ul>
+    
+    </nav>
+  </aside>
+
+  <header id="topbar">
+    <button class="sidebar-toggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+    <div class="topbar-spacer"></div>
+    <a class="github-link" href="https://github.com/cudbg/database-vis" target="_blank" rel="noopener" aria-label="GitHub repository">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+  </header>
+
+  <main class="content">
+    <article class="markdown-section">
+      <h1 id="dvl-documentation">DVL Documentation</h1>
+<p><strong>DVL</strong> is a visualization language that treats a chart as a database query. You declare marks
+over relations, bind their channels to scales and layouts, and DVL compiles the whole
+visualization — placement included — into SQL over DuckDB plus a small solved constraint
+system. Data never leaves the database until there are pixels to draw.</p>
+<pre data-lang="js"><code class="language-js">const v = canvas(640, 480);
+v.dot(&quot;penguins&quot;, { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), fill: ordinal(&quot;species&quot;) })
+ .axis(&quot;x&quot;)
+ .axis(&quot;y&quot;);
+const svg = await renderSpec(v.spec, v.registries, &quot;&quot;, db);
+</code></pre>
+<p>These docs follow the shape of <a href="https://observablehq.com/plot/">Observable Plot's documentation</a>:
+a short <a href="getting-started.html">getting started</a>, concept pages under <a href="features/README.html">features</a>,
+one reference page per instance under <a href="marks/README.html">marks</a>, <a href="layouts/README.html">layouts</a>, and
+<a href="scales/README.html">scales</a>, and a worked <a href="examples/README.html">example gallery</a>. The full page
+tree is in the sidebar: <a href="SUMMARY.html">SUMMARY.md</a>.</p>
+<p>New here? Read <a href="what-is-dvl.html">What is DVL?</a> for the mental model, then
+<a href="getting-started.html">Getting started</a>. Curious how the engine works — or contributing to it?
+Start with the <a href="architecture.html">Architecture</a> overview.</p>
+<blockquote>
+<p><strong>Status.</strong> The engine is mid-refactor toward the architecture described in
+<a href="architecture.html">architecture.md</a>. Code samples reflect the current authoring API and are
+written for reading; verify against <code>src/lib/dvl/__tests__/e2e-debug-parity.test.ts</code> (the
+pattern ground-truth) before relying on one. Design rationale and dated engineering
+explainers live in <code>docs/</code>, not here.</p>
+</blockquote>
+<h2 id="deferred-decisions-roadmap">Deferred decisions &amp; roadmap</h2>
+<p>Choices made deliberately and work pushed to the future, so they read as intent rather than
+accident (full rationale in <code>design/CELL_KEY_VIA.html</code> §7–§8):</p>
+<p><strong>Decisions that stand until revisited</strong></p>
+<ul>
+<li><strong>Inline JS reductions don't serialize — accepted.</strong> A <code>via</code> resolution's opaque function
+rides the plan object (the same precedent as embedded resolved operators); plans are
+session-local today. Registered by-name reductions come back only if plan serialization
+becomes real.</li>
+<li><strong>Unprovable join multiplicity passes.</strong> Only <em>provably</em> multi-match joins (non-eq, or eq
+that visibly misses a key) demand a <code>resolve</code>; joins the FK catalog can't judge compile as
+single-match. Making the judgment total needs a populated catalog plus a <code>declareKey</code> for
+non-FK unique keys, then a strict flag flips unknown → error.</li>
+<li><strong>Empty match set ⇒ NULL, uniformly</strong> — even for <code>count</code> (LEFT-JOIN semantics; &quot;no match&quot; is
+a value, never a dropped mark).</li>
+<li><strong>The two force substrates are different simulations.</strong> Same contract — normalized positions,
+deterministic per substrate — different exact coordinates. A test that pins force pixels is
+pinning a substrate choice.</li>
+<li><strong>Borrow shadowing: the referent wins.</strong> A <code>via</code> output that collides with an existing mark
+column replaces it (that's the point of the via), with a one-time warning; a declared
+<code>replace</code> stays silent.</li>
+<li><strong>Computed resolutions must be named.</strong> <code>{ resolve: { spend: { fn, arg } } }</code>, picked by
+<code>'spend'</code> — an expression/JS reduction mints a quantity no relation has a column for, so the
+map key is its declaration; the unnamed form is rejected.</li>
+</ul>
+<p><strong>Deferred work</strong></p>
+<ul>
+<li><strong>required-columns pass</strong> — proving join-key columns survive to the hop that needs them.
+Fires on nothing today (augment-only pipelines never drop columns); becomes real with the
+first projecting relop.</li>
+<li><strong>Child-extent aggregation</strong> — host extents as a grouped reduce over children's placed marks
+(<code>by: dvl_cell</code> → an extents table). The standalone <code>reduce</code> op is its prerequisite and is
+built; the layout wiring is not.</li>
+<li><strong>Intermediate hop columns in JS match sets</strong> — an opaque reduction's <code>matches</code> carry only
+the referent's rows; hop columns are reachable through <code>m</code> in expression args but are not
+flattened into the match rows (needs a collision rule).</li>
+<li><strong>Level-3 cell inference</strong> — auto-defaulting a mark's panel from its position vias. Kept
+explicit (<code>pick({ cell: 'dvl_cell' })</code>) deliberately; inference would hide the frame decision.</li>
+<li><strong>Nested subplots as database partitions — LANDED</strong> (<code>docs/2026-07-15-per-cell-layouts.html</code>
+§7, executed per §7e): a template cell scopes the WHOLE database — a nested layer's partition
+σ derives from the FK catalog (conjoin default; <code>{ scope: 'union' }</code> for local-subgraph
+multiples), cross-panel rows don't exist at the data level, &quot;all edges&quot; is a top-level layer
+with <code>{ frame: srcVia }</code>, dropped rows are reported as data (<code>sigmaDropped</code>), and the
+<code>cell</code> pick is deprecated. Remaining from that design: withdrawing the deprecated pick, and
+σ for AUX inputs (force's edges by name resolution — blocked on cell-backed aux bindings),
+which would delete the d3 impl's hand-rolled dangling-link filter.
+<em>The logic, spelled out</em> (another paper-worthy instance of semantics doing the deciding):
+a nest key is a join key, and a join key IS a partition — so take the partition seriously
+and it partitions not one table but the database, since every other relation reaches the
+host through declared FKs. Then (i) &quot;does the cross-panel edge render?&quot; stops being a
+rendering flag and becomes name resolution — inside a panel the edge simply isn't in scope;
+(ii) the one genuine ambiguity relocates to where it belongs, the data level: how σ extends
+at a relation with SEVERAL FK paths to the host (conjoin = strict partition, union =
+local-subgraph multiples) — declared once about the schema, never per layer; (iii) wanting
+global data inside a panel becomes an explicit opt-out (global data + frame assignment),
+not a laxness of nesting; and (iv) data, fits (scope-of-fits above), and frames end up
+scoped by ONE environment — the panel. Same shape as the Space and fit stories: classify
+the thing (how does this relation reach the host?), and behavior falls out of the
+classification instead of a per-use option. Worth writing up alongside them.</li>
+<li><strong>Joins inside scalar expressions</strong> — a cross-table ref nested in an arithmetic expression
+still throws; bind the via output to its own channel instead.</li>
+<li><strong>Space checking of resolution arguments</strong> — a computed output's declared space is trusted,
+not yet verified against the argument expression's inferred space.</li>
+<li><strong>e2e-duckdb assertion drift</strong> — a set of pre-existing margin/gutter mismatches in the
+DuckDB e2e suite predates the current work and needs its own reconciliation pass.</li>
+<li><strong><code>PlotParams.zIndex</code> is declared but unread</strong> — the renderer draws in authoring order; a
+layer that must sit under an earlier one (edge lines under node boxes) can't say so yet.</li>
+<li><strong><code>perCell</code> → scope-of-fits</strong> — the per-cell layout default landed as an explicit operator
+bit; the cleaner mechanism (scope as a per-FIT property derived from the declaration shape —
+per-row work is scope-invariant, factored domains default shared, whole-set execs default
+cell; gather-scatter and keyed execution as the coarsen/confine coercions on one axis) is
+designed in <code>docs/2026-07-15-per-cell-layouts.html</code> §6 and awaits the exec-operator audit.
+<em>Why the fit is the right home for scope</em>: scope is about computing <strong>properties of the
+data — metadata</strong> (a domain, a normalization, a box solve) — and fits are exactly where the
+engine represents metadata; per-row values have no scope because they aren't metadata. This
+is the same move as the rest of the design — the type system and its semantics doing the
+deciding (cf. &quot;the type system enumerates the cases&quot;): classify the value (row datum vs fit),
+and the legal/default scoping falls out of the classification rather than out of a flag.</li>
+</ul>
+
+    </article>
+  </main>
+
+  <script src="assets/docs.js"></script>
+  <script src="assets/dvl-example.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
+</body>
+</html>

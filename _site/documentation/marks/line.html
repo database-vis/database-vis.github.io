@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>line · DVL</title>
+  <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="app-name" href="../index.html">DVL</a>
+    <nav class="sidebar-nav">
+    
+      <h2>Introduction</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../what-is-dvl.html">What is DVL?</a></li>
+        
+      
+        
+        
+        <li><a href="../getting-started.html">Getting started</a></li>
+        
+      
+        
+        
+        <li><a href="../architecture.html">Architecture</a></li>
+        
+      
+      </ul>
+    
+      <h2>Features</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#channels">Channels</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#scales">Scales</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#data">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        
+      
+      </ul>
+    
+      <h2>Marks</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../marks/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/area.html">area</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/arrow.html">arrow</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/bar.html">bar</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/cell.html">cell</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/connect.html">connect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/dot.html">dot</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/image.html">image</a></li>
+        
+      
+        
+        
+        <li class="active"><a href="../marks/line.html">line</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/link.html">link</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/path.html">path</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rect.html">rect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rule.html">rule</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/text.html">text</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/tick.html">tick</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/vector.html">vector</a></li>
+        
+      
+      </ul>
+    
+      <h2>Layouts</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../layouts/README.html">Overview</a></li>
+        
+      
+        
+        <li><strong>Produce</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/bandX.html">bandX</a></li>
+          
+            
+            <li><a href="../layouts/bandY.html">bandY</a></li>
+          
+            
+            <li><a href="../layouts/barX.html">barX</a></li>
+          
+            
+            <li><a href="../layouts/barY.html">barY</a></li>
+          
+            
+            <li><a href="../layouts/stackX.html">stackX</a></li>
+          
+            
+            <li><a href="../layouts/stackY.html">stackY</a></li>
+          
+            
+            <li><a href="../layouts/pitchX.html">pitchX</a></li>
+          
+            
+            <li><a href="../layouts/pitchY.html">pitchY</a></li>
+          
+            
+            <li><a href="../layouts/eqX.html">eqX</a></li>
+          
+            
+            <li><a href="../layouts/eqY.html">eqY</a></li>
+          
+            
+            <li><a href="../layouts/proportionalX.html">proportionalX</a></li>
+          
+            
+            <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
+          
+            
+            <li><a href="../layouts/force.html">force</a></li>
+          
+            
+            <li><a href="../layouts/treemap.html">treemap</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Refine</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Resolver</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/hull.html">hull</a></li>
+          
+          </ul>
+        </li>
+        
+      
+      </ul>
+    
+      <h2>Scales</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../scales/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/linear.html">linear</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/log.html">log</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/sqrt.html">sqrt</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/pow.html">pow</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/symlog.html">symlog</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/ordinal.html">ordinal</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/point.html">point</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/color.html">color</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/quantize.html">quantize</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/threshold.html">threshold</a></li>
+        
+      
+      </ul>
+    
+      <h2>Examples</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../examples/README.html">Gallery</a></li>
+        
+      
+      </ul>
+    
+    </nav>
+  </aside>
+
+  <header id="topbar">
+    <button class="sidebar-toggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+    <div class="topbar-spacer"></div>
+    <a class="github-link" href="https://github.com/cudbg/database-vis" target="_blank" rel="noopener" aria-label="GitHub repository">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+  </header>
+
+  <main class="content">
+    <article class="markdown-section">
+      <h1 id="line">line</h1>
+<p>The <code>line</code> mark turns an <strong>ordered, grouped point set into one polyline</strong>. It is an AGGREGATE
+mark: its N input rows collapse to a single SVG <code>&lt;path&gt;</code> per series (an <code>array_agg</code> over the
+points in SQL), so a table of <code>(x, y)</code> becomes one connected line. Points are drawn in the
+order of the <code>order</code> channel, which <strong>defaults to <code>x</code></strong>. A <code>stroke</code> colour channel splits the
+input into one path per distinct value — one line per series. <code>line</code> is just <code>path</code> with a
+conventional name; the two marks are identical.</p>
+<pre data-lang="dvl"><code class="lang-dvl">// N rows aggregate to ONE path per species, ordered by x (year). The series is modelled
+// inline — a group-by averaging body mass per (species, year), visible in the SQL tab.
+const series = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;, &quot;year&quot;], { mass: avg(&quot;body_mass_g&quot;) });
+const v = canvas(640, 460);
+v.line(series, {
+  x: linear(&quot;year&quot;),
+  y: linear(&quot;mass&quot;),
+  stroke: ordinal(&quot;species&quot;),
+  strokeWidth: 2,
+}).axis(&quot;x&quot;).axis(&quot;y&quot;);
+return v;
+</code></pre>
+<p>Three lines, one per species, each connecting its yearly average mass in year order.</p>
+<h2 id="options">Options</h2>
+<p><code>line</code> is a <strong>stroked</strong> aggregate mark: it binds <code>stroke</code>, never <code>fill</code> (an unfilled path is a
+stroke, not a filled blob — <code>drawPath</code> defaults <code>fill</code> to <code>&quot;none&quot;</code>). Aggregation is per series:
+distinct <code>stroke</code> values partition the rows, and within each partition the points sort by
+<code>order</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Channel</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>x</code></td>
+<td>positional-x</td>
+<td>—</td>
+<td>point x position (scale binding or pixel literal)</td>
+</tr>
+<tr>
+<td><code>y</code></td>
+<td>positional-y</td>
+<td>—</td>
+<td>point y position</td>
+</tr>
+<tr>
+<td><code>order</code></td>
+<td>number</td>
+<td><code>x</code></td>
+<td>the SEQUENCE column — the points sort by this before aggregating</td>
+</tr>
+<tr>
+<td><code>stroke</code></td>
+<td>color</td>
+<td>—</td>
+<td>line colour; distinct values split into one path per series</td>
+</tr>
+<tr>
+<td><code>strokeWidth</code></td>
+<td>pixel</td>
+<td>1</td>
+<td>line thickness (px)</td>
+</tr>
+<tr>
+<td><code>strokeDasharray</code></td>
+<td>text</td>
+<td>—</td>
+<td>SVG dash pattern, e.g. <code>&quot;4 2&quot;</code></td>
+</tr>
+<tr>
+<td><code>strokeOpacity</code></td>
+<td>number</td>
+<td>1</td>
+<td>stroke alpha</td>
+</tr>
+<tr>
+<td><code>opacity</code></td>
+<td>number</td>
+<td>1</td>
+<td>whole-mark alpha</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td>text</td>
+<td>—</td>
+<td>per-path <code>&lt;title&gt;</code> hover tooltip</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>order</code> channel takes an EXPRESSION, not a scale: use <code>field(&quot;t&quot;)</code> (aka <code>col(&quot;t&quot;)</code>) to name
+a raw column. A bare string is a literal, so <code>order: &quot;t&quot;</code> is wrong — always wrap the column.</p>
+<h2 id="examples">Examples</h2>
+<p>A basic single line — no series split, ordered by <code>x</code>:</p>
+<pre data-lang="dvl"><code class="lang-dvl">const yearly = db.table(&quot;penguins&quot;).groupby([&quot;year&quot;], { mass: avg(&quot;body_mass_g&quot;) });
+const v = canvas(480, 320);
+v.line(yearly, { x: linear(&quot;year&quot;), y: linear(&quot;mass&quot;), stroke: &quot;#4e79a7&quot; })
+ .axis(&quot;x&quot;).axis(&quot;y&quot;);
+return v;
+</code></pre>
+<p>Multi-series by colour — one line per species, with a legend:</p>
+<pre data-lang="dvl"><code class="lang-dvl">const series = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;, &quot;year&quot;], { mass: avg(&quot;body_mass_g&quot;) });
+const v = canvas(640, 460);
+const p = v.line(series, {
+  x: linear(&quot;year&quot;),
+  y: linear(&quot;mass&quot;),
+  stroke: ordinal(&quot;species&quot;),
+  strokeWidth: 2,
+});
+p.axis(&quot;x&quot;).axis(&quot;y&quot;).legend(&quot;stroke&quot;, { placement: &quot;right&quot; });
+return v;
+</code></pre>
+<p>Time-ordered by an explicit <code>order</code> channel — the line follows time, not x, so it can double
+back on x:</p>
+<pre data-lang="dvl"><code class="lang-dvl">const track = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;, &quot;year&quot;],
+  { bill: avg(&quot;bill_length_mm&quot;), mass: avg(&quot;body_mass_g&quot;) });
+const v = canvas(640, 460);
+v.line(track, {
+  x: linear(&quot;bill&quot;),
+  y: linear(&quot;mass&quot;),
+  order: field(&quot;year&quot;),          // sequence by TIME — bill is not monotone
+  stroke: ordinal(&quot;species&quot;),
+  strokeWidth: 2,
+}).axis(&quot;x&quot;).axis(&quot;y&quot;);
+return v;
+</code></pre>
+<p>Dashed styling and per-mark opacity:</p>
+<pre data-lang="dvl"><code class="lang-dvl">const yearly = db.table(&quot;penguins&quot;).groupby([&quot;year&quot;], { mass: avg(&quot;body_mass_g&quot;) });
+const v = canvas(480, 320);
+v.line(yearly, {
+  x: linear(&quot;year&quot;), y: linear(&quot;mass&quot;),
+  stroke: &quot;#e15759&quot;, strokeWidth: 2, strokeDasharray: &quot;6 3&quot;, strokeOpacity: 0.8,
+}).axis(&quot;x&quot;).axis(&quot;y&quot;);
+return v;
+</code></pre>
+<p>Layered over dots — draw the raw points and the connecting line over the same shared scales by
+reusing deferred scale objects:</p>
+<pre data-lang="dvl"><code class="lang-dvl">const series = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;, &quot;year&quot;], { mass: avg(&quot;body_mass_g&quot;) });
+const x = linear(), y = linear();
+const v = canvas(640, 460);
+v.line(series, { x: x(&quot;year&quot;), y: y(&quot;mass&quot;), stroke: ordinal(&quot;species&quot;), strokeWidth: 2 });
+v.dot(series, { x: x(&quot;year&quot;), y: y(&quot;mass&quot;), fill: ordinal(&quot;species&quot;), r: 4 })
+ .axis(&quot;x&quot;).axis(&quot;y&quot;);
+return v;
+</code></pre>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="./path.html">path</a> — the aggregate primitive; <code>line</code> is <code>path</code> under another name</li>
+<li><a href="./area.html">area</a> — the filled aggregate: a band between <code>(x, y)</code> and a baseline</li>
+<li><a href="./connect.html">connect</a> — the pairwise sibling: N points → N−1 styleable segments</li>
+<li><a href="./rule.html">rule</a> · <a href="./link.html">link</a> — single-segment marks over paired columns</li>
+</ul>
+
+    </article>
+  </main>
+
+  <script src="../assets/docs.js"></script>
+  <script src="../assets/dvl-example.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
+</body>
+</html>

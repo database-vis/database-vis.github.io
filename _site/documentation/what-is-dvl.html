@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>What is DVL? · DVL</title>
+  <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="app-name" href="index.html">DVL</a>
+    <nav class="sidebar-nav">
+    
+      <h2>Introduction</h2>
+      <ul>
+      
+        
+        
+        <li class="active"><a href="what-is-dvl.html">What is DVL?</a></li>
+        
+      
+        
+        
+        <li><a href="getting-started.html">Getting started</a></li>
+        
+      
+        
+        
+        <li><a href="architecture.html">Architecture</a></li>
+        
+      
+      </ul>
+    
+      <h2>Features</h2>
+      <ul>
+      
+        
+        
+        <li><a href="features/README.html#plots-and-marks">Plots and marks</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#channels">Channels</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#scales">Scales</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#layouts">Layouts</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#the-frame">The frame</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#join-paths">Join paths</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#subplots">Subplots</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#data">Data</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#debugging">Debugging</a></li>
+        
+      
+      </ul>
+    
+      <h2>Marks</h2>
+      <ul>
+      
+        
+        
+        <li><a href="marks/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="marks/area.html">area</a></li>
+        
+      
+        
+        
+        <li><a href="marks/arrow.html">arrow</a></li>
+        
+      
+        
+        
+        <li><a href="marks/bar.html">bar</a></li>
+        
+      
+        
+        
+        <li><a href="marks/cell.html">cell</a></li>
+        
+      
+        
+        
+        <li><a href="marks/connect.html">connect</a></li>
+        
+      
+        
+        
+        <li><a href="marks/dot.html">dot</a></li>
+        
+      
+        
+        
+        <li><a href="marks/image.html">image</a></li>
+        
+      
+        
+        
+        <li><a href="marks/line.html">line</a></li>
+        
+      
+        
+        
+        <li><a href="marks/link.html">link</a></li>
+        
+      
+        
+        
+        <li><a href="marks/path.html">path</a></li>
+        
+      
+        
+        
+        <li><a href="marks/rect.html">rect</a></li>
+        
+      
+        
+        
+        <li><a href="marks/rule.html">rule</a></li>
+        
+      
+        
+        
+        <li><a href="marks/text.html">text</a></li>
+        
+      
+        
+        
+        <li><a href="marks/tick.html">tick</a></li>
+        
+      
+        
+        
+        <li><a href="marks/vector.html">vector</a></li>
+        
+      
+      </ul>
+    
+      <h2>Layouts</h2>
+      <ul>
+      
+        
+        
+        <li><a href="layouts/README.html">Overview</a></li>
+        
+      
+        
+        <li><strong>Produce</strong>
+          <ul>
+          
+            
+            <li><a href="layouts/bandX.html">bandX</a></li>
+          
+            
+            <li><a href="layouts/bandY.html">bandY</a></li>
+          
+            
+            <li><a href="layouts/barX.html">barX</a></li>
+          
+            
+            <li><a href="layouts/barY.html">barY</a></li>
+          
+            
+            <li><a href="layouts/stackX.html">stackX</a></li>
+          
+            
+            <li><a href="layouts/stackY.html">stackY</a></li>
+          
+            
+            <li><a href="layouts/pitchX.html">pitchX</a></li>
+          
+            
+            <li><a href="layouts/pitchY.html">pitchY</a></li>
+          
+            
+            <li><a href="layouts/eqX.html">eqX</a></li>
+          
+            
+            <li><a href="layouts/eqY.html">eqY</a></li>
+          
+            
+            <li><a href="layouts/proportionalX.html">proportionalX</a></li>
+          
+            
+            <li><a href="layouts/proportionalY.html">proportionalY</a></li>
+          
+            
+            <li><a href="layouts/force.html">force</a></li>
+          
+            
+            <li><a href="layouts/treemap.html">treemap</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Refine</strong>
+          <ul>
+          
+            
+            <li><a href="layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="layouts/grid-stack.html">grid-stack</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Resolver</strong>
+          <ul>
+          
+            
+            <li><a href="layouts/hull.html">hull</a></li>
+          
+          </ul>
+        </li>
+        
+      
+      </ul>
+    
+      <h2>Scales</h2>
+      <ul>
+      
+        
+        
+        <li><a href="scales/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="scales/linear.html">linear</a></li>
+        
+      
+        
+        
+        <li><a href="scales/log.html">log</a></li>
+        
+      
+        
+        
+        <li><a href="scales/sqrt.html">sqrt</a></li>
+        
+      
+        
+        
+        <li><a href="scales/pow.html">pow</a></li>
+        
+      
+        
+        
+        <li><a href="scales/symlog.html">symlog</a></li>
+        
+      
+        
+        
+        <li><a href="scales/ordinal.html">ordinal</a></li>
+        
+      
+        
+        
+        <li><a href="scales/point.html">point</a></li>
+        
+      
+        
+        
+        <li><a href="scales/color.html">color</a></li>
+        
+      
+        
+        
+        <li><a href="scales/quantize.html">quantize</a></li>
+        
+      
+        
+        
+        <li><a href="scales/threshold.html">threshold</a></li>
+        
+      
+      </ul>
+    
+      <h2>Examples</h2>
+      <ul>
+      
+        
+        
+        <li><a href="examples/README.html">Gallery</a></li>
+        
+      
+      </ul>
+    
+    </nav>
+  </aside>
+
+  <header id="topbar">
+    <button class="sidebar-toggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+    <div class="topbar-spacer"></div>
+    <a class="github-link" href="https://github.com/cudbg/database-vis" target="_blank" rel="noopener" aria-label="GitHub repository">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+  </header>
+
+  <main class="content">
+    <article class="markdown-section">
+      <h1 id="what-is-dvl">What is DVL?</h1>
+<p><strong>DVL</strong> (the <em>Database Visualization Language</em>) is a declarative visualization language built on
+one premise: a visualization <strong>is</strong> a database query. Not &quot;uses a query to fetch its data&quot; — the
+visualization itself, placement and all, is a query the engine compiles and the database
+executes.</p>
+<p>In grammar-of-graphics terms, DVL looks familiar: you make plots from <strong>marks</strong> (dots, bars,
+lines, text) whose <strong>channels</strong> (x, y, fill, …) are bound to data columns through <strong>scales</strong> and
+<strong>layouts</strong>. The differences are underneath:</p>
+<ol>
+<li>
+<p><strong>Everything is a relation.</strong> A plot's marks are rows of a <em>mark table</em> derived from your
+source table. A scale's trained domain is a (tiny) relation. The tick marks on an axis are a
+relation. Even the diagram's diagnostics are a relation. Because everything is a relation,
+one algebra — and one optimizer — covers the whole pipeline.</p>
+</li>
+<li>
+<p><strong>Scales and layouts are the same kind of thing: operators.</strong> An operator may <strong>train</strong>
+(reduce the data to a <em>fit</em> — a min/max envelope, a category index) and must <strong>apply</strong>
+(augment each mark row with output columns). A linear scale, a stacked-bar layout, and a
+force-directed graph layout are all operators; they differ only in what they train and what
+they add.</p>
+</li>
+<li>
+<p><strong>Placement is normalized, then solved.</strong> Operators emit positions in a normalized
+[0, 1] frame — they never know pixels. A constraint solver arranges the boxes (panels,
+axes, gutters, margins), and a single <em>affine</em> step maps normalized positions into solved
+boxes. This split is why the same spec can facet, nest, and resize without any operator
+caring.</p>
+</li>
+<li>
+<p><strong>It compiles to SQL.</strong> Mark tables, scale training, layout application, even the affine are
+SQL over <a href="https://duckdb.org">DuckDB</a> wherever possible, with JavaScript as a second
+execution substrate for algorithms that want it (force simulation, treemaps). The optimizer
+chooses where each step runs and inserts the conversions. A million rows scale-train in the
+database; only drawable pixels come out.</p>
+</li>
+</ol>
+<h2 id="a-complete-example">A complete example</h2>
+<pre data-lang="js"><code class="language-js">import { canvas, linear, ordinal } from &quot;$lib/dvl/api/builder&quot;;
+import { renderSpec } from &quot;$lib/dvl/executor/compile-spec&quot;;
+
+const v = canvas(640, 480);
+v.dot(&quot;penguins&quot;, {
+  x: linear(&quot;bill_length_mm&quot;),
+  y: linear(&quot;body_mass_g&quot;),
+  fill: ordinal(&quot;species&quot;),
+})
+ .axis(&quot;x&quot;)
+ .axis(&quot;y&quot;);
+
+const svg = await renderSpec(v.spec, v.registries, &quot;&quot;, db);
+</code></pre>
+<p>Reading it the DVL way: <code>dot</code> declares a mark table over <code>penguins</code>; <code>linear(&quot;bill_length_mm&quot;)</code>
+binds the x channel through a scale operator that will <em>train</em> a <code>{lo, hi}</code> domain in SQL and
+<em>apply</em> <code>(v − lo) / (hi − lo)</code> to every row; <code>ordinal(&quot;species&quot;)</code> trains a category index and
+applies a palette lookup; <code>.axis()</code> asks for axes — which are themselves ordinary plots (a rule,
+ticks, and labels over the scale's tick relation), not a special renderer feature. <code>renderSpec</code>
+compiles all of that into a dataflow of SQL and JS steps, solves the frame, and reads back SVG.</p>
+<h2 id="how-dvl-relates-to-other-tools">How DVL relates to other tools</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>ggplot2 / Vega-Lite / Observable Plot</th>
+<th>DVL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Marks + channels + scales</td>
+<td>yes</td>
+<td>yes — the authoring surface is deliberately close</td>
+</tr>
+<tr>
+<td>Where data lives</td>
+<td>in memory, in the tool</td>
+<td>in the database, until pixels</td>
+</tr>
+<tr>
+<td>Layout algorithms</td>
+<td>built-in, special-cased</td>
+<td>operators in the same algebra as scales</td>
+</tr>
+<tr>
+<td>Axes, legends</td>
+<td>renderer features</td>
+<td>ordinary plots over tick relations</td>
+</tr>
+<tr>
+<td>Placement</td>
+<td>per-tool layout engine</td>
+<td>normalized frame + constraint solver</td>
+</tr>
+<tr>
+<td>Extensibility</td>
+<td>plugins per concept</td>
+<td>one operator contract for scales <em>and</em> layouts</td>
+</tr>
+</tbody>
+</table>
+<p>If you know Observable Plot, the authoring model will feel close; see
+<a href="getting-started.html">Getting started</a>. If you want the engine's internal story — the pipeline,
+the type system, execution — see <a href="architecture.html">Architecture</a>.</p>
+
+    </article>
+  </main>
+
+  <script src="assets/docs.js"></script>
+  <script src="assets/dvl-example.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
+</body>
+</html>

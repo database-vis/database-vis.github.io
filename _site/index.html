@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="./favicon.png" />
+		<meta name="viewport" content="width=device-width" />
+		
+		<link href="./internal/immutable/assets/2.5e3b9b5d.css" rel="stylesheet">
+		<link rel="modulepreload" href="./internal/immutable/entry/start.adaa16be.js">
+		<link rel="modulepreload" href="./internal/immutable/chunks/index.77266668.js">
+		<link rel="modulepreload" href="./internal/immutable/chunks/singletons.6204a450.js">
+		<link rel="modulepreload" href="./internal/immutable/chunks/paths.ad01a0f1.js">
+		<link rel="modulepreload" href="./internal/immutable/entry/app.fc6f14c3.js">
+		<link rel="modulepreload" href="./internal/immutable/chunks/preload-helper.a4192956.js">
+		<link rel="modulepreload" href="./internal/immutable/nodes/0.b609ec18.js">
+		<link rel="modulepreload" href="./internal/immutable/nodes/2.1291e257.js"><title>DVL — a visualization language that compiles to SQL</title><!-- HEAD_svelte-1j0zp8k_START --><meta name="description" content="DVL is a constraint-based visualization language: declarative marks, scales, and layouts that compile to SQL and run in DuckDB, live in your browser."><!-- HEAD_svelte-1j0zp8k_END -->
+	</head>
+	<body>
+		<body data-sveltekit-prefetch>
+			<div>
+
+
+
+
+
+<main class="page svelte-1vuwe14"><header class="hero svelte-1vuwe14"><h1 class="logo svelte-1vuwe14">DVL</h1>
+    <p class="tagline svelte-1vuwe14">A constraint-based visualization language that compiles to <strong>SQL</strong>.</p>
+    <p class="sub svelte-1vuwe14">Describe a chart as marks, channels, scales, and layouts. DVL trains domains, solves the
+      frame, and lowers the whole thing to queries that run in DuckDB — live, in the browser.
+    </p>
+    <div class="cta svelte-1vuwe14"><a class="btn primary svelte-1vuwe14" href="/dvl-demo">Try the editor →</a>
+      <a class="btn svelte-1vuwe14" href="/documentation/">Read the docs</a></div></header>
+
+  <section class="features svelte-1vuwe14"><div class="feature svelte-1vuwe14"><h3 class="svelte-1vuwe14">Declarative marks &amp; channels</h3>
+      <p class="svelte-1vuwe14">Bind columns to a mark&#39;s channels — <code class="svelte-1vuwe14">x</code>, <code class="svelte-1vuwe14">y</code>, <code class="svelte-1vuwe14">fill</code>,
+        … — and let expressions, aggregates, and cross-mark references compose.</p></div>
+    <div class="feature svelte-1vuwe14"><h3 class="svelte-1vuwe14">Scales &amp; layouts solve the frame</h3>
+      <p class="svelte-1vuwe14">Continuous and categorical scales, plus multi-output layouts (bars, stacks, facets,
+        treemaps, force) that emit normalized positions a constraint solver places.</p></div>
+    <div class="feature svelte-1vuwe14"><h3 class="svelte-1vuwe14">Runs in DuckDB, in the browser</h3>
+      <p class="svelte-1vuwe14">Every spec lowers to SQL and executes on DuckDB-Wasm. No server — the editor and every
+        documentation example run the current engine live.</p></div></section>
+
+  <section class="snippet svelte-1vuwe14"><pre class="svelte-1vuwe14"><code>const v = canvas(640, 400);
+v.dot(&quot;penguins&quot;, {
+  x: linear(&quot;flipper_length_mm&quot;),
+  y: linear(&quot;body_mass_g&quot;),
+  fill: ordinal(&quot;species&quot;),
+}).axis(&quot;x&quot;).axis(&quot;y&quot;).legend(&quot;fill&quot;);</code></pre>
+    <a class="snippet-link svelte-1vuwe14" href="/dvl-demo">Open this in the editor →</a></section>
+
+  <footer class="foot svelte-1vuwe14"><a href="/dvl-demo" class="svelte-1vuwe14">Editor</a>
+    <span>·</span>
+    <a href="/documentation/" class="svelte-1vuwe14">Documentation</a>
+    <span>·</span>
+    <a href="https://github.com/cudbg/database-vis" target="_blank" rel="noopener" class="svelte-1vuwe14">GitHub</a></footer>
+</main>
+
+
+			
+			<script>
+				{
+					__sveltekit_19p9epg = {
+						base: new URL(".", location).pathname.slice(0, -1),
+						env: {}
+					};
+
+					const element = document.currentScript.parentElement;
+
+					const data = [null,null];
+
+					Promise.all([
+						import("./internal/immutable/entry/start.adaa16be.js"),
+						import("./internal/immutable/entry/app.fc6f14c3.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2],
+							data,
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+		</body>
+	</body>
+</html>
+
+

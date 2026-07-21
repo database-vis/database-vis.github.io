@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>stackY · DVL</title>
+  <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="app-name" href="../index.html">DVL</a>
+    <nav class="sidebar-nav">
+    
+      <h2>Introduction</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../what-is-dvl.html">What is DVL?</a></li>
+        
+      
+        
+        
+        <li><a href="../getting-started.html">Getting started</a></li>
+        
+      
+        
+        
+        <li><a href="../architecture.html">Architecture</a></li>
+        
+      
+      </ul>
+    
+      <h2>Features</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#channels">Channels</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#scales">Scales</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#data">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        
+      
+      </ul>
+    
+      <h2>Marks</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../marks/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/area.html">area</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/arrow.html">arrow</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/bar.html">bar</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/cell.html">cell</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/connect.html">connect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/dot.html">dot</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/image.html">image</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/line.html">line</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/link.html">link</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/path.html">path</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rect.html">rect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rule.html">rule</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/text.html">text</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/tick.html">tick</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/vector.html">vector</a></li>
+        
+      
+      </ul>
+    
+      <h2>Layouts</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../layouts/README.html">Overview</a></li>
+        
+      
+        
+        <li><strong>Produce</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/bandX.html">bandX</a></li>
+          
+            
+            <li><a href="../layouts/bandY.html">bandY</a></li>
+          
+            
+            <li><a href="../layouts/barX.html">barX</a></li>
+          
+            
+            <li><a href="../layouts/barY.html">barY</a></li>
+          
+            
+            <li><a href="../layouts/stackX.html">stackX</a></li>
+          
+            
+            <li class="active"><a href="../layouts/stackY.html">stackY</a></li>
+          
+            
+            <li><a href="../layouts/pitchX.html">pitchX</a></li>
+          
+            
+            <li><a href="../layouts/pitchY.html">pitchY</a></li>
+          
+            
+            <li><a href="../layouts/eqX.html">eqX</a></li>
+          
+            
+            <li><a href="../layouts/eqY.html">eqY</a></li>
+          
+            
+            <li><a href="../layouts/proportionalX.html">proportionalX</a></li>
+          
+            
+            <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
+          
+            
+            <li><a href="../layouts/force.html">force</a></li>
+          
+            
+            <li><a href="../layouts/treemap.html">treemap</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Refine</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Resolver</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/hull.html">hull</a></li>
+          
+          </ul>
+        </li>
+        
+      
+      </ul>
+    
+      <h2>Scales</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../scales/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/linear.html">linear</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/log.html">log</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/sqrt.html">sqrt</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/pow.html">pow</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/symlog.html">symlog</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/ordinal.html">ordinal</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/point.html">point</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/color.html">color</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/quantize.html">quantize</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/threshold.html">threshold</a></li>
+        
+      
+      </ul>
+    
+      <h2>Examples</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../examples/README.html">Gallery</a></li>
+        
+      
+      </ul>
+    
+    </nav>
+  </aside>
+
+  <header id="topbar">
+    <button class="sidebar-toggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+    <div class="topbar-spacer"></div>
+    <a class="github-link" href="https://github.com/cudbg/database-vis" target="_blank" rel="noopener" aria-label="GitHub repository">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+  </header>
+
+  <main class="content">
+    <article class="markdown-section">
+      <h1 id="stacky">stackY</h1>
+<p><code>stackY</code> is a <strong>layout operator</strong> that cumulates weighted segments within a group and normalizes
+them to fill an extent. Each mark occupies <code>[cumsum − weight, cumsum]</code> of its group's total: <code>y</code>
+(segment TOP) <code>= cumsum/total</code>, <code>h</code> (segment height) <code>= weight/total</code>. Bind both with
+<code>.pick(&quot;y&quot;,&quot;h&quot;)</code>. The cumulative and the total are WINDOWED sums (the same window family as <code>rank</code>),
+so it lowers to SQL. Because the outputs are RELATIVE <code>[0,1]</code> shares, the frame STRETCHES each
+group's segments to fill its box — a percent-stack per group. Replace <code>barY</code> with <code>stackY</code> on the y
+axis of a <code>bandX</code> chart to get stacked bars.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const stacks = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;, &quot;island&quot;], { n: count() });
+const v = canvas(640, 460);
+v.rect(stacks, {
+  ...bandX(&quot;species&quot;, { paddingInner: 0.2 }).pick(&quot;x&quot;, &quot;w&quot;),
+  ...stackY({ weight: &quot;n&quot;, group: &quot;species&quot;, order: &quot;island&quot; }).pick(&quot;y&quot;, &quot;h&quot;),
+  fill: ordinal(&quot;island&quot;),
+}).axis(&quot;x&quot;);
+return v;
+</code></pre>
+<p>Stacked bars: <code>bandX</code> places one bar per species; <code>stackY</code> partitions each bar's total by island and
+cumulates the segments to fill the height.</p>
+<h2 id="options">Options</h2>
+<p><code>stackY</code> is apply-only (no trained fit) — its outputs are within-group relative shares in <code>[0,1]</code>,
+so there is no natural axis over it. Its constructor takes one bag of INPUT columns (all are marks
+columns):</p>
+<table>
+<thead>
+<tr>
+<th>input</th>
+<th>required</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>weight</code></td>
+<td>yes</td>
+<td>the segment's magnitude (summed into the cumulative and total)</td>
+</tr>
+<tr>
+<td><code>group</code></td>
+<td>no</td>
+<td>the PARTITION — the x category the bars stack within</td>
+</tr>
+<tr>
+<td><code>order</code></td>
+<td>no</td>
+<td>the stacking sequence within a group; default = <code>weight</code></td>
+</tr>
+</tbody>
+</table>
+<p>With no <code>group</code>, all rows form one stack (which is also the absolute stack). With no <code>order</code>,
+segments stack by <code>weight</code> (largest last).</p>
+<p><strong>Outputs</strong> (bind with <code>.pick(...)</code>):</p>
+<table>
+<thead>
+<tr>
+<th>output</th>
+<th>space</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>y</code></td>
+<td>relative coord (y)</td>
+<td>segment TOP (<code>cumsum / total</code>)</td>
+</tr>
+<tr>
+<td><code>h</code></td>
+<td>relative len (y)</td>
+<td>segment height (<code>weight / total</code>)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<p>Stacked bars — segments partitioned by island, ordered by island name:</p>
+<pre data-lang="dvl"><code class="lang-dvl">const stacks = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;, &quot;island&quot;], { n: count() });
+const v = canvas(640, 460);
+v.rect(stacks, {
+  ...bandX(&quot;species&quot;, { paddingInner: 0.2 }).pick(&quot;x&quot;, &quot;w&quot;),
+  ...stackY({ weight: &quot;n&quot;, group: &quot;species&quot;, order: &quot;island&quot; }).pick(&quot;y&quot;, &quot;h&quot;),
+  fill: ordinal(&quot;island&quot;),
+}).axis(&quot;x&quot;);
+return v;
+</code></pre>
+<p>Percent stack — every bar fills the full height because shares normalize to each group's total, so
+<code>stackY</code> IS a normalized (100%) stack by construction:</p>
+<pre data-lang="dvl"><code class="lang-dvl">// Same spec as above: each species bar reaches y=1 (100%); the segment split shows composition.
+const stacks = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;, &quot;island&quot;], { n: count() });
+const v = canvas(640, 460);
+v.rect(stacks, {
+  ...bandX(&quot;species&quot;).pick(&quot;x&quot;, &quot;w&quot;),
+  ...stackY({ weight: &quot;n&quot;, group: &quot;species&quot;, order: &quot;island&quot; }).pick(&quot;y&quot;, &quot;h&quot;),
+  fill: ordinal(&quot;island&quot;),
+}).axis(&quot;x&quot;);
+return v;
+</code></pre>
+<p>Custom stacking order — sequence segments by an explicit column instead of by weight:</p>
+<pre data-lang="dvl"><code class="lang-dvl">const stacks = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;, &quot;island&quot;], { n: count() });
+const v = canvas(640, 460);
+v.rect(stacks, {
+  ...bandX(&quot;species&quot;, { paddingInner: 0.2 }).pick(&quot;x&quot;, &quot;w&quot;),
+  ...stackY({ weight: &quot;n&quot;, group: &quot;species&quot;, order: &quot;island&quot; }).pick(&quot;y&quot;, &quot;h&quot;),
+  fill: ordinal(&quot;island&quot;),
+}).axis(&quot;x&quot;);
+return v;
+</code></pre>
+<p>Single stack (no group) — one column of cumulated segments over all rows:</p>
+<pre data-lang="dvl"><code class="lang-dvl">const byIsland = db.table(&quot;penguins&quot;).groupby([&quot;island&quot;], { n: count() });
+const v = canvas(320, 460);
+v.rect(byIsland, {
+  x: 40, w: 120,                              // one fixed column (pixels)
+  ...stackY({ weight: &quot;n&quot;, order: &quot;island&quot; }).pick(&quot;y&quot;, &quot;h&quot;),
+  fill: ordinal(&quot;island&quot;),
+});
+return v;
+</code></pre>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="../layouts/stackX.html">stackX</a> — the x-mirror; grouped stacked segments → {x,w} (horizontal stacked bars).</li>
+<li><a href="../layouts/pitchY.html">pitchY</a> — the contrast: fixed-PITCH pixel bands, extent-INDEPENDENT (this
+<code>stackY</code> fills an extent; <code>pitchY</code> does not).</li>
+<li><a href="../layouts/bandX.html">bandX</a> — the x placement each stacked bar sits in.</li>
+<li><a href="../layouts/barY.html">barY</a> — the un-stacked single-value alternative for a bar's height.</li>
+</ul>
+
+    </article>
+  </main>
+
+  <script src="../assets/docs.js"></script>
+  <script src="../assets/dvl-example.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
+</body>
+</html>

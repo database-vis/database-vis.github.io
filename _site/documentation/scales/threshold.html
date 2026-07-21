@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>threshold · DVL</title>
+  <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="app-name" href="../index.html">DVL</a>
+    <nav class="sidebar-nav">
+    
+      <h2>Introduction</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../what-is-dvl.html">What is DVL?</a></li>
+        
+      
+        
+        
+        <li><a href="../getting-started.html">Getting started</a></li>
+        
+      
+        
+        
+        <li><a href="../architecture.html">Architecture</a></li>
+        
+      
+      </ul>
+    
+      <h2>Features</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#channels">Channels</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#scales">Scales</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#data">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        
+      
+      </ul>
+    
+      <h2>Marks</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../marks/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/area.html">area</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/arrow.html">arrow</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/bar.html">bar</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/cell.html">cell</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/connect.html">connect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/dot.html">dot</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/image.html">image</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/line.html">line</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/link.html">link</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/path.html">path</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rect.html">rect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rule.html">rule</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/text.html">text</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/tick.html">tick</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/vector.html">vector</a></li>
+        
+      
+      </ul>
+    
+      <h2>Layouts</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../layouts/README.html">Overview</a></li>
+        
+      
+        
+        <li><strong>Produce</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/bandX.html">bandX</a></li>
+          
+            
+            <li><a href="../layouts/bandY.html">bandY</a></li>
+          
+            
+            <li><a href="../layouts/barX.html">barX</a></li>
+          
+            
+            <li><a href="../layouts/barY.html">barY</a></li>
+          
+            
+            <li><a href="../layouts/stackX.html">stackX</a></li>
+          
+            
+            <li><a href="../layouts/stackY.html">stackY</a></li>
+          
+            
+            <li><a href="../layouts/pitchX.html">pitchX</a></li>
+          
+            
+            <li><a href="../layouts/pitchY.html">pitchY</a></li>
+          
+            
+            <li><a href="../layouts/eqX.html">eqX</a></li>
+          
+            
+            <li><a href="../layouts/eqY.html">eqY</a></li>
+          
+            
+            <li><a href="../layouts/proportionalX.html">proportionalX</a></li>
+          
+            
+            <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
+          
+            
+            <li><a href="../layouts/force.html">force</a></li>
+          
+            
+            <li><a href="../layouts/treemap.html">treemap</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Refine</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Resolver</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/hull.html">hull</a></li>
+          
+          </ul>
+        </li>
+        
+      
+      </ul>
+    
+      <h2>Scales</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../scales/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/linear.html">linear</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/log.html">log</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/sqrt.html">sqrt</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/pow.html">pow</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/symlog.html">symlog</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/ordinal.html">ordinal</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/point.html">point</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/color.html">color</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/quantize.html">quantize</a></li>
+        
+      
+        
+        
+        <li class="active"><a href="../scales/threshold.html">threshold</a></li>
+        
+      
+      </ul>
+    
+      <h2>Examples</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../examples/README.html">Gallery</a></li>
+        
+      
+      </ul>
+    
+    </nav>
+  </aside>
+
+  <header id="topbar">
+    <button class="sidebar-toggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+    <div class="topbar-spacer"></div>
+    <a class="github-link" href="https://github.com/cudbg/database-vis" target="_blank" rel="noopener" aria-label="GitHub repository">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+  </header>
+
+  <main class="content">
+    <article class="markdown-section">
+      <h1 id="threshold">threshold</h1>
+<p>The <code>threshold</code> scale is <strong>binned with author-specified breakpoints</strong>. Unlike every other numeric
+scale it has <strong>no train</strong>: its domain is <em>static</em> — you give it the cut points, and each value maps
+to the bin whose lower bound it exceeds (D3's <code>scaleThreshold</code>). N breakpoints define N+1 output
+bins. Because nothing is fitted from data, no domain fit ever materializes — the domain is
+<code>ordinal</code>, ordered, and non-interpolable.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
+v.dot(&quot;penguins&quot;, {
+  x: linear(&quot;bill_length_mm&quot;),
+  y: linear(&quot;flipper_length_mm&quot;),
+  fill: threshold(&quot;body_mass_g&quot;, { params: { breaks: [3500, 4500, 5500] } }),
+}).axis(&quot;x&quot;).axis(&quot;y&quot;);
+return v;
+</code></pre>
+<p>Mass split at 3500 / 4500 / 5500 into four classes, each a distinct colour — a classed encoding with
+boundaries <em>you</em> choose rather than equal-width bins.</p>
+<h2 id="options">Options</h2>
+<ul>
+<li><strong>Fitted</strong> — <code>threshold(&quot;col&quot;)</code> binds the column; the breakpoints (not the data) define the bins.</li>
+<li><strong>Deferred</strong> — <code>const S = threshold(); S(&quot;col&quot;)</code> is callable per channel. There is no domain to
+union — the breakpoints are the whole story.</li>
+</ul>
+<p><code>ScaleOpts</code> (second argument):</p>
+<table>
+<thead>
+<tr>
+<th>option</th>
+<th>type</th>
+<th>default</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>shared</code></td>
+<td>boolean</td>
+<td>solver decides</td>
+<td>facet-level sharing hint (no data domain to share)</td>
+</tr>
+<tr>
+<td><code>side</code></td>
+<td><code>&quot;top&quot;</code>|<code>&quot;right&quot;</code>|<code>&quot;bottom&quot;</code>|<code>&quot;left&quot;</code></td>
+<td>auto</td>
+<td>pin the axis side (positional use)</td>
+</tr>
+<tr>
+<td><code>domain</code></td>
+<td>domain treatment</td>
+<td>—</td>
+<td>no data-derived domain; the breakpoints <em>are</em> the domain</td>
+</tr>
+<tr>
+<td><code>params</code></td>
+<td><code>Record&lt;string, Expr&gt;</code></td>
+<td><code>{}</code></td>
+<td>carries <code>breaks</code> (the breakpoint array) and the output <code>range</code>/palette</td>
+</tr>
+<tr>
+<td><code>axis</code></td>
+<td><code>AxisOptions</code> | <code>false</code></td>
+<td>drawn</td>
+<td>axis config, or <code>false</code> to hide</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Breakpoints (<code>breaks</code>).</strong> The cut points come from the binding's <code>breaks</code> option — an ascending
+array of numbers. N breaks → N+1 bins; each bin maps to one output entry (a categorical palette
+entry, or a colour-ramp step on a colour channel). With no breaks, everything maps to the first
+output entry. The domain is <code>ordinal</code>/ordered, so the legend is a set of <strong>discrete blocks</strong>, not a
+gradient.</p>
+<blockquote>
+<p><strong>Implementation status.</strong> The scalar algebra has no <code>CASE</code>/<code>&gt;=</code> boolean yet, so the current
+<code>threshold</code> apply is a <strong>placeholder</strong>: only <em>evenly spaced</em> breakpoints are expressed exactly
+(via <code>floor((value − breaks[0]) / step)</code>), and in the present source the bucketing collapses to the
+first output entry pending that algebra extension. Arbitrary (unevenly spaced) breaks and the full
+cascade await a <code>CASE</code>-expression primitive. Prefer <a href="quantize.html"><code>quantize</code></a> (equal-width bins,
+which <em>is</em> wired) when you want a data-driven classing today; reach for <code>threshold</code> when you need
+to state the exact boundaries and can accept the current limitation.</p>
+</blockquote>
+<p><strong>On a colour channel</strong> each bin maps to one palette entry (default <code>blues</code>, sampled) — a classed
+colour encoding with your chosen boundaries.</p>
+<h2 id="examples">Examples</h2>
+<p>Author-chosen mass classes on the colour channel, with a discrete legend.</p>
+<blockquote>
+<p><strong>Illustrative, not yet wired.</strong> <code>threshold</code>'s domain is <em>static</em> (author breakpoints, no train),
+so it has no fitted domain rows for a swatch legend to enumerate — the discrete-legend case below
+does <strong>not</strong> render end-to-end today. It is shown for the intended shape only. The <code>apply</code> is also a
+placeholder that currently expresses only evenly-spaced breaks (see the source note in
+<code>components/scales/threshold.ts</code>); for a wired, data-fitted binned colour legend use
+<a href="quantize.html"><code>quantize</code></a>.</p>
+</blockquote>
+<pre data-lang="text"><code class="language-text">// NOT RUNNABLE (see note above) — the intended discrete-legend shape:
+const v = canvas(680, 460);
+const p = v.dot(&quot;penguins&quot;, {
+  x: linear(&quot;bill_length_mm&quot;),
+  y: linear(&quot;flipper_length_mm&quot;),
+  fill: threshold(&quot;body_mass_g&quot;, { params: { breaks: [3500, 4500, 5500] } }),
+  r: 5,
+});
+p.legend(&quot;fill&quot;, { placement: &quot;right&quot; });   // discrete class blocks (not yet wired)
+return v;
+</code></pre>
+<p>Evenly spaced breakpoints — the case the current transform expresses exactly.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
+v.dot(&quot;penguins&quot;, {
+  x: linear(&quot;bill_length_mm&quot;),
+  y: linear(&quot;flipper_length_mm&quot;),
+  fill: threshold(&quot;body_mass_g&quot;, { params: { breaks: [3000, 4000, 5000, 6000] } }),
+}).axis(&quot;x&quot;).axis(&quot;y&quot;);
+return v;
+</code></pre>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="quantize.html">quantize</a> — equal-width bins fitted from the data (the wired binned scale)</li>
+<li><a href="linear.html">linear</a> — the smooth counterpart</li>
+<li><a href="symlog.html">symlog</a> — a smooth scale for signed quantities</li>
+</ul>
+
+    </article>
+  </main>
+
+  <script src="../assets/docs.js"></script>
+  <script src="../assets/dvl-example.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
+</body>
+</html>

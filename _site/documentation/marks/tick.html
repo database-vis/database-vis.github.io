@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>tick · DVL</title>
+  <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="app-name" href="../index.html">DVL</a>
+    <nav class="sidebar-nav">
+    
+      <h2>Introduction</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../what-is-dvl.html">What is DVL?</a></li>
+        
+      
+        
+        
+        <li><a href="../getting-started.html">Getting started</a></li>
+        
+      
+        
+        
+        <li><a href="../architecture.html">Architecture</a></li>
+        
+      
+      </ul>
+    
+      <h2>Features</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#channels">Channels</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#scales">Scales</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#data">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        
+      
+      </ul>
+    
+      <h2>Marks</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../marks/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/area.html">area</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/arrow.html">arrow</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/bar.html">bar</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/cell.html">cell</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/connect.html">connect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/dot.html">dot</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/image.html">image</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/line.html">line</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/link.html">link</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/path.html">path</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rect.html">rect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rule.html">rule</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/text.html">text</a></li>
+        
+      
+        
+        
+        <li class="active"><a href="../marks/tick.html">tick</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/vector.html">vector</a></li>
+        
+      
+      </ul>
+    
+      <h2>Layouts</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../layouts/README.html">Overview</a></li>
+        
+      
+        
+        <li><strong>Produce</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/bandX.html">bandX</a></li>
+          
+            
+            <li><a href="../layouts/bandY.html">bandY</a></li>
+          
+            
+            <li><a href="../layouts/barX.html">barX</a></li>
+          
+            
+            <li><a href="../layouts/barY.html">barY</a></li>
+          
+            
+            <li><a href="../layouts/stackX.html">stackX</a></li>
+          
+            
+            <li><a href="../layouts/stackY.html">stackY</a></li>
+          
+            
+            <li><a href="../layouts/pitchX.html">pitchX</a></li>
+          
+            
+            <li><a href="../layouts/pitchY.html">pitchY</a></li>
+          
+            
+            <li><a href="../layouts/eqX.html">eqX</a></li>
+          
+            
+            <li><a href="../layouts/eqY.html">eqY</a></li>
+          
+            
+            <li><a href="../layouts/proportionalX.html">proportionalX</a></li>
+          
+            
+            <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
+          
+            
+            <li><a href="../layouts/force.html">force</a></li>
+          
+            
+            <li><a href="../layouts/treemap.html">treemap</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Refine</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Resolver</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/hull.html">hull</a></li>
+          
+          </ul>
+        </li>
+        
+      
+      </ul>
+    
+      <h2>Scales</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../scales/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/linear.html">linear</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/log.html">log</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/sqrt.html">sqrt</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/pow.html">pow</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/symlog.html">symlog</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/ordinal.html">ordinal</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/point.html">point</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/color.html">color</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/quantize.html">quantize</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/threshold.html">threshold</a></li>
+        
+      
+      </ul>
+    
+      <h2>Examples</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../examples/README.html">Gallery</a></li>
+        
+      
+      </ul>
+    
+    </nav>
+  </aside>
+
+  <header id="topbar">
+    <button class="sidebar-toggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+    <div class="topbar-spacer"></div>
+    <a class="github-link" href="https://github.com/cudbg/database-vis" target="_blank" rel="noopener" aria-label="GitHub repository">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+  </header>
+
+  <main class="content">
+    <article class="markdown-section">
+      <h1 id="tick">tick</h1>
+<p>The <strong>tick</strong> mark draws a short axis-oriented stroke of <code>len</code> px at <code>(x, y)</code>. <code>orient</code> chooses the
+direction: <code>&quot;vertical&quot;</code> (the default — an x-axis tick, extending in +y) or <code>&quot;horizontal&quot;</code> (a
+y-axis tick, extending in −x). It is the primitive an axis is built from: an axis is literally a
+<code>tick</code> layer plus a <code>text</code> layer over the same tick table — same mark, no bespoke renderer. One
+row → one tick.</p>
+<pre data-lang="dvl"><code class="lang-dvl">// A short vertical stroke at each point, coloured by species — a rug/tick plot.
+const v = canvas(640, 460);
+v.tick(&quot;penguins&quot;, {
+  x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;),
+  len: 10, orient: &quot;vertical&quot;,
+  stroke: ordinal(&quot;species&quot;),
+}).axis(&quot;x&quot;).axis(&quot;y&quot;);
+return v;
+</code></pre>
+<p>Each bird is a 10 px vertical dash placed at its <code>(bill, mass)</code>, coloured by species.</p>
+<h2 id="options">Options</h2>
+<p><code>tick</code> draws <code>pen.line</code>: for <code>orient: &quot;horizontal&quot;</code> it strokes <code>(x, y) → (x − len, y)</code>; otherwise
+<code>(x, y) → (x, y + len)</code>. Signs assume a bottom/left axis placement (top/right placement flips them
+during axis construction). <code>len</code> defaults to 4 px.</p>
+<table>
+<thead>
+<tr>
+<th>Channel</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>x</code></td>
+<td>positional-x</td>
+<td>—</td>
+<td>tick x (base)</td>
+</tr>
+<tr>
+<td><code>y</code></td>
+<td>positional-y</td>
+<td>—</td>
+<td>tick y (base)</td>
+</tr>
+<tr>
+<td><code>len</code></td>
+<td>pixel</td>
+<td>4</td>
+<td>stroke length in px</td>
+</tr>
+<tr>
+<td><code>orient</code></td>
+<td>shape</td>
+<td><code>&quot;vertical&quot;</code></td>
+<td><code>&quot;vertical&quot;</code> (extends +y) | <code>&quot;horizontal&quot;</code> (extends −x)</td>
+</tr>
+<tr>
+<td><code>stroke</code></td>
+<td>color</td>
+<td>—</td>
+<td>tick colour</td>
+</tr>
+<tr>
+<td><code>strokeWidth</code></td>
+<td>pixel</td>
+<td>1</td>
+<td>tick thickness</td>
+</tr>
+<tr>
+<td><code>strokeDasharray</code></td>
+<td>text</td>
+<td>—</td>
+<td>SVG dash pattern</td>
+</tr>
+<tr>
+<td><code>opacity</code></td>
+<td>number</td>
+<td>1</td>
+<td>overall opacity</td>
+</tr>
+<tr>
+<td><code>strokeOpacity</code></td>
+<td>number</td>
+<td>1</td>
+<td>stroke-only opacity</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td>text</td>
+<td>—</td>
+<td>per-tick hover tooltip</td>
+</tr>
+</tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<p><strong>A horizontal rug</strong> on the left edge — value on y, a fixed x base, <code>orient: &quot;horizontal&quot;</code>.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(480, 460);
+const y = linear(&quot;body_mass_g&quot;);
+v.tick(&quot;penguins&quot;, {
+  x: 40, y, len: 12, orient: &quot;horizontal&quot;, stroke: &quot;#4e79a7&quot;, strokeOpacity: 0.6,
+}).axis(&quot;y&quot;);
+return v;
+</code></pre>
+<p><strong>A strip / one-dimensional distribution</strong> — ticks along a single axis, one per bird.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 160);
+v.tick(&quot;penguins&quot;, {
+  x: linear(&quot;flipper_length_mm&quot;), y: 80,
+  len: 24, orient: &quot;vertical&quot;, stroke: &quot;#333&quot;, strokeOpacity: 0.4,
+}).axis(&quot;x&quot;);
+return v;
+</code></pre>
+<p><strong>Category strips</strong> — a strip plot per species, ticks at each bill length, grouped by a point
+scale on y.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 300);
+v.tick(&quot;penguins&quot;, {
+  x: linear(&quot;bill_length_mm&quot;), y: point(&quot;species&quot;),
+  len: 14, orient: &quot;vertical&quot;, stroke: ordinal(&quot;species&quot;),
+}).axis(&quot;x&quot;).axis(&quot;y&quot;);
+return v;
+</code></pre>
+<p><strong>Reconstructing an axis from primitives</strong> — the tick + text pair over a distinct-values table.
+This is exactly what <code>.axis(&quot;x&quot;)</code> lowers to.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const ticks = db.derive(&quot;ticks&quot;, `SELECT DISTINCT species FROM penguins`);
+const v = canvas(520, 260);
+const x = point();   // deferred, shared by the tick and text layers
+v.tick(ticks, { x: x(&quot;species&quot;), y: 220, len: 6, orient: &quot;vertical&quot;, stroke: &quot;#333&quot; });
+v.text(ticks, { x: x(&quot;species&quot;), y: 236, text: field(&quot;species&quot;), anchor: &quot;middle&quot;, fill: &quot;#333&quot; });
+return v;
+</code></pre>
+<p><strong>Longer ticks as gridlines</strong> — one long horizontal tick per y gridline value, spanning the plot.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const grid = db.derive(&quot;grid&quot;, `SELECT unnest([3000, 4000, 5000, 6000]) AS mass`);
+const v = canvas(640, 460);
+const y = linear(undefined, { domain: { explicit: [3000, 6000] } });  // deferred, shared by gridlines + dots
+v.tick(grid, { x: 640, y: y(&quot;mass&quot;), len: 600, orient: &quot;horizontal&quot;,
+               stroke: &quot;#eee&quot;, strokeWidth: 1 });
+v.dot(&quot;penguins&quot;, { x: linear(&quot;bill_length_mm&quot;), y: y(&quot;body_mass_g&quot;), r: 3, fill: &quot;#4e79a7&quot; })
+ .axis(&quot;x&quot;).axis(&quot;y&quot;);
+return v;
+</code></pre>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="./vector.html">vector</a> — an arbitrary-angle short stroke (tick is the axis-aligned case).</li>
+<li><a href="./rule.html">rule</a> — a full-length reference segment / gridline across the plot.</li>
+<li><a href="./text.html">text</a> — the label half of an axis (tick + text over the tick table).</li>
+</ul>
+
+    </article>
+  </main>
+
+  <script src="../assets/docs.js"></script>
+  <script src="../assets/dvl-example.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Layouts · DVL</title>
+  <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="app-name" href="../index.html">DVL</a>
+    <nav class="sidebar-nav">
+    
+      <h2>Introduction</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../what-is-dvl.html">What is DVL?</a></li>
+        
+      
+        
+        
+        <li><a href="../getting-started.html">Getting started</a></li>
+        
+      
+        
+        
+        <li><a href="../architecture.html">Architecture</a></li>
+        
+      
+      </ul>
+    
+      <h2>Features</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#channels">Channels</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#scales">Scales</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#data">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        
+      
+      </ul>
+    
+      <h2>Marks</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../marks/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/area.html">area</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/arrow.html">arrow</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/bar.html">bar</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/cell.html">cell</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/connect.html">connect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/dot.html">dot</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/image.html">image</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/line.html">line</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/link.html">link</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/path.html">path</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rect.html">rect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rule.html">rule</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/text.html">text</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/tick.html">tick</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/vector.html">vector</a></li>
+        
+      
+      </ul>
+    
+      <h2>Layouts</h2>
+      <ul>
+      
+        
+        
+        <li class="active"><a href="../layouts/README.html">Overview</a></li>
+        
+      
+        
+        <li><strong>Produce</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/bandX.html">bandX</a></li>
+          
+            
+            <li><a href="../layouts/bandY.html">bandY</a></li>
+          
+            
+            <li><a href="../layouts/barX.html">barX</a></li>
+          
+            
+            <li><a href="../layouts/barY.html">barY</a></li>
+          
+            
+            <li><a href="../layouts/stackX.html">stackX</a></li>
+          
+            
+            <li><a href="../layouts/stackY.html">stackY</a></li>
+          
+            
+            <li><a href="../layouts/pitchX.html">pitchX</a></li>
+          
+            
+            <li><a href="../layouts/pitchY.html">pitchY</a></li>
+          
+            
+            <li><a href="../layouts/eqX.html">eqX</a></li>
+          
+            
+            <li><a href="../layouts/eqY.html">eqY</a></li>
+          
+            
+            <li><a href="../layouts/proportionalX.html">proportionalX</a></li>
+          
+            
+            <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
+          
+            
+            <li><a href="../layouts/force.html">force</a></li>
+          
+            
+            <li><a href="../layouts/treemap.html">treemap</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Refine</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Resolver</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/hull.html">hull</a></li>
+          
+          </ul>
+        </li>
+        
+      
+      </ul>
+    
+      <h2>Scales</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../scales/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/linear.html">linear</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/log.html">log</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/sqrt.html">sqrt</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/pow.html">pow</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/symlog.html">symlog</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/ordinal.html">ordinal</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/point.html">point</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/color.html">color</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/quantize.html">quantize</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/threshold.html">threshold</a></li>
+        
+      
+      </ul>
+    
+      <h2>Examples</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../examples/README.html">Gallery</a></li>
+        
+      
+      </ul>
+    
+    </nav>
+  </aside>
+
+  <header id="topbar">
+    <button class="sidebar-toggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+    <div class="topbar-spacer"></div>
+    <a class="github-link" href="https://github.com/cudbg/database-vis" target="_blank" rel="noopener" aria-label="GitHub repository">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+  </header>
+
+  <main class="content">
+    <article class="markdown-section">
+      <h1 id="layouts">Layouts</h1>
+<p>Layouts are operators that compute arrangements. Most are <strong>multi-output</strong>: bind them by
+spreading <code>.pick()</code> into the channel object — <code>...bandX(&quot;cat&quot;).pick(&quot;x&quot;, &quot;w&quot;)</code> — or rename with
+the object form: <code>.pick({ x1: &quot;x&quot;, y1: &quot;y&quot; })</code>. Outputs are normalized [0, 1]; the frame affine
+turns them into pixels.</p>
+<h2 id="the-four-classes">The four classes</h2>
+<p>Every layout is one of four kinds, told apart by <em>what it reads and what it writes</em> — the
+data-flow direction:</p>
+<ul>
+<li><strong>Produce</strong> — <em>data → normalized positions.</em> The common case: a <strong>train/apply</strong> operator
+reduces the marks to a <strong>fit</strong> (its trained domain), then joins that fit back per row to emit
+normalized [0, 1] channel columns (<code>bandX</code>, <code>barY</code>, <code>stackY</code>, <code>eqX</code>, <code>proportional*</code>). Iterative
+producers (<code>force</code>, <code>treemap</code>) emit the same normalized outputs from a custom plan (a recursive
+query in SQL). Bound to channels with <code>.pick()</code>; the frame affine turns [0, 1] into pixels.</li>
+<li><strong>Refine</strong> — <em>placed pixels → adjusted pixels.</em> Runs <strong>after</strong> placement, reading the marks'
+already-solved geometry: <code>fitText</code> reads each label's box (<code>w</code>/<code>h</code>) and the string it draws to
+solve a font size; <code>grid-stack</code> packs items into the content box. Refine outputs are pixels —
+they never pass back through the affine.</li>
+<li><strong>Resolver</strong> — <em>a matched SET → one value or shape per row.</em> Not a placement stage at all: a
+resolver rides a <a href="../features/README.html#cross-mark-and-cross-table-references"><code>via()</code></a> join,
+reducing each anchor row's set of matched referent rows to a single derived quantity. Scalar
+resolvers mint a number (<code>mode</code>, <code>range</code>, <code>extentUnion</code>); <strong>geometry</strong> resolvers mint a shape —
+<code>convex</code>/<code>bbox</code> reduce a borrowed point set to a polygon the <a href="hull.html"><code>hull</code></a> mark draws.
+Authored as a <code>via()</code> resolution + a mark, not a <code>.pick()</code> operator (see <a href="hull.html">hull</a>).</li>
+<li><strong>Measure</strong> <em>(internal)</em> — <em>placed geometry → size demands.</em> The reverse direction: a measure
+reports how much room a plot or label needs, feeding the constraint solver's <strong>demand loop</strong> (an
+axis gutter widens to fit its measured labels; a panel grows to its measured content). <strong>Not
+exposed in the authoring API</strong> — there is no builder verb; the engine wires the built-in
+providers itself (the label-extent provider <code>estimate</code>, or a canvas <code>measureText</code> in the
+browser, and the plot bounding-box op). Listed here for the complete picture, not to author.</li>
+</ul>
+<p>Three of the four close the frame's fixpoint: <strong>produce</strong> emits normalized coordinates → the
+affine places them → <strong>refine</strong> nudges the placed pixels → <strong>measure</strong> reads the result back into
+size demands that re-solve the arrangement, until it settles (see
+<a href="../architecture.html">Architecture</a> and <a href="../features/README.html#the-frame">The frame</a>). <strong>Resolver</strong>
+is orthogonal — a data reduction over a join, not a placement stage in that loop.</p>
+<h2 id="built-in-layouts">Built-in layouts</h2>
+<table>
+<thead>
+<tr>
+<th>Layout</th>
+<th>Outputs</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a id="bandx"></a><a href="bandX.html"><strong>bandX</strong></a></td>
+<td>x, w</td>
+<td>categorical → evenly spaced bands (a vertical bar's x); options <code>paddingInner</code>, <code>paddingOuter</code>, <code>padding</code>, <code>align</code></td>
+</tr>
+<tr>
+<td><a id="bandy"></a><a href="bandY.html"><strong>bandY</strong></a></td>
+<td>y, h</td>
+<td>categorical → evenly spaced bands (a horizontal bar's y); the y-mirror of <code>bandX</code>, same options</td>
+</tr>
+<tr>
+<td><a id="bary"></a><a href="barY.html"><strong>barY</strong></a></td>
+<td>y, h</td>
+<td>value → a vertical bar from the baseline up (a bar's y); option <code>zero: true</code> anchors the domain at 0 (otherwise the domain is the data extent and the min-value bar has height 0)</td>
+</tr>
+<tr>
+<td><a id="barx"></a><a href="barX.html"><strong>barX</strong></a></td>
+<td>x, w</td>
+<td>value → a horizontal bar from the baseline out (a bar's x); the x-mirror of <code>barY</code>, same <code>zero: true</code> option</td>
+</tr>
+<tr>
+<td><a id="stacky"></a><a href="stackY.html"><strong>stackY</strong></a></td>
+<td>y, h</td>
+<td><code>{ weight, group, order }</code> → vertically stacked segments per group (a percent-stack, normalized to the box)</td>
+</tr>
+<tr>
+<td><a id="stackx"></a><a href="stackX.html"><strong>stackX</strong></a></td>
+<td>x, w</td>
+<td><code>{ weight, group, order }</code> → horizontally stacked segments per group; the x-mirror of <code>stackY</code></td>
+</tr>
+<tr>
+<td><a id="pitchy"></a><a href="pitchY.html"><strong>pitchY</strong></a></td>
+<td>y, h</td>
+<td>fixed-pitch vertical bands — one band per row, ordered; height is a constant pitch <strong>independent of the box</strong> (legend items, list rows). Pure windowed derive, so it stays in SQL (unlike <code>grid-stack</code>)</td>
+</tr>
+<tr>
+<td><a id="pitchx"></a><a href="pitchX.html"><strong>pitchX</strong></a></td>
+<td>x, w</td>
+<td>fixed-pitch horizontal bands — one band per row, ordered; width is a constant pitch independent of the box; the x-mirror of <code>pitchY</code> (horizontal legend/list row)</td>
+</tr>
+<tr>
+<td><a id="eqx"></a><a href="eqX.html"><strong>eqX</strong></a></td>
+<td>x, w</td>
+<td>distinct keys → equal horizontal split (the simplest column-facet driver)</td>
+</tr>
+<tr>
+<td><a id="eqy"></a><a href="eqY.html"><strong>eqY</strong></a></td>
+<td>y, h</td>
+<td>distinct keys → equal vertical split (row facets); the y-mirror of <code>eqX</code></td>
+</tr>
+<tr>
+<td><a id="proportional"></a><strong>proportionalX / proportionalY</strong></td>
+<td>x, w / y, h</td>
+<td>segments sized proportionally to a value column</td>
+</tr>
+<tr>
+<td><a id="treemap"></a><a href="treemap.html"><strong>treemap</strong></a></td>
+<td>x, y, w, h</td>
+<td>squarified treemap over a size column — <strong>dual-substrate</strong>: d3-hierarchy in JS, or the squarify state machine as one recursive SQL query; the two agree (squarify is deterministic)</td>
+</tr>
+<tr>
+<td><a id="force"></a><a href="force.html"><strong>force</strong></a></td>
+<td>x, y</td>
+<td>force-directed positions; takes an edges table (<code>force(&quot;edges&quot;)</code> — endpoint columns come from the declared join, or an <code>on</code> override, never a name convention) — <strong>dual-substrate</strong>: seeded d3-force in JS, or a recursive in-database simulation (<code>WITH RECURSIVE … USING KEY</code>); same contract (normalized, deterministic per substrate), different exact coordinates</td>
+</tr>
+<tr>
+<td><a id="fittext"></a><a href="fitText.html"><strong>fitText</strong></a></td>
+<td>fontSize, rotate, lines</td>
+<td>fits text into boxes — runs <em>after</em> placement (a refine-class layout). <strong>Inputs are inferred from the mark's channels</strong>: a bare <code>fitText()</code> sizes exactly the string the mark draws (its <code>text</code> channel, literal or column) against its <code>w</code>/<code>h</code> box — name an input only to override (<code>{ text: 'other_col' }</code>). <strong>Defaults do the whole job</strong>: each label solves against its own box, rotation is tried (−90° when vertical fits larger), and the size is uncapped — the box itself bounds the solve (&quot;as big as fits&quot;). Opt-outs mix into the same bag (input and option keys are disjoint): <code>shared: true</code> (ONE size across all labels — uniform typography), <code>rotate: false</code>, a finite <code>maxFontSize</code> ceiling, <code>minFontSize</code>, <code>padding</code>, <code>wrap</code></td>
+</tr>
+<tr>
+<td><a href="grid-stack.html"><strong>grid-stack</strong></a></td>
+<td>x, y, w, h</td>
+<td>packs items into the available box, row- or column-major (pixel outputs)</td>
+</tr>
+<tr>
+<td><a id="hull"></a><a href="hull.html"><strong>hull</strong></a></td>
+<td>path (polygon)</td>
+<td>a shape around a matched point set — <strong>not a <code>.pick()</code> layout but a mark + via geometry resolver</strong>: <code>pts.via(on(&quot;g&quot;), { resolve: &quot;convex&quot; }).pick(&quot;path&quot;)</code> reduces the borrowed (placed) points to a polygon (inputs default to <code>x</code>/<code>y</code>, output to <code>path</code>). <code>convex</code> — <strong>SQL push-down</strong> via DuckDB <code>spatial</code> (<code>ST_ConvexHull</code>), JS reduce as the escape hatch — or <code>bbox</code> (JS)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Substrates.</strong> An operator may carry a SQL impl, a JS impl, or both; when both exist the
+engine keeps the data where it already is (SQL marks stay in the database — no materialize
+round-trip). Even iterative layouts fit in SQL: force and treemap run as single recursive
+queries (DuckDB's <code>WITH RECURSIVE</code>, with <code>USING KEY</code> for force's keyed per-node state).</p>
+<h2 id="adding-your-own-layout">Adding your own layout</h2>
+<p>A layout is an <strong>operator</strong>, authored with the same <code>op({ … })</code> factory as scales and dropped
+into <code>components/layouts/</code>. The class decides what you supply:</p>
+<ul>
+<li><strong>Produce</strong>: declare a trained <code>domain</code> (<code>continuous</code>/<code>categorical</code>) + an <code>apply</code> returning the
+normalized outputs — <code>op()</code> wires the train→apply subgraph. For an iterative producer, give a
+custom <code>plan(io)</code> emitting a recursive <code>RelOp</code> instead.</li>
+<li><strong>Refine</strong>: a plan-only <code>plan(io)</code> that reads the marks' placed extent cells and writes pixel
+outputs (no domain, no train) — as <code>fitText</code>/<code>grid-stack</code> do.</li>
+</ul>
+<p>Register it and expose an authoring factory:</p>
+<pre data-lang="js"><code class="language-js">registries.operators.register(myLayout.name, myLayout);   // into the Registries
+export const myLayout = layoutFactory(&quot;myLayout&quot;);         // → myLayout(&quot;col&quot;).pick(&quot;x&quot;, &quot;w&quot;)
+</code></pre>
+<p>Every column in <code>output.add</code> is <code>.pick()</code>-able (multi-output is free); supplying both a SQL and a
+JS impl makes it <strong>dual-substrate</strong>. The neighbouring registries extend the same way — a <strong>tick
+algo</strong> (<code>registries.tickAlgos</code>) earns an axis, a <strong>scheme</strong> (<code>registries.schemes</code>) a palette, a
+<strong>measurement provider</strong> (<code>registries.measures</code>) swaps the label-width heuristic for a real one.
+The full operator contract is in <code>components/layouts/README.md</code>.</p>
+
+    </article>
+  </main>
+
+  <script src="../assets/docs.js"></script>
+  <script src="../assets/dvl-example.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
+</body>
+</html>

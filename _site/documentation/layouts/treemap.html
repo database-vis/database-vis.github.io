@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>treemap · DVL</title>
+  <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="app-name" href="../index.html">DVL</a>
+    <nav class="sidebar-nav">
+    
+      <h2>Introduction</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../what-is-dvl.html">What is DVL?</a></li>
+        
+      
+        
+        
+        <li><a href="../getting-started.html">Getting started</a></li>
+        
+      
+        
+        
+        <li><a href="../architecture.html">Architecture</a></li>
+        
+      
+      </ul>
+    
+      <h2>Features</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#channels">Channels</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#scales">Scales</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#data">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        
+      
+      </ul>
+    
+      <h2>Marks</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../marks/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/area.html">area</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/arrow.html">arrow</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/bar.html">bar</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/cell.html">cell</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/connect.html">connect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/dot.html">dot</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/image.html">image</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/line.html">line</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/link.html">link</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/path.html">path</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rect.html">rect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rule.html">rule</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/text.html">text</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/tick.html">tick</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/vector.html">vector</a></li>
+        
+      
+      </ul>
+    
+      <h2>Layouts</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../layouts/README.html">Overview</a></li>
+        
+      
+        
+        <li><strong>Produce</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/bandX.html">bandX</a></li>
+          
+            
+            <li><a href="../layouts/bandY.html">bandY</a></li>
+          
+            
+            <li><a href="../layouts/barX.html">barX</a></li>
+          
+            
+            <li><a href="../layouts/barY.html">barY</a></li>
+          
+            
+            <li><a href="../layouts/stackX.html">stackX</a></li>
+          
+            
+            <li><a href="../layouts/stackY.html">stackY</a></li>
+          
+            
+            <li><a href="../layouts/pitchX.html">pitchX</a></li>
+          
+            
+            <li><a href="../layouts/pitchY.html">pitchY</a></li>
+          
+            
+            <li><a href="../layouts/eqX.html">eqX</a></li>
+          
+            
+            <li><a href="../layouts/eqY.html">eqY</a></li>
+          
+            
+            <li><a href="../layouts/proportionalX.html">proportionalX</a></li>
+          
+            
+            <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
+          
+            
+            <li><a href="../layouts/force.html">force</a></li>
+          
+            
+            <li class="active"><a href="../layouts/treemap.html">treemap</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Refine</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Resolver</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/hull.html">hull</a></li>
+          
+          </ul>
+        </li>
+        
+      
+      </ul>
+    
+      <h2>Scales</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../scales/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/linear.html">linear</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/log.html">log</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/sqrt.html">sqrt</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/pow.html">pow</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/symlog.html">symlog</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/ordinal.html">ordinal</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/point.html">point</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/color.html">color</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/quantize.html">quantize</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/threshold.html">threshold</a></li>
+        
+      
+      </ul>
+    
+      <h2>Examples</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../examples/README.html">Gallery</a></li>
+        
+      
+      </ul>
+    
+    </nav>
+  </aside>
+
+  <header id="topbar">
+    <button class="sidebar-toggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+    <div class="topbar-spacer"></div>
+    <a class="github-link" href="https://github.com/cudbg/database-vis" target="_blank" rel="noopener" aria-label="GitHub repository">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+  </header>
+
+  <main class="content">
+    <article class="markdown-section">
+      <h1 id="treemap">treemap</h1>
+<p><code>treemap</code> partitions a unit square into rectangles sized by a value column, using a <strong>squarified</strong>
+tiling (boxes kept as close to square as possible). It emits <code>x</code>, <code>y</code>, <code>w</code>, <code>h</code> for each row, all
+normalized to [0, 1] — the frame affine places them into pixels. There is no trained domain: the
+boxes tile relative value and carry no data-space meaning, so nothing is tickable.</p>
+<p>It is <strong>dual-substrate</strong>: JS runs d3-hierarchy's squarify; SQL runs the same squarify state
+machine as one recursive DuckDB query. Both are deterministic, so the two substrates agree up to
+float error (equal weights break ties by input order on both sides).</p>
+<pre data-lang="dvl"><code class="lang-dvl">const revenue = db.table('orders').rollup(
+  db.table('products'), { left: 'product_id', right: 'id' },
+  'category', { amount: sum({ sql: 'qty * price' }) });
+const v = canvas(640, 460);
+v.rect(revenue, {
+  ...treemap('amount').pick('x', 'y', 'w', 'h'),
+  fill: ordinal('category'),
+  stroke: '#fff',
+});
+return v;
+</code></pre>
+<p>One rectangle per category, area proportional to revenue, squarified to fill the canvas. The
+measure is modelled inline: <code>rollup</code> joins orders→products and sums <code>qty*price</code> per category.</p>
+<h2 id="options">Options</h2>
+<p><code>treemap(value)</code> takes a single numeric input and produces the full box (all four channels).
+Negative values clamp to 0. In a template it tiles <strong>per cell</strong> by default — each panel is its own
+unit square (<code>perCell: true</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Input</th>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>value</code></td>
+<td>double</td>
+<td>the measure whose magnitude sets each tile's <strong>area</strong></td>
+</tr>
+</tbody>
+</table>
+<p><code>.pick()</code> outputs:</p>
+<table>
+<thead>
+<tr>
+<th>Output</th>
+<th>Space</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>x</code></td>
+<td>relative coord x</td>
+<td>tile left edge</td>
+</tr>
+<tr>
+<td><code>y</code></td>
+<td>relative coord y</td>
+<td>tile top edge</td>
+</tr>
+<tr>
+<td><code>w</code></td>
+<td>relative len x</td>
+<td>tile width</td>
+</tr>
+<tr>
+<td><code>h</code></td>
+<td>relative len y</td>
+<td>tile height</td>
+</tr>
+</tbody>
+</table>
+<p>Bind by spreading the whole box: <code>...treemap('amount').pick('x', 'y', 'w', 'h')</code>. No options bag;
+padding is 0 and rounding is off (crisp normalized coordinates).</p>
+<h2 id="examples">Examples</h2>
+<p>Revenue by category, the canonical treemap (as above):</p>
+<pre data-lang="dvl"><code class="lang-dvl">const revenue = db.table('orders').rollup(
+  db.table('products'), { left: 'product_id', right: 'id' },
+  'category', { amount: sum({ sql: 'qty * price' }) });
+const v = canvas(640, 460);
+v.rect(revenue, { ...treemap('amount').pick('x', 'y', 'w', 'h'),
+                  fill: ordinal('category'), stroke: '#fff' });
+return v;
+</code></pre>
+<p>Penguin body-mass share per species — group and sum first, then tile by the aggregate:</p>
+<pre data-lang="dvl"><code class="lang-dvl">const byMass = db.table('penguins').groupby(['species'], { total: sum('body_mass_g') });
+const v = canvas(560, 400);
+v.rect(byMass, { ...treemap('total').pick('x', 'y', 'w', 'h'),
+                 fill: ordinal('species'), stroke: '#fff' });
+return v;
+</code></pre>
+<p>Fitted labels — the text layer borrows each tile's <strong>solved</strong> box through a via and computes its
+midpoint in the same breath (<code>f.x + f.w/2</code>, <code>f.y + f.h/2</code>), then <code>fitText</code> sizes the label against
+that box. <code>{ shared: true }</code> opts into one uniform size (capped at 14, no rotation):</p>
+<pre data-lang="dvl"><code class="lang-dvl">const revenue = db.table('orders').rollup(
+  db.table('products'), { left: 'product_id', right: 'id' },
+  'category', { amount: sum({ sql: 'qty * price' }) });
+const v = canvas(640, 460);
+const rects = v.rect(revenue, { ...treemap('amount').pick('x', 'y', 'w', 'h'),
+                                fill: ordinal('category'), stroke: '#fff' });
+const center = { resolve: { cx: { fn: 'avg', arg: expr`f.x + f.w / 2` },
+                            cy: { fn: 'avg', arg: expr`f.y + f.h / 2` } } };
+v.text(revenue, {
+  ...rects.via(eq('category', 'category'), center).pick({ x: 'cx', y: 'cy', w: 'w', h: 'h' }),
+  ...fitText().pick('fontSize'),
+  text: field('category'), anchor: 'middle', baseline: 'middle', fill: '#333',
+});
+return v;
+</code></pre>
+<p>Per-panel treemaps — because <code>treemap</code> is <code>perCell</code>, nesting it inside <code>eqX</code> panels gives each
+panel its own unit-square tiling of that panel's data. The revenue relation must keep <code>year</code> for
+the <code>eq('year', 'year')</code> nest to bind, so group by <strong>both</strong> keys (<code>join</code> then <code>groupby(['year', 'category'])</code>) rather than rolling up to <code>category</code> alone:</p>
+<pre data-lang="dvl"><code class="lang-dvl">const revenue = db.table('orders')
+  .join(db.table('products'), { left: 'product_id', right: 'id' })
+  .groupby(['year', 'category'], { amount: sum({ sql: 'qty * price' }) });
+const years = db.table('orders').groupby(['year'], {});
+const v = canvas(720, 320);
+v.rect(years, { ...eqX('year').pick('x', 'w'), y: 10, h: 300, fill: '#f5f6fa' })
+ .rect(revenue,
+   { ...treemap('amount').pick('x', 'y', 'w', 'h'), fill: ordinal('category'), stroke: '#fff' },
+   { on: eq('year', 'year') });
+return v;
+</code></pre>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="proportionalX.html">proportionalX</a> / <a href="proportionalY.html">proportionalY</a> — one-axis value partitions</li>
+<li><a href="force.html">force</a> — the other dual-substrate space-partition layout (node placement)</li>
+<li><a href="eqX.html">eqX</a> — panel splitter that treemap nests inside</li>
+<li><a href="fitText.html">fitText</a> — label fitting used with the computed-center via above</li>
+</ul>
+
+    </article>
+  </main>
+
+  <script src="../assets/docs.js"></script>
+  <script src="../assets/dvl-example.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
+</body>
+</html>

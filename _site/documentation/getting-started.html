@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Getting started · DVL</title>
+  <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="app-name" href="index.html">DVL</a>
+    <nav class="sidebar-nav">
+    
+      <h2>Introduction</h2>
+      <ul>
+      
+        
+        
+        <li><a href="what-is-dvl.html">What is DVL?</a></li>
+        
+      
+        
+        
+        <li class="active"><a href="getting-started.html">Getting started</a></li>
+        
+      
+        
+        
+        <li><a href="architecture.html">Architecture</a></li>
+        
+      
+      </ul>
+    
+      <h2>Features</h2>
+      <ul>
+      
+        
+        
+        <li><a href="features/README.html#plots-and-marks">Plots and marks</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#channels">Channels</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#scales">Scales</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#layouts">Layouts</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#the-frame">The frame</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#join-paths">Join paths</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#subplots">Subplots</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#data">Data</a></li>
+        
+      
+        
+        
+        <li><a href="features/README.html#debugging">Debugging</a></li>
+        
+      
+      </ul>
+    
+      <h2>Marks</h2>
+      <ul>
+      
+        
+        
+        <li><a href="marks/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="marks/area.html">area</a></li>
+        
+      
+        
+        
+        <li><a href="marks/arrow.html">arrow</a></li>
+        
+      
+        
+        
+        <li><a href="marks/bar.html">bar</a></li>
+        
+      
+        
+        
+        <li><a href="marks/cell.html">cell</a></li>
+        
+      
+        
+        
+        <li><a href="marks/connect.html">connect</a></li>
+        
+      
+        
+        
+        <li><a href="marks/dot.html">dot</a></li>
+        
+      
+        
+        
+        <li><a href="marks/image.html">image</a></li>
+        
+      
+        
+        
+        <li><a href="marks/line.html">line</a></li>
+        
+      
+        
+        
+        <li><a href="marks/link.html">link</a></li>
+        
+      
+        
+        
+        <li><a href="marks/path.html">path</a></li>
+        
+      
+        
+        
+        <li><a href="marks/rect.html">rect</a></li>
+        
+      
+        
+        
+        <li><a href="marks/rule.html">rule</a></li>
+        
+      
+        
+        
+        <li><a href="marks/text.html">text</a></li>
+        
+      
+        
+        
+        <li><a href="marks/tick.html">tick</a></li>
+        
+      
+        
+        
+        <li><a href="marks/vector.html">vector</a></li>
+        
+      
+      </ul>
+    
+      <h2>Layouts</h2>
+      <ul>
+      
+        
+        
+        <li><a href="layouts/README.html">Overview</a></li>
+        
+      
+        
+        <li><strong>Produce</strong>
+          <ul>
+          
+            
+            <li><a href="layouts/bandX.html">bandX</a></li>
+          
+            
+            <li><a href="layouts/bandY.html">bandY</a></li>
+          
+            
+            <li><a href="layouts/barX.html">barX</a></li>
+          
+            
+            <li><a href="layouts/barY.html">barY</a></li>
+          
+            
+            <li><a href="layouts/stackX.html">stackX</a></li>
+          
+            
+            <li><a href="layouts/stackY.html">stackY</a></li>
+          
+            
+            <li><a href="layouts/pitchX.html">pitchX</a></li>
+          
+            
+            <li><a href="layouts/pitchY.html">pitchY</a></li>
+          
+            
+            <li><a href="layouts/eqX.html">eqX</a></li>
+          
+            
+            <li><a href="layouts/eqY.html">eqY</a></li>
+          
+            
+            <li><a href="layouts/proportionalX.html">proportionalX</a></li>
+          
+            
+            <li><a href="layouts/proportionalY.html">proportionalY</a></li>
+          
+            
+            <li><a href="layouts/force.html">force</a></li>
+          
+            
+            <li><a href="layouts/treemap.html">treemap</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Refine</strong>
+          <ul>
+          
+            
+            <li><a href="layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="layouts/grid-stack.html">grid-stack</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Resolver</strong>
+          <ul>
+          
+            
+            <li><a href="layouts/hull.html">hull</a></li>
+          
+          </ul>
+        </li>
+        
+      
+      </ul>
+    
+      <h2>Scales</h2>
+      <ul>
+      
+        
+        
+        <li><a href="scales/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="scales/linear.html">linear</a></li>
+        
+      
+        
+        
+        <li><a href="scales/log.html">log</a></li>
+        
+      
+        
+        
+        <li><a href="scales/sqrt.html">sqrt</a></li>
+        
+      
+        
+        
+        <li><a href="scales/pow.html">pow</a></li>
+        
+      
+        
+        
+        <li><a href="scales/symlog.html">symlog</a></li>
+        
+      
+        
+        
+        <li><a href="scales/ordinal.html">ordinal</a></li>
+        
+      
+        
+        
+        <li><a href="scales/point.html">point</a></li>
+        
+      
+        
+        
+        <li><a href="scales/color.html">color</a></li>
+        
+      
+        
+        
+        <li><a href="scales/quantize.html">quantize</a></li>
+        
+      
+        
+        
+        <li><a href="scales/threshold.html">threshold</a></li>
+        
+      
+      </ul>
+    
+      <h2>Examples</h2>
+      <ul>
+      
+        
+        
+        <li><a href="examples/README.html">Gallery</a></li>
+        
+      
+      </ul>
+    
+    </nav>
+  </aside>
+
+  <header id="topbar">
+    <button class="sidebar-toggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+    <div class="topbar-spacer"></div>
+    <a class="github-link" href="https://github.com/cudbg/database-vis" target="_blank" rel="noopener" aria-label="GitHub repository">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+  </header>
+
+  <main class="content">
+    <article class="markdown-section">
+      <h1 id="getting-started">Getting started</h1>
+<p>DVL is authored in JavaScript/TypeScript against a fluent builder, and renders by compiling
+your spec to SQL over DuckDB. This page walks from an empty canvas to faceted, multi-layer
+plots. (For why DVL works the way it does, read <a href="what-is-dvl.html">What is DVL?</a> first.)</p>
+<p>Every block like the one below is <strong>live</strong>: it runs the current DVL build in your browser
+(DuckDB-Wasm), against the demo tables (<code>penguins</code>, <code>members</code>/<code>follows</code>, the
+<code>customers</code>/<code>orders</code>/<code>products</code> star). The sandbox matches the playground exactly —
+<code>canvas</code>, <code>db</code>, the scales/layouts, <code>eq</code>/<code>on</code>/<code>fk</code>/<code>path</code>, <code>expr</code>, <code>px</code>/<code>field</code>, and the
+aggregate helpers.</p>
+<pre data-lang="dvl"><code class="lang-dvl">// bill length vs body mass, coloured by species — with axes and a legend.
+const v = canvas(640, 320);
+v.dot('penguins', {
+  x: linear('bill_length_mm'),
+  y: linear('body_mass_g'),
+  fill: ordinal('species'),
+}).axis('x').axis('y').legend('fill');
+return v;
+</code></pre>
+<h2 id="set-up-a-database">Set up a database</h2>
+<p>DVL draws from a <code>Database</code>, which wraps a DuckDB connection behind a backend adapter. In
+Node (tests, scripts):</p>
+<pre data-lang="js"><code class="language-js">import { Database } from &quot;$lib/dvl/data/database&quot;;
+import { DuckDBBackend } from &quot;$lib/dvl/data/duckdb-backend&quot;;
+import { createNodeDuckDB } from &quot;$lib/dvl/data/duckdb-node&quot;;
+
+const duck = await createNodeDuckDB();
+const db = new Database({ backend: new DuckDBBackend(duck.conn) });
+</code></pre>
+<p>In the browser, use <code>createBrowserDuckDB</code> (DuckDB-Wasm) instead; everything else is identical.</p>
+<p>Register data by rows, or point at tables that already exist in the database:</p>
+<pre data-lang="js"><code class="language-js">db.fromRows(&quot;penguins&quot;, [
+  { bill_length_mm: 39.1, body_mass_g: 3750, species: &quot;Adelie&quot; },
+  { bill_length_mm: 46.5, body_mass_g: 3500, species: &quot;Chinstrap&quot; },
+  // …
+]);
+// also: db.table(&quot;existing_table&quot;), db.fromQuery(&quot;view_name&quot;, &quot;SELECT …&quot;)
+</code></pre>
+<h2 id="your-first-plot">Your first plot</h2>
+<pre data-lang="js"><code class="language-js">import { canvas, linear } from &quot;$lib/dvl/api/builder&quot;;
+import { renderSpec } from &quot;$lib/dvl/executor/compile-spec&quot;;
+
+const v = canvas(640, 480);
+v.dot(&quot;penguins&quot;, { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;) })
+ .axis(&quot;x&quot;)
+ .axis(&quot;y&quot;);
+
+const svg = await renderSpec(v.spec, v.registries, &quot;&quot;, db);
+</code></pre>
+<p><code>canvas(width, height)</code> starts a spec. Every mark method — <code>dot</code>, <code>rect</code>, <code>bar</code>, <code>line</code>,
+<code>area</code>, <code>text</code>, <code>link</code>, <code>arrow</code>, … — takes a <strong>source</strong> (a table name or <code>Table</code> handle) and a
+<strong>channels</strong> object. <code>renderSpec</code> compiles, executes, and returns an SVG string.</p>
+<p>Two things to know about channels from the start:</p>
+<ul>
+<li>A channel value can be a <strong>literal</strong> (<code>fill: &quot;#4e79a7&quot;</code>, <code>r: 6</code>), a <strong>scale</strong> binding
+(<code>x: linear(&quot;col&quot;)</code>), or a <strong>layout</strong> output (next section). Positional literals are pixels.</li>
+<li>Bare strings are literals <em>everywhere</em>, including the <code>text</code> channel — to show a column's
+values, bind it explicitly: <code>text: col(&quot;label&quot;)</code> (with <code>col</code> from <code>$lib/dvl/ir/expr</code>).</li>
+</ul>
+<blockquote>
+<p><code>renderSpec</code> mutates the spec as it compiles. Build a fresh spec per render (wrap authoring
+in a function) rather than rendering one spec twice.</p>
+</blockquote>
+<h2 id="color-and-other-output-channels">Color and other output channels</h2>
+<p>Scales aren't only positional. <code>ordinal</code> maps categories to a palette; <code>color</code> maps a
+<em>continuous</em> value onto a ramp:</p>
+<pre data-lang="js"><code class="language-js">v.dot(&quot;penguins&quot;, {
+  x: linear(&quot;bill_length_mm&quot;),
+  y: linear(&quot;body_mass_g&quot;),
+  fill: ordinal(&quot;species&quot;),     // categorical → palette
+  // fill: color(&quot;body_mass_g&quot;) // continuous → ramp
+});
+</code></pre>
+<p>Pick by the column's nature, not the channel: <code>ordinal</code> trains <code>SELECT DISTINCT</code>, <code>color</code>
+trains min/max — a string column under <code>color()</code> is an error. See <a href="scales/README.html">scales</a>.</p>
+<h2 id="bars-layouts-and-pick">Bars: layouts and <code>.pick()</code></h2>
+<p>A bar needs <em>two</em> numbers per axis — position and extent. Multi-output <strong>layouts</strong> produce
+them, and <code>.pick()</code> spreads their outputs onto channels:</p>
+<pre data-lang="js"><code class="language-js">import { bandX, barY, ordinal } from &quot;$lib/dvl/api/builder&quot;;
+
+v.bar(&quot;by_species&quot;, {
+  ...bandX(&quot;species&quot;, { paddingInner: 0.2 }).pick(&quot;x&quot;, &quot;w&quot;),  // category → x + width
+  ...barY(&quot;mean_mass&quot;).pick(&quot;y&quot;, &quot;h&quot;),                        // value → top + height
+  fill: ordinal(&quot;species&quot;),
+});
+</code></pre>
+<p><code>bandX</code> is D3's band scale as a layout (options: <code>paddingInner</code>, <code>paddingOuter</code>, <code>padding</code>,
+<code>align</code>); <code>barY</code> draws from a zero baseline. Each 1-D layout comes as an <strong>X/Y pair</strong> — swap to
+<code>bandY</code> + <code>barX</code> for a <em>horizontal</em> bar chart (same for <code>stackX</code>/<code>stackY</code>, <code>pitchX</code>/<code>pitchY</code>,
+<code>eqX</code>/<code>eqY</code>). Stacking is one substitution away:</p>
+<pre data-lang="js"><code class="language-js">v.rect(&quot;stacks&quot;, {
+  ...bandX(&quot;species&quot;, { paddingInner: 0.2 }).pick(&quot;x&quot;, &quot;w&quot;),
+  ...stackY({ weight: &quot;n&quot;, group: &quot;species&quot;, order: &quot;island&quot; }).pick(&quot;y&quot;, &quot;h&quot;),
+  fill: ordinal(&quot;island&quot;),
+});
+</code></pre>
+<p><code>.pick()</code> also renames — <code>.pick({ x1: &quot;x&quot;, y1: &quot;y&quot; })</code> maps a layout's <code>x</code> output onto the
+<code>x1</code> channel. See <a href="layouts/README.html">layouts</a> for the full set, including <code>treemap</code>, <code>force</code>,
+and <code>fitText</code>.</p>
+<h2 id="lines-and-shared-scales">Lines and shared scales</h2>
+<p>Reusing one scale object binds several layers to the <em>same</em> trained domain:</p>
+<pre data-lang="js"><code class="language-js">const x = linear(&quot;bill_length_mm&quot;);
+const y = linear(&quot;body_mass_g&quot;);
+v.dot(&quot;penguins&quot;,   { x, y, fill: &quot;#cfd3dc&quot; });
+v.dot(&quot;highlights&quot;, { x, y, fill: &quot;#e15759&quot; });   // same x/y domains as the layer above
+</code></pre>
+<p>Object identity is the authored &quot;these are the same quantity&quot; — distinct <code>linear(&quot;col&quot;)</code> calls
+train independently. For multi-series lines, <code>line</code> aggregates rows per series:</p>
+<pre data-lang="js"><code class="language-js">v.line(&quot;series&quot;, { x: linear(&quot;t&quot;), y: linear(&quot;value&quot;), stroke: ordinal(&quot;group&quot;) });
+</code></pre>
+<h2 id="facets-and-nesting">Facets and nesting</h2>
+<p>A container mark plus a join predicate turns any plot into small multiples. <code>eqX</code> splits the
+x-range equally among a table's rows; <code>eq</code> declares the parent↔child join:</p>
+<pre data-lang="js"><code class="language-js">import { eqX } from &quot;$lib/dvl/api/builder&quot;;
+import { eq } from &quot;$lib/dvl/ir/refs&quot;;
+
+v.rect(&quot;species&quot;, { ...eqX(&quot;species&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: 12, h: 236, fill: &quot;#f5f6fa&quot; })
+ .dot(&quot;penguins&quot;,
+      { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;) },
+      { on: eq(&quot;species&quot;, &quot;species&quot;) });     // each panel shows its own species' rows
+</code></pre>
+<p>Scales are shared across panels by default; opt out per scale with
+<code>linear(&quot;col&quot;, { shared: false })</code> for per-panel domains. <code>.nest()</code> names the pattern when a
+panel hosts several layers:</p>
+<pre data-lang="js"><code class="language-js">const panel = v.rect(&quot;clusters&quot;, { ...eqX(&quot;cluster&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: 12, h: 330 })
+  .nest(&quot;fnodes&quot;, { on: eq(&quot;cluster&quot;, &quot;cluster&quot;) });
+const dots = panel.dot({ ...force(&quot;fedges&quot;).pick(&quot;x&quot;, &quot;y&quot;), r: 6 });
+panel.link(&quot;fedges&quot;, { /* edges layer in the same panels */ });
+</code></pre>
+<p>For ad-hoc side-by-side plots without a driving table, see
+<a href="features/README.html#subplots">subplots</a>: <code>v.subplot()</code> / <code>v.subplots({...eqX(&quot;i&quot;).pick(&quot;x&quot;,&quot;w&quot;)})</code>.</p>
+<h2 id="connecting-marks-across-plots-via">Connecting marks across plots: <code>via</code></h2>
+<p>Layers can borrow another plot's <em>solved</em> positions through a join — how node-link diagrams,
+annotations, and connectors are built:</p>
+<pre data-lang="js"><code class="language-js">const dots = v.dot(&quot;penguins&quot;, { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;) });
+v.link(&quot;highlights&quot;, {
+  ...dots.via(eq(&quot;highlights.species&quot;, &quot;penguins.species&quot;)).pick({ x1: &quot;x&quot;, y1: &quot;y&quot; }),
+  x2: linear(&quot;bill_length_mm&quot;), y2: linear(&quot;body_mass_g&quot;),
+  stroke: &quot;#e15759&quot;,
+});
+</code></pre>
+<p><code>via()</code> accepts multiple predicates for composite keys, and works into nested plots. Borrowed
+positions arrive in pixels and are not re-transformed. See
+<a href="features/README.html#cross-mark-and-cross-table-references">cross-mark references</a>.</p>
+<h2 id="rendering">Rendering</h2>
+<p><code>renderSpec</code> returns SVG. In the browser, insert it; in Node, rasterize with
+<code>render/png</code> (<code>@resvg/resvg-js</code>) or write the SVG to disk. To watch the engine work, pass a
+debug sink — every compile pass, SQL statement, and solver iteration lands in queryable
+<code>dvl_*</code> tables, which DVL can then visualize with itself:</p>
+<pre data-lang="js"><code class="language-js">import { DuckDbSink } from &quot;$lib/dvl/debug/duckdb-sink&quot;;
+const sink = new DuckDbSink(db.backend, 2);
+const svg = await renderSpec(v.spec, v.registries, &quot;&quot;, db, {}, sink);
+// then: spanTimeline(db, sink.runId), sqlProfile(db, sink.runId), …
+</code></pre>
+<p>See <a href="features/README.html#debugging">debugging</a>.</p>
+<h2 id="where-next">Where next</h2>
+<ul>
+<li><a href="features/README.html">Features</a> — each concept, one page at a time.</li>
+<li><a href="marks/README.html">Marks</a> · <a href="layouts/README.html">Layouts</a> · <a href="scales/README.html">Scales</a> —
+per-instance reference.</li>
+<li><a href="examples/README.html">Examples</a> — the gallery, from scatter to ER diagrams.</li>
+<li><a href="architecture.html">Architecture</a> — what happens between <code>renderSpec</code> and the SVG.</li>
+</ul>
+
+    </article>
+  </main>
+
+  <script src="assets/docs.js"></script>
+  <script src="assets/dvl-example.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
+</body>
+</html>

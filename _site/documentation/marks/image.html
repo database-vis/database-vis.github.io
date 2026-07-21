@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>image · DVL</title>
+  <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="app-name" href="../index.html">DVL</a>
+    <nav class="sidebar-nav">
+    
+      <h2>Introduction</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../what-is-dvl.html">What is DVL?</a></li>
+        
+      
+        
+        
+        <li><a href="../getting-started.html">Getting started</a></li>
+        
+      
+        
+        
+        <li><a href="../architecture.html">Architecture</a></li>
+        
+      
+      </ul>
+    
+      <h2>Features</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#channels">Channels</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#scales">Scales</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#data">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        
+      
+      </ul>
+    
+      <h2>Marks</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../marks/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/area.html">area</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/arrow.html">arrow</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/bar.html">bar</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/cell.html">cell</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/connect.html">connect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/dot.html">dot</a></li>
+        
+      
+        
+        
+        <li class="active"><a href="../marks/image.html">image</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/line.html">line</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/link.html">link</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/path.html">path</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rect.html">rect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rule.html">rule</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/text.html">text</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/tick.html">tick</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/vector.html">vector</a></li>
+        
+      
+      </ul>
+    
+      <h2>Layouts</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../layouts/README.html">Overview</a></li>
+        
+      
+        
+        <li><strong>Produce</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/bandX.html">bandX</a></li>
+          
+            
+            <li><a href="../layouts/bandY.html">bandY</a></li>
+          
+            
+            <li><a href="../layouts/barX.html">barX</a></li>
+          
+            
+            <li><a href="../layouts/barY.html">barY</a></li>
+          
+            
+            <li><a href="../layouts/stackX.html">stackX</a></li>
+          
+            
+            <li><a href="../layouts/stackY.html">stackY</a></li>
+          
+            
+            <li><a href="../layouts/pitchX.html">pitchX</a></li>
+          
+            
+            <li><a href="../layouts/pitchY.html">pitchY</a></li>
+          
+            
+            <li><a href="../layouts/eqX.html">eqX</a></li>
+          
+            
+            <li><a href="../layouts/eqY.html">eqY</a></li>
+          
+            
+            <li><a href="../layouts/proportionalX.html">proportionalX</a></li>
+          
+            
+            <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
+          
+            
+            <li><a href="../layouts/force.html">force</a></li>
+          
+            
+            <li><a href="../layouts/treemap.html">treemap</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Refine</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Resolver</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/hull.html">hull</a></li>
+          
+          </ul>
+        </li>
+        
+      
+      </ul>
+    
+      <h2>Scales</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../scales/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/linear.html">linear</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/log.html">log</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/sqrt.html">sqrt</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/pow.html">pow</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/symlog.html">symlog</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/ordinal.html">ordinal</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/point.html">point</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/color.html">color</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/quantize.html">quantize</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/threshold.html">threshold</a></li>
+        
+      
+      </ul>
+    
+      <h2>Examples</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../examples/README.html">Gallery</a></li>
+        
+      
+      </ul>
+    
+    </nav>
+  </aside>
+
+  <header id="topbar">
+    <button class="sidebar-toggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+    <div class="topbar-spacer"></div>
+    <a class="github-link" href="https://github.com/cudbg/database-vis" target="_blank" rel="noopener" aria-label="GitHub repository">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+  </header>
+
+  <main class="content">
+    <article class="markdown-section">
+      <h1 id="image">image</h1>
+<p>The <code>image</code> mark draws a raster image — an SVG <code>&lt;image href&gt;</code> box — at each row's <code>(x, y)</code>, sized
+<code>w × h</code> pixels. The <code>src</code> channel is the image URL or <code>data:</code> URI; <code>(x, y)</code> is the box's top-left
+corner (the same anchor convention as <code>rect</code>). Like every mark, positional channels take scale
+bindings, layout outputs, or pixel literals, and <code>w</code>/<code>h</code> are pixel sizes.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const birds = db.derive(&quot;birds&quot;, `SELECT *, 'data:image/svg+xml;utf8,&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;24&quot; height=&quot;24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot; fill=&quot;%234e79a7&quot; fill-opacity=&quot;0.8&quot;/&gt;&lt;/svg&gt;' AS icon_url FROM penguins`);
+const v = canvas(640, 460);
+v.image(birds, {
+  x: linear(&quot;bill_length_mm&quot;),
+  y: linear(&quot;body_mass_g&quot;),
+  w: 24, h: 24,
+  src: field(&quot;icon_url&quot;),          // reads the icon_url COLUMN (a bare string would be one literal URL)
+}).axis(&quot;x&quot;).axis(&quot;y&quot;);
+return v;
+</code></pre>
+<p>A scatter where each point is a 24×24 image loaded from its row's <code>icon_url</code> column, its top-left
+corner placed at the scaled <code>(x, y)</code>.</p>
+<h2 id="options">Options</h2>
+<p>Positional <code>x</code>/<code>y</code> place the box's top-left corner. <code>w</code>/<code>h</code> are pixel sizes (default <code>0</code>, so you must
+set them or nothing is drawn). <code>src</code> is the content channel — bind it to <code>field(&quot;col&quot;)</code> for per-row
+URLs, or pass a bare string for one constant image on every row (the bare-string-is-a-literal rule).
+<code>opacity</code> rides the box's style.</p>
+<table>
+<thead>
+<tr>
+<th>channel</th>
+<th>type</th>
+<th>default</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>x</code></td>
+<td>positional-x</td>
+<td>—</td>
+<td>box top-left x (scale binding, layout output, or pixel literal)</td>
+</tr>
+<tr>
+<td><code>y</code></td>
+<td>positional-y</td>
+<td>—</td>
+<td>box top-left y</td>
+</tr>
+<tr>
+<td><code>w</code></td>
+<td>pixel</td>
+<td><code>0</code></td>
+<td>box width in px</td>
+</tr>
+<tr>
+<td><code>h</code></td>
+<td>pixel</td>
+<td><code>0</code></td>
+<td>box height in px</td>
+</tr>
+<tr>
+<td><code>src</code></td>
+<td>text</td>
+<td><code>&quot;&quot;</code></td>
+<td>image URL or <code>data:</code> URI. <code>field(&quot;col&quot;)</code> = column; bare string = literal</td>
+</tr>
+<tr>
+<td><code>opacity</code></td>
+<td>number</td>
+<td><code>1</code></td>
+<td>image opacity</td>
+</tr>
+</tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<p>A single logo placed at a fixed pixel point. <code>src</code> is a bare string, so the SAME image is drawn once
+at <code>(x, y)</code> rather than per row.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
+v.image(&quot;penguins&quot;, {
+  x: 20, y: 20, w: 48, h: 48,
+  src: &quot;https://example.com/logo.png&quot;,
+});
+return v;
+</code></pre>
+<p>Per-row images from a column, sized uniformly. <code>field(&quot;icon_url&quot;)</code> reads each row's URL; <code>w</code>/<code>h</code> are
+pixel literals so every glyph is the same size.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const birds = db.derive(&quot;birds&quot;, `SELECT *, 'data:image/svg+xml;utf8,&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;24&quot; height=&quot;24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot; fill=&quot;%234e79a7&quot; fill-opacity=&quot;0.8&quot;/&gt;&lt;/svg&gt;' AS icon_url FROM penguins`);
+const v = canvas(640, 460);
+v.image(birds, {
+  x: linear(&quot;bill_length_mm&quot;),
+  y: linear(&quot;body_mass_g&quot;),
+  w: 20, h: 20,
+  src: field(&quot;icon_url&quot;),
+}).axis(&quot;x&quot;).axis(&quot;y&quot;);
+return v;
+</code></pre>
+<p>Faded thumbnails via <code>opacity</code>, layered under a dot overlay so the points stay legible.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const birds = db.derive(&quot;birds&quot;, `SELECT *, 'data:image/svg+xml;utf8,&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;24&quot; height=&quot;24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot; fill=&quot;%234e79a7&quot; fill-opacity=&quot;0.8&quot;/&gt;&lt;/svg&gt;' AS icon_url FROM penguins`);
+const v = canvas(640, 460);
+const x = linear(&quot;bill_length_mm&quot;), y = linear(&quot;body_mass_g&quot;);
+v.image(birds, { x, y, w: 32, h: 32, src: field(&quot;icon_url&quot;), opacity: 0.35 });
+v.dot(&quot;penguins&quot;,   { x, y, r: 2, fill: &quot;#333&quot; });
+return v;
+</code></pre>
+<p>Images placed into a layout's solved boxes — borrow a bandX × barY box and drop a data-sized image
+into it. <code>w</code>/<code>h</code> come from the layout instead of literals.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const birds = db.derive(&quot;birds&quot;, `SELECT *, 'data:image/svg+xml;utf8,&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;24&quot; height=&quot;24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot; fill=&quot;%234e79a7&quot; fill-opacity=&quot;0.8&quot;/&gt;&lt;/svg&gt;' AS icon_url FROM penguins`);
+const v = canvas(640, 460);
+v.bar(&quot;penguins&quot;, {
+  ...bandX(&quot;species&quot;, { paddingInner: 0.15 }).pick(&quot;x&quot;, &quot;w&quot;),
+  ...barY(&quot;body_mass_g&quot;).pick(&quot;y&quot;, &quot;h&quot;),
+  fill: &quot;#eef&quot;,
+});
+v.image(birds, {
+  ...bandX(&quot;species&quot;, { paddingInner: 0.15 }).pick(&quot;x&quot;, &quot;w&quot;),
+  ...barY(&quot;body_mass_g&quot;).pick(&quot;y&quot;, &quot;h&quot;),
+  src: field(&quot;icon_url&quot;),
+});
+return v;
+</code></pre>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="./text.html">text</a> — the sibling glyph mark (a string box instead of a raster box)</li>
+<li><a href="./rect.html">rect</a> — the same top-left <code>(x, y)</code> + <code>w × h</code> box convention, filled instead of imaged</li>
+<li><a href="../layouts/bandX.html">bandX</a> / <a href="../layouts/barY.html">barY</a> — box layouts to place images into</li>
+</ul>
+
+    </article>
+  </main>
+
+  <script src="../assets/docs.js"></script>
+  <script src="../assets/dvl-example.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
+</body>
+</html>

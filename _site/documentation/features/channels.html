@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Channels · DVL</title>
+  <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="app-name" href="../index.html">DVL</a>
+    <nav class="sidebar-nav">
+    
+      <h2>Introduction</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../what-is-dvl.html">What is DVL?</a></li>
+        
+      
+        
+        
+        <li><a href="../getting-started.html">Getting started</a></li>
+        
+      
+        
+        
+        <li><a href="../architecture.html">Architecture</a></li>
+        
+      
+      </ul>
+    
+      <h2>Features</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#channels">Channels</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#scales">Scales</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#data">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        
+      
+      </ul>
+    
+      <h2>Marks</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../marks/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/area.html">area</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/arrow.html">arrow</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/bar.html">bar</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/cell.html">cell</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/connect.html">connect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/dot.html">dot</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/image.html">image</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/line.html">line</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/link.html">link</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/path.html">path</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rect.html">rect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rule.html">rule</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/text.html">text</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/tick.html">tick</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/vector.html">vector</a></li>
+        
+      
+      </ul>
+    
+      <h2>Layouts</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../layouts/README.html">Overview</a></li>
+        
+      
+        
+        <li><strong>Produce</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/bandX.html">bandX</a></li>
+          
+            
+            <li><a href="../layouts/bandY.html">bandY</a></li>
+          
+            
+            <li><a href="../layouts/barX.html">barX</a></li>
+          
+            
+            <li><a href="../layouts/barY.html">barY</a></li>
+          
+            
+            <li><a href="../layouts/stackX.html">stackX</a></li>
+          
+            
+            <li><a href="../layouts/stackY.html">stackY</a></li>
+          
+            
+            <li><a href="../layouts/pitchX.html">pitchX</a></li>
+          
+            
+            <li><a href="../layouts/pitchY.html">pitchY</a></li>
+          
+            
+            <li><a href="../layouts/eqX.html">eqX</a></li>
+          
+            
+            <li><a href="../layouts/eqY.html">eqY</a></li>
+          
+            
+            <li><a href="../layouts/proportionalX.html">proportionalX</a></li>
+          
+            
+            <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
+          
+            
+            <li><a href="../layouts/force.html">force</a></li>
+          
+            
+            <li><a href="../layouts/treemap.html">treemap</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Refine</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Resolver</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/hull.html">hull</a></li>
+          
+          </ul>
+        </li>
+        
+      
+      </ul>
+    
+      <h2>Scales</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../scales/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/linear.html">linear</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/log.html">log</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/sqrt.html">sqrt</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/pow.html">pow</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/symlog.html">symlog</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/ordinal.html">ordinal</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/point.html">point</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/color.html">color</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/quantize.html">quantize</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/threshold.html">threshold</a></li>
+        
+      
+      </ul>
+    
+      <h2>Examples</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../examples/README.html">Gallery</a></li>
+        
+      
+      </ul>
+    
+    </nav>
+  </aside>
+
+  <header id="topbar">
+    <button class="sidebar-toggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+    <div class="topbar-spacer"></div>
+    <a class="github-link" href="https://github.com/cudbg/database-vis" target="_blank" rel="noopener" aria-label="GitHub repository">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+  </header>
+
+  <main class="content">
+    <article class="markdown-section">
+      <h1 id="channels">Channels</h1>
+<p>A <strong>channel</strong> is a named input to a mark — <code>x</code>, <code>y</code>, <code>x1</code>, <code>fill</code>, <code>r</code>, <code>text</code>, <code>dx</code>… Every mark
+declares which channels it accepts and each channel's <em>kind</em> (positional, pixel, color, shape,
+text, number — see <a href="marks/README.html">Marks</a>). What you <strong>bind</strong> to a channel is a value in one
+small <strong>channel-value language</strong>. This page maps that language: the ways to specify a channel,
+what each one produces, and where and when it resolves.</p>
+<p>Whatever you write, the compiler lowers it to a single union — the <code>Expr</code> type in <code>ir/expr.ts</code>:</p>
+<pre><code>literal · local-column · layout-output · table-ref · bound-ref · agg · binary · var
+</code></pre>
+<p>The authoring surface (<code>ChannelValue</code>) is a little broader than <code>Expr</code> — it also accepts scale
+specs, layout <code>.pick()</code> handles, and via <code>.pick()</code> handles, which the builder resolves into
+<em>operators plus an <code>Expr</code> reference</em>. But everything ends as that union, and it lowers <strong>once to
+both substrates</strong> (SQL in the database, JS in the browser) — you never pick a backend.</p>
+<pre data-lang="ts"><code class="language-ts">type ChannelValue =
+  | ScaleSpec | ColumnBinding | DatumBinding   // scales
+  | PendingOutput                              // a layout / via .pick() output
+  | Expr                                       // field(), binary(), literal(), px.*(), …
+  | number | string | boolean                  // bare literals
+  | null;                                      // an explicit hole (unbound)
+</code></pre>
+<h2 id="two-questions-every-channel-value-answers">Two questions every channel value answers</h2>
+<p>Two cross-cutting properties decide how a value behaves; internalizing them explains the whole
+reference below.</p>
+<p><strong>Space — data or pixel?</strong></p>
+<table>
+<thead>
+<tr>
+<th>Space</th>
+<th>Meaning</th>
+<th>Feeds a scale?</th>
+<th>Placed by the frame?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>data</strong></td>
+<td>a value in the data domain — a raw column, a constant, a table borrow. <em>Pre-affine.</em></td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><strong>pixel</strong></td>
+<td>a value already in canvas coordinates — a positional literal, precomputed geometry, a borrowed <em>solved</em> position. <em>Post-affine.</em></td>
+<td>no</td>
+<td>no — drawn as-is, never re-placed</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Resolution — when is it known?</strong> A value's resolution is the <em>max over its leaves</em>, ordered
+<code>literal &lt; data &lt; solver</code>:</p>
+<ul>
+<li><strong>literal</strong> — a constant, known at author time.</li>
+<li><strong>data</strong> — computed by a query over your tables (a column, a table borrow, an aggregate).</li>
+<li><strong>solver</strong> — produced by the constraint solver (layout outputs, borrowed pixel positions) —
+known only <em>after</em> placement.</li>
+</ul>
+<p>(<strong>Arity</strong> is the quieter third axis: a constant is <code>scalar</code>, a column is <code>per-row</code>; arithmetic
+broadcasts scalar over per-row.)</p>
+<h2 id="the-channel-value-language-reference">The channel-value language — reference</h2>
+<table>
+<thead>
+<tr>
+<th>Author it as</th>
+<th>What it is</th>
+<th>Lowers to</th>
+<th>Space</th>
+<th>Resolution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>4</code>, <code>&quot;#4e79a7&quot;</code>, <code>true</code></td>
+<td>a <strong>literal</strong> constant. On a positional channel (<code>x</code>, <code>y</code>, <code>x1</code>…) a number is a <strong>pixel</strong>; elsewhere it is just the constant. A bare <strong>string is never a column</strong> — the <em>bare-string rule</em>.</td>
+<td><code>literal</code></td>
+<td>pixel <em>(positional)</em> / data</td>
+<td>literal</td>
+</tr>
+<tr>
+<td><code>field(&quot;c&quot;)</code></td>
+<td>a <strong>raw column</strong> read, untransformed</td>
+<td><code>local-column</code></td>
+<td>data</td>
+<td>data</td>
+</tr>
+<tr>
+<td><code>linear(&quot;c&quot;)</code></td>
+<td>a <strong>scale</strong> fitted to column <code>c</code> now</td>
+<td>scale op + column ref</td>
+<td>data → pixel <em>(via frame)</em></td>
+<td>data</td>
+</tr>
+<tr>
+<td><code>const x = linear(); x(&quot;c&quot;)</code></td>
+<td>a <strong>deferred scale</strong>, bound per channel; <strong>reuse the same <code>x</code></strong> to declare the <em>same quantity</em> (unioned/shared domain)</td>
+<td>scale op + column ref</td>
+<td>data → pixel</td>
+<td>data</td>
+</tr>
+<tr>
+<td><code>x(4000)</code></td>
+<td>a <strong>datum</strong> — a literal <em>in the scale's domain</em> (placed like data, not a raw pixel)</td>
+<td>scale op + literal</td>
+<td>data → pixel</td>
+<td>data</td>
+</tr>
+<tr>
+<td><code>bandX(&quot;s&quot;).pick(&quot;x&quot;,&quot;w&quot;)</code></td>
+<td>a <strong>layout output</strong> — an arrangement the solver computes; multi-output spreads with <code>.pick()</code></td>
+<td>layout op + <code>layout-output</code></td>
+<td>pixel</td>
+<td>solver</td>
+</tr>
+<tr>
+<td><code>dots.via(eq(…)).pick({x:&quot;x&quot;})</code></td>
+<td>a <strong>via into a plot</strong> — a borrowed <strong>solved</strong> position</td>
+<td>join ops + <code>table-ref</code></td>
+<td><strong>pixel</strong></td>
+<td>solver</td>
+</tr>
+<tr>
+<td><code>db.table(&quot;t&quot;).via(eq(…)).pick({w:&quot;m&quot;})</code></td>
+<td>a <strong>via into a table</strong> — a borrowed <strong>raw</strong> column</td>
+<td>join ops + <code>bound-ref</code></td>
+<td><strong>data</strong></td>
+<td>data</td>
+</tr>
+<tr>
+<td><code>…via(…, { resolve: &quot;avg&quot; })</code></td>
+<td>an <strong>aggregate</strong> reduction over a multi-match via (or a grouped-table column)</td>
+<td><code>agg</code></td>
+<td>data / pixel</td>
+<td>data / solver</td>
+</tr>
+<tr>
+<td><code>binary(&quot;+&quot;, a, b)</code></td>
+<td><strong>arithmetic</strong> combining any two expressions; a nested via/agg is <em>lifted</em> into its own join</td>
+<td><code>binary</code></td>
+<td>from operands <em>(dimensional check)</em></td>
+<td>max of operands</td>
+</tr>
+<tr>
+<td><code>px.x(&quot;c&quot;)</code>, <code>px.w(&quot;c&quot;)</code></td>
+<td><strong>precomputed geometry</strong> — a column read as a <em>pixel</em> coordinate/length, skipping the affine</td>
+<td><code>local-column</code> <em>(pixel space)</em></td>
+<td>pixel</td>
+<td>data</td>
+</tr>
+</tbody>
+</table>
+<p>Frame <strong>variables</strong> (<code>var</code> — the solver's fixpoint cells for extents, params, ranges) are an
+internal form you rarely author directly; they surface in axis internals and <code>params</code>.</p>
+<hr>
+<h2 id="data-columns-and-constants">Data: columns and constants</h2>
+<p><code>field(&quot;c&quot;)</code> reads a column untransformed (data space, per-row). Bare literals are constants —
+and a <strong>bare string is the literal string</strong>, never a column: <code>text: &quot;island&quot;</code> labels every mark
+with the word <em>island</em>; <code>text: field(&quot;island&quot;)</code> reads the column. Positional literals (<code>x</code>, <code>y</code>,
+<code>r</code>, <code>dx</code>…) are pixels; <code>fill: &quot;#4e79a7&quot;</code> is the literal colour.</p>
+<pre data-lang="dvl"><code class="lang-dvl">// literal vs scale vs column: x/y are SCALE bindings; r: 4 and fill: '#4e79a7' are
+// LITERALS (a bare string is never a column read); the label reads a column with field().
+const v = canvas(640, 320);
+const x = linear(&quot;bill_length_mm&quot;), y = linear(&quot;body_mass_g&quot;);
+v.dot(&quot;penguins&quot;, { x, y, r: 4, fill: &quot;#4e79a7&quot;, fillOpacity: 0.6 });
+v.text(&quot;penguins&quot;, { x, y, text: field(&quot;island&quot;), dy: -8, fontSize: 8, fill: &quot;#888&quot; });
+return v;
+</code></pre>
+<h2 id="scales-a-value-through-a-function">Scales: a value through a function</h2>
+<p>A scale trains a <strong>domain</strong> from data and maps each row into an output space. Three forms:
+<code>linear(&quot;c&quot;)</code> fits to a column immediately; <code>const x = linear(); x(&quot;c&quot;)</code> is <em>deferred</em> and bound
+per channel — <strong>binding the same scale object twice declares &quot;the same quantity&quot;</strong>, so the
+domains union and the layers share a frame; <code>x(4000)</code> is a <strong>datum</strong>, a literal placed <em>in the
+scale's domain</em>. See <a href="scales/README.html">Scales</a> for the families and domain treatments.</p>
+<pre data-lang="dvl"><code class="lang-dvl">// ONE scale object bound across two relations declares &quot;the same quantity&quot;: the domains
+// UNION and both layers share a frame — the species means land exactly on the cloud.
+const bySpecies = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;], { bill: avg(&quot;bill_length_mm&quot;), mass: avg(&quot;body_mass_g&quot;) });
+const v = canvas(640, 360);
+const x = linear(), y = linear();
+v.dot(&quot;penguins&quot;, { x: x(&quot;bill_length_mm&quot;), y: y(&quot;body_mass_g&quot;), fill: &quot;#cfd3dc&quot; });
+v.dot(bySpecies, { x: x(&quot;bill&quot;), y: y(&quot;mass&quot;), r: 6, fill: ordinal(&quot;species&quot;) })
+ .axis(&quot;x&quot;).axis(&quot;y&quot;).legend(&quot;fill&quot;);
+return v;
+</code></pre>
+<h2 id="layout-outputs-arrangements-via-pick">Layout outputs: arrangements via <code>.pick()</code></h2>
+<p>A layout is an operator that computes an <em>arrangement</em> — usually <strong>multi-output</strong>. Spread its
+outputs into channels with <code>.pick()</code>; the values are solver-space pixels. See
+<a href="layouts/README.html">Layouts</a>.</p>
+<pre data-lang="dvl"><code class="lang-dvl">// multi-output layouts spread into channels with .pick(): bandX gives {x, w}, stackY {y, h}.
+const stacks = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;, &quot;island&quot;], { n: count() });
+const v = canvas(640, 340);
+v.rect(stacks, {
+  ...bandX(&quot;species&quot;, { paddingInner: 0.2 }).pick(&quot;x&quot;, &quot;w&quot;),
+  ...stackY({ weight: &quot;n&quot;, group: &quot;species&quot;, order: &quot;island&quot; }).pick(&quot;y&quot;, &quot;h&quot;),
+  fill: ordinal(&quot;island&quot;),
+}).axis(&quot;x&quot;).legend(&quot;fill&quot;);
+return v;
+</code></pre>
+<h2 id="via-borrowed-values">Via: borrowed values</h2>
+<p><code>via()</code> borrows values across a relational <a href="features/README.html#join-paths">join path</a>. The <strong>referent</strong>
+decides the space: a <strong>plot</strong> referent borrows <em>solved</em> channels → <strong>pixels</strong> (never re-placed);
+a <strong>table</strong> referent borrows <em>raw</em> columns → <strong>data</strong> (free to feed a scale). A join that can
+match several rows per mark declares a <strong>resolution</strong> (<code>{ resolve: &quot;avg&quot; }</code>, a positional form,
+an expression, or a JS reducer). Full mechanism: <a href="features/via.html">Via</a>.</p>
+<pre data-lang="dvl"><code class="lang-dvl">// PLOT referent + a resolution, live: each species label sits at the CENTROID of its dots —
+// the via matches MANY dots per species; resolve: 'avg' reduces every picked channel
+// independently. The borrowed values are solved pixels, never re-placed.
+const species = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;], {});
+const v = canvas(640, 360);
+const dots = v.dot(&quot;penguins&quot;, { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), fill: ordinal(&quot;species&quot;), fillOpacity: 0.5 });
+v.text(species, {
+  ...dots.via(eq(&quot;species&quot;, &quot;species&quot;), { resolve: &quot;avg&quot; }).pick({ x: &quot;x&quot;, y: &quot;y&quot; }),
+  text: field(&quot;species&quot;), fontSize: 12, fill: &quot;#333&quot;, anchor: &quot;middle&quot;,
+});
+return v;
+</code></pre>
+<h2 id="arithmetic-combining-expressions">Arithmetic: combining expressions</h2>
+<p><code>binary(op, left, right)</code> combines any two channel expressions — columns, literals, borrows — with
+<code>+ - * / %</code>. It lowers once to <strong>both</strong> substrates through the shared <code>ScalarExpr</code> layer, and the
+result's space is dimensionally checked (a pixel offset on a placed value; a data offset on a
+borrowed column). A via/aggregate nested inside arithmetic is <strong>lifted</strong> into its own join
+automatically, so <code>y: borrowed + 5</code> works. The <code>cexpr`…`</code> tagged template is sugar for the same
+tree — bare names are columns, <code>${…}</code> splices a channel expression: <code>cexpr`x + dx`</code> ≡
+<code>binary(&quot;+&quot;, field(&quot;x&quot;), field(&quot;dx&quot;))</code>.</p>
+<pre data-lang="dvl"><code class="lang-dvl">// ARITHMETIC channels: each arrow's head is a data expression — cexpr`…` builds the tree (bare
+// names are columns), compiling once to both substrates (SQL + JS) via the ScalarExpr lowering.
+// Feeding it through the SAME scale as the tail (x()/y()) puts both endpoints in one domain — one coupled axis.
+const flow = db.derive(&quot;flow&quot;, `
+  SELECT bill_length_mm AS x, body_mass_g AS y,
+         (bill_depth_mm - 17) * 0.3 AS dx, (flipper_length_mm - 200) * 40 AS dy
+  FROM penguins`);
+const v = canvas(640, 360);
+const x = linear(), y = linear();
+v.arrow(flow, {
+  x1: x(&quot;x&quot;), y1: y(&quot;y&quot;),
+  x2: x(cexpr`x + dx`),
+  y2: y(cexpr`y + dy`),
+  headType: &quot;barb&quot;, headSize: 5, stroke: &quot;#4e79a7&quot;, strokeOpacity: 0.6,
+}).axis(&quot;x&quot;).axis(&quot;y&quot;);
+return v;
+</code></pre>
+<h2 id="pixels-precomputed-geometry">Pixels: precomputed geometry</h2>
+<p>Positional literals are already pixels. To read a <strong>column</strong> as a pixel coordinate or length —
+bypassing the frame affine — use <code>px.x</code> / <code>px.y</code> / <code>px.w</code> / <code>px.h</code>. This is how a table can size
+its own boxes: the engine reads pixel channels as canvas coordinates and never runs them through
+placement.</p>
+<pre data-lang="dvl"><code class="lang-dvl">// precomputed geometry: this table already carries pixel box edges; px.* reads a column as a
+// CANVAS coordinate/length, skipping the frame affine — so each rect places itself.
+db.fromRows(&quot;boxes&quot;, [
+  { label: &quot;A&quot;, x: 40, y: 60, w: 150, h: 170 },
+  { label: &quot;B&quot;, x: 210, y: 60, w: 150, h: 170 },
+  { label: &quot;C&quot;, x: 380, y: 60, w: 180, h: 170 },
+]);
+const v = canvas(600, 290);
+v.rect(&quot;boxes&quot;, { x: px.x(&quot;x&quot;), y: px.y(&quot;y&quot;), w: px.w(&quot;w&quot;), h: px.h(&quot;h&quot;), fill: ordinal(&quot;label&quot;) }).legend(&quot;fill&quot;);
+return v;
+</code></pre>
+<h2 id="channel-kinds-what-a-mark-accepts">Channel kinds: what a mark accepts</h2>
+<p>Marks type-check what you bind. Each channel has a <strong>kind</strong> — positional-x/y, pixel, color,
+shape, text, number — and the binding must agree:</p>
+<ul>
+<li>a <strong>scale</strong> or <strong>column</strong> goes on positional/color channels; a <strong>shape</strong>/text channel takes a
+literal or a column, not a scale output;</li>
+<li>on a <strong>color</strong> channel, a continuous scale is a sequential ramp and <code>ordinal</code> is a categorical
+palette (<code>color</code> is an output space, not a scale family);</li>
+<li>the <strong>bare-string rule</strong> holds on every channel, <code>text</code> included — <code>text: &quot;n&quot;</code> is the literal,
+<code>text: field(&quot;n&quot;)</code> is the column;</li>
+<li>an unbound channel is a <strong>hole</strong> (<code>null</code> / omitted) — the mark uses its draw-time default.</li>
+</ul>
+<p>Per-mark channel lists are in the <a href="marks/README.html">Marks reference</a>; the concepts they build
+on — scales, layouts, the frame, via — each have their own page under
+<a href="features/README.html">Features</a>.</p>
+
+    </article>
+  </main>
+
+  <script src="../assets/docs.js"></script>
+  <script src="../assets/dvl-example.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
+</body>
+</html>
