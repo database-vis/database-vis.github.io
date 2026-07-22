@@ -118,6 +118,11 @@
       
         
         
+        <li><a href="../marks/bezier.html">bezier</a></li>
+        
+      
+        
+        
         <li><a href="../marks/cell.html">cell</a></li>
         
       
@@ -227,6 +232,9 @@
             <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
           
             
+            <li><a href="../layouts/dag.html">dag</a></li>
+          
+            
             <li><a href="../layouts/force.html">force</a></li>
           
             
@@ -242,6 +250,9 @@
           
             
             <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/route.html">route</a></li>
           
             
             <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
@@ -369,8 +380,38 @@ return v;
 <p>A scatter with a red link from each species' heaviest bird back to the corresponding dot.</p>
 <h2 id="options">Options</h2>
 <p><code>link</code> draws <code>drawSegment(&quot;x1&quot;, &quot;y1&quot;, &quot;x2&quot;, &quot;y2&quot;)</code>. If <code>x2</code>/<code>y2</code> are omitted they fall back to
-<code>x1</code>/<code>y1</code> (a degenerate zero-length segment). Every endpoint is affine — but the idiomatic source
+<code>x1</code>/<code>y1</code> — a degenerate zero-length segment. Every endpoint is affine — but the idiomatic source
 of an endpoint is a <code>via().pick({...})</code> spread, not a literal.</p>
+<p><strong>Boundary attachment (<code>route()</code>).</strong> Bind the endpoint pairs through the <code>route</code> layout to land
+each endpoint on its referent's <strong>boundary</strong> nearest the far end instead of piercing to its
+center — a dot referent is clipped on its circle (exactly <code>r</code> from center), a box referent on its
+rectangle edge, anchor convention included:</p>
+<pre data-lang="js"><code class="language-js">v.link(&quot;edges&quot;, {
+  ...route({ src: nodes.via(eq(&quot;edges.src&quot;, &quot;nodes.id&quot;)),
+             dst: nodes.via(eq(&quot;edges.dst&quot;, &quot;nodes.id&quot;)) }).pick(&quot;x1&quot;, &quot;y1&quot;, &quot;x2&quot;, &quot;y2&quot;),
+  stroke: &quot;#999&quot;,
+});
+</code></pre>
+<p><code>route({ src, dst })</code> takes the two endpoint via HANDLES and owns the borrow: each expands into
+the referent's placed anchor plus its box edges riding the same join. A boxless referent (or a
+plain <code>via().pick()</code> without <code>route</code>) keeps the borrowed center verbatim — the degenerate case IS
+today's behavior. Options: <code>pad</code> (px standoff past the boundary — arrowhead breathing room),
+<code>shape</code>/<code>shape1</code>/<code>shape2</code> (boundary metric override; the referent mark's declared shape is the
+default — ellipse for dots, box for rects). <code>arrow</code> composes the same way — its head lands ON the
+target's boundary.</p>
+<pre data-lang="dvl"><code class="lang-dvl">// route() live: force places the member nodes, each edge lands on the dot's
+// circle nearest the far node rather than piercing to its center.
+const v = canvas(760, 420);
+const nodes = v.dot(&quot;members&quot;, {
+  ...force(&quot;follows&quot;).pick(&quot;x&quot;, &quot;y&quot;), r: 10, fill: ordinal(&quot;community&quot;),
+});
+v.link(&quot;follows&quot;, {
+  ...route({ src: nodes.via(eq(&quot;follows.src&quot;, &quot;members.id&quot;)),
+             dst: nodes.via(eq(&quot;follows.dst&quot;, &quot;members.id&quot;)) }).pick(&quot;x1&quot;, &quot;y1&quot;, &quot;x2&quot;, &quot;y2&quot;),
+  stroke: &quot;#b6bdc9&quot;,
+});
+return v;
+</code></pre>
 <table>
 <thead>
 <tr>
@@ -445,11 +486,13 @@ of an endpoint is a <code>via().pick({...})</code> spread, not a literal.</p>
 </table>
 <h3 id="the-via-pattern">The <code>via()</code> pattern</h3>
 <p><code>plot.via(pred, opts?)</code> returns a <strong>borrowed reference</strong> to another plot's solved rows, joined by
-<code>pred</code> (an <code>eq</code>, <code>fk</code>, or <code>path</code>). <code>.pick({ x1: &quot;x&quot;, y1: &quot;y&quot; })</code> maps that plot's output columns
+<code>pred</code> (an <code>eq</code>, <code>fk</code>, or <code>path</code>). A <strong>bare string</strong> is shorthand for the same column name on both
+sides — <code>via(&quot;id&quot;)</code> means <code>via(eq(&quot;id&quot;, &quot;id&quot;))</code>, the dominant case — and mixes freely with other
+steps (<code>via(&quot;id&quot;, fk(&quot;islands&quot;))</code>). <code>.pick({ x1: &quot;x&quot;, y1: &quot;y&quot; })</code> maps that plot's output columns
 (here its solved pixel <code>x</code>/<code>y</code>) onto THIS mark's channels. Spread two vias — one per endpoint — to
 connect a row's placement in one plot to its placement in another:</p>
-<pre data-lang="js"><code class="language-js">...axes[i].via(eq(&quot;id&quot;, &quot;id&quot;)).pick({ x1: &quot;x&quot;, y1: &quot;y&quot; }),
-...axes[i + 1].via(eq(&quot;id&quot;, &quot;id&quot;)).pick({ x2: &quot;x&quot;, y2: &quot;y&quot; }),
+<pre data-lang="js"><code class="language-js">...axes[i].via(&quot;id&quot;).pick({ x1: &quot;x&quot;, y1: &quot;y&quot; }),
+...axes[i + 1].via(&quot;id&quot;).pick({ x2: &quot;x&quot;, y2: &quot;y&quot; }),
 </code></pre>
 <p><code>pick</code> accepts an OBJECT (rename: borrowed <code>x</code> → channel <code>x1</code>) or bare strings (same name). Pass a
 <code>resolve</code> in the via's second argument to COMPUTE an endpoint from the borrowed box (e.g. a
@@ -463,15 +506,15 @@ const xs = [90, 300, 500, 670];
 const v = canvas(740, 460);
 
 const axes = attrs.map((a, i) =&gt; v.dot(p, {
-  x: xs[i], y: linear(a, { axis: false }),
+  x: px(xs[i]), y: linear(a, { axis: false }),
   r: 3, fill: ordinal(&quot;species&quot;), fillOpacity: 0.85,
   title: field(&quot;id&quot;),               // carry the key so via() can join on it
 }));
 
 for (let i = 0; i &lt; attrs.length - 1; i++) {
   v.link(p, {
-    ...axes[i].via(eq(&quot;id&quot;, &quot;id&quot;)).pick({ x1: &quot;x&quot;, y1: &quot;y&quot; }),
-    ...axes[i + 1].via(eq(&quot;id&quot;, &quot;id&quot;)).pick({ x2: &quot;x&quot;, y2: &quot;y&quot; }),
+    ...axes[i].via(&quot;id&quot;).pick({ x1: &quot;x&quot;, y1: &quot;y&quot; }),      // via(&quot;id&quot;) ≡ via(eq(&quot;id&quot;,&quot;id&quot;))
+    ...axes[i + 1].via(&quot;id&quot;).pick({ x2: &quot;x&quot;, y2: &quot;y&quot; }),
     stroke: ordinal(&quot;species&quot;), strokeWidth: 1, strokeOpacity: 0.3,
   });
 }
@@ -492,18 +535,16 @@ v.link(highlights, {
 return v;
 </code></pre>
 <p><strong>Node-link diagram over a force layout.</strong> Force places the member nodes; each edge borrows its
-two endpoints from the node plot through the declared FK, computing each node's CENTER with a
-<code>resolve</code>.</p>
+two endpoints from the node plot through the declared FK, and <code>route()</code> clips each endpoint to the
+node's rectangle edge nearest the far node instead of piercing to its center.</p>
 <pre data-lang="dvl"><code class="lang-dvl">const v = canvas(760, 420);
 const nodes = v.rect(&quot;members&quot;, {
   ...force(&quot;follows&quot;).pick(&quot;x&quot;, &quot;y&quot;),
   w: 92, h: 64, fill: &quot;#fff&quot;, stroke: ordinal(&quot;community&quot;), strokeWidth: 2,
 });
-const center = { resolve: { cx: { fn: &quot;avg&quot;, arg: expr`f.x + 46` },
-                            cy: { fn: &quot;avg&quot;, arg: expr`f.y + 32` } } };
 v.link(&quot;follows&quot;, {
-  ...nodes.via(eq(&quot;follows.src&quot;, &quot;members.id&quot;), center).pick({ x1: &quot;cx&quot;, y1: &quot;cy&quot; }),
-  ...nodes.via(eq(&quot;follows.dst&quot;, &quot;members.id&quot;), center).pick({ x2: &quot;cx&quot;, y2: &quot;cy&quot; }),
+  ...route({ src: nodes.via(eq(&quot;follows.src&quot;, &quot;members.id&quot;)),
+             dst: nodes.via(eq(&quot;follows.dst&quot;, &quot;members.id&quot;)) }).pick(&quot;x1&quot;, &quot;y1&quot;, &quot;x2&quot;, &quot;y2&quot;),
   stroke: &quot;#b6bdc9&quot;,
 });
 return v;
@@ -514,7 +555,7 @@ that keeps only within-panel edges.</p>
 <pre data-lang="dvl"><code class="lang-dvl">const communities = db.table(&quot;members&quot;).groupby([&quot;community&quot;], {});
 db.declareFK({ fromTable: &quot;members&quot;, fromCols: [&quot;community&quot;], toTable: communities.name, toCols: [&quot;community&quot;] });
 const v = canvas(760, 360);
-const panel = v.rect(communities, { ...eqX(&quot;community&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: 12, h: 330, fill: &quot;#f5f6fa&quot; });
+const panel = v.rect(communities, { ...eqX(&quot;community&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: px(12), h: 330, fill: &quot;#f5f6fa&quot; });
 const np = panel.nest(&quot;members&quot;, { on: eq(&quot;community&quot;, &quot;community&quot;) }).dot({
   ...force(&quot;follows&quot;).pick(&quot;x&quot;, &quot;y&quot;), r: 6, fill: ordinal(&quot;community&quot;),
 });
@@ -534,6 +575,7 @@ return v;
 <h2 id="see-also">See also</h2>
 <ul>
 <li><a href="./rule.html">rule</a> — a segment whose endpoints ride on one row (reference lines, whiskers).</li>
+<li><a href="./bezier.html">bezier</a> — the curved sibling; same endpoint channels, plus <code>curvature</code>/control points.</li>
 <li><a href="./arrow.html">arrow</a> — a directed link with a head; same <code>x1,y1→x2,y2</code> channels.</li>
 <li><a href="./connect.html">connect</a> — links consecutive points within a group via a LEAD window.</li>
 <li><a href="../layouts/force.html">force</a> — the node placement links usually connect.</li>

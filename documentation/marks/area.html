@@ -118,6 +118,11 @@
       
         
         
+        <li><a href="../marks/bezier.html">bezier</a></li>
+        
+      
+        
+        
         <li><a href="../marks/cell.html">cell</a></li>
         
       
@@ -227,6 +232,9 @@
             <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
           
             
+            <li><a href="../layouts/dag.html">dag</a></li>
+          
+            
             <li><a href="../layouts/force.html">force</a></li>
           
             
@@ -242,6 +250,9 @@
           
             
             <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/route.html">route</a></li>
           
             
             <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
@@ -471,7 +482,7 @@ const v = canvas(480, 320);
 v.area(yearly, {
   x: linear(&quot;year&quot;),
   y: linear(&quot;mass&quot;),
-  y2: 320,               // constant floor (pixel literal, bottom of the canvas)
+  y2: px(320),               // constant floor (pixel literal, bottom of the canvas)
   fill: &quot;#cfe2f3&quot;,
   stroke: &quot;#4e79a7&quot;,
 }).axis(&quot;x&quot;).axis(&quot;y&quot;);
@@ -497,7 +508,7 @@ const v = canvas(640, 460);
 const p = v.area(series, {
   x: linear(&quot;year&quot;),
   y: linear(&quot;mass&quot;),
-  y2: 460,
+  y2: px(460),
   fill: ordinal(&quot;species&quot;),
   fillOpacity: 0.5,
 });
@@ -522,7 +533,7 @@ return v;
 <pre data-lang="dvl"><code class="lang-dvl">const yearly = db.table(&quot;penguins&quot;).groupby([&quot;year&quot;], { mass: avg(&quot;body_mass_g&quot;) });
 const x = linear(), y = linear();
 const v = canvas(480, 320);
-v.area(yearly, { x: x(&quot;year&quot;), y: y(&quot;mass&quot;), y2: 320, fill: &quot;#e8eef5&quot; });
+v.area(yearly, { x: x(&quot;year&quot;), y: y(&quot;mass&quot;), y2: px(320), fill: &quot;#e8eef5&quot; });
 v.line(yearly, { x: x(&quot;year&quot;), y: y(&quot;mass&quot;), stroke: &quot;#4e79a7&quot;, strokeWidth: 2 })
  .axis(&quot;x&quot;).axis(&quot;y&quot;);
 return v;

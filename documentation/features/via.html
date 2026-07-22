@@ -118,6 +118,11 @@
       
         
         
+        <li><a href="../marks/bezier.html">bezier</a></li>
+        
+      
+        
+        
         <li><a href="../marks/cell.html">cell</a></li>
         
       
@@ -227,6 +232,9 @@
             <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
           
             
+            <li><a href="../layouts/dag.html">dag</a></li>
+          
+            
             <li><a href="../layouts/force.html">force</a></li>
           
             
@@ -242,6 +250,9 @@
           
             
             <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/route.html">route</a></li>
           
             
             <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
@@ -357,7 +368,10 @@ np.via(eq('follows.src', 'members.id')).pick({ x1: 'x', y1: 'y' })
 </code></pre>
 <p>Paths are the same <a href="README.html#join-paths">join-path vocabulary</a> as everywhere else —
 <code>eq</code>/<code>lt</code>/…, <code>on('col')</code>, <code>fk('table')</code>, multi-hop <code>path(...)</code> — resolved once against the FK
-catalog.</p>
+catalog. A bare string is the same-column shorthand: <code>via(&quot;id&quot;)</code> ≡ <code>via(eq(&quot;id&quot;, &quot;id&quot;))</code>, mixing
+freely with other steps (<code>via(&quot;id&quot;, fk(&quot;islands&quot;))</code>) — and it works at every path site that takes
+this vocabulary (<code>via</code>, <code>nest</code>'s <code>on:</code>, a layout's aux <code>on:</code>), since the desugar happens where
+paths resolve, not in any one API entry.</p>
 <h2 id="the-referent-axis-plot-vs-table">The referent axis: plot vs table</h2>
 <table>
 <thead>
@@ -485,6 +499,24 @@ fan-out; the lenient default for <em>unprovable</em> joins tightens to an error 
 <li>Look up an attribute across an FK without denormalizing → <code>db.table(...).via(...)</code>, data space.</li>
 <li>Aggregate over a one-to-many relationship → any of the above + <code>{ resolve: … }</code>.</li>
 </ul>
+<h2 id="turning-borrowed-endpoints-into-boundary-attachments-route">Turning borrowed endpoints into boundary attachments: <code>route()</code></h2>
+<p>A position via hands back the referent's <em>center</em> in pixels. For a node-link edge you usually
+want the endpoint on the node's <strong>boundary</strong> instead — the arrowhead should meet the circle, not
+bury itself in the middle. <code>route()</code> is the idiomatic layout for that: it owns the two endpoint
+borrows and outputs the final clipped endpoints.</p>
+<pre data-lang="js"><code class="language-js">v.link(&quot;edges&quot;, {
+  ...route({ src: nodes.via(eq(&quot;edges.src&quot;, &quot;nodes.id&quot;)),
+             dst: nodes.via(eq(&quot;edges.dst&quot;, &quot;nodes.id&quot;)) }).pick(&quot;x1&quot;, &quot;y1&quot;, &quot;x2&quot;, &quot;y2&quot;),
+  stroke: &quot;#999&quot;,
+});
+</code></pre>
+<p>Pass the endpoint via <em>handles</em> directly (not <code>.pick()</code>ed), pick all four channels, and each
+endpoint lands on the referent's boundary nearest the far end — a <code>dot</code> clips on its circle, a
+<code>rect</code>/<code>bar</code>/<code>image</code> on its rectangle edge. This replaces manually resolving a center (the old
+<code>{ resolve: { cx: { fn: 'avg', arg: expr</code>f.x + w/2<code> } } }</code> boilerplate): <code>route()</code> derives the
+center from the box edges <em>and</em> clips to the true boundary in one step. <code>arrow</code> composes the same
+way — its head then lands on the target boundary. <code>route()</code> is post-affine and segment-only, so
+it does not apply to curved <code>bezier</code> links yet.</p>
 
     </article>
   </main>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>vector · DVL</title>
+  <title>bezier · DVL</title>
   <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
   <link rel="stylesheet" href="../assets/styles.css">
@@ -118,7 +118,7 @@
       
         
         
-        <li><a href="../marks/bezier.html">bezier</a></li>
+        <li class="active"><a href="../marks/bezier.html">bezier</a></li>
         
       
         
@@ -178,7 +178,7 @@
       
         
         
-        <li class="active"><a href="../marks/vector.html">vector</a></li>
+        <li><a href="../marks/vector.html">vector</a></li>
         
       
       </ul>
@@ -357,32 +357,38 @@
 
   <main class="content">
     <article class="markdown-section">
-      <h1 id="vector">vector</h1>
-<p>The <strong>vector</strong> mark draws a stroked segment from an anchor <code>(x, y)</code> given a <code>length</code> (px) and an
-<code>angle</code> (radians, <code>0</code> = +x, increasing clockwise in screen space). Where <code>arrow</code>/<code>link</code> take two
-endpoints, a vector takes a POLAR delta — the natural encoding for a flow field, wind barbs, a
-gradient, or any per-point direction+magnitude. One row → one segment.</p>
-<pre data-lang="dvl"><code class="lang-dvl">// A vector per penguin: anchored at (bill, mass), pointing at an angle derived from bill
-// depth, its length scaled from flipper length.
-const flow = db.derive(&quot;flow&quot;, `
-  SELECT bill_length_mm AS x, body_mass_g AS y,
-         (bill_depth_mm - 17) * 0.4 AS angle,
-         (flipper_length_mm - 170) * 0.6 AS length
-  FROM penguins`);
-const v = canvas(640, 460);
-v.vector(flow, {
-  x: linear(&quot;x&quot;), y: linear(&quot;y&quot;),
-  length: px(&quot;length&quot;), angle: field(&quot;angle&quot;),
-  stroke: &quot;#4e79a7&quot;,
-}).axis(&quot;x&quot;).axis(&quot;y&quot;);
+      <h1 id="bezier">bezier</h1>
+<p>The <strong>bezier</strong> mark is <a href="./link.html">link</a>'s curved sibling: one cubic Bézier per row from
+<code>(x1, y1)</code> to <code>(x2, y2)</code>. It carries link's exact endpoint contract — endpoints are almost always
+<strong>borrowed</strong> from other plots with <code>via()</code> — and adds the curve's shape on top: a <code>curvature</code>
+bend, or explicit control points. Reach for it where straight edges overlap or double back —
+node-link diagrams with reciprocal edges, arc diagrams, flow maps.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
+const np = v.dot(&quot;members&quot;, { ...force(&quot;follows&quot;).pick(&quot;x&quot;, &quot;y&quot;), r: 6, fill: ordinal(&quot;community&quot;) });
+v.bezier(&quot;follows&quot;, {
+  ...np.via(eq(&quot;follows.src&quot;, &quot;members.id&quot;)).pick({ x1: &quot;x&quot;, y1: &quot;y&quot; }),
+  ...np.via(eq(&quot;follows.dst&quot;, &quot;members.id&quot;)).pick({ x2: &quot;x&quot;, y2: &quot;y&quot; }),
+  curvature: 0.3,
+  stroke: &quot;#b6bdc9&quot;,
+});
 return v;
 </code></pre>
-<p>A scatter-shaped field where each point emits a short stroke whose direction and length vary with
-the bird's other measurements.</p>
+<p>A force-placed node-link diagram whose edges bow 0.3 of their length to the side — reciprocal
+edges (<code>a→b</code> and <code>b→a</code>) bow to opposite sides automatically, because curvature is signed by the
+segment's direction.</p>
 <h2 id="options">Options</h2>
-<p><code>vector</code> draws <code>pen.line(x, y, x + length·cos(angle), y + length·sin(angle))</code>. The anchor is
-affine (bind a scale, layout, or pixel literal); <code>length</code> is a pixel magnitude and <code>angle</code> is a
-plain number in radians.</p>
+<p><code>bezier</code> draws <code>M x1,y1 C cx1,cy1 cx2,cy2 x2,y2</code> — stroke-only (fill defaults to <code>none</code>, like
+<code>line</code>/<code>path</code>). If <code>x2</code>/<code>y2</code> are omitted the chord is zero-length and nothing is drawn. The two
+control points come from ONE of:</p>
+<ul>
+<li><strong><code>curvature</code></strong> (the default path): a signed perpendicular bow as a <strong>fraction of the chord
+length</strong>. The controls sit at ⅓ and ⅔ along the chord, offset <code>curvature × chord</code> to the
+normal side; the curve's peak deviation is ≈ ¾ of that. <code>0</code> is a straight segment; negative
+bends the other way; the sign flips with the segment direction, so reciprocal edges separate.</li>
+<li><strong><code>cx1</code>/<code>cy1</code>/<code>cx2</code>/<code>cy2</code></strong>: explicit control points, ordinary <strong>positional</strong> channels — scale
+bindings, layout outputs, or <code>via()</code> borrows, placed by the frame affine like any endpoint.
+When <strong>all four</strong> are bound they win over <code>curvature</code> (edge bundling, flow maps).</li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -394,40 +400,58 @@ plain number in radians.</p>
 </thead>
 <tbody>
 <tr>
-<td><code>x</code></td>
+<td><code>x1</code></td>
 <td>positional-x</td>
 <td>—</td>
-<td>anchor x</td>
+<td>start x</td>
 </tr>
 <tr>
-<td><code>y</code></td>
+<td><code>y1</code></td>
 <td>positional-y</td>
 <td>—</td>
-<td>anchor y</td>
+<td>start y</td>
 </tr>
 <tr>
-<td><code>length</code></td>
-<td>pixel</td>
-<td>—</td>
-<td>segment length in px</td>
+<td><code>x2</code></td>
+<td>positional-x</td>
+<td><code>x1</code></td>
+<td>end x (missing ⇒ degenerate, not drawn)</td>
 </tr>
 <tr>
-<td><code>angle</code></td>
+<td><code>y2</code></td>
+<td>positional-y</td>
+<td><code>y1</code></td>
+<td>end y</td>
+</tr>
+<tr>
+<td><code>curvature</code></td>
 <td>number</td>
-<td>—</td>
-<td>direction in radians (<code>0</code> = +x, clockwise)</td>
+<td><code>0.25</code></td>
+<td>signed bow, fraction of chord length</td>
+</tr>
+<tr>
+<td><code>cx1</code>, <code>cy1</code></td>
+<td>positional</td>
+<td>derived</td>
+<td>first control point (with <code>cx2</code>/<code>cy2</code>, overrides <code>curvature</code>)</td>
+</tr>
+<tr>
+<td><code>cx2</code>, <code>cy2</code></td>
+<td>positional</td>
+<td>derived</td>
+<td>second control point</td>
 </tr>
 <tr>
 <td><code>stroke</code></td>
 <td>color</td>
 <td>—</td>
-<td>line colour</td>
+<td>curve colour (scale binding or literal)</td>
 </tr>
 <tr>
 <td><code>strokeWidth</code></td>
 <td>pixel</td>
 <td>1</td>
-<td>line thickness</td>
+<td>curve thickness in px</td>
 </tr>
 <tr>
 <td><code>strokeDasharray</code></td>
@@ -451,66 +475,81 @@ plain number in radians.</p>
 <td><code>title</code></td>
 <td>text</td>
 <td>—</td>
-<td>per-vector hover tooltip</td>
+<td>per-curve hover tooltip</td>
 </tr>
 </tbody>
 </table>
-<p><code>length</code> is PIXELS, not data units — it does not pass through a positional scale, so vectors keep
-their size regardless of the domain. There is no head; compose with <code>arrow</code> (angle → endpoints)
-if you need one.</p>
 <h2 id="examples">Examples</h2>
-<p><strong>A uniform-direction field</strong> — a fixed-angle, fixed-length quill at every data point.</p>
-<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
-v.vector(&quot;penguins&quot;, {
-  x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;),
-  length: 12, angle: field(&quot;bill_depth_mm&quot;),   // radians ≈ bill_depth (a spread of directions)
-  stroke: &quot;#59a14f&quot;, strokeOpacity: 0.7,
-}).axis(&quot;x&quot;).axis(&quot;y&quot;);
-return v;
-</code></pre>
-<p><strong>Magnitude-encoded</strong> — length carries a measure while a categorical fill (stroke) reads species.</p>
-<pre data-lang="dvl"><code class="lang-dvl">const flow = db.derive(&quot;flow&quot;, `
-  SELECT bill_length_mm AS x, body_mass_g AS y, species,
-         atan2(bill_depth_mm - 17, 5) AS angle,
-         (body_mass_g - 3000) / 60 AS length
-  FROM penguins`);
-const v = canvas(640, 460);
-v.vector(flow, {
-  x: linear(&quot;x&quot;), y: linear(&quot;y&quot;),
-  length: px(&quot;length&quot;), angle: field(&quot;angle&quot;),
-  stroke: ordinal(&quot;species&quot;), strokeWidth: 1.5,
-}).axis(&quot;x&quot;).axis(&quot;y&quot;);
-return v;
-</code></pre>
-<p><strong>A polar clock face</strong> — vectors from a shared center, angle swept over a category index.</p>
-<pre data-lang="dvl"><code class="lang-dvl">const spokes = db.derive(&quot;spokes&quot;, `
-  SELECT category, row_number() OVER () * 0.9 AS angle
-  FROM (SELECT DISTINCT category FROM products)`);
-const v = canvas(400, 400);
-v.vector(spokes, {
-  x: px(200), y: px(200), length: 140,
-  angle: field(&quot;angle&quot;),
-  stroke: ordinal(&quot;category&quot;), strokeWidth: 3,
+<p><strong>Arc diagram.</strong> Nodes on a line; every edge is a semicircle-ish arc above it. One fixed y, so
+each chord is horizontal and <code>curvature</code> lifts every arc the same way.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(740, 300);
+const np = v.dot(&quot;members&quot;, { x: point(&quot;id&quot;), y: px(240), r: 4, fill: ordinal(&quot;community&quot;) });
+v.bezier(&quot;follows&quot;, {
+  ...np.via(eq(&quot;follows.src&quot;, &quot;members.id&quot;)).pick({ x1: &quot;x&quot;, y1: &quot;y&quot; }),
+  ...np.via(eq(&quot;follows.dst&quot;, &quot;members.id&quot;)).pick({ x2: &quot;x&quot;, y2: &quot;y&quot; }),
+  curvature: 0.5,
+  stroke: ordinal(&quot;src&quot;), strokeOpacity: 0.5,   // color each arc by its source node (a column of `follows`)
 });
 return v;
 </code></pre>
-<p><strong>Gradient glyphs on a grid</strong> — anchor on a band/point grid, direction from a computed slope.</p>
-<pre data-lang="dvl"><code class="lang-dvl">const grid = db.derive(&quot;grid&quot;, `
-  SELECT x, y, atan2(y - 3, x - 3) AS angle FROM
-  (SELECT g1.i AS x, g2.i AS y FROM range(0,6) g1(i), range(0,6) g2(i))`);
-const v = canvas(420, 420);
-const gx = point(), gy = point();   // deferred point scales for the grid axes
-v.vector(grid, {
-  x: gx(&quot;x&quot;), y: gy(&quot;y&quot;), length: 18, angle: field(&quot;angle&quot;),
-  stroke: &quot;#4e79a7&quot;,
-}).axis(&quot;x&quot;).axis(&quot;y&quot;);
+<p><strong>Boundary attachment + reciprocal separation.</strong> <code>bezier</code> composes with the
+<a href="../layouts/force.html"><code>route()</code></a> layout exactly like <code>link</code>: route owns the two endpoint borrows,
+clips each to its node's boundary (a dot's circle, a rect's edge), and hands the clipped
+<code>x1,y1,x2,y2</code> to the curve — which then bows from the boundary points. Reciprocal edges (<code>a→b</code>
+and <code>b→a</code>) still separate automatically, because signed <code>curvature</code> flips with the reversed chord
+direction. Options ride route's second argument: <code>pad</code> stands the endpoints a few px further off
+the boundary, <code>shape</code>/<code>shape1</code>/<code>shape2</code> override the metric (default = the referent mark's
+declared boundary — ellipse for dots, box for rects).</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
+const np = v.dot(&quot;members&quot;, { ...force(&quot;follows&quot;).pick(&quot;x&quot;, &quot;y&quot;), r: 6, fill: &quot;#4e79a7&quot; });
+v.bezier(&quot;follows&quot;, {
+  ...route({ src: np.via(eq(&quot;follows.src&quot;, &quot;members.id&quot;)),
+             dst: np.via(eq(&quot;follows.dst&quot;, &quot;members.id&quot;)) }, { pad: 2 }).pick(&quot;x1&quot;, &quot;y1&quot;, &quot;x2&quot;, &quot;y2&quot;),
+  stroke: &quot;#999&quot;, strokeWidth: 1.5,
+});
+return v;
+</code></pre>
+<p><strong>Explicit control points — a hand-shaped flow.</strong> Bind the controls to data (or literals): here
+every curve leaves its source horizontally and enters its target horizontally, Sankey-style. The
+aligned column x's are pixel literals; the varying y's ride one <code>linear</code> scale per side (reused on
+the control point so it shares the endpoint's height — a flat departure/arrival).</p>
+<pre data-lang="dvl"><code class="lang-dvl">const flows = db.derive(&quot;flows&quot;, `
+  WITH agg AS (SELECT island, species, count(*) AS n FROM penguins GROUP BY 1, 2)
+  SELECT island, species, n,
+         dense_rank() OVER (ORDER BY island)  AS row_from,
+         dense_rank() OVER (ORDER BY species) AS row_to
+  FROM agg`);
+const v = canvas(640, 460);
+const yf = linear(&quot;row_from&quot;), yt = linear(&quot;row_to&quot;);
+v.bezier(flows, {
+  x1: px(100), y1: yf,  x2: px(540), y2: yt,          // aligned columns: x is a pixel literal
+  cx1: px(320), cy1: yf, cx2: px(320), cy2: yt,        // controls at mid-x, each level with its endpoint
+  stroke: ordinal(&quot;island&quot;), strokeWidth: px(&quot;n&quot;), strokeOpacity: 0.6,  // ribbon per island, width = count
+});
+return v;
+</code></pre>
+<p><strong>Data-driven bend.</strong> <code>curvature</code> is an ordinary number channel — bind a column to bend heavier
+flows harder.</p>
+<pre data-lang="dvl"><code class="lang-dvl">// synthesize a per-edge weight (follows carries only src/dst) → a signed bend in [-0.5, 0.5]
+const edges = db.derive(&quot;wedges&quot;, `SELECT *, ((src * 7 + dst) % 11) / 10.0 - 0.5 AS weight FROM follows`);
+const v = canvas(640, 460);
+const np = v.dot(&quot;members&quot;, { ...force(&quot;follows&quot;).pick(&quot;x&quot;, &quot;y&quot;), r: 6, fill: &quot;#4e79a7&quot; });
+v.bezier(edges, {
+  ...np.via(eq(&quot;wedges.src&quot;, &quot;members.id&quot;)).pick({ x1: &quot;x&quot;, y1: &quot;y&quot; }),
+  ...np.via(eq(&quot;wedges.dst&quot;, &quot;members.id&quot;)).pick({ x2: &quot;x&quot;, y2: &quot;y&quot; }),
+  curvature: field(&quot;weight&quot;),
+  stroke: &quot;#999&quot;,
+});
 return v;
 </code></pre>
 <h2 id="see-also">See also</h2>
 <ul>
-<li><a href="./arrow.html">arrow</a> — direction as two endpoints, with a head.</li>
-<li><a href="./link.html">link</a> / <a href="./rule.html">rule</a> — undirected / axis-aligned segments.</li>
-<li><a href="./tick.html">tick</a> — a short AXIS-oriented stroke (a special-cased vector).</li>
+<li><a href="./link.html">link</a> — the straight sibling; same endpoint channels and <code>via()</code> idiom. Both marks
+get boundary attachment through <code>route()</code>: it clips each endpoint to the node's edge, then link
+draws the segment and bezier bows the curve from those clipped points.</li>
+<li><a href="./arrow.html">arrow</a> — a directed straight connector with a head.</li>
+<li><a href="./connect.html">connect</a> — successive points within a group, via a LEAD window.</li>
+<li><a href="../layouts/force.html">force</a> — the node placement curved edges usually connect.</li>
 </ul>
 
     </article>

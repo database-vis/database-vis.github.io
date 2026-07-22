@@ -118,6 +118,11 @@
       
         
         
+        <li><a href="../marks/bezier.html">bezier</a></li>
+        
+      
+        
+        
         <li><a href="../marks/cell.html">cell</a></li>
         
       
@@ -227,6 +232,9 @@
             <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
           
             
+            <li><a href="../layouts/dag.html">dag</a></li>
+          
+            
             <li><a href="../layouts/force.html">force</a></li>
           
             
@@ -242,6 +250,9 @@
           
             
             <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/route.html">route</a></li>
           
             
             <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
@@ -357,8 +368,8 @@ and JS.</p>
 <pre data-lang="dvl"><code class="lang-dvl">const bySpecies = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;], { n: count() });
 const v = canvas(380, 120);
 const bands = pitchX(&quot;species&quot;, { pitch: 96, gap: 12, pad: 16 });
-v.rect(bySpecies, { ...bands.pick(&quot;x&quot;, &quot;w&quot;), y: 16, h: 22, fill: ordinal(&quot;species&quot;) });
-v.text(bySpecies, { ...bands.pick(&quot;x&quot;, &quot;w&quot;), y: 58, text: field(&quot;species&quot;),
+v.rect(bySpecies, { ...bands.pick(&quot;x&quot;, &quot;w&quot;), y: px(16), h: 22, fill: ordinal(&quot;species&quot;) });
+v.text(bySpecies, { ...bands.pick(&quot;x&quot;, &quot;w&quot;), y: px(58), text: field(&quot;species&quot;),
                     fill: &quot;#c5cbe0&quot;, anchor: &quot;start&quot; });
 return v;
 </code></pre>

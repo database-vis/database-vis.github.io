@@ -118,6 +118,11 @@
       
         
         
+        <li><a href="../marks/bezier.html">bezier</a></li>
+        
+      
+        
+        
         <li><a href="../marks/cell.html">cell</a></li>
         
       
@@ -227,6 +232,9 @@
             <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
           
             
+            <li><a href="../layouts/dag.html">dag</a></li>
+          
+            
             <li><a href="../layouts/force.html">force</a></li>
           
             
@@ -242,6 +250,9 @@
           
             
             <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/route.html">route</a></li>
           
             
             <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
@@ -458,9 +469,19 @@ is orthogonal — a data reduction over a join, not a placement stage in that lo
 <td>force-directed positions; takes an edges table (<code>force(&quot;edges&quot;)</code> — endpoint columns come from the declared join, or an <code>on</code> override, never a name convention) — <strong>dual-substrate</strong>: seeded d3-force in JS, or a recursive in-database simulation (<code>WITH RECURSIVE … USING KEY</code>); same contract (normalized, deterministic per substrate), different exact coordinates</td>
 </tr>
 <tr>
+<td><a id="dag"></a><a href="dag.html"><strong>dag</strong></a></td>
+<td>x, y</td>
+<td>layered DAG (Sugiyama-lite: longest-path layers, one barycenter ordering sweep, centered rows); takes an edges table like <code>force</code> — js-only; the algorithm behind the playground's compute-graph debugger</td>
+</tr>
+<tr>
 <td><a id="fittext"></a><a href="fitText.html"><strong>fitText</strong></a></td>
 <td>fontSize, rotate, lines</td>
 <td>fits text into boxes — runs <em>after</em> placement (a refine-class layout). <strong>Inputs are inferred from the mark's channels</strong>: a bare <code>fitText()</code> sizes exactly the string the mark draws (its <code>text</code> channel, literal or column) against its <code>w</code>/<code>h</code> box — name an input only to override (<code>{ text: 'other_col' }</code>). <strong>Defaults do the whole job</strong>: each label solves against its own box, rotation is tried (−90° when vertical fits larger), and the size is uncapped — the box itself bounds the solve (&quot;as big as fits&quot;). Opt-outs mix into the same bag (input and option keys are disjoint): <code>shared: true</code> (ONE size across all labels — uniform typography), <code>rotate: false</code>, a finite <code>maxFontSize</code> ceiling, <code>minFontSize</code>, <code>padding</code>, <code>wrap</code></td>
+</tr>
+<tr>
+<td><a id="route"></a><a href="route.html"><strong>route</strong></a></td>
+<td>x1, y1, x2, y2</td>
+<td>boundary attach for edge marks — runs <em>after</em> placement (a refine-class layout). Takes the two endpoint <code>via()</code> handles (<code>route({ src, dst })</code>) and rewrites each endpoint from its node's center onto the node's <strong>boundary</strong> nearest the far end (a dot's circle, a rect's edge; centers derived from box edges, so the anchor convention never skews the clip). Options: <code>pad</code> (px standoff off the boundary), <code>shape</code>/<code>shape1</code>/<code>shape2</code> (metric override — default is the referent mark's boundary). Composes with <code>link</code>, <code>arrow</code>, and <code>bezier</code>; a boxless referent degrades that endpoint to its center</td>
 </tr>
 <tr>
 <td><a href="grid-stack.html"><strong>grid-stack</strong></a></td>

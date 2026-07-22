@@ -118,6 +118,11 @@
       
         
         
+        <li><a href="../marks/bezier.html">bezier</a></li>
+        
+      
+        
+        
         <li class="active"><a href="../marks/cell.html">cell</a></li>
         
       
@@ -227,6 +232,9 @@
             <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
           
             
+            <li><a href="../layouts/dag.html">dag</a></li>
+          
+            
             <li><a href="../layouts/force.html">force</a></li>
           
             
@@ -242,6 +250,9 @@
           
             
             <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/route.html">route</a></li>
           
             
             <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
@@ -347,26 +358,25 @@
   <main class="content">
     <article class="markdown-section">
       <h1 id="cell">cell</h1>
-<p>The <code>cell</code> mark emits one <code>&lt;rect&gt;</code> per row, but — unlike <a href="./rect.html">rect</a>/<a href="./bar.html">bar</a> — it has
-<strong>no size channels</strong>. It carries only <code>x</code>, <code>y</code>, and the paint channels; its box extent comes from
-the frame it sits in (a container's cell, or a positional layout). It is the heatmap-tile mark
-(Observable Plot's <code>cell</code>): position it categorically, paint it by a value. It is also
-<strong>container-eligible</strong>, so a cell's box can host a nested plot.</p>
+<p>The <code>cell</code> mark emits one <code>&lt;rect&gt;</code> per row: a <strong>heatmap tile</strong> that fills its grid slot (Observable
+Plot's <code>cell</code>). Position it categorically with a band scale on each axis and it takes its width and
+height from those bands — <code>bandX</code> gives <code>x</code>/<code>w</code>, <code>bandY</code> gives <code>y</code>/<code>h</code> — then <code>fill</code> paints it by a
+value. It is <strong>container-eligible</strong>, so a cell's box can also host a nested plot.</p>
 <pre data-lang="dvl"><code class="lang-dvl">const counts = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;, &quot;island&quot;], { n: count() });
 const v = canvas(560, 420);
 v.cell(counts, {
-  ...bandX(&quot;species&quot;).pick(&quot;x&quot;),
-  y: point(&quot;island&quot;),
+  ...bandX(&quot;species&quot;).pick(&quot;x&quot;, &quot;w&quot;),
+  ...bandY(&quot;island&quot;).pick(&quot;y&quot;, &quot;h&quot;),
   fill: ordinal(&quot;species&quot;),
 });
 return v;
 </code></pre>
-<p>A species × island grid: <code>bandX</code> supplies the x-extent (a tile fills each band slot), <code>point</code>
-evenly spaces the islands down the y axis, and <code>fill</code> paints each tile.</p>
+<p>A species × island grid: each band supplies both a position and an extent, so every tile fills its
+slot; <code>fill</code> paints it.</p>
 <h2 id="options">Options</h2>
-<p><code>cell</code> is deliberately minimal — no <code>w</code>, <code>h</code>, <code>x2</code>, or <code>y2</code>. Give it a position and a paint; the box
-comes from the surrounding frame. Bare strings are literals; use <code>field(...)</code> or a scale to bind a
-column.</p>
+<p><code>cell</code> fills the bands it is placed in: bind <code>bandX().pick(&quot;x&quot;,&quot;w&quot;)</code> and <code>bandY().pick(&quot;y&quot;,&quot;h&quot;)</code> (or
+give explicit pixel <code>w</code>/<code>h</code>). Unbound <code>w</code>/<code>h</code> are <code>0</code> — a tile with no band and no size is invisible.
+Bare strings are literals; use <code>field(...)</code> or a scale to bind a column.</p>
 <table>
 <thead>
 <tr>
@@ -388,6 +398,18 @@ column.</p>
 <td>positional-y</td>
 <td>—</td>
 <td>row position</td>
+</tr>
+<tr>
+<td><code>w</code></td>
+<td>pixel</td>
+<td><code>0</code></td>
+<td>tile width (from <code>bandX</code>'s <code>w</code>, or a pixel literal)</td>
+</tr>
+<tr>
+<td><code>h</code></td>
+<td>pixel</td>
+<td><code>0</code></td>
+<td>tile height (from <code>bandY</code>'s <code>h</code>, or a pixel literal)</td>
 </tr>
 <tr>
 <td><code>fill</code></td>
@@ -432,6 +454,12 @@ column.</p>
 <td>outline opacity</td>
 </tr>
 <tr>
+<td><code>anchor</code></td>
+<td>shape</td>
+<td><code>topleft</code></td>
+<td>box reference point (rarely set — the frame supplies the box corner)</td>
+</tr>
+<tr>
 <td><code>title</code></td>
 <td>text</td>
 <td>—</td>
@@ -439,16 +467,16 @@ column.</p>
 </tr>
 </tbody>
 </table>
-<p>Only <code>strokeWidth</code> is a pixel channel. For an explicitly <em>sized</em> box (offset <code>w</code>/<code>h</code> or interval
-<code>x2</code>/<code>y2</code>), use <code>rect</code>/<code>bar</code> instead.</p>
+<p><code>w</code>, <code>h</code>, and <code>strokeWidth</code> are pixel channels (<code>w</code>→x, <code>h</code>→y). For the interval form (<code>x</code>/<code>x2</code>,
+<code>y</code>/<code>y2</code>) use <code>rect</code>/<code>bar</code>.</p>
 <h2 id="examples">Examples</h2>
 <p><strong>Heatmap coloured by a continuous measure.</strong> <code>color(...)</code> is a 256-step continuous ramp; ask the
 fill channel for a legend to read the scale.</p>
 <pre data-lang="dvl"><code class="lang-dvl">const counts = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;, &quot;island&quot;], { n: count() });
 const v = canvas(560, 420);
 v.cell(counts, {
-  ...bandX(&quot;species&quot;).pick(&quot;x&quot;),
-  y: point(&quot;island&quot;),
+  ...bandX(&quot;species&quot;).pick(&quot;x&quot;, &quot;w&quot;),
+  ...bandY(&quot;island&quot;).pick(&quot;y&quot;, &quot;h&quot;),
   fill: color(&quot;n&quot;),
 }).axis(&quot;x&quot;).axis(&quot;y&quot;).legend(&quot;fill&quot;);
 return v;
@@ -458,8 +486,8 @@ between adjacent tiles.</p>
 <pre data-lang="dvl"><code class="lang-dvl">const counts = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;, &quot;island&quot;], { n: count() });
 const v = canvas(560, 420);
 v.cell(counts, {
-  ...bandX(&quot;species&quot;, { paddingInner: 0.05 }).pick(&quot;x&quot;),
-  y: point(&quot;island&quot;, { padding: 0.5 }),
+  ...bandX(&quot;species&quot;, { paddingInner: 0.05 }).pick(&quot;x&quot;, &quot;w&quot;),
+  ...bandY(&quot;island&quot;, { paddingInner: 0.05 }).pick(&quot;y&quot;, &quot;h&quot;),
   fill: color(&quot;n&quot;),
 });
 return v;
@@ -471,19 +499,18 @@ band axis, one measure on fill. The measure is modelled inline with a <code>roll
   &quot;category&quot;, { amount: sum({ sql: &quot;qty * price&quot; }) });
 const v = canvas(560, 200);
 v.cell(revenue, {
-  ...bandX(&quot;category&quot;, { paddingInner: 0.05 }).pick(&quot;x&quot;),
-  y: 40,
+  ...bandX(&quot;category&quot;, { paddingInner: 0.05 }).pick(&quot;x&quot;, &quot;w&quot;),
+  y: px(40), h: 120,           // a single strip: band width from x, an explicit pixel height
   fill: color(&quot;amount&quot;),
 }).axis(&quot;x&quot;).legend(&quot;fill&quot;);
 return v;
 </code></pre>
-<p><strong>Container — a box hosting a nested plot.</strong> Nesting needs a host with a real box, so the
-container carries width and height: <code>bandX</code> gives the x-extent (<code>x</code>,<code>w</code>) and explicit <code>y</code>/<code>h</code> give
-the vertical extent (<code>cell</code>, having no <code>w</code>/<code>h</code>, is a leaf tile — use <code>rect</code> when a tile must host a
-child pipeline).</p>
+<p><strong>Container — a box hosting a nested plot.</strong> A host needs a real box, so it carries width and
+height: <code>bandX</code> gives the x-extent (<code>x</code>,<code>w</code>) and explicit <code>y</code>/<code>h</code> give the vertical extent. <code>rect</code>
+and <code>cell</code> are both container-eligible; <code>rect</code> is the idiomatic host for a facet grid.</p>
 <pre data-lang="dvl"><code class="lang-dvl">const species = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;], {});
 const v = canvas(760, 300);
-v.rect(species, { ...bandX(&quot;species&quot;, { paddingInner: 0.05 }).pick(&quot;x&quot;, &quot;w&quot;), y: 20, h: 236, fill: &quot;#f5f6fa&quot; })
+v.rect(species, { ...bandX(&quot;species&quot;, { paddingInner: 0.05 }).pick(&quot;x&quot;, &quot;w&quot;), y: px(20), h: 236, fill: &quot;#f5f6fa&quot; })
  .dot(&quot;penguins&quot;,
    { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), fill: &quot;#4e79a7&quot; },
    { on: eq(&quot;species&quot;, &quot;species&quot;) });
@@ -493,7 +520,7 @@ return v;
 per tile so each panel's range is its own.</p>
 <pre data-lang="dvl"><code class="lang-dvl">const species = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;], {});
 const v = canvas(760, 300);
-v.rect(species, { ...bandX(&quot;species&quot;, { paddingInner: 0.05 }).pick(&quot;x&quot;, &quot;w&quot;), y: 20, h: 236, fill: &quot;#f5f6fa&quot; })
+v.rect(species, { ...bandX(&quot;species&quot;, { paddingInner: 0.05 }).pick(&quot;x&quot;, &quot;w&quot;), y: px(20), h: 236, fill: &quot;#f5f6fa&quot; })
  .dot(&quot;penguins&quot;,
    { x: linear(&quot;bill_length_mm&quot;, { shared: false }),
      y: linear(&quot;body_mass_g&quot;,    { shared: false }), fill: &quot;#59a14f&quot; },

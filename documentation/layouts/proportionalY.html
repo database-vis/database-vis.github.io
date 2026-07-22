@@ -118,6 +118,11 @@
       
         
         
+        <li><a href="../marks/bezier.html">bezier</a></li>
+        
+      
+        
+        
         <li><a href="../marks/cell.html">cell</a></li>
         
       
@@ -227,6 +232,9 @@
             <li class="active"><a href="../layouts/proportionalY.html">proportionalY</a></li>
           
             
+            <li><a href="../layouts/dag.html">dag</a></li>
+          
+            
             <li><a href="../layouts/force.html">force</a></li>
           
             
@@ -242,6 +250,9 @@
           
             
             <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/route.html">route</a></li>
           
             
             <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
@@ -358,7 +369,7 @@ of <a href="proportionalX.html">proportionalX</a> — a single-column percent st
 const v = canvas(200, 460);
 v.rect(revenue, {
   ...proportionalY('amount').pick('y', 'h'),
-  x: 40, w: 120,
+  x: px(40), w: 120,
   fill: ordinal('category'),
   stroke: '#fff',
 });
@@ -416,14 +427,14 @@ follows the input relation's order. No options bag.</p>
   db.table('products'), { left: 'product_id', right: 'id' },
   'category', { amount: sum({ sql: 'qty * price' }) });
 const v = canvas(200, 460);
-v.rect(revenue, { ...proportionalY('amount').pick('y', 'h'), x: 40, w: 120,
+v.rect(revenue, { ...proportionalY('amount').pick('y', 'h'), x: px(40), w: 120,
                   fill: ordinal('category'), stroke: '#fff' });
 return v;
 </code></pre>
 <p>Penguin counts per species as a proportional column — group, then size by count:</p>
 <pre data-lang="dvl"><code class="lang-dvl">const bySpecies = db.table('penguins').groupby(['species'], { n: count() });
 const v = canvas(160, 400);
-v.rect(bySpecies, { ...proportionalY('n').pick('y', 'h'), x: 40, w: 80,
+v.rect(bySpecies, { ...proportionalY('n').pick('y', 'h'), x: px(40), w: 80,
                     fill: ordinal('species'), stroke: '#fff' });
 return v;
 </code></pre>
@@ -432,12 +443,11 @@ return v;
   db.table('products'), { left: 'product_id', right: 'id' },
   'category', { amount: sum({ sql: 'qty * price' }) });
 const v = canvas(260, 460);
-const bars = v.rect(revenue, { ...proportionalY('amount').pick('y', 'h'), x: 40, w: 140,
+const bars = v.rect(revenue, { ...proportionalY('amount').pick('y', 'h'), x: px(40), w: 140,
                               fill: ordinal('category'), stroke: '#fff' });
-const center = { resolve: { cy: { fn: 'avg', arg: expr`f.y + f.h / 2` } } };
 v.text(revenue, {
-  ...bars.via(eq('category', 'category'), center).pick({ x: 'x', y: 'cy', w: 'w', h: 'h' }),
-  ...fitText().pick('fontSize'),
+  ...bars.via(eq('category', 'category')).pick({ x: 'x', y: 'y', w: 'w', h: 'h' }),
+  ...fitText(),
   text: field('category'), anchor: 'middle', baseline: 'middle', fill: '#fff',
 });
 return v;
@@ -449,9 +459,9 @@ column filled by its own <code>proportionalY</code>:</p>
   'category', { amount: sum({ sql: 'qty * price' }) });
 const panels = db.table('penguins').groupby(['species'], {});
 const v = canvas(600, 400);
-v.rect(panels, { ...eqX('species').pick('x', 'w'), y: 10, h: 380, fill: '#f5f6fa' })
+v.rect(panels, { ...eqX('species').pick('x', 'w'), y: px(10), h: 380, fill: '#f5f6fa' })
  .rect(revenue,
-   { ...proportionalY('amount').pick('y', 'h'), x: 8, w: 60, fill: ordinal('category'), stroke: '#fff' });
+  { ...proportionalY('amount').pick('y', 'h'), x: px(8), w: 60, fill: ordinal('category'), stroke: '#fff' });
 return v;
 </code></pre>
 <h2 id="see-also">See also</h2>

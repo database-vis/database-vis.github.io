@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>route · DVL</title>
+  <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="app-name" href="../index.html">DVL</a>
+    <nav class="sidebar-nav">
+    
+      <h2>Introduction</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../what-is-dvl.html">What is DVL?</a></li>
+        
+      
+        
+        
+        <li><a href="../getting-started.html">Getting started</a></li>
+        
+      
+        
+        
+        <li><a href="../architecture.html">Architecture</a></li>
+        
+      
+      </ul>
+    
+      <h2>Features</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#channels">Channels</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#scales">Scales</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#data">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        
+      
+      </ul>
+    
+      <h2>Marks</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../marks/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/area.html">area</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/arrow.html">arrow</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/bar.html">bar</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/bezier.html">bezier</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/cell.html">cell</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/connect.html">connect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/dot.html">dot</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/image.html">image</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/line.html">line</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/link.html">link</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/path.html">path</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rect.html">rect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rule.html">rule</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/text.html">text</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/tick.html">tick</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/vector.html">vector</a></li>
+        
+      
+      </ul>
+    
+      <h2>Layouts</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../layouts/README.html">Overview</a></li>
+        
+      
+        
+        <li><strong>Produce</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/bandX.html">bandX</a></li>
+          
+            
+            <li><a href="../layouts/bandY.html">bandY</a></li>
+          
+            
+            <li><a href="../layouts/barX.html">barX</a></li>
+          
+            
+            <li><a href="../layouts/barY.html">barY</a></li>
+          
+            
+            <li><a href="../layouts/stackX.html">stackX</a></li>
+          
+            
+            <li><a href="../layouts/stackY.html">stackY</a></li>
+          
+            
+            <li><a href="../layouts/pitchX.html">pitchX</a></li>
+          
+            
+            <li><a href="../layouts/pitchY.html">pitchY</a></li>
+          
+            
+            <li><a href="../layouts/eqX.html">eqX</a></li>
+          
+            
+            <li><a href="../layouts/eqY.html">eqY</a></li>
+          
+            
+            <li><a href="../layouts/proportionalX.html">proportionalX</a></li>
+          
+            
+            <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
+          
+            
+            <li><a href="../layouts/dag.html">dag</a></li>
+          
+            
+            <li><a href="../layouts/force.html">force</a></li>
+          
+            
+            <li><a href="../layouts/treemap.html">treemap</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Refine</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li class="active"><a href="../layouts/route.html">route</a></li>
+          
+            
+            <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Resolver</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/hull.html">hull</a></li>
+          
+          </ul>
+        </li>
+        
+      
+      </ul>
+    
+      <h2>Scales</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../scales/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/linear.html">linear</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/log.html">log</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/sqrt.html">sqrt</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/pow.html">pow</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/symlog.html">symlog</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/ordinal.html">ordinal</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/point.html">point</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/color.html">color</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/quantize.html">quantize</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/threshold.html">threshold</a></li>
+        
+      
+      </ul>
+    
+      <h2>Examples</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../examples/README.html">Gallery</a></li>
+        
+      
+      </ul>
+    
+    </nav>
+  </aside>
+
+  <header id="topbar">
+    <button class="sidebar-toggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+    <div class="topbar-spacer"></div>
+    <a class="github-link" href="https://github.com/cudbg/database-vis" target="_blank" rel="noopener" aria-label="GitHub repository">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+  </header>
+
+  <main class="content">
+    <article class="markdown-section">
+      <h1 id="route">route</h1>
+<p><code>route</code> is a <strong>refine layout</strong> for edge marks: it takes the two endpoint <code>via()</code> handles of a
+<code>link</code>, <code>arrow</code>, or <code>bezier</code>, and rewrites each endpoint from its node's <em>center</em> onto the node's
+<strong>boundary</strong> nearest the far end. A dot referent clips on its circle (exactly <code>r</code> from center); a
+<code>rect</code>/<code>bar</code>/<code>image</code> referent clips on its rectangle edge. Because centers are derived from the
+node's box edges, the anchor convention (a centered dot, a top-left rect) never skews the clip —
+the edge always meets the visible shape, never dives under it.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
+const nodes = v.dot(&quot;members&quot;, { ...force(&quot;follows&quot;).pick(&quot;x&quot;, &quot;y&quot;), r: 8, fill: ordinal(&quot;community&quot;) });
+v.link(&quot;follows&quot;, {
+  ...route({ src: nodes.via(eq(&quot;follows.src&quot;, &quot;members.id&quot;)),
+             dst: nodes.via(eq(&quot;follows.dst&quot;, &quot;members.id&quot;)) }).pick(&quot;x1&quot;, &quot;y1&quot;, &quot;x2&quot;, &quot;y2&quot;),
+  stroke: &quot;#b6bdc9&quot;,
+});
+return v;
+</code></pre>
+<p>A force node-link diagram whose edges stop exactly on each dot's circle instead of piercing to the
+center. Without <code>route</code>, the same two <code>via().pick()</code> borrows land the endpoints on the centers
+(the raw solved positions) — which is what you want when the nodes are point-sized, and what
+<code>route</code> degrades to when a referent has no box.</p>
+<h2 id="the-refine-model-how-route-gets-the-box">The refine model — how route gets the box</h2>
+<p>Like <a href="fitText.html"><code>fitText</code></a>, <code>route</code> runs <strong>after placement</strong>: it reads pixel positions, not data.
+But instead of picking columns off ONE mark, it owns the two endpoint borrows itself — you pass it
+the <code>src</code> and <code>dst</code> via handles, not <code>.pick()</code>ed channels:</p>
+<pre data-lang="js"><code class="language-js">route({ src: nodes.via(eq(&quot;follows.src&quot;, &quot;members.id&quot;)),
+        dst: nodes.via(eq(&quot;follows.dst&quot;, &quot;members.id&quot;)) }).pick(&quot;x1&quot;, &quot;y1&quot;, &quot;x2&quot;, &quot;y2&quot;)
+</code></pre>
+<p>Each handle expands into the referent's placed anchor <strong>plus its box edges</strong>, riding the same via
+join — so the box travels with the borrow, no separate query. <code>route</code> clips the ray from each box
+center toward the far endpoint at the point it exits the boundary, and emits the four endpoint
+channels. You MUST <code>.pick(&quot;x1&quot;, &quot;y1&quot;, &quot;x2&quot;, &quot;y2&quot;)</code> — all four — and spread them onto the edge mark.</p>
+<p>A referent with no full box (a dot with no <code>r</code> is still boxed by its default radius, but a mark
+with no size channels, or a raw-column endpoint) degrades that endpoint to its center — mixed
+edges clip only the boxed end, never producing <code>NaN</code> or an inverted segment.</p>
+<h2 id="options">Options</h2>
+<p><code>route(bag, options?)</code>. The <code>bag</code> carries <code>src</code>/<code>dst</code> (the via handles); <code>options</code> tunes the clip.</p>
+<h3 id="pick-outputs"><code>.pick(...)</code> outputs</h3>
+<table>
+<thead>
+<tr>
+<th>output</th>
+<th>space</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>x1</code>, <code>y1</code></td>
+<td><code>pixel(x|y)</code></td>
+<td>source endpoint, clipped to the src node's boundary</td>
+</tr>
+<tr>
+<td><code>x2</code>, <code>y2</code></td>
+<td><code>pixel(x|y)</code></td>
+<td>target endpoint, clipped to the dst node's boundary</td>
+</tr>
+</tbody>
+</table>
+<h3 id="options-bag">Options bag</h3>
+<table>
+<thead>
+<tr>
+<th>option</th>
+<th>type</th>
+<th>default</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>src</code></td>
+<td>via handle</td>
+<td>—</td>
+<td>the source node borrow (<code>nodes.via(eq(...))</code>) — required</td>
+</tr>
+<tr>
+<td><code>dst</code></td>
+<td>via handle</td>
+<td>—</td>
+<td>the target node borrow — required</td>
+</tr>
+<tr>
+<td><code>pad</code></td>
+<td>number</td>
+<td><code>0</code></td>
+<td>stand each clipped endpoint off the boundary by this many px along the segment (arrowhead breathing room, edge–node gap)</td>
+</tr>
+<tr>
+<td><code>shape</code></td>
+<td><code>&quot;box&quot;</code> | <code>&quot;ellipse&quot;</code></td>
+<td>the referent's</td>
+<td>override the boundary metric for BOTH ends</td>
+</tr>
+<tr>
+<td><code>shape1</code> / <code>shape2</code></td>
+<td><code>&quot;box&quot;</code> | <code>&quot;ellipse&quot;</code></td>
+<td>the referent's</td>
+<td>override just the src / dst end</td>
+</tr>
+</tbody>
+</table>
+<p>The metric defaults to the referent mark's declared boundary: <strong>ellipse</strong> (L2) for <code>dot</code>, <strong>box</strong>
+(L∞) for <code>rect</code>/<code>bar</code>/<code>image</code>. Override only when the shape lies (a square dot, a circular avatar
+in a rect).</p>
+<h2 id="examples">Examples</h2>
+<h3 id="rectangular-nodes">Rectangular nodes</h3>
+<p>Nodes with real width and height: <code>route</code> clips each edge to the rectangle edge nearest the far
+node. <code>anchor: &quot;center&quot;</code> centers each rect on its solved force position.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(680, 460);
+const nodes = v.rect(&quot;members&quot;, {
+  ...force(&quot;follows&quot;).pick(&quot;x&quot;, &quot;y&quot;),
+  w: 70, h: 34, anchor: &quot;center&quot;, fill: &quot;#eef2fb&quot;, stroke: ordinal(&quot;community&quot;), strokeWidth: 2,
+});
+v.link(&quot;follows&quot;, {
+  ...route({ src: nodes.via(eq(&quot;follows.src&quot;, &quot;members.id&quot;)),
+             dst: nodes.via(eq(&quot;follows.dst&quot;, &quot;members.id&quot;)) }).pick(&quot;x1&quot;, &quot;y1&quot;, &quot;x2&quot;, &quot;y2&quot;),
+  stroke: &quot;#b6bdc9&quot;,
+});
+return v;
+</code></pre>
+<p>Every connector terminates on a box edge — no line vanishes under a node. Add
+<a href="../marks/text.html"><code>text</code></a> labels borrowing the same rects to finish a boxed node-link diagram.</p>
+<h3 id="curved-edges-over-rect-nodes-bezier-route">Curved edges over rect nodes (bezier + route)</h3>
+<p><code>route</code> works with <a href="../marks/bezier.html"><code>bezier</code></a> exactly as with <code>link</code>: it clips the endpoints to
+the boundary, and the curve bows from those clipped points. Reciprocal edges separate because
+signed <code>curvature</code> flips with the chord direction. <code>pad: 3</code> opens a small gap between each curve
+and the box.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(680, 460);
+const nodes = v.rect(&quot;members&quot;, {
+  ...force(&quot;follows&quot;).pick(&quot;x&quot;, &quot;y&quot;),
+  w: 70, h: 34, anchor: &quot;center&quot;, fill: &quot;#eef2fb&quot;, stroke: ordinal(&quot;community&quot;), strokeWidth: 2,
+});
+v.bezier(&quot;follows&quot;, {
+  ...route({ src: nodes.via(eq(&quot;follows.src&quot;, &quot;members.id&quot;)),
+             dst: nodes.via(eq(&quot;follows.dst&quot;, &quot;members.id&quot;)) }, { pad: 3 }).pick(&quot;x1&quot;, &quot;y1&quot;, &quot;x2&quot;, &quot;y2&quot;),
+  curvature: 0.25, stroke: &quot;#8894ab&quot;, strokeWidth: 1.5,
+});
+return v;
+</code></pre>
+<h3 id="arrowheads-that-land-on-the-boundary">Arrowheads that land on the boundary</h3>
+<p>An <code>arrow</code> head is only useful when it stops at the node it points to. <code>route</code> puts the tip on the
+boundary; <code>pad</code> lifts it a couple px clear of the edge.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
+const nodes = v.dot(&quot;members&quot;, { ...force(&quot;follows&quot;).pick(&quot;x&quot;, &quot;y&quot;), r: 9, fill: ordinal(&quot;community&quot;) });
+v.arrow(&quot;follows&quot;, {
+  ...route({ src: nodes.via(eq(&quot;follows.src&quot;, &quot;members.id&quot;)),
+             dst: nodes.via(eq(&quot;follows.dst&quot;, &quot;members.id&quot;)) }, { pad: 2 }).pick(&quot;x1&quot;, &quot;y1&quot;, &quot;x2&quot;, &quot;y2&quot;),
+  headType: &quot;triangle&quot;, headSize: 8, stroke: &quot;#8894ab&quot;,
+});
+return v;
+</code></pre>
+<h3 id="padding-an-edgenode-gap">Padding: an edge–node gap</h3>
+<p><code>pad</code> stands both clipped ends off the boundary along the segment — a uniform gap between edges and
+nodes that reads as breathing room in dense graphs.</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
+const nodes = v.dot(&quot;members&quot;, { ...force(&quot;follows&quot;).pick(&quot;x&quot;, &quot;y&quot;), r: 10, fill: ordinal(&quot;community&quot;) });
+v.link(&quot;follows&quot;, {
+  ...route({ src: nodes.via(eq(&quot;follows.src&quot;, &quot;members.id&quot;)),
+             dst: nodes.via(eq(&quot;follows.dst&quot;, &quot;members.id&quot;)) }, { pad: 6 }).pick(&quot;x1&quot;, &quot;y1&quot;, &quot;x2&quot;, &quot;y2&quot;),
+  stroke: &quot;#b6bdc9&quot;, strokeWidth: 1.5,
+});
+return v;
+</code></pre>
+<h3 id="override-the-boundary-metric">Override the boundary metric</h3>
+<p>A <code>dot</code> clips as an ellipse by default. If you drew square markers with a dot's <code>r</code>, tell <code>route</code>
+to exit the L∞ box instead:</p>
+<pre data-lang="js"><code class="language-js">...route({ src, dst }, { shape: &quot;box&quot; }).pick(&quot;x1&quot;, &quot;y1&quot;, &quot;x2&quot;, &quot;y2&quot;),
+</code></pre>
+<p>Use <code>shape1</code> / <code>shape2</code> to override just one end (a boxed source into a circular target).</p>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="../marks/link.html">link</a> — the straight edge; <code>route</code> clips its endpoints to node boundaries</li>
+<li><a href="../marks/bezier.html">bezier</a> — the curved edge; same <code>route</code> composition, curve bows from the clipped points</li>
+<li><a href="../marks/arrow.html">arrow</a> — a directed edge whose head lands on the boundary via <code>route</code></li>
+<li><a href="force.html">force</a> / <a href="dag.html">dag</a> — the node placements <code>route</code>'s edges connect</li>
+<li><a href="fitText.html">fitText</a> — the other refine-class layout (reads placed pixels, emits channels)</li>
+</ul>
+
+    </article>
+  </main>
+
+  <script src="../assets/docs.js"></script>
+  <script src="../assets/dvl-example.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
+</body>
+</html>

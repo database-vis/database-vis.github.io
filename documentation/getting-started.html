@@ -118,6 +118,11 @@
       
         
         
+        <li><a href="marks/bezier.html">bezier</a></li>
+        
+      
+        
+        
         <li><a href="marks/cell.html">cell</a></li>
         
       
@@ -227,6 +232,9 @@
             <li><a href="layouts/proportionalY.html">proportionalY</a></li>
           
             
+            <li><a href="layouts/dag.html">dag</a></li>
+          
+            
             <li><a href="layouts/force.html">force</a></li>
           
             
@@ -242,6 +250,9 @@
           
             
             <li><a href="layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="layouts/route.html">route</a></li>
           
             
             <li><a href="layouts/grid-stack.html">grid-stack</a></li>
@@ -461,7 +472,7 @@ x-range equally among a table's rows; <code>eq</code> declares the parent↔chil
 <pre data-lang="js"><code class="language-js">import { eqX } from &quot;$lib/dvl/api/builder&quot;;
 import { eq } from &quot;$lib/dvl/ir/refs&quot;;
 
-v.rect(&quot;species&quot;, { ...eqX(&quot;species&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: 12, h: 236, fill: &quot;#f5f6fa&quot; })
+v.rect(&quot;species&quot;, { ...eqX(&quot;species&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: px(12), h: 236, fill: &quot;#f5f6fa&quot; })
  .dot(&quot;penguins&quot;,
       { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;) },
       { on: eq(&quot;species&quot;, &quot;species&quot;) });     // each panel shows its own species' rows
@@ -469,10 +480,13 @@ v.rect(&quot;species&quot;, { ...eqX(&quot;species&quot;).pick(&quot;x&quot;, &q
 <p>Scales are shared across panels by default; opt out per scale with
 <code>linear(&quot;col&quot;, { shared: false })</code> for per-panel domains. <code>.nest()</code> names the pattern when a
 panel hosts several layers:</p>
-<pre data-lang="js"><code class="language-js">const panel = v.rect(&quot;clusters&quot;, { ...eqX(&quot;cluster&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: 12, h: 330 })
+<pre data-lang="js"><code class="language-js">const panel = v.rect(&quot;clusters&quot;, { ...eqX(&quot;cluster&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: px(12), h: 330 })
   .nest(&quot;fnodes&quot;, { on: eq(&quot;cluster&quot;, &quot;cluster&quot;) });
 const dots = panel.dot({ ...force(&quot;fedges&quot;).pick(&quot;x&quot;, &quot;y&quot;), r: 6 });
-panel.link(&quot;fedges&quot;, { /* edges layer in the same panels */ });
+panel.link(&quot;fedges&quot;, {                        // edges layer in the same panels — route()
+  ...route({ src: dots.via(eq(&quot;fedges.src&quot;, &quot;fnodes.id&quot;)),   // attaches each end to a node
+             dst: dots.via(eq(&quot;fedges.dst&quot;, &quot;fnodes.id&quot;)) }).pick(&quot;x1&quot;, &quot;y1&quot;, &quot;x2&quot;, &quot;y2&quot;),
+});
 </code></pre>
 <p>For ad-hoc side-by-side plots without a driving table, see
 <a href="features/README.html#subplots">subplots</a>: <code>v.subplot()</code> / <code>v.subplots({...eqX(&quot;i&quot;).pick(&quot;x&quot;,&quot;w&quot;)})</code>.</p>
@@ -487,8 +501,11 @@ v.link(&quot;highlights&quot;, {
 });
 </code></pre>
 <p><code>via()</code> accepts multiple predicates for composite keys, and works into nested plots. Borrowed
-positions arrive in pixels and are not re-transformed. See
-<a href="features/README.html#cross-mark-and-cross-table-references">cross-mark references</a>.</p>
+positions arrive in pixels and are not re-transformed. For node-link edges, wrap the two
+endpoint vias in <code>route({ src, dst })</code> — that is how an edge attaches to each node's <em>boundary</em>
+(the circle or rect edge) instead of borrowing its raw center. See
+<a href="features/README.html#cross-mark-and-cross-table-references">cross-mark references</a> and
+<a href="features/via.html#turning-borrowed-endpoints-into-boundary-attachments-route">via → route()</a>.</p>
 <h2 id="rendering">Rendering</h2>
 <p><code>renderSpec</code> returns SVG. In the browser, insert it; in Node, rasterize with
 <code>render/png</code> (<code>@resvg/resvg-js</code>) or write the SVG to disk. To watch the engine work, pass a

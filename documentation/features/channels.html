@@ -118,6 +118,11 @@
       
         
         
+        <li><a href="../marks/bezier.html">bezier</a></li>
+        
+      
+        
+        
         <li><a href="../marks/cell.html">cell</a></li>
         
       
@@ -227,6 +232,9 @@
             <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
           
             
+            <li><a href="../layouts/dag.html">dag</a></li>
+          
+            
             <li><a href="../layouts/force.html">force</a></li>
           
             
@@ -242,6 +250,9 @@
           
             
             <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/route.html">route</a></li>
           
             
             <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
@@ -349,7 +360,7 @@
       <h1 id="channels">Channels</h1>
 <p>A <strong>channel</strong> is a named input to a mark — <code>x</code>, <code>y</code>, <code>x1</code>, <code>fill</code>, <code>r</code>, <code>text</code>, <code>dx</code>… Every mark
 declares which channels it accepts and each channel's <em>kind</em> (positional, pixel, color, shape,
-text, number — see <a href="marks/README.html">Marks</a>). What you <strong>bind</strong> to a channel is a value in one
+text, number — see <a href="../marks/README.html">Marks</a>). What you <strong>bind</strong> to a channel is a value in one
 small <strong>channel-value language</strong>. This page maps that language: the ways to specify a channel,
 what each one produces, and where and when it resolves.</p>
 <p>Whatever you write, the compiler lowers it to a single union — the <code>Expr</code> type in <code>ir/expr.ts</code>:</p>
@@ -418,10 +429,24 @@ broadcasts scalar over per-row.)</p>
 <tbody>
 <tr>
 <td><code>4</code>, <code>&quot;#4e79a7&quot;</code>, <code>true</code></td>
-<td>a <strong>literal</strong> constant. On a positional channel (<code>x</code>, <code>y</code>, <code>x1</code>…) a number is a <strong>pixel</strong>; elsewhere it is just the constant. A bare <strong>string is never a column</strong> — the <em>bare-string rule</em>.</td>
-<td><code>literal</code></td>
-<td>pixel <em>(positional)</em> / data</td>
+<td>a <strong>literal</strong> constant. Every channel declares what a bare value means: on a positional channel (<code>x</code>, <code>y</code>, <code>x1</code>…) a bare number is a <strong>data value</strong> (placed through the axis's scale, widening its domain — a scale must be bound on that axis); on a pixel-size channel (<code>r</code>, <code>w</code>, <code>h</code>, <code>dx</code>…) it is <strong>pixels</strong>; elsewhere it is just the constant. A bare <strong>string is never a column</strong> — the <em>bare-string rule</em>.</td>
+<td><code>literal</code> / scale expr</td>
+<td>data <em>(positional)</em> / pixel <em>(sizes)</em></td>
 <td>literal</td>
+</tr>
+<tr>
+<td><code>px(12)</code>, <code>px(&quot;c&quot;)</code></td>
+<td>the <strong>pixel wrapper</strong> — the explicit pixel spelling for any channel: <code>px(12)</code> is 12 screen pixels, <code>px(&quot;c&quot;)</code> reads column <code>c</code> as pixels; both skip the scale and the frame placement</td>
+<td><code>literal</code> / <code>local-column</code> <em>(pixel)</em></td>
+<td>pixel</td>
+<td>literal / data</td>
+</tr>
+<tr>
+<td><code>lit(0)</code></td>
+<td>the <strong>data wrapper</strong> — the explicit spelling of what a bare positional number means; useful when you want to be unambiguous</td>
+<td>scale expr</td>
+<td>data → pixel</td>
+<td>data</td>
 </tr>
 <tr>
 <td><code>field(&quot;c&quot;)</code></td>
@@ -488,7 +513,7 @@ broadcasts scalar over per-row.)</p>
 </tr>
 <tr>
 <td><code>px.x(&quot;c&quot;)</code>, <code>px.w(&quot;c&quot;)</code></td>
-<td><strong>precomputed geometry</strong> — a column read as a <em>pixel</em> coordinate/length, skipping the affine</td>
+<td><strong>axis-explicit pixel column readers</strong> — the form for <em>expression</em> positions, where types are checked before any channel is known; for channel bindings <code>px(&quot;c&quot;)</code> suffices</td>
 <td><code>local-column</code> <em>(pixel space)</em></td>
 <td>pixel</td>
 <td>data</td>
@@ -501,8 +526,10 @@ internal form you rarely author directly; they surface in axis internals and <co
 <h2 id="data-columns-and-constants">Data: columns and constants</h2>
 <p><code>field(&quot;c&quot;)</code> reads a column untransformed (data space, per-row). Bare literals are constants —
 and a <strong>bare string is the literal string</strong>, never a column: <code>text: &quot;island&quot;</code> labels every mark
-with the word <em>island</em>; <code>text: field(&quot;island&quot;)</code> reads the column. Positional literals (<code>x</code>, <code>y</code>,
-<code>r</code>, <code>dx</code>…) are pixels; <code>fill: &quot;#4e79a7&quot;</code> is the literal colour.</p>
+with the word <em>island</em>; <code>text: field(&quot;island&quot;)</code> reads the column. A bare number means what its
+channel declares: on positional channels (<code>x</code>, <code>y</code>, <code>x1</code>…) it is a <strong>data value</strong> through the
+axis's scale (<code>px(v)</code> for pixels); on pixel-size channels (<code>r</code>, <code>w</code>, <code>dx</code>…) it is pixels;
+<code>fill: &quot;#4e79a7&quot;</code> is the literal colour.</p>
 <pre data-lang="dvl"><code class="lang-dvl">// literal vs scale vs column: x/y are SCALE bindings; r: 4 and fill: '#4e79a7' are
 // LITERALS (a bare string is never a column read); the label reads a column with field().
 const v = canvas(640, 320);
@@ -516,7 +543,7 @@ return v;
 <code>linear(&quot;c&quot;)</code> fits to a column immediately; <code>const x = linear(); x(&quot;c&quot;)</code> is <em>deferred</em> and bound
 per channel — <strong>binding the same scale object twice declares &quot;the same quantity&quot;</strong>, so the
 domains union and the layers share a frame; <code>x(4000)</code> is a <strong>datum</strong>, a literal placed <em>in the
-scale's domain</em>. See <a href="scales/README.html">Scales</a> for the families and domain treatments.</p>
+scale's domain</em>. See <a href="../scales/README.html">Scales</a> for the families and domain treatments.</p>
 <pre data-lang="dvl"><code class="lang-dvl">// ONE scale object bound across two relations declares &quot;the same quantity&quot;: the domains
 // UNION and both layers share a frame — the species means land exactly on the cloud.
 const bySpecies = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;], { bill: avg(&quot;bill_length_mm&quot;), mass: avg(&quot;body_mass_g&quot;) });
@@ -530,7 +557,7 @@ return v;
 <h2 id="layout-outputs-arrangements-via-pick">Layout outputs: arrangements via <code>.pick()</code></h2>
 <p>A layout is an operator that computes an <em>arrangement</em> — usually <strong>multi-output</strong>. Spread its
 outputs into channels with <code>.pick()</code>; the values are solver-space pixels. See
-<a href="layouts/README.html">Layouts</a>.</p>
+<a href="../layouts/README.html">Layouts</a>.</p>
 <pre data-lang="dvl"><code class="lang-dvl">// multi-output layouts spread into channels with .pick(): bandX gives {x, w}, stackY {y, h}.
 const stacks = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;, &quot;island&quot;], { n: count() });
 const v = canvas(640, 340);
@@ -542,11 +569,11 @@ v.rect(stacks, {
 return v;
 </code></pre>
 <h2 id="via-borrowed-values">Via: borrowed values</h2>
-<p><code>via()</code> borrows values across a relational <a href="features/README.html#join-paths">join path</a>. The <strong>referent</strong>
+<p><code>via()</code> borrows values across a relational <a href="README.html#join-paths">join path</a>. The <strong>referent</strong>
 decides the space: a <strong>plot</strong> referent borrows <em>solved</em> channels → <strong>pixels</strong> (never re-placed);
 a <strong>table</strong> referent borrows <em>raw</em> columns → <strong>data</strong> (free to feed a scale). A join that can
 match several rows per mark declares a <strong>resolution</strong> (<code>{ resolve: &quot;avg&quot; }</code>, a positional form,
-an expression, or a JS reducer). Full mechanism: <a href="features/via.html">Via</a>.</p>
+an expression, or a JS reducer). Full mechanism: <a href="via.html">Via</a>.</p>
 <pre data-lang="dvl"><code class="lang-dvl">// PLOT referent + a resolution, live: each species label sits at the CENTROID of its dots —
 // the via matches MANY dots per species; resolve: 'avg' reduces every picked channel
 // independently. The borrowed values are solved pixels, never re-placed.
@@ -584,11 +611,12 @@ v.arrow(flow, {
 }).axis(&quot;x&quot;).axis(&quot;y&quot;);
 return v;
 </code></pre>
-<h2 id="pixels-precomputed-geometry">Pixels: precomputed geometry</h2>
-<p>Positional literals are already pixels. To read a <strong>column</strong> as a pixel coordinate or length —
-bypassing the frame affine — use <code>px.x</code> / <code>px.y</code> / <code>px.w</code> / <code>px.h</code>. This is how a table can size
-its own boxes: the engine reads pixel channels as canvas coordinates and never runs them through
-placement.</p>
+<h2 id="pixels-explicit-geometry">Pixels: explicit geometry</h2>
+<p>Pixel intent is always spelled: <code>px(12)</code> on any channel is 12 screen pixels, and <code>px(&quot;col&quot;)</code>
+reads a <strong>column</strong> as a pixel coordinate or length — bypassing the frame placement. This is how
+a table can size its own boxes: the engine reads pixel channels as canvas coordinates and never
+runs them through a scale. (The axis-explicit readers <code>px.x</code> / <code>px.y</code> / <code>px.w</code> / <code>px.h</code> remain
+for <em>expression</em> positions, where types are checked before any channel is known.)</p>
 <pre data-lang="dvl"><code class="lang-dvl">// precomputed geometry: this table already carries pixel box edges; px.* reads a column as a
 // CANVAS coordinate/length, skipping the frame affine — so each rect places itself.
 db.fromRows(&quot;boxes&quot;, [
@@ -612,9 +640,9 @@ palette (<code>color</code> is an output space, not a scale family);</li>
 <code>text: field(&quot;n&quot;)</code> is the column;</li>
 <li>an unbound channel is a <strong>hole</strong> (<code>null</code> / omitted) — the mark uses its draw-time default.</li>
 </ul>
-<p>Per-mark channel lists are in the <a href="marks/README.html">Marks reference</a>; the concepts they build
+<p>Per-mark channel lists are in the <a href="../marks/README.html">Marks reference</a>; the concepts they build
 on — scales, layouts, the frame, via — each have their own page under
-<a href="features/README.html">Features</a>.</p>
+<a href="README.html">Features</a>.</p>
 
     </article>
   </main>

@@ -118,6 +118,11 @@
       
         
         
+        <li><a href="../marks/bezier.html">bezier</a></li>
+        
+      
+        
+        
         <li><a href="../marks/cell.html">cell</a></li>
         
       
@@ -227,6 +232,9 @@
             <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
           
             
+            <li><a href="../layouts/dag.html">dag</a></li>
+          
+            
             <li><a href="../layouts/force.html">force</a></li>
           
             
@@ -242,6 +250,9 @@
           
             
             <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/route.html">route</a></li>
           
             
             <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
@@ -450,15 +461,19 @@ to read a column.</p>
 </tr>
 </tbody>
 </table>
-<p><code>r</code> and <code>strokeWidth</code> are pixel channels scaled on both axes.</p>
+<p><code>r</code> and <code>strokeWidth</code> are pixel channels scaled on both axes. A dot is centered on <code>(x, y)</code> by
+nature — it has no <code>anchor</code> option (unlike the box marks <code>rect</code>/<code>image</code>).</p>
 <h2 id="examples">Examples</h2>
-<p>Colour <em>and</em> size encoded — a bubble chart. <code>r</code> binds a <code>sqrt</code> scale so area, not radius, reads
-proportional to mass.</p>
+<p>Colour <em>and</em> size encoded — a bubble chart. <code>r</code> is a raw <strong>pixel</strong> radius, so drive it with a
+channel expression: <code>sqrt(body_mass_g)</code> makes the <em>area</em> (∝ r²) proportional to mass, and <code>/ 10</code>
+scales the bubbles to a legible range. (A size <em>scale</em> — <code>sqrt(&quot;body_mass_g&quot;)</code> — is the wrong tool
+here: scales emit a relative <code>[0, 1]</code>, which the frame affine turns into pixels only for
+<em>positional</em> channels; on a bare radius that <code>[0, 1]</code> is sub-pixel, so the dots vanish.)</p>
 <pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
 v.dot(&quot;penguins&quot;, {
   x: linear(&quot;bill_length_mm&quot;),
   y: linear(&quot;bill_depth_mm&quot;),
-  r: sqrt(&quot;body_mass_g&quot;),
+  r: cexpr`sqrt(body_mass_g) / 10`,   // area ∝ mass; the /10 keeps radii in a legible px range
   fill: ordinal(&quot;species&quot;),
   fillOpacity: 0.7,
 });
@@ -499,7 +514,7 @@ return v;
 species. The panel count comes from the data; shared scales make every panel's range identical.</p>
 <pre data-lang="dvl"><code class="lang-dvl">const species = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;], {});  // one row per species
 const v = canvas(760, 260);
-v.rect(species, { ...eqX(&quot;species&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: 12, h: 236, fill: &quot;#f5f6fa&quot; })
+v.rect(species, { ...eqX(&quot;species&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: px(12), h: 236, fill: &quot;#f5f6fa&quot; })
  .dot(&quot;penguins&quot;,
    { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), fill: &quot;#4e79a7&quot; },
    { on: eq(&quot;species&quot;, &quot;species&quot;) });   // child.species = host.species
@@ -512,7 +527,7 @@ const attrs = [&quot;bill_length_mm&quot;, &quot;bill_depth_mm&quot;, &quot;flip
 const xs = [90, 300, 500, 670];
 const v = canvas(740, 460);
 const axes = attrs.map((a, i) =&gt; v.dot(p, {
-  x: xs[i], y: linear(a, { axis: false }),
+  x: px(xs[i]), y: linear(a, { axis: false }),
   r: 3, fill: ordinal(&quot;species&quot;), title: field(&quot;id&quot;),
 }));
 for (let i = 0; i &lt; attrs.length - 1; i++) {
@@ -530,6 +545,7 @@ return v;
 <li><a href="./cell.html">cell</a> — a positioned box with no explicit size</li>
 <li><a href="./line.html">line</a> — the aggregate sibling: N dots collapse to one path</li>
 <li><a href="./text.html">text</a> — labels layered onto placed dots</li>
+<li><a href="./link.html">link</a> — connectors that borrow dot positions; <code>route()</code> clips an edge endpoint to a dot's circle</li>
 </ul>
 
     </article>

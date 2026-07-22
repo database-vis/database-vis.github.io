@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Scales · DVL</title>
+  <title>dag · DVL</title>
   <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
   <link rel="stylesheet" href="../assets/styles.css">
@@ -232,7 +232,7 @@
             <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
           
             
-            <li><a href="../layouts/dag.html">dag</a></li>
+            <li class="active"><a href="../layouts/dag.html">dag</a></li>
           
             
             <li><a href="../layouts/force.html">force</a></li>
@@ -279,7 +279,7 @@
       
         
         
-        <li class="active"><a href="../scales/README.html">Overview</a></li>
+        <li><a href="../scales/README.html">Overview</a></li>
         
       
         
@@ -357,172 +357,122 @@
 
   <main class="content">
     <article class="markdown-section">
-      <h1 id="scales">Scales</h1>
-<p>Scales are operators that <strong>train</strong> a domain from your data (in SQL, in the database) and
-<strong>apply</strong> a per-row normalization. Bind one to a channel — <code>x: linear(&quot;bill_length_mm&quot;)</code> — or
-share one across layers by reusing the object. Options ride the second argument:
-<code>linear(&quot;col&quot;, { shared: false, domain: &quot;nice&quot;, axis: { ticks: 4 } })</code>, and on a <strong>color channel</strong>
-a <code>scheme</code> names the palette: <code>linear(&quot;mass&quot;, { scheme: &quot;viridis&quot; })</code>.</p>
-<h2 id="continuous-train-minmax">Continuous (train min/max)</h2>
-<table>
-<thead>
-<tr>
-<th>Scale</th>
-<th>Apply</th>
-<th>Notes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a id="linear"></a><a href="linear.html"><strong>linear</strong></a></td>
-<td>(v − lo) / (hi − lo)</td>
-<td>the workhorse</td>
-</tr>
-<tr>
-<td><a id="log"></a><a href="log.html"><strong>log</strong></a></td>
-<td>interpolates in ln-space</td>
-<td>positive domains</td>
-</tr>
-<tr>
-<td><a id="sqrt"></a><a href="sqrt.html"><strong>sqrt</strong></a></td>
-<td>square-root transform</td>
-<td></td>
-</tr>
-<tr>
-<td><a id="pow"></a><a href="pow.html"><strong>pow</strong></a></td>
-<td>power transform</td>
-<td>exponent option (default 2)</td>
-</tr>
-<tr>
-<td><a id="symlog"></a><a href="symlog.html"><strong>symlog</strong></a></td>
-<td>bi-symmetric log</td>
-<td>handles zero and negatives</td>
-</tr>
-<tr>
-<td><a id="color"></a><a href="color.html"><strong>color</strong></a></td>
-<td>position on a color ramp</td>
-<td><em>continuous</em> fill — a <code>linear</code> with a sequential-scheme default; any continuous scale on a color channel behaves the same (see <a href="#color">Color</a>)</td>
-</tr>
-</tbody>
-</table>
-<h2 id="categorical-train-distinct">Categorical (train distinct)</h2>
-<table>
-<thead>
-<tr>
-<th>Scale</th>
-<th>Apply</th>
-<th>Notes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a id="ordinal"></a><a href="ordinal.html"><strong>ordinal</strong></a></td>
-<td>category → range[index]</td>
-<td>palette for fill, or any discrete range</td>
-</tr>
-<tr>
-<td><a id="point"></a><a href="point.html"><strong>point</strong></a></td>
-<td>category → centered position</td>
-<td>band with zero width</td>
-</tr>
-</tbody>
-</table>
-<h2 id="binned">Binned</h2>
-<table>
-<thead>
-<tr>
-<th>Scale</th>
-<th>Apply</th>
-<th>Notes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a id="quantize"></a><a href="quantize.html"><strong>quantize</strong></a></td>
-<td>N equal-width bins over [lo, hi]</td>
-<td>trained</td>
-</tr>
-<tr>
-<td><a id="threshold"></a><a href="threshold.html"><strong>threshold</strong></a></td>
-<td>authored breakpoints → bins</td>
-<td>no training (a static domain)</td>
-</tr>
-</tbody>
-</table>
-<h2 id="color">Color</h2>
-<p><strong>Color is an output space, not a scale family.</strong> The <em>same</em> scale emits a number on a positional
-channel and a <strong>color</strong> on a color channel (<code>fill</code>/<code>stroke</code>) — decided by the channel, not the scale
-name. So <code>fill: linear(&quot;mass&quot;)</code> is a sequential ramp (not a stray number), <code>fill: ordinal(&quot;species&quot;)</code>
-is a categorical palette, and <code>color(&quot;mass&quot;)</code> is just <code>linear</code> with a sequential default. The palette
-comes from a named <code>scheme</code> (resolved once to a 256-step ramp for continuous, a fixed array for
-categorical); override with <code>{ scheme }</code> or an explicit <code>{ range: [...] }</code>.</p>
-<table>
-<thead>
-<tr>
-<th>Family</th>
-<th>Channel →</th>
-<th>Default scheme</th>
-<th>Schemes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>continuous (<code>linear</code>/<code>log</code>/<code>sqrt</code>/<code>pow</code>/<code>symlog</code>/<code>color</code>)</td>
-<td>sequential ramp</td>
-<td><code>blues</code></td>
-<td><code>blues</code>, <code>viridis</code>, <code>turbo</code>, diverging <code>rdbu</code>/<code>blueorange</code></td>
-</tr>
-<tr>
-<td>categorical (<code>ordinal</code>)</td>
-<td>discrete palette</td>
-<td><code>tableau10</code></td>
-<td><code>tableau10</code>, <code>observable10</code>, <code>category10</code></td>
-</tr>
-<tr>
-<td>binned (<code>quantize</code>/<code>threshold</code>)</td>
-<td>discrete bins</td>
-<td>(sequential)</td>
-<td>any sequential, sampled to the bin count</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Sharing.</strong> Reusing one scale <em>object</em> across bindings declares &quot;same quantity&quot; — one unioned
-domain, one axis. Facet panels share domains by default; <code>{ shared: false }</code> gives each panel
-its own. <strong>Choosing fill:</strong> a categorical column → <code>ordinal</code>; a numeric intensity → <code>color</code> (or any
-continuous scale — they all ramp on a color channel). A string column under <code>color()</code>/<code>linear()</code>
-still fails at train time (min/max over text) — that is a data-type error, not the old type-lie
-(a continuous scale on <code>fill</code> now always yields a color, never a raw number).</p>
-<h2 id="adding-your-own-scale">Adding your own scale</h2>
-<p>A scale is an <strong>operator</strong> — the same <code>op({ … })</code> factory layouts use — with a trained <code>domain</code>
-and an <code>apply</code> that normalizes each row against the fit.</p>
-<pre data-lang="js"><code class="language-js">import { op } from &quot;$lib/dvl/operator/operator&quot;;
-import { continuous } from &quot;$lib/dvl/components/scales/types&quot;;
-import { scaledOut } from &quot;$lib/dvl/components/scales/_shared&quot;;
-import { inputCol } from &quot;$lib/dvl/algebra/impl&quot;;
-
-const clampLinear = op({
-  name: &quot;clampLinear&quot;,
-  domain: continuous((b) =&gt; ({ kind: &quot;reduce&quot;, aggs: {
-    lo: { fn: &quot;min&quot;, col: inputCol(b, &quot;value&quot;) }, hi: { fn: &quot;max&quot;, col: inputCol(b, &quot;value&quot;) } } })),
-  apply: (b) =&gt; scaledOut(b, /* clamp((v − lo) / (hi − lo), 0, 1) — a ScalarExpr */ …),
-  ticks: &quot;nice-linear&quot;,   // earns a labelled axis
-  scheme: &quot;blues&quot;,        // default palette when bound to a colour channel
+      <h1 id="dag">dag</h1>
+<p><code>dag</code> places the nodes of a <strong>directed acyclic graph</strong> in topological layers — the layered
+(Sugiyama-style) layout used for dataflow/dependency diagrams — and emits an <code>x</code>, <code>y</code> per node,
+normalized to <code>[pad, 1−pad]</code> (the frame affine turns them into pixels). Like
+<a href="force.html">force</a> it takes an <strong>edges table</strong> — <code>dag('edges')</code> — whose endpoint columns come from
+the declared join (<code>edges.src → marks.id</code>, <code>edges.dst → marks.id</code>) or an <code>on</code> override. There is
+no trained domain: positions carry no data-space meaning, so nothing is tickable.</p>
+<p>Three deterministic steps (no simulation, no iteration):</p>
+<ol>
+<li><strong>Layer</strong> — each node sits one layer below its <em>deepest</em> parent (longest path from the roots);
+roots on top, sinks at the bottom. A cycle's back-edge counts zero, so cyclic inputs
+terminate (with an arbitrary split inside the cycle).</li>
+<li><strong>Order</strong> — one downward sweep sorts each layer by the <em>barycenter</em> (mean position) of its
+parents in the layer above, pulling connected nodes into vertical alignment and reducing edge
+crossings.</li>
+<li><strong>Center</strong> — each layer's row centers on <code>x = 0.5</code> with one uniform step shared across layers
+(the widest layer spans the full width).</li>
+</ol>
+<p>This is the algorithm behind DVL's own compute-graph debugger: the playground's <strong>Graph</strong> tab is
+an ordinary DVL spec that reads the dataflow log (<code>dvl_operator</code>/<code>dvl_op_io</code>) back from the
+profiling database and draws it with <code>dag</code> (see <code>design/2026-07-21-compute-graph-vis.html</code>).</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 400);
+v.dot('members', {
+  ...dag('follows').pick('x', 'y'),
+  r: 8, fill: ordinal('community'),
 });
+return v;
 </code></pre>
+<p>The members social graph as a hierarchy: <code>dag('follows')</code> reads the <code>follows</code> edge table
+(<code>src</code>/<code>dst</code> FK-joined to <code>members.id</code>) and stacks each member below the people they follow.</p>
+<h2 id="options">Options</h2>
+<p><code>dag(edges)</code> takes the marks (the nodes, whose id column is the primary input) plus an aux
+<strong>edges</strong> relation named as the argument. Edges to nodes absent from a panel are ignored (a
+per-panel run sees only its panel's nodes). In a template it runs <strong>per cell</strong> by default — one
+layered graph per panel (<code>perCell: true</code>). js-only: an ordering algorithm over the whole node
+set has no meaningful SQL form.</p>
+<table>
+<thead>
+<tr>
+<th>Input</th>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code> (marks)</td>
+<td>int</td>
+<td>the node identity column, matched against edge endpoints</td>
+</tr>
+<tr>
+<td><code>edges</code></td>
+<td>table</td>
+<td>the edge relation; <code>src</code>/<code>dst</code> (or the declared refs) are its endpoint columns</td>
+</tr>
+</tbody>
+</table>
+<p><code>.pick()</code> outputs:</p>
+<table>
+<thead>
+<tr>
+<th>Output</th>
+<th>Space</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>x</code></td>
+<td>relative coord x</td>
+<td>the node's slot in its layer's row, rows centered on 0.5</td>
+</tr>
+<tr>
+<td><code>y</code></td>
+<td>relative coord y</td>
+<td>the node's layer: roots at the top, deepest layer at the bottom</td>
+</tr>
+</tbody>
+</table>
+<p>Bind by spreading: <code>...dag('follows').pick('x', 'y')</code>. An empty edge set puts every node in one
+top row; a single layer (or single node) centers at 0.5.</p>
+<h2 id="examples">Examples</h2>
+<p>Nodes <strong>and</strong> edges — draw the links underneath with <code>route()</code>, which owns both endpoint borrows
+and clips each end to the node it lands on, so an edge meets the dot <strong>boundary</strong> nearest the far
+end rather than the center (the same pattern as <a href="force.html">force</a>):</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 400);
+const nodes = v.dot('members', { ...dag('follows').pick('x', 'y'), r: 8, fill: ordinal('community') });
+v.link('follows', {
+  ...route({
+    src: nodes.via(eq('follows.src', 'members.id')),
+    dst: nodes.via(eq('follows.dst', 'members.id')),
+  }).pick('x1', 'y1', 'x2', 'y2'),
+  stroke: '#b6bdc9',
+});
+return v;
+</code></pre>
+<p>Labelled nodes — a <code>text</code> layer rides the same <code>dag</code> placement (the layout is deterministic, so
+a second <code>dag('follows')</code> over the same nodes reproduces exactly the same positions):</p>
+<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(700, 400);
+const nodes = v.dot('members', { ...dag('follows').pick('x', 'y'), r: 8, fill: ordinal('community') });
+v.text('members', { ...dag('follows').pick('x', 'y'), text: field('name'), dy: -12, fill: '#343a40' });
+v.link('follows', {
+  ...route({
+    src: nodes.via(eq('follows.src', 'members.id')),
+    dst: nodes.via(eq('follows.dst', 'members.id')),
+  }).pick('x1', 'y1', 'x2', 'y2'),
+  stroke: '#b6bdc9',
+});
+return v;
+</code></pre>
+<h2 id="see-also">See also</h2>
 <ul>
-<li><strong><code>domain</code></strong> — <code>continuous(trainFn)</code> (a 1-row <code>{lo, hi}</code> fit) or <code>categorical(trainFn)</code> (the
-keyed value table). The train runs in SQL, in the database.</li>
-<li><strong><code>apply(b)</code></strong> returns a <code>RelOp</code> computing the normalized <code>t</code>; wrapping it in <code>scaledOut(b, t)</code>
-makes the SAME operator emit a number on a positional channel and a <strong>colour</strong> on a colour
-channel — the binding-polymorphic apply (<a href="#color">Color</a>).</li>
-<li><strong><code>ticks</code></strong> names the tick algo for the axis; <strong><code>scheme</code></strong> the default palette.</li>
+<li><a href="force.html">force</a> — free-form node-link placement (simulation instead of layers)</li>
+<li><a href="../marks/link.html">link</a> — draws the edges between dag-placed nodes</li>
+<li><a href="treemap.html">treemap</a> — the other whole-set 2-D layout</li>
 </ul>
-<p>Register it and expose a factory — exactly like a layout:</p>
-<pre data-lang="js"><code class="language-js">registries.operators.register(clampLinear.name, clampLinear);
-export const clampLinear = scaleFactory(&quot;clampLinear&quot;);   // → clampLinear(&quot;mass&quot;)
-</code></pre>
-<p>Marks (<code>defineMark</code>), scales, and layouts (<code>op</code>) are the three extension points; all three
-register into the <code>Registries</code> and surface through a builder factory.</p>
 
     </article>
   </main>

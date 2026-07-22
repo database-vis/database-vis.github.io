@@ -118,6 +118,11 @@
       
         
         
+        <li><a href="../marks/bezier.html">bezier</a></li>
+        
+      
+        
+        
         <li><a href="../marks/cell.html">cell</a></li>
         
       
@@ -227,6 +232,9 @@
             <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
           
             
+            <li><a href="../layouts/dag.html">dag</a></li>
+          
+            
             <li><a href="../layouts/force.html">force</a></li>
           
             
@@ -242,6 +250,9 @@
           
             
             <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/route.html">route</a></li>
           
             
             <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
@@ -413,6 +424,12 @@ gives <code>{y, h}</code> — four positional values from two multi-output layou
 <td>height in pixels (offset form)</td>
 </tr>
 <tr>
+<td><code>anchor</code></td>
+<td>shape</td>
+<td><code>topleft</code></td>
+<td>box reference point: <code>topleft</code> places <code>(x, y)</code> at the corner, <code>center</code> centers the box on <code>(x, y)</code></td>
+</tr>
+<tr>
 <td><code>fill</code></td>
 <td>color</td>
 <td>black</td>
@@ -462,7 +479,8 @@ gives <code>{y, h}</code> — four positional values from two multi-output layou
 </tr>
 </tbody>
 </table>
-<p><code>w</code>, <code>h</code>, and <code>strokeWidth</code> are pixel channels (<code>w</code>→x, <code>h</code>→y).</p>
+<p><code>w</code>, <code>h</code>, and <code>strokeWidth</code> are pixel channels (<code>w</code>→x, <code>h</code>→y). <code>anchor</code> defaults to <code>topleft</code> so
+<code>x</code>/<code>y</code> are the box corner — what <code>bandX</code>/<code>barY</code> hand out.</p>
 <h2 id="examples">Examples</h2>
 <p><strong>Zero-based bars.</strong> <code>barY(&quot;mass&quot;, { zero: true })</code> anchors the domain at the baseline
 (<code>lo = min(v, 0)</code>, <code>hi = max(v, 0)</code>), so the smallest category is not a degenerate height-0 bar and
@@ -519,11 +537,9 @@ const bars = v.bar(bySpecies, {
   ...barY(&quot;mass&quot;, { zero: true }).pick(&quot;y&quot;, &quot;h&quot;),
   fill: ordinal(&quot;species&quot;),
 });
-const center = { resolve: { cx: { fn: &quot;avg&quot;, arg: expr`f.x + f.w / 2` },
-                            cy: { fn: &quot;avg&quot;, arg: expr`f.y + f.h / 2` } } };
 v.text(bySpecies, {
-  ...bars.via(eq(&quot;species&quot;, &quot;species&quot;), center).pick({ x: &quot;cx&quot;, y: &quot;cy&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
-  ...fitText().pick(&quot;fontSize&quot;),
+  ...bars.via(eq(&quot;species&quot;, &quot;species&quot;)).pick({ x: &quot;x&quot;, y: &quot;y&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
+  ...fitText(),
   text: field(&quot;species&quot;), anchor: &quot;middle&quot;, baseline: &quot;middle&quot;, fill: &quot;#fff&quot;,
 });
 return v;
@@ -532,7 +548,7 @@ return v;
 the same mechanism as <code>rect</code>.</p>
 <pre data-lang="dvl"><code class="lang-dvl">const species = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;], {});
 const v = canvas(760, 260);
-v.bar(species, { ...eqX(&quot;species&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: 12, h: 236, fill: &quot;#f5f6fa&quot; })
+v.bar(species, { ...eqX(&quot;species&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: px(12), h: 236, fill: &quot;#f5f6fa&quot; })
  .dot(&quot;penguins&quot;,
    { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), fill: &quot;#4e79a7&quot; },
    { on: eq(&quot;species&quot;, &quot;species&quot;) });

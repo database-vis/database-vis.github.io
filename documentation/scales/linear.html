@@ -118,6 +118,11 @@
       
         
         
+        <li><a href="../marks/bezier.html">bezier</a></li>
+        
+      
+        
+        
         <li><a href="../marks/cell.html">cell</a></li>
         
       
@@ -227,6 +232,9 @@
             <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
           
             
+            <li><a href="../layouts/dag.html">dag</a></li>
+          
+            
             <li><a href="../layouts/force.html">force</a></li>
           
             
@@ -242,6 +250,9 @@
           
             
             <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/route.html">route</a></li>
           
             
             <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
@@ -414,6 +425,12 @@ domain (and it trains the domain like any member).</li>
 <td>drawn</td>
 <td>axis config, or <code>false</code> to hide the axis</td>
 </tr>
+<tr>
+<td><code>expand</code></td>
+<td><code>number</code> | <code>[lo, hi]</code> | <code>false</code></td>
+<td>solved</td>
+<td>containment slack: by default the engine measures the bound marks' boxes (<code>w</code>/<code>h</code>/<code>r</code>) each layout pass and compresses this scale's output so glyphs at the domain extremes stay inside the frame. <code>0</code>/<code>false</code> opts out (marks may bleed); a number or <code>[lo, hi]</code> pins the slack as fractions of the span</td>
+</tr>
 </tbody>
 </table>
 <p><code>AxisOptions</code>: <code>{ ticks?: number | { count?, algorithm? }, side?, tickLength? (5), fontSize? (10) }</code>.</p>
@@ -465,7 +482,7 @@ return v;
 its own frame and each draws its own axis. Panels are data-driven: one host row → one panel.</p>
 <pre data-lang="dvl"><code class="lang-dvl">const species = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;], {});   // one row per species
 const v = canvas(760, 260);
-v.rect(species, { ...eqX(&quot;species&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: 12, h: 236, fill: &quot;#f5f6fa&quot; })
+v.rect(species, { ...eqX(&quot;species&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: px(12), h: 236, fill: &quot;#f5f6fa&quot; })
  .dot(&quot;penguins&quot;,
    { x: linear(&quot;bill_length_mm&quot;, { shared: false }),
      y: linear(&quot;body_mass_g&quot;,    { shared: false }), fill: &quot;#59a14f&quot; },
@@ -477,7 +494,7 @@ return v;
 <pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
 const y = linear();  // deferred, so y(4000) is a datum placed through the same frame
 v.dot(&quot;penguins&quot;, { x: linear(&quot;bill_length_mm&quot;), y: y(&quot;body_mass_g&quot;) }).axis(&quot;x&quot;).axis(&quot;y&quot;);
-v.rule(&quot;penguins&quot;, { x: 0, x2: 640, y: y(4000) });   // horizontal line at mass = 4000
+v.rule(&quot;penguins&quot;, { x: px(0), x2: px(640), y: y(4000) });   // horizontal line at mass = 4000
 return v;
 </code></pre>
 <p>Hide the axis on a secondary channel with <code>axis: false</code>.</p>

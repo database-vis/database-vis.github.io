@@ -118,6 +118,11 @@
       
         
         
+        <li><a href="../marks/bezier.html">bezier</a></li>
+        
+      
+        
+        
         <li><a href="../marks/cell.html">cell</a></li>
         
       
@@ -227,6 +232,9 @@
             <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
           
             
+            <li><a href="../layouts/dag.html">dag</a></li>
+          
+            
             <li><a href="../layouts/force.html">force</a></li>
           
             
@@ -242,6 +250,9 @@
           
             
             <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/route.html">route</a></li>
           
             
             <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
@@ -366,7 +377,7 @@ return v;
 </code></pre>
 <h2 id="channels">Channels</h2>
 <p><em>This is the concept outline; the full channel-value language — every expression kind, the
-data/pixel and resolution model, and a reference table — has <a href="features/channels.html">its own page</a>.</em></p>
+data/pixel and resolution model, and a reference table — has <a href="channels.html">its own page</a>.</em></p>
 <p>How channel values bind: literals (positional literals are pixels), scale bindings, layout
 outputs via <code>.pick()</code>, expressions (<code>col()</code> from <code>ir/expr</code>), and cross-mark references. The
 bare-string rule (strings are literals everywhere — including <code>text</code>), channel kinds
@@ -407,7 +418,7 @@ return v;
 (<code>quantize</code>, <code>threshold</code>) families; on a <strong>color channel</strong> any continuous scale is a sequential
 ramp and <code>ordinal</code> is a categorical palette (a <code>scheme</code> names the palette) — color is an output
 space, not a scale family. Domain sharing (object identity, facet defaults, <code>shared: false</code>);
-domain treatments (<code>nice</code>, <code>zero</code>, explicit). Reference: <a href="scales/README.html">scales/</a>.</p>
+domain treatments (<code>nice</code>, <code>zero</code>, explicit). Reference: <a href="../scales/README.html">scales/</a>.</p>
 <pre data-lang="dvl"><code class="lang-dvl">// ONE scale object bound across two relations declares &quot;the same quantity&quot;: the domains
 // UNION and both layers share a frame — the species means land exactly on the cloud.
 const bySpecies = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;], { bill: avg(&quot;bill_length_mm&quot;), mass: avg(&quot;body_mass_g&quot;) });
@@ -423,7 +434,7 @@ return v;
 classes: <strong>produce</strong> (data → normalized positions: <code>bandX</code>, <code>barY</code>, <code>stackY</code>, <code>eqX</code>, <code>force</code>,
 <code>treemap</code>, <code>proportional*</code>), <strong>refine</strong> (positions → positions, post-placement: <code>fitText</code>,
 <code>grid-stack</code>), <strong>measure</strong> (positions → sizes, feeding the demand loop). Reference:
-<a href="layouts/README.html">layouts/</a>.</p>
+<a href="../layouts/README.html">layouts/</a>.</p>
 <p>Each 1-D producer is an <strong>X/Y pair</strong> — <code>bandX</code>/<code>bandY</code>, <code>barX</code>/<code>barY</code>, <code>stackX</code>/<code>stackY</code>,
 <code>pitchX</code>/<code>pitchY</code>, <code>eqX</code>/<code>eqY</code> — so a vertical bar (<code>bandX</code> + <code>barY</code>) mirrors to a horizontal one
 (<code>bandY</code> + <code>barX</code>) by swapping the axis; <code>eqX</code> splits columns, <code>eqY</code> rows.</p>
@@ -538,19 +549,21 @@ is what <a href="#cross-mark-and-cross-table-references">resolutions</a> are for
 a hop that lands on a known key (an FK's target) is provably single-match; a non-eq hop is
 provably multi; multi without a declared resolution is a build-time error, never a silent
 fan-out.</p>
-<pre data-lang="dvl"><code class="lang-dvl">// a node-link diagram: force places the members; each edge borrows its two endpoints
-// from that plot through a JOIN PATH. The `eq('follows.src','members.id')` predicates ARE
-// the paths — `on('col')` (same-column eq), `fk('table')` (named hop), and `path(...)`
-// (multi-hop) are the shorthands the section lists, resolved against the same FK catalog.
+<pre data-lang="dvl"><code class="lang-dvl">// a node-link diagram: force places the members; route() OWNS both endpoint borrows and
+// clips each edge to the node BOUNDARY nearest the far end. The `eq('follows.src','members.id')`
+// predicates ARE the join paths — `on('col')` (same-column eq), `fk('table')` (named hop), and
+// `path(...)` (multi-hop) are the shorthands the section lists, resolved against the same FK catalog.
 const v = canvas(640, 420);
 const nodes = v.dot(&quot;members&quot;, { ...force(&quot;follows&quot;).pick(&quot;x&quot;, &quot;y&quot;), r: 8, fill: ordinal(&quot;community&quot;) });
 v.link(&quot;follows&quot;, {
-  ...nodes.via(eq(&quot;follows.src&quot;, &quot;members.id&quot;)).pick({ x1: &quot;x&quot;, y1: &quot;y&quot; }),
-  ...nodes.via(eq(&quot;follows.dst&quot;, &quot;members.id&quot;)).pick({ x2: &quot;x&quot;, y2: &quot;y&quot; }),
+  ...route({ src: nodes.via(eq(&quot;follows.src&quot;, &quot;members.id&quot;)),
+             dst: nodes.via(eq(&quot;follows.dst&quot;, &quot;members.id&quot;)) }).pick(&quot;x1&quot;, &quot;y1&quot;, &quot;x2&quot;, &quot;y2&quot;),
   stroke: &quot;#bbb&quot;, strokeOpacity: 0.6,
 });
 return v;
 </code></pre>
+<p>Because <code>route()</code> owns the endpoint joins, each edge lands on the node's boundary (a <code>dot</code>
+clips on its circle) — not its center — so arrowheads and links meet the mark cleanly.</p>
 <h2 id="facets-and-nesting">Facets and nesting</h2>
 <p>Small multiples are a container plot plus a <strong>nest key</strong> — any <a href="#join-paths">join path</a>:</p>
 <pre data-lang="js"><code class="language-js">panel.nest('penguins', { on: on('island') })       // same-column eq shorthand
@@ -570,7 +583,9 @@ referent's cell</strong> instead of re-deriving it — pick the reserved <code>c
 <p>One declared FK, read twice: the <strong>cell</strong> resolves early (it stands in for the nest key, before
 layout), the <strong>positions</strong> resolve late (post-placement pixels). The borrow path must be provably
 single-match end to end — declare the FKs it walks. Also covers <code>.nest()</code> multi-layer panels and
-per-panel vs shared domains (<code>shared: false</code>).</p>
+per-panel vs shared domains (<code>shared: false</code>). <code>route()</code> composes with these borrows too: wrap
+the two position vias in <code>route({ src, dst })</code> to clip each edge to the nested node's boundary
+while the cell borrow still resolves the panel.</p>
 <p><strong>Which rows belong to a panel?</strong> Take the partition seriously: a nested subplot scopes the
 <em>whole database</em> — inside a panel, a table name denotes its restriction to that panel, derived
 through the declared FK paths. A nested layer over an edge table needs <strong>no <code>on</code> and no
@@ -586,7 +601,7 @@ old <code>pick({ cell: 'dvl_cell' })</code> spelling still works with a deprecat
 // and the shared x/y scales keep every panel comparable.
 const species = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;], {});
 const v = canvas(760, 280);
-v.rect(species, { ...eqX(&quot;species&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: 12, h: 236, fill: &quot;#f5f6fa&quot; })
+v.rect(species, { ...eqX(&quot;species&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: px(12), h: 236, fill: &quot;#f5f6fa&quot; })
  .dot(&quot;penguins&quot;, { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), fill: ordinal(&quot;species&quot;) },
       { on: eq(&quot;species&quot;, &quot;species&quot;) });
 return v;
@@ -594,7 +609,7 @@ return v;
 <h2 id="cross-mark-and-cross-table-references">Cross-mark and cross-table references</h2>
 <p><em>This section keeps the resolution grammar reference; the full mechanism — both referent kinds,
 top-level vs nested consumers, frame assignments, timing, and the placeholder machinery — has
-<a href="features/via.html">its own page</a>.</em></p>
+<a href="via.html">its own page</a>.</em></p>
 <p>One verb, two referent kinds — the receiver says which, and the <strong>type system carries the
 difference</strong> (same mechanism, different Space):</p>
 <pre data-lang="js"><code class="language-js">// PLOT referent: borrow SOLVED positions — results arrive in PIXELS, never re-placed
@@ -664,6 +679,9 @@ v.subplots({ ...eqX(&quot;i&quot;).pick(&quot;x&quot;, &quot;w&quot;) });
 return v;
 </code></pre>
 <h2 id="data">Data</h2>
+<p><em>This is the concept outline; the full data-layer reference — branches, loading data, the <code>Table</code>
+modeling operators, the raw-SQL and <code>expr</code>/<code>cexpr</code> string templates, and the FK catalog — has
+<a href="data.html">its own page</a>.</em></p>
 <p>The <code>Database</code> wrapper: <code>fromRows</code>, <code>fromColumnar</code>, <code>table</code>, <code>fromQuery</code>; backends (DuckDB-Wasm
 in the browser, the same engine in Node); schema introspection; when data crosses between SQL
 and JS and what it costs.</p>

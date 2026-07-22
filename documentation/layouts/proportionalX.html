@@ -118,6 +118,11 @@
       
         
         
+        <li><a href="../marks/bezier.html">bezier</a></li>
+        
+      
+        
+        
         <li><a href="../marks/cell.html">cell</a></li>
         
       
@@ -227,6 +232,9 @@
             <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
           
             
+            <li><a href="../layouts/dag.html">dag</a></li>
+          
+            
             <li><a href="../layouts/force.html">force</a></li>
           
             
@@ -242,6 +250,9 @@
           
             
             <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/route.html">route</a></li>
           
             
             <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
@@ -358,7 +369,7 @@ partition — the horizontal cousin of a percent stack, and of <a href="proporti
 const v = canvas(720, 120);
 v.rect(revenue, {
   ...proportionalX('amount').pick('x', 'w'),
-  y: 20, h: 80,
+  y: px(20), h: 80,
   fill: ordinal('category'),
   stroke: '#fff',
 });
@@ -418,14 +429,14 @@ along the strip follows the input relation's order. No options bag.</p>
   db.table('products'), { left: 'product_id', right: 'id' },
   'category', { amount: sum({ sql: 'qty * price' }) });
 const v = canvas(720, 120);
-v.rect(revenue, { ...proportionalX('amount').pick('x', 'w'), y: 20, h: 80,
+v.rect(revenue, { ...proportionalX('amount').pick('x', 'w'), y: px(20), h: 80,
                   fill: ordinal('category'), stroke: '#fff' });
 return v;
 </code></pre>
 <p>Penguin counts per species as a proportional strip — group first, then size by the count:</p>
 <pre data-lang="dvl"><code class="lang-dvl">const bySpecies = db.table('penguins').groupby(['species'], { n: count() });
 const v = canvas(640, 100);
-v.rect(bySpecies, { ...proportionalX('n').pick('x', 'w'), y: 20, h: 60,
+v.rect(bySpecies, { ...proportionalX('n').pick('x', 'w'), y: px(20), h: 60,
                     fill: ordinal('species'), stroke: '#fff' });
 return v;
 </code></pre>
@@ -435,12 +446,11 @@ midpoint (<code>f.x + f.w/2</code>), fitted with <code>fitText</code>:</p>
   db.table('products'), { left: 'product_id', right: 'id' },
   'category', { amount: sum({ sql: 'qty * price' }) });
 const v = canvas(760, 120);
-const strip = v.rect(revenue, { ...proportionalX('amount').pick('x', 'w'), y: 20, h: 80,
+const strip = v.rect(revenue, { ...proportionalX('amount').pick('x', 'w'), y: px(20), h: 80,
                                 fill: ordinal('category'), stroke: '#fff' });
-const center = { resolve: { cx: { fn: 'avg', arg: expr`f.x + f.w / 2` } } };
 v.text(revenue, {
-  ...strip.via(eq('category', 'category'), center).pick({ x: 'cx', y: 'y', w: 'w', h: 'h' }),
-  ...fitText().pick('fontSize'),
+  ...strip.via(eq('category', 'category')).pick({ x: 'x', y: 'y', w: 'w', h: 'h' }),
+  ...fitText(),
   text: field('category'), anchor: 'middle', baseline: 'middle', fill: '#fff',
 });
 return v;
@@ -452,9 +462,9 @@ splits the rows and each row's own <code>proportionalX</code> fills its width:</
   'category', { amount: sum({ sql: 'qty * price' }) });
 const v = canvas(720, 260);
 const rows = db.table('penguins').groupby(['species'], {});
-v.rect(rows, { ...eqY('species').pick('y', 'h'), x: 10, w: 700, fill: '#f5f6fa' })
+v.rect(rows, { ...eqY('species').pick('y', 'h'), x: px(10), w: 700, fill: '#f5f6fa' })
  .rect(revenue,
-   { ...proportionalX('amount').pick('x', 'w'), y: 4, h: 60, fill: ordinal('category'), stroke: '#fff' });
+  { ...proportionalX('amount').pick('x', 'w'), y: px(4), h: 60, fill: ordinal('category'), stroke: '#fff' });
 return v;
 </code></pre>
 <h2 id="see-also">See also</h2>

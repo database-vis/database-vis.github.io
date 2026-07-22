@@ -108,6 +108,19 @@ var isRelationSource = (s) => typeof s === "object" && s !== null && "relation" 
 var isProducerSource = (s) => typeof s === "object" && s !== null && "producer" in s;
 var isUnitSource = (s) => (typeof s === "object" || typeof s === "function") && s !== null && "__unit" in s && s.__unit === "unit-source";
 var sourceKey = (s) => typeof s === "string" ? `t:${s}` : "producer" in s ? `p:${s.producer}` : "relation" in s ? `c:${s.relation}` : `tbl:${s.name ?? "?"}`;
+function boxEdgesOf(plot, desc = plot.resolvedMark) {
+  if (desc?.extentOf === void 0)
+    return void 0;
+  const aExpr = plot.channels["anchor"];
+  if (aExpr !== void 0 && aExpr.kind !== "literal")
+    throw new Error(`compilePlot: plot "${plot.id}" binds a data-driven anchor \u2014 the box model needs a literal anchor (per-row anchors are not supported yet)`);
+  const anchor = aExpr !== void 0 && aExpr.kind === "literal" ? String(aExpr.value) : desc.anchorDefault ?? "center";
+  const bExpr = plot.channels["baseline"];
+  if (bExpr !== void 0 && bExpr.kind !== "literal")
+    throw new Error(`compilePlot: plot "${plot.id}" binds a data-driven baseline \u2014 the box model needs a literal baseline (per-row baselines are not supported yet)`);
+  const baseline = bExpr !== void 0 && bExpr.kind === "literal" ? String(bExpr.value) : void 0;
+  return desc.extentOf({ bound: new Set(Object.keys(plot.channels)), anchor, baseline });
+}
 
 // src/lib/dvl/types/ids.ts
 var IdGen = class {
@@ -215,6 +228,10 @@ var CellStore = class {
    *  whether that is acceptable (fail fast under strict via spaceFallbacks.note). */
   cellSpace(id2) {
     return this.#spaces.get(id2) ?? null;
+  }
+  /** Every allocated cell — for debug/introspection (walking relation cells' fragment DAGs). */
+  values() {
+    return this.#cells.values();
   }
 };
 
@@ -395,6 +412,54 @@ function spaceArith(op2, a3, b2) {
   return null;
 }
 
+// src/lib/dvl/algebra/functions.ts
+var sqlFn = (name2) => (a3) => `${name2}(${a3.join(", ")})`;
+var m1 = (name2) => (a3) => `Math.${name2}(Number(${a3[0]}))`;
+var m2 = (name2) => (a3) => `Math.${name2}(Number(${a3[0]}), Number(${a3[1]}))`;
+var FUNCTIONS = {
+  // ── unary math (DuckDB scalar name = the SQL form; Math.* = the JS form) ──
+  sqrt: { arity: 1, type: "double", sql: sqlFn("sqrt"), js: m1("sqrt") },
+  cbrt: { arity: 1, type: "double", sql: sqlFn("cbrt"), js: m1("cbrt") },
+  exp: { arity: 1, type: "double", sql: sqlFn("exp"), js: m1("exp") },
+  ln: { arity: 1, type: "double", sql: sqlFn("ln"), js: m1("log") },
+  log10: { arity: 1, type: "double", sql: sqlFn("log10"), js: m1("log10") },
+  log2: { arity: 1, type: "double", sql: sqlFn("log2"), js: m1("log2") },
+  abs: { arity: 1, type: "double", sql: sqlFn("abs"), js: m1("abs") },
+  floor: { arity: 1, type: "double", sql: sqlFn("floor"), js: m1("floor") },
+  ceil: { arity: 1, type: "double", sql: sqlFn("ceil"), js: m1("ceil") },
+  round: { arity: 1, type: "double", sql: (a3) => `round(${a3[0]})`, js: m1("round") },
+  trunc: { arity: 1, type: "double", sql: sqlFn("trunc"), js: m1("trunc") },
+  sign: { arity: 1, type: "double", sql: sqlFn("sign"), js: m1("sign") },
+  sin: { arity: 1, type: "double", sql: sqlFn("sin"), js: m1("sin") },
+  cos: { arity: 1, type: "double", sql: sqlFn("cos"), js: m1("cos") },
+  tan: { arity: 1, type: "double", sql: sqlFn("tan"), js: m1("tan") },
+  asin: { arity: 1, type: "double", sql: sqlFn("asin"), js: m1("asin") },
+  acos: { arity: 1, type: "double", sql: sqlFn("acos"), js: m1("acos") },
+  atan: { arity: 1, type: "double", sql: sqlFn("atan"), js: m1("atan") },
+  degrees: { arity: 1, type: "double", sql: sqlFn("degrees"), js: (a3) => `(Number(${a3[0]}) * 180 / Math.PI)` },
+  radians: { arity: 1, type: "double", sql: sqlFn("radians"), js: (a3) => `(Number(${a3[0]}) * Math.PI / 180)` },
+  // ── binary math ──
+  pow: { arity: 2, type: "double", sql: sqlFn("pow"), js: m2("pow") },
+  atan2: { arity: 2, type: "double", sql: sqlFn("atan2"), js: m2("atan2") },
+  log: { arity: 2, type: "double", sql: (a3) => `log(${a3[0]}, ${a3[1]})`, js: (a3) => `(Math.log(Number(${a3[1]})) / Math.log(Number(${a3[0]})))` },
+  // log base a0 of a1
+  mod: { arity: 2, type: "double", sql: (a3) => `(${a3[0]} % ${a3[1]})`, js: (a3) => `(Number(${a3[1]}) === 0 ? null : Number(${a3[0]}) % Number(${a3[1]}))` },
+  min: { arity: 2, type: "double", sql: (a3) => `least(${a3[0]}, ${a3[1]})`, js: m2("min") },
+  max: { arity: 2, type: "double", sql: (a3) => `greatest(${a3[0]}, ${a3[1]})`, js: m2("max") },
+  hypot: { arity: 2, type: "double", sql: (a3) => `sqrt(${a3[0]} * ${a3[0]} + ${a3[1]} * ${a3[1]})`, js: m2("hypot") },
+  // ── unary string ──
+  upper: { arity: 1, type: "varchar", sql: sqlFn("upper"), js: (a3) => `String(${a3[0]}).toUpperCase()` },
+  lower: { arity: 1, type: "varchar", sql: sqlFn("lower"), js: (a3) => `String(${a3[0]}).toLowerCase()` },
+  trim: { arity: 1, type: "varchar", sql: sqlFn("trim"), js: (a3) => `String(${a3[0]}).trim()` },
+  ltrim: { arity: 1, type: "varchar", sql: sqlFn("ltrim"), js: (a3) => `String(${a3[0]}).replace(/^\\s+/, "")` },
+  rtrim: { arity: 1, type: "varchar", sql: sqlFn("rtrim"), js: (a3) => `String(${a3[0]}).replace(/\\s+$/, "")` },
+  length: { arity: 1, type: "int", sql: sqlFn("length"), js: (a3) => `String(${a3[0]}).length` },
+  reverse: { arity: 1, type: "varchar", sql: sqlFn("reverse"), js: (a3) => `[...String(${a3[0]})].reverse().join("")` },
+  // ── binary string ──
+  repeat: { arity: 2, type: "varchar", sql: sqlFn("repeat"), js: (a3) => `String(${a3[0]}).repeat(Math.max(0, Math.trunc(Number(${a3[1]}))))` },
+  concat2: { arity: 2, type: "varchar", sql: (a3) => `(${a3[0]} || ${a3[1]})`, js: (a3) => `(String(${a3[0]}) + String(${a3[1]}))` }
+};
+
 // src/lib/dvl/ir/expr.ts
 var literal = (value, space2 = dataSpace, arity = "scalar") => ({ kind: "literal", type: { space: space2, arity }, value });
 var col = (columnName, space2 = dataSpace) => ({ kind: "local-column", type: { space: space2, arity: "per-row" }, columnName });
@@ -402,6 +467,7 @@ var layoutOutput = (layout, output, type) => ({ kind: "layout-output", type, lay
 var boundRef = (tableName, columnName, viaSpec, type, resolve) => ({ kind: "bound-ref", type, tableName, columnName, viaSpec, ...resolve !== void 0 && { resolve } });
 var tableRef = (plotId, attrName, viaSpec, type, resolve) => ({ kind: "table-ref", type, plotId, attrName, viaSpec, ...resolve !== void 0 && { resolve } });
 var binary = (op2, left2, right) => ({ kind: "binary", type: binaryType(op2, left2.type, right.type), op: op2, left: left2, right });
+var callExpr = (fn, args) => ({ kind: "call", type: { space: dataSpace, arity: args.some((a3) => a3.type.arity === "per-row") ? "per-row" : "scalar" }, fn, args });
 function typeOf(e) {
   return e.type;
 }
@@ -410,6 +476,9 @@ function walk(e, visit) {
   if (e.kind === "binary") {
     walk(e.left, visit);
     walk(e.right, visit);
+  } else if (e.kind === "call") {
+    for (const a3 of e.args)
+      walk(a3, visit);
   }
 }
 function leaves(e) {
@@ -418,7 +487,7 @@ function leaves(e) {
   walk(e, (n) => {
     if (n.kind === "var")
       solver.push(n);
-    else if (n.kind !== "literal" && n.kind !== "binary")
+    else if (n.kind !== "literal" && n.kind !== "binary" && n.kind !== "call")
       data.push(n);
   });
   return { data, solver };
@@ -459,8 +528,13 @@ function cTokenize(strings, exprs) {
         j2++;
         continue;
       }
+      if (ch === ",") {
+        tokens.push({ kind: "," });
+        j2++;
+        continue;
+      }
       if (ch === "+" || ch === "-" || ch === "*" || ch === "/" || ch === "%") {
-        if (ch === "-" && (tokens.length === 0 || tokens[tokens.length - 1].kind === "(" || tokens[tokens.length - 1].kind === "op")) {
+        if (ch === "-" && (tokens.length === 0 || tokens[tokens.length - 1].kind === "(" || tokens[tokens.length - 1].kind === "op" || tokens[tokens.length - 1].kind === ",")) {
           let end = j2 + 1;
           while (end < s.length && isDigit(s[end]))
             end++;
@@ -486,7 +560,7 @@ function cTokenize(strings, exprs) {
         let end = j2;
         while (end < s.length && isWord(s[end]))
           end++;
-        tokens.push({ kind: "expr", value: col(s.slice(j2, end)) });
+        tokens.push({ kind: "word", name: s.slice(j2, end) });
         j2 = end;
         continue;
       }
@@ -508,6 +582,30 @@ function cParse(tokens) {
     if (t2.kind === "expr") {
       advance();
       return t2.value;
+    }
+    if (t2.kind === "word") {
+      advance();
+      if (peek()?.kind === "(") {
+        advance();
+        const args = [];
+        if (peek()?.kind !== ")") {
+          args.push(parseExpr(0));
+          while (peek()?.kind === ",") {
+            advance();
+            args.push(parseExpr(0));
+          }
+        }
+        const cl = advance();
+        if (!cl || cl.kind !== ")")
+          throw new Error(`cexpr: expected ')' after ${t2.name}(\u2026`);
+        const def = FUNCTIONS[t2.name];
+        if (def === void 0)
+          throw new Error(`cexpr: unknown function "${t2.name}" (see algebra/functions.ts for the registry)`);
+        if (def.arity !== args.length)
+          throw new Error(`cexpr: "${t2.name}" takes ${def.arity} argument(s), got ${args.length}`);
+        return callExpr(t2.name, args);
+      }
+      return col(t2.name);
     }
     if (t2.kind === "(") {
       advance();
@@ -894,7 +992,7 @@ function asBinding(v2, fallbackRelation) {
 var isComputed = (r) => typeof r === "function" || typeof r === "object" && r !== null && ("arg" in r || "js" in r);
 function parseViaArgs(site, args) {
   const last = args[args.length - 1];
-  const hasOpts = last !== void 0 && !("op" in last) && !("kind" in last && last.kind === "fk");
+  const hasOpts = last !== void 0 && typeof last !== "string" && !("op" in last) && !("kind" in last && last.kind === "fk");
   const steps = hasOpts ? args.slice(0, -1) : args;
   const resolve = hasOpts ? last.resolve : void 0;
   const isSingle = typeof resolve === "string" || typeof resolve === "function" || typeof resolve === "object" && resolve !== null && ("fn" in resolve || "js" in resolve || "arg" in resolve);
@@ -932,16 +1030,32 @@ var strict = (w2) => {
 };
 function validate(spec, registries, report = strict) {
   for (const plot of spec.plots.values()) {
+    if (plot.origin !== void 0)
+      continue;
     if (!registries.marks.has(plot.markType)) {
       report({ message: `unknown mark type: "${plot.markType}"` });
       continue;
     }
     const mark = registries.marks.get(plot.markType);
+    const layoutInputs = /* @__PURE__ */ new Set();
+    for (const [lid, inst] of spec.layouts) {
+      if (!lid.startsWith(`${plot.id}/`))
+        continue;
+      for (const v2 of Object.values(inst.inputs.marks?.project ?? {}))
+        if (typeof v2 === "string")
+          layoutInputs.add(v2);
+    }
     for (const [ch, expr2] of Object.entries(plot.channels)) {
+      if (ch === "cell" && expr2.kind === "table-ref" && expr2.attrName === "dvl_cell")
+        continue;
       if (!(ch in mark.channels)) {
+        if (expr2.kind === "layout-output" || layoutInputs.has(ch))
+          continue;
         report({ message: `mark "${plot.markType}" has no channel "${ch}"` });
         continue;
       }
+      if (expr2.kind !== "literal" && expr2.kind !== "local-column")
+        continue;
       const actual = typeOf(expr2).space;
       const expected = mark.expectedType(ch).space;
       if (!fits(actual, expected)) {
@@ -2148,6 +2262,7 @@ var concat = (...parts) => ({ k: "concat", parts });
 var round = (x3, digits) => ({ k: "round", x: x3, digits });
 var rownum = () => ({ k: "rownum" });
 var cell = (ref) => ({ k: "cell", ref });
+var call = (fn, args) => ({ k: "call", fn, args });
 function cellsOf(e) {
   switch (e.k) {
     case "cell":
@@ -2165,6 +2280,8 @@ function cellsOf(e) {
       return e.parts.flatMap(cellsOf);
     case "round":
       return cellsOf(e.x);
+    case "call":
+      return e.args.flatMap(cellsOf);
     default:
       return [];
   }
@@ -2200,19 +2317,19 @@ function rewriteSql(body, opts) {
     }
     if (ch === "@" && opts.rel) {
       REL_RE.lastIndex = i;
-      const m3 = REL_RE.exec(body);
-      if (m3 !== null) {
-        out += opts.rel(m3[1]);
-        i += m3[0].length;
+      const m4 = REL_RE.exec(body);
+      if (m4 !== null) {
+        out += opts.rel(m4[1]);
+        i += m4[0].length;
         continue;
       }
     }
     if (ch === "{" && opts.cell) {
       CELL_RE.lastIndex = i;
-      const m3 = CELL_RE.exec(body);
-      if (m3 !== null) {
-        out += opts.cell(m3[1]);
-        i += m3[0].length;
+      const m4 = CELL_RE.exec(body);
+      if (m4 !== null) {
+        out += opts.cell(m4[1]);
+        i += m4[0].length;
         continue;
       }
     }
@@ -2411,7 +2528,7 @@ function augmentBroadcast(key, marks2, adds, addSchema2, fit, cells = [], replac
 }
 var KEYED_OP = { eq: "=", lt: "<", le: "<=", gt: ">", ge: ">=", neq: "<>" };
 function augmentKeyed(key, marks2, fit, on2, adds, addSchema2, kind = "JOIN", cells = [], replace2 = false) {
-  const cond2 = on2.map(([m3, f2, op2]) => `m."${m3}" ${KEYED_OP[op2 ?? "eq"] ?? "="} f."${f2}"`).join(" AND ");
+  const cond2 = on2.map(([m4, f2, op2]) => `m."${m4}" ${KEYED_OP[op2 ?? "eq"] ?? "="} f."${f2}"`).join(" AND ");
   const inputCols = replace2 ? void 0 : fragColumns(marks2);
   return mkFrag(key, `SELECT ${augmentHead(adds, replace2, inputCols)} FROM @marks AS m ${kind} @fit AS f ON ${cond2}`, { marks: { fragment: marks2 }, fit: { fragment: fit } }, { passthrough: "marks", add: addSchema2 }, cells);
 }
@@ -2494,6 +2611,12 @@ function exprSql(e) {
       return `(row_number() OVER () - 1)`;
     case "cell":
       return `{${e.ref}}`;
+    case "call": {
+      const def = FUNCTIONS[e.fn];
+      if (def === void 0)
+        throw new Error(`exprSql: unknown function "${e.fn}"`);
+      return def.sql(e.args.map(exprSql));
+    }
   }
 }
 var wsig = (e) => `${e.col}|${e.partition ?? ""}|${e.order ?? ""}`;
@@ -2534,6 +2657,14 @@ function genJsExpr(e) {
       return `(idx ?? 0)`;
     case "cell":
       return `(cells?.[${JSON.stringify(e.ref)}] ?? null)`;
+    case "call": {
+      const def = FUNCTIONS[e.fn];
+      if (def === void 0)
+        throw new Error(`genJsExpr: unknown function "${e.fn}"`);
+      const args = e.args.map(genJsExpr);
+      const refs = args.map((_2, i) => `_a[${i}]`);
+      return `(() => { const _a = [${args.join(", ")}]; return _a.some((v) => v === null || v === undefined) ? null : (${def.js(refs)}); })()`;
+    }
   }
 }
 var compiledEvalJs = /* @__PURE__ */ new WeakMap();
@@ -2574,7 +2705,7 @@ function windowSums(op2, rows) {
     scan(e);
   const out = {};
   for (const [sig, e] of nodes) {
-    const m3 = /* @__PURE__ */ new Map();
+    const m4 = /* @__PURE__ */ new Map();
     const parts = /* @__PURE__ */ new Map();
     for (const r of rows) {
       const k2 = e.partition !== void 0 ? r[e.partition] : "_all";
@@ -2588,19 +2719,19 @@ function windowSums(op2, rows) {
       const total = group.reduce((sum2, r) => sum2 + Number(r[e.col] ?? 0), 0);
       if (e.order === void 0) {
         for (const r of group)
-          m3.set(r, total);
+          m4.set(r, total);
         continue;
       }
       let acc = 0;
       for (const r of [...group].sort((a3, z2) => Number(a3[e.order] ?? 0) - Number(z2[e.order] ?? 0))) {
         acc += Number(r[e.col] ?? 0);
-        m3.set(r, acc);
+        m4.set(r, acc);
       }
     }
-    out[sig] = m3;
+    out[sig] = m4;
   }
   for (const [sig, e] of leads) {
-    const m3 = /* @__PURE__ */ new Map();
+    const m4 = /* @__PURE__ */ new Map();
     const parts = /* @__PURE__ */ new Map();
     for (const r of rows) {
       const k2 = e.partition !== void 0 ? r[e.partition] : "_all";
@@ -2616,10 +2747,10 @@ function windowSums(op2, rows) {
       for (let i = 0; i + off < sorted.length; i++) {
         const v2 = sorted[i + off][e.col];
         if (v2 !== null && v2 !== void 0)
-          m3.set(sorted[i], Number(v2));
+          m4.set(sorted[i], Number(v2));
       }
     }
-    out[sig] = m3;
+    out[sig] = m4;
   }
   return out;
 }
@@ -2894,7 +3025,7 @@ function buildKeyed(on2, fit) {
     throw new Error("keyed apply: the JS substrate supports eq join pairs only \u2014 a range-joined via must stay in SQL");
   const norm = (v2) => String(v2 ?? "");
   const keyOf = (r, cols) => cols.map((c2) => norm(r[c2])).join("\0");
-  const markCols = on2.map(([m3]) => m3);
+  const markCols = on2.map(([m4]) => m4);
   const fitCols = on2.map(([, f2]) => f2);
   const map = new Map((fit?.rows ?? []).map((fr) => [keyOf(fr, fitCols), fr]));
   return { get: (r) => map.get(keyOf(r, markCols)) ?? null };
@@ -2970,6 +3101,25 @@ function buildApplyExec(descFn, shape) {
   };
 }
 
+// src/lib/dvl/operator/treatment.ts
+var isActiveTreatment = (t2) => t2 === "zero" || typeof t2 === "object" && t2 !== null && "explicit" in t2;
+function applyTreatment(domain2, treatment) {
+  if (!isActiveTreatment(treatment))
+    return jsRel([...domain2.rows], domain2.schema);
+  const hasEnvelope = domain2.schema.some((c2) => c2.name === "lo") && domain2.schema.some((c2) => c2.name === "hi");
+  if (typeof treatment === "object" && "explicit" in treatment) {
+    const [lo, hi] = treatment.explicit;
+    if (!hasEnvelope)
+      throw new Error(`domain treatment: explicit [${lo}, ${hi}] needs a numeric (lo/hi) domain \u2014 this scale's domain is categorical`);
+    if (domain2.rows.length === 0)
+      return jsRel([{ lo, hi }], domain2.schema);
+    return jsRel(domain2.rows.map((r) => ({ ...r, lo, hi })), domain2.schema);
+  }
+  if (!hasEnvelope)
+    return jsRel([...domain2.rows], domain2.schema);
+  return jsRel(domain2.rows.map((r) => ({ ...r, lo: Math.min(Number(r.lo), 0) })), domain2.schema);
+}
+
 // src/lib/dvl/operator/operator.ts
 function selfDescribe(obj, tag, name2) {
   Object.defineProperty(obj, "toJSON", { value: () => ({ [tag]: name2 }), enumerable: false });
@@ -2995,6 +3145,12 @@ function trainApplyPlan(name2, needsFit, io) {
     if (contribution !== void 0) {
       return [
         { id: `${io.id}:domain`, reads: [trainIn], writes: [fit, contribution], payload: { kind: "domain", algoName: name2, binding: io.binding, by } },
+        apply2([marksIn, domainHole], domainHole)
+      ];
+    }
+    if (isActiveTreatment(io.treatment)) {
+      return [
+        { id: `${io.id}:domain`, reads: [trainIn], writes: [fit, domainHole], payload: { kind: "domain", algoName: name2, binding: io.binding, by, treatment: io.treatment } },
         apply2([marksIn, domainHole], domainHole)
       ];
     }
@@ -3103,8 +3259,8 @@ var unit = op({
 var envelope = {
   name: "envelope",
   js: (members) => {
-    const lo = Math.min(...members.map((m3) => Number(m3.rows[0]?.lo ?? Infinity)));
-    const hi = Math.max(...members.map((m3) => Number(m3.rows[0]?.hi ?? -Infinity)));
+    const lo = Math.min(...members.map((m4) => Number(m4.rows[0]?.lo ?? Infinity)));
+    const hi = Math.max(...members.map((m4) => Number(m4.rows[0]?.hi ?? -Infinity)));
     return { rows: [{ lo, hi }], schema: [{ name: "lo", type: "double" }, { name: "hi", type: "double" }] };
   }
   // ponytail: SQL impl deferred — the current gather-scatter runs JS-only (materialize + union).
@@ -3114,10 +3270,10 @@ var envelope = {
 var setUnion = {
   name: "set-union",
   js: (members) => {
-    const indexed = members.some((m3) => m3.rows[0] !== void 0 && "idx" in m3.rows[0]);
+    const indexed = members.some((m4) => m4.rows[0] !== void 0 && "idx" in m4.rows[0]);
     const seen = /* @__PURE__ */ new Set();
     const key = (r) => indexed ? JSON.stringify(r.value ?? r.category) : JSON.stringify(r);
-    let rows = members.flatMap((m3) => [...m3.rows]).filter((r) => {
+    let rows = members.flatMap((m4) => [...m4.rows]).filter((r) => {
       const k2 = key(r);
       if (seen.has(k2))
         return false;
@@ -3136,8 +3292,8 @@ var quantileUnion = {
   js: (members) => {
     const seen = /* @__PURE__ */ new Set();
     const values2 = [];
-    for (const m3 of members) {
-      for (const r of m3.rows) {
+    for (const m4 of members) {
+      for (const r of m4.rows) {
         const v2 = Number(r.value);
         if (!seen.has(v2)) {
           seen.add(v2);
@@ -3232,7 +3388,7 @@ var barX = op({
   apply: (b2) => {
     const [xo, wo] = b2.outputs;
     const ratio = bin("/", bin("-", mcol(inputCol(b2, "value")), fcol("lo")), nullif0(bin("-", fcol("hi"), fcol("lo"))));
-    return { kind: "derive", add: { [xo]: ratio, [wo]: ratio }, outTypes: { [xo]: "double", [wo]: "double" } };
+    return { kind: "derive", add: { [xo]: lit(0), [wo]: ratio }, outTypes: { [xo]: "double", [wo]: "double" } };
   },
   ticks: "nice-linear"
 });
@@ -3302,6 +3458,94 @@ var eqY = op({
     const invN = bin("/", lit(1), fcol("n"));
     return { kind: "derive", add: { [yo]: bin("*", rank(inputCol(b2, "value")), invN), [ho]: invN }, outTypes: { [yo]: "double", [ho]: "double" } };
   }
+});
+
+// src/lib/dvl/components/layouts/dag.ts
+function layerDag(ids, edges) {
+  const known = new Set(ids);
+  const radj = new Map(ids.map((id2) => [id2, /* @__PURE__ */ new Set()]));
+  for (const e of edges) {
+    if (known.has(e.src) && known.has(e.dst) && e.src !== e.dst)
+      radj.get(e.dst).add(e.src);
+  }
+  const layer2 = /* @__PURE__ */ new Map();
+  const visiting = /* @__PURE__ */ new Set();
+  const layerOf = (id2) => {
+    const memo = layer2.get(id2);
+    if (memo !== void 0)
+      return memo;
+    if (visiting.has(id2))
+      return 0;
+    visiting.add(id2);
+    const parents = radj.get(id2);
+    const l = parents.size === 0 ? 0 : Math.max(...[...parents].map(layerOf)) + 1;
+    visiting.delete(id2);
+    layer2.set(id2, l);
+    return l;
+  };
+  for (const id2 of ids)
+    layerOf(id2);
+  const byLayer = [];
+  for (const id2 of ids) {
+    const l = layer2.get(id2);
+    (byLayer[l] ?? (byLayer[l] = [])).push(id2);
+  }
+  const layers = byLayer.filter((row) => row !== void 0 && row.length > 0);
+  for (let l = 1; l < layers.length; l++) {
+    const prevPos = new Map(layers[l - 1].map((id2, i) => [id2, i]));
+    const bary = (id2) => {
+      const ps = [...radj.get(id2)].filter((p2) => prevPos.has(p2));
+      return ps.length === 0 ? 0 : ps.reduce((s, p2) => s + prevPos.get(p2), 0) / ps.length;
+    };
+    layers[l].sort((a3, b2) => bary(a3) - bary(b2));
+  }
+  return layers;
+}
+var dag = op({
+  name: "dag",
+  // No domain: no train — self-contained placement (like force). Positions carry no
+  // data-space meaning, so there is nothing an axis could tick.
+  inputs: { marks: [{ name: "id", type: "int" }], edges: [{ name: "src", type: "int" }, { name: "dst", type: "int" }] },
+  refs: [{ from: "edges.src", to: "marks.id" }, { from: "edges.dst", to: "marks.id" }],
+  output: { passthrough: "marks", add: [{ name: "x", type: "double" }, { name: "y", type: "double" }] },
+  outSpaces: { x: relativeSpace(coord("x")), y: relativeSpace(coord("y")) },
+  inputSpaces: { id: dataSpace },
+  // In a template, dag runs PER CELL by default: one layered graph per panel.
+  perCell: true,
+  // ONE ordinary apply op (custom plan, same as force): reads the marks, writes the augmented
+  // marks; the edges aux relation rides binding.inputs. io.key rides payload.by when templated.
+  plan: (io) => {
+    if (io.marksIn === void 0)
+      throw new Error("dag: applies over input marks (PlanIO.marksIn)");
+    return [{ id: `${io.id}:apply`, reads: [io.marksIn], writes: [io.marksOut], payload: { kind: "apply", algoName: "dag", binding: io.binding, ...io.key !== void 0 && { by: io.key } } }];
+  },
+  exec: { js: jsImpl(async (inputs, b2, ctx) => {
+    const marks2 = inputs[0];
+    const [xo, yo] = b2.outputs;
+    const idCol = inputCol(b2, "value");
+    const edgesRef = b2.inputs.edges;
+    const refPairs = b2.refs?.edges ?? [{ from: "src", to: "id" }, { from: "dst", to: "id" }];
+    if (refPairs.length < 2)
+      throw new Error(`dag "${b2.key}": needs two edge endpoint refs (got ${refPairs.length})`);
+    const [srcCol, dstCol] = [refPairs[0].from, refPairs[1].from];
+    const edgeRows = typeof edgesRef === "string" ? await ctx.run(mkFrag(`${b2.key}:edges`, "SELECT * FROM @e AS m", { e: { base: edgesRef } }, { columns: [{ name: srcCol, type: "unknown" }, { name: dstCol, type: "unknown" }] })) : [];
+    const ids = marks2.rows.map((r) => String(r[idCol]));
+    const edges = edgeRows.map((e) => ({ src: String(e[srcCol]), dst: String(e[dstCol]) }));
+    const layers = layerDag(ids, edges);
+    const pad = 0.05;
+    const maxLayer = layers.length - 1;
+    const widest = Math.max(...layers.map((row) => row.length));
+    const step = widest > 1 ? (1 - 2 * pad) / (widest - 1) : 0;
+    const pos = /* @__PURE__ */ new Map();
+    layers.forEach((row, l) => {
+      const y3 = maxLayer === 0 ? 0.5 : 1 - pad - (1 - 2 * pad) * (l / maxLayer);
+      row.forEach((id2, i) => pos.set(id2, { x: 0.5 + (i - (row.length - 1) / 2) * step, y: y3 }));
+    });
+    return {
+      rows: marks2.rows.map((r, i) => ({ ...r, [xo]: pos.get(ids[i]).x, [yo]: pos.get(ids[i]).y })),
+      schema: [...marks2.schema, { name: xo, type: "double" }, { name: yo, type: "double" }]
+    };
+  }) }
 });
 
 // node_modules/d3-force/src/center.js
@@ -3736,8 +3980,8 @@ function link_default(links) {
   function initialize() {
     if (!nodes)
       return;
-    var i, n = nodes.length, m3 = links.length, nodeById = new Map(nodes.map((d, i2) => [id2(d, i2, nodes), d])), link;
-    for (i = 0, count3 = new Array(n); i < m3; ++i) {
+    var i, n = nodes.length, m4 = links.length, nodeById = new Map(nodes.map((d, i2) => [id2(d, i2, nodes), d])), link;
+    for (i = 0, count3 = new Array(n); i < m4; ++i) {
       link = links[i], link.index = i;
       if (typeof link.source !== "object")
         link.source = find(nodeById, link.source);
@@ -3746,11 +3990,11 @@ function link_default(links) {
       count3[link.source.index] = (count3[link.source.index] || 0) + 1;
       count3[link.target.index] = (count3[link.target.index] || 0) + 1;
     }
-    for (i = 0, bias = new Array(m3); i < m3; ++i) {
+    for (i = 0, bias = new Array(m4); i < m4; ++i) {
       link = links[i], bias[i] = count3[link.source.index] / (count3[link.source.index] + count3[link.target.index]);
     }
-    strengths = new Array(m3), initializeStrength();
-    distances = new Array(m3), initializeDistance();
+    strengths = new Array(m4), initializeStrength();
+    distances = new Array(m4), initializeDistance();
   }
   function initializeStrength() {
     if (!nodes)
@@ -4545,7 +4789,7 @@ var stackX = op({
     const total = wsum(wt, { partition });
     return {
       kind: "derive",
-      add: { [xo]: bin("/", cumsum, nullif0(total)), [wo]: bin("/", mcol(wt), nullif0(total)) },
+      add: { [xo]: bin("/", bin("-", cumsum, mcol(wt)), nullif0(total)), [wo]: bin("/", mcol(wt), nullif0(total)) },
       outTypes: { [xo]: "double", [wo]: "double" }
     };
   }
@@ -5428,8 +5672,101 @@ var fitTextComponent = op({
   }) }
 });
 
+// src/lib/dvl/components/layouts/route.ts
+var routeCols = (k2) => ({ ax: `dvl_a${k2}_x`, ay: `dvl_a${k2}_y`, x0: `dvl_b${k2}_x0`, y0: `dvl_b${k2}_y0`, x1: `dvl_b${k2}_x1`, y1: `dvl_b${k2}_y1` });
+var INPUT_NAMES = [1, 2].flatMap((k2) => Object.values(routeCols(k2)));
+var numOf = (v2) => typeof v2 === "number" && Number.isFinite(v2) ? v2 : void 0;
+function anchorOf(row, c2, shape) {
+  const x3 = numOf(row[c2.ax]), y3 = numOf(row[c2.ay]);
+  if (x3 === void 0 || y3 === void 0)
+    return void 0;
+  const x0 = numOf(row[c2.x0]), x1 = numOf(row[c2.x1]), y0 = numOf(row[c2.y0]), y1 = numOf(row[c2.y1]);
+  if (x0 !== void 0 && x1 !== void 0 && y0 !== void 0 && y1 !== void 0) {
+    return { cx: (x0 + x1) / 2, cy: (y0 + y1) / 2, hw: Math.abs(x1 - x0) / 2, hh: Math.abs(y1 - y0) / 2, boxed: true, shape };
+  }
+  return { cx: x3, cy: y3, hw: 0, hh: 0, boxed: false, shape: "box" };
+}
+function exitT(a3, dx, dy) {
+  const rx = a3.hw > 0 ? Math.abs(dx) / a3.hw : 0;
+  const ry = a3.hh > 0 ? Math.abs(dy) / a3.hh : 0;
+  const rxx = a3.hw === 0 && dx !== 0 ? Infinity : rx;
+  const ryy = a3.hh === 0 && dy !== 0 ? Infinity : ry;
+  const m4 = a3.shape === "ellipse" ? Math.sqrt(rxx * rxx + ryy * ryy) : Math.max(rxx, ryy);
+  return m4 > 0 && Number.isFinite(m4) ? 1 / m4 : 0;
+}
+var routeComponent = op({
+  name: "route",
+  // No domain: a geometric refinement over placed pixels — no trained fit, nothing tickable.
+  inputs: { marks: INPUT_NAMES.map((name2) => ({ name: name2, type: "double" })) },
+  output: { passthrough: "marks", add: [
+    { name: "x1", type: "double" },
+    { name: "y1", type: "double" },
+    { name: "x2", type: "double" },
+    { name: "y2", type: "double" }
+  ] },
+  outSpaces: {
+    x1: pixelSpace(coord("x")),
+    y1: pixelSpace(coord("y")),
+    x2: pixelSpace(coord("x")),
+    y2: pixelSpace(coord("y"))
+  },
+  // Pixel input contract ⇒ requiresPixelInputs (op() derives it): route defers post-affine, after
+  // the via joins that mint its hidden borrow columns.
+  inputSpaces: Object.fromEntries(INPUT_NAMES.map((n) => [n, pixelSpace(coord(n.endsWith("_x") || n.includes("_x0") || n.includes("_x1") ? "x" : "y"))])),
+  plan(io) {
+    return [{
+      id: `${io.id}:apply`,
+      reads: io.marksIn !== void 0 ? [io.marksIn] : [],
+      writes: [io.marksOut],
+      payload: { kind: "apply", algoName: "route", binding: io.binding }
+    }];
+  },
+  exec: { js: jsImpl(async (inputs, b2, _ctx) => {
+    const marks2 = inputs[0];
+    if (b2.outputs.length !== 4)
+      throw new Error(`route: pick all four endpoint outputs \u2014 .pick("x1", "y1", "x2", "y2") (got ${b2.outputs.length})`);
+    const [ox1, oy1, ox2, oy2] = b2.outputs;
+    const col3 = (name2) => name2 === INPUT_NAMES[0] ? b2.inputs.value ?? name2 : b2.inputs[name2] ?? name2;
+    const named = (k2) => Object.fromEntries(Object.entries(routeCols(k2)).map(([key, n]) => [key, col3(n)]));
+    const c1 = named(1), c2 = named(2);
+    const opts = b2.options ?? {};
+    const s1 = opts.shape ?? opts.shape1 ?? "box";
+    const s2 = opts.shape ?? opts.shape2 ?? "box";
+    const pad = typeof opts.pad === "number" && opts.pad > 0 ? opts.pad : 0;
+    const rows = marks2.rows.map((row) => {
+      const r = row;
+      const a1 = anchorOf(r, c1, s1), a22 = anchorOf(r, c2, s2);
+      if (a1 === void 0 || a22 === void 0)
+        return { ...r, [ox1]: r[c1.ax] ?? null, [oy1]: r[c1.ay] ?? null, [ox2]: r[c2.ax] ?? null, [oy2]: r[c2.ay] ?? null };
+      const dx = a22.cx - a1.cx, dy = a22.cy - a1.cy;
+      const len3 = Math.hypot(dx, dy);
+      const centers = { ...r, [ox1]: a1.cx, [oy1]: a1.cy, [ox2]: a22.cx, [oy2]: a22.cy };
+      if (len3 === 0)
+        return centers;
+      const t1 = a1.boxed ? exitT(a1, dx, dy) : 0;
+      const t2 = a22.boxed ? exitT(a22, -dx, -dy) : 0;
+      const p1 = t1 + (a1.boxed ? pad / len3 : 0);
+      const p2 = t2 + (a22.boxed ? pad / len3 : 0);
+      if (p1 + p2 >= 1)
+        return centers;
+      return {
+        ...r,
+        [ox1]: a1.cx + p1 * dx,
+        [oy1]: a1.cy + p1 * dy,
+        [ox2]: a22.cx - p2 * dx,
+        [oy2]: a22.cy - p2 * dy
+      };
+    });
+    const schema = [...marks2.schema];
+    for (const o of b2.outputs)
+      if (!schema.some((c3) => c3.name === o))
+        schema.push({ name: o, type: "double" });
+    return { substrate: "js", rows, schema };
+  }) }
+});
+
 // src/lib/dvl/components/layouts/index.ts
-var layoutComponents = [stackX, stackY, pitchX, pitchY, eqX, eqY, bandX, bandY, barX, barY, force, gridStack, truncate, proportionalX, proportionalY, treemap, fitTextComponent];
+var layoutComponents = [stackX, stackY, pitchX, pitchY, eqX, eqY, bandX, bandY, barX, barY, dag, force, gridStack, truncate, proportionalX, proportionalY, treemap, fitTextComponent, routeComponent];
 function registerLayouts(registries) {
   for (const l of layoutComponents)
     registries.operators.register(l.name, l);
@@ -5452,6 +5789,22 @@ var SPACE_OF_KIND = {
   geometry: styleSpace("geometry")
   // a polygon: already-placed [x,y] vertices the pen draws as-is
 };
+var WRAP_OF_KIND = {
+  "positional-x": "lit",
+  "positional-y": "lit",
+  pixel: "px",
+  number: "value",
+  color: "value",
+  shape: "value",
+  text: "value",
+  fontSize: "value",
+  rotate: "value",
+  geometry: "value"
+};
+function wrapOf(mark, channel) {
+  const kind = mark.channels[channel];
+  return mark.defaultWrap?.[channel] ?? (kind !== void 0 ? WRAP_OF_KIND[kind] : "value");
+}
 function exprTypeOfKind(k2) {
   return { space: SPACE_OF_KIND[k2], arity: "per-row" };
 }
@@ -5469,9 +5822,14 @@ function defineMark(spec) {
     channels,
     spatial,
     pixelAxes,
+    defaultWrap: spec.defaultWrap,
     containerEligible: spec.containerEligible ?? false,
     cardinality: spec.cardinality ?? "per-row",
+    anchorDefault: spec.anchorDefault,
+    boundaryShape: spec.boundaryShape,
     draw: spec.draw,
+    extentOf: spec.extentOf,
+    needs: spec.needs,
     expectedType(channel) {
       const k2 = channels[channel];
       if (k2 === void 0)
@@ -5492,19 +5850,42 @@ function defineMark(spec) {
 // src/lib/dvl/components/marks/_draw.ts
 var fillPaint = { fill: "color", stroke: "color", strokeWidth: "pixel", strokeDasharray: "text", opacity: "number", fillOpacity: "number", strokeOpacity: "number", title: "text" };
 var strokePaint = { stroke: "color", strokeWidth: "pixel", strokeDasharray: "text", opacity: "number", strokeOpacity: "number", title: "text" };
-var rectChannels = { x: "positional-x", y: "positional-y", x2: "positional-x", y2: "positional-y", w: "pixel", h: "pixel", ...fillPaint };
-var drawRect = (r, pen) => pen.rect(num(r, "x"), num(r, "y"), num(r, "w"), num(r, "h"), styleOf(r));
-var drawPath = (r, pen) => {
+var rectChannels = { x: "positional-x", y: "positional-y", x2: "positional-x", y2: "positional-y", w: "pixel", h: "pixel", anchor: "shape", ...fillPaint };
+function anchorOffset(r, dflt, w2, h2) {
+  const anchor = str(r, "anchor") ?? dflt;
+  const x3 = num(r, "x"), y3 = num(r, "y");
+  return anchor === "center" ? [x3 - w2 / 2, y3 - h2 / 2] : [x3, y3];
+}
+function boxStyle(r) {
   const s = styleOf(r);
+  s.textAnchor = void 0;
+  return s;
+}
+var drawBox = (dflt) => (r, pen) => {
+  const ix = numOpt(r, "w") === void 0 && numOpt(r, "x2") !== void 0;
+  const iy = numOpt(r, "h") === void 0 && numOpt(r, "y2") !== void 0;
+  const w2 = ix ? Math.abs(num(r, "x2") - num(r, "x")) : num(r, "w");
+  const h2 = iy ? Math.abs(num(r, "y2") - num(r, "y")) : num(r, "h");
+  const [ax, ay] = anchorOffset(r, dflt, w2, h2);
+  const x3 = ix ? Math.min(num(r, "x"), num(r, "x2")) : ax;
+  const y3 = iy ? Math.min(num(r, "y"), num(r, "y2")) : ay;
+  pen.rect(x3, y3, w2, h2, boxStyle(r));
+};
+var strokedStyle = (r) => {
+  const s = styleOf(r);
+  return { ...s, stroke: s.stroke ?? "#000" };
+};
+var drawPath = (r, pen) => {
+  const s = strokedStyle(r);
   pen.path(str(r, "d") ?? "", { ...s, fill: s.fill ?? "none" });
 };
-var drawSegment = (ax, ay, bx, by) => (r, pen) => pen.line(num(r, ax), num(r, ay), num(r, bx, num(r, ax)), num(r, by, num(r, ay)), styleOf(r));
+var drawSegment = (ax, ay, bx, by) => (r, pen) => pen.line(num(r, ax), num(r, ay), num(r, bx, num(r, ax)), num(r, by, num(r, ay)), strokedStyle(r));
 var drawArrow = (r, pen) => {
   const x1 = num(r, "x1");
   const y1 = num(r, "y1");
   const x22 = num(r, "x2");
   const y22 = num(r, "y2");
-  const style = styleOf(r);
+  const style = strokedStyle(r);
   pen.line(x1, y1, x22, y22, style);
   const type = str(r, "headType") ?? "triangle";
   if (type === "none")
@@ -5528,8 +5909,8 @@ var asPolygon = (v2) => {
     if (!v2.startsWith("POLYGON"))
       return null;
     const pts2 = [];
-    for (const m3 of v2.matchAll(WKT_PAIR))
-      pts2.push([Number(m3[1]), Number(m3[2])]);
+    for (const m4 of v2.matchAll(WKT_PAIR))
+      pts2.push([Number(m4[1]), Number(m4[2])]);
     if (pts2.length > 1 && pts2[0][0] === pts2[pts2.length - 1][0] && pts2[0][1] === pts2[pts2.length - 1][1])
       pts2.pop();
     return pts2;
@@ -5552,18 +5933,93 @@ var drawHull = (r, pen) => {
   const pts = asPolygon(r.path);
   if (pts === null || pts.length < 3)
     return;
-  const s = styleOf(r);
+  const s = strokedStyle(r);
   pen.polygon(pts, { ...s, fill: s.fill ?? "none" });
 };
 
 // src/lib/dvl/components/marks/index.ts
+var least = (a3, b2) => bin("/", bin("-", bin("+", a3, b2), unary("abs", bin("-", a3, b2))), lit(2));
+var greatest = (a3, b2) => bin("/", bin("+", bin("+", a3, b2), unary("abs", bin("-", a3, b2))), lit(2));
+var half = (c2) => bin("/", mcol(c2), lit(2));
+function boxAxis(ctx, pos, len3, pos2) {
+  if (!ctx.bound.has(pos))
+    return void 0;
+  const p2 = mcol(pos);
+  if (ctx.bound.has(len3)) {
+    return ctx.anchor === "center" ? [bin("-", p2, half(len3)), bin("+", p2, half(len3))] : [p2, bin("+", p2, mcol(len3))];
+  }
+  if (ctx.bound.has(pos2))
+    return [least(p2, mcol(pos2)), greatest(p2, mcol(pos2))];
+  return [p2, p2];
+}
+function boxEdges(ctx) {
+  const e = {};
+  const x3 = boxAxis(ctx, "x", "w", "x2");
+  if (x3 !== void 0)
+    [e.left, e.right] = x3;
+  const y3 = boxAxis(ctx, "y", "h", "y2");
+  if (y3 !== void 0)
+    [e.top, e.bottom] = y3;
+  return e;
+}
+function dotEdges(ctx) {
+  const e = {};
+  const r = ctx.bound.has("r") ? mcol("r") : lit(3);
+  if (ctx.bound.has("x")) {
+    e.left = bin("-", mcol("x"), r);
+    e.right = bin("+", mcol("x"), r);
+  }
+  if (ctx.bound.has("y")) {
+    e.top = bin("-", mcol("y"), r);
+    e.bottom = bin("+", mcol("y"), r);
+  }
+  return e;
+}
+function textEdges(ctx) {
+  const e = {};
+  const fs = ctx.bound.has("fontSize") ? mcol("fontSize") : lit(10);
+  if (ctx.bound.has("x")) {
+    const x3 = ctx.bound.has("dx") ? bin("+", mcol("x"), mcol("dx")) : mcol("x");
+    if (ctx.bound.has("w")) {
+      [e.left, e.right] = [x3, bin("+", x3, mcol("w"))];
+    } else {
+      const w2 = bin("*", bin("*", call("length", [mcol("text")]), fs), lit(0.6));
+      const anchor = ctx.bound.has("anchor") ? String(ctx.anchor) : "start";
+      if (anchor === "middle")
+        [e.left, e.right] = [bin("-", x3, bin("/", w2, lit(2))), bin("+", x3, bin("/", w2, lit(2)))];
+      else if (anchor === "end")
+        [e.left, e.right] = [bin("-", x3, w2), x3];
+      else
+        [e.left, e.right] = [x3, bin("+", x3, w2)];
+    }
+  }
+  if (ctx.bound.has("y")) {
+    const y3 = ctx.bound.has("dy") ? bin("+", mcol("y"), mcol("dy")) : mcol("y");
+    if (ctx.bound.has("h")) {
+      [e.top, e.bottom] = [y3, bin("+", y3, mcol("h"))];
+    } else {
+      const h2 = bin("*", fs, lit(1.2));
+      const baseline = ctx.bound.has("baseline") ? ctx.baseline ?? "alphabetic" : "alphabetic";
+      if (baseline === "middle")
+        [e.top, e.bottom] = [bin("-", y3, bin("/", h2, lit(2))), bin("+", y3, bin("/", h2, lit(2)))];
+      else if (baseline === "top")
+        [e.top, e.bottom] = [y3, bin("+", y3, h2)];
+      else
+        [e.top, e.bottom] = [bin("-", y3, h2), y3];
+    }
+  }
+  return e;
+}
 var markComponents = [
   // points (VL point/circle/square; Plot dot)
-  defineMark({ type: "dot", channels: { x: "positional-x", y: "positional-y", r: "pixel", shape: "shape", ...fillPaint }, pixelAxes: { r: "xy", strokeWidth: "xy" }, draw: (r, pen) => pen.circle(num(r, "x"), num(r, "y"), num(r, "r", 3), styleOf(r)) }),
+  defineMark({ type: "dot", channels: { x: "positional-x", y: "positional-y", r: "pixel", shape: "shape", ...fillPaint }, pixelAxes: { r: "xy", strokeWidth: "xy" }, boundaryShape: "ellipse", extentOf: dotEdges, needs: ["x", "y"], draw: (r, pen) => pen.circle(num(r, "x"), num(r, "y"), num(r, "r", 3), styleOf(r)) }),
   // rectangles — container-eligible hosts for nesting/faceting (VL bar/rect; Plot bar/rect/cell)
-  defineMark({ type: "rect", containerEligible: true, channels: rectChannels, pixelAxes: { w: "x", h: "y", strokeWidth: "xy" }, draw: drawRect }),
-  defineMark({ type: "bar", containerEligible: true, channels: rectChannels, pixelAxes: { w: "x", h: "y", strokeWidth: "xy" }, draw: drawRect }),
-  defineMark({ type: "cell", containerEligible: true, channels: { x: "positional-x", y: "positional-y", ...fillPaint }, pixelAxes: { strokeWidth: "xy" }, draw: drawRect }),
+  defineMark({ type: "rect", containerEligible: true, channels: rectChannels, pixelAxes: { w: "x", h: "y", strokeWidth: "xy" }, anchorDefault: "topleft", extentOf: boxEdges, needs: ["x", "y", ["w", "x2"], ["h", "y2"]], draw: drawBox("topleft") }),
+  defineMark({ type: "bar", containerEligible: true, channels: rectChannels, pixelAxes: { w: "x", h: "y", strokeWidth: "xy" }, anchorDefault: "topleft", extentOf: boxEdges, needs: ["x", "y", ["w", "x2"], ["h", "y2"]], draw: drawBox("topleft") }),
+  // cell: the heatmap tile — a positioned box that FILLS its band(s). Like Observable Plot's cell,
+  // it takes w/h from the layout it sits in (bandX × bandY), or explicit sizes; unbound w/h fall
+  // back to 0 (a leaf tile nested in a container gets its box from the host instead).
+  defineMark({ type: "cell", containerEligible: true, channels: { x: "positional-x", y: "positional-y", w: "pixel", h: "pixel", anchor: "shape", ...fillPaint }, pixelAxes: { w: "x", h: "y", strokeWidth: "xy" }, anchorDefault: "topleft", extentOf: boxEdges, needs: ["x", "y", "w", "h"], draw: drawBox("topleft") }),
   // paths (N points -> 1 path: cardinality "aggregate"; the array_agg -> `d` is path-agg). `order`
   // is the SEQUENCE channel (SEQUENCE_MARKS §3.1) — the column the points sort by; default x.
   defineMark({ type: "line", cardinality: "aggregate", channels: { x: "positional-x", y: "positional-y", order: "number", ...strokePaint }, pixelAxes: { strokeWidth: "xy" }, draw: drawPath }),
@@ -5573,20 +6029,52 @@ var markComponents = [
   defineMark({ type: "area", cardinality: "aggregate", channels: { x: "positional-x", y: "positional-y", x2: "positional-x", y2: "positional-y", order: "number", ...fillPaint }, pixelAxes: { strokeWidth: "xy" }, draw: drawPath }),
   // connect: the PAIR sibling (SEQUENCE_MARKS §4) — each point borrows its successor's coords via
   // a LEAD window (1:1; the partition tail is degenerate/invisible); drawn like a link segment.
-  defineMark({ type: "connect", cardinality: "pairs", channels: { x: "positional-x", y: "positional-y", order: "number", ...strokePaint }, pixelAxes: { strokeWidth: "xy" }, draw: drawSegment("x1", "y1", "x2", "y2") }),
+  defineMark({ type: "connect", cardinality: "pairs", channels: { x: "positional-x", y: "positional-y", order: "number", ...strokePaint }, pixelAxes: { strokeWidth: "xy" }, needs: ["x1", "y1", "x2", "y2"], draw: drawSegment("x1", "y1", "x2", "y2") }),
   // hull: a per-row POLYGON around a matched point set. Its `path` channel carries the vertices a
   // GEOMETRY reducer minted (convex/bbox) over a via into a point plot — `pts.via(on('species'),
   // { resolve: { path: { js: 'convex' } } }).pick('path')` — already-placed pixel [x,y], drawn as-is
   // (design/2026-07-20-convexhull-resolver.html). Strokes AND fills, so it takes the full paint set.
-  defineMark({ type: "hull", channels: { path: "geometry", ...fillPaint }, pixelAxes: { strokeWidth: "xy" }, draw: drawHull }),
+  defineMark({ type: "hull", channels: { path: "geometry", ...fillPaint }, pixelAxes: { strokeWidth: "xy" }, needs: ["path"], draw: drawHull }),
   // segments / connectors (Plot rule/link/arrow/vector; VL rule)
-  defineMark({ type: "rule", channels: { x: "positional-x", y: "positional-y", x2: "positional-x", y2: "positional-y", ...strokePaint }, pixelAxes: { strokeWidth: "xy" }, draw: drawSegment("x", "y", "x2", "y2") }),
-  defineMark({ type: "link", channels: { x1: "positional-x", y1: "positional-y", x2: "positional-x", y2: "positional-y", ...strokePaint }, pixelAxes: { strokeWidth: "xy" }, draw: drawSegment("x1", "y1", "x2", "y2") }),
-  defineMark({ type: "arrow", channels: { x1: "positional-x", y1: "positional-y", x2: "positional-x", y2: "positional-y", headType: "shape", headSize: "pixel", ...strokePaint }, pixelAxes: { headSize: "xy", strokeWidth: "xy" }, draw: drawArrow }),
+  defineMark({ type: "rule", channels: { x: "positional-x", y: "positional-y", x2: "positional-x", y2: "positional-y", ...strokePaint }, pixelAxes: { strokeWidth: "xy" }, needs: ["x", "y", ["x2", "y2"]], draw: drawSegment("x", "y", "x2", "y2") }),
+  defineMark({ type: "link", channels: { x1: "positional-x", y1: "positional-y", x2: "positional-x", y2: "positional-y", ...strokePaint }, pixelAxes: { strokeWidth: "xy" }, needs: ["x1", "y1", ["x2", "y2"]], draw: drawSegment("x1", "y1", "x2", "y2") }),
+  // bezier: link's curved sibling — the same x1,y1 → x2,y2 endpoint contract (borrowed via
+  // `via().pick`, exactly like link), drawn as ONE cubic Bézier per row. Curve options:
+  //   curvature — signed perpendicular bow as a FRACTION of the chord length (default 0.25;
+  //     negative bends the other way; 0 = a straight segment; peak deviation ≈ ¾·curvature·chord).
+  //   cx1/cy1/cx2/cy2 — explicit control points, ordinary POSITIONAL channels (scale-bindable,
+  //     borrowable). When all four are bound they win over curvature (flow maps, edge bundling).
+  defineMark({
+    type: "bezier",
+    channels: { x1: "positional-x", y1: "positional-y", x2: "positional-x", y2: "positional-y", cx1: "positional-x", cy1: "positional-y", cx2: "positional-x", cy2: "positional-y", curvature: "number", ...strokePaint },
+    pixelAxes: { strokeWidth: "xy" },
+    needs: ["x1", "y1", "x2", "y2"],
+    draw: (r, pen) => {
+      const x1 = num(r, "x1"), y1 = num(r, "y1");
+      const x22 = num(r, "x2", x1), y22 = num(r, "y2", y1);
+      let cx1 = numOpt(r, "cx1"), cy1 = numOpt(r, "cy1"), cx2 = numOpt(r, "cx2"), cy2 = numOpt(r, "cy2");
+      if (cx1 === void 0 || cy1 === void 0 || cx2 === void 0 || cy2 === void 0) {
+        const dx = x22 - x1, dy = y22 - y1;
+        const chord = Math.hypot(dx, dy);
+        if (chord === 0)
+          return;
+        const k2 = num(r, "curvature", 0.25) * chord;
+        const nx = -dy / chord * k2, ny = dx / chord * k2;
+        cx1 = x1 + dx / 3 + nx;
+        cy1 = y1 + dy / 3 + ny;
+        cx2 = x1 + 2 * dx / 3 + nx;
+        cy2 = y1 + 2 * dy / 3 + ny;
+      }
+      const s = strokedStyle(r);
+      pen.path(`M${x1},${y1} C${cx1},${cy1} ${cx2},${cy2} ${x22},${y22}`, { ...s, fill: s.fill ?? "none" });
+    }
+  }),
+  defineMark({ type: "arrow", channels: { x1: "positional-x", y1: "positional-y", x2: "positional-x", y2: "positional-y", headType: "shape", headSize: "pixel", ...strokePaint }, pixelAxes: { headSize: "xy", strokeWidth: "xy" }, needs: ["x1", "y1", ["x2", "y2"]], draw: drawArrow }),
   defineMark({
     type: "vector",
     channels: { x: "positional-x", y: "positional-y", length: "pixel", angle: "number", ...strokePaint },
     pixelAxes: { length: "xy", strokeWidth: "xy" },
+    needs: ["x", "y", "length"],
     // ponytail: angle in radians, 0 = +x
     draw: (r, pen) => {
       const x3 = num(r, "x");
@@ -5602,6 +6090,7 @@ var markComponents = [
     type: "tick",
     channels: { x: "positional-x", y: "positional-y", len: "pixel", orient: "shape", ...strokePaint },
     pixelAxes: { len: "xy", strokeWidth: "xy" },
+    needs: ["x", "y"],
     draw: (r, pen) => {
       const x3 = num(r, "x");
       const y3 = num(r, "y");
@@ -5614,12 +6103,22 @@ var markComponents = [
   }),
   // text & image (VL/Plot text, image). dx/dy: PIXEL nudges the draw applies after placement
   // (an axis label sits `labelPad` px off its baseline -- WUAXIS §createAxis); anchor -> text-anchor.
+  // BOX-PLACEABLE (box-text explainer): optional w/h channels — when a box is bound,
+  // anchor/baseline align the glyph point WITHIN it (middle → x + w/2 …); no box = today's
+  // point semantics, so axis/legend labels are untouched. dx/dy nudge AFTER box alignment.
   defineMark({
     type: "text",
-    channels: { x: "positional-x", y: "positional-y", dx: "pixel", dy: "pixel", text: "text", anchor: "shape", baseline: "shape", fontSize: "fontSize", rotate: "rotate", fill: "color", opacity: "number" },
-    pixelAxes: { dx: "x", dy: "y" },
+    channels: { x: "positional-x", y: "positional-y", w: "pixel", h: "pixel", dx: "pixel", dy: "pixel", text: "text", anchor: "shape", baseline: "shape", fontSize: "fontSize", rotate: "rotate", fill: "color", opacity: "number" },
+    pixelAxes: { w: "x", h: "y", dx: "x", dy: "y" },
+    needs: ["x", "y", "text"],
+    extentOf: textEdges,
     draw: (r, pen) => {
-      const x3 = num(r, "x") + num(r, "dx", 0), y3 = num(r, "y") + num(r, "dy", 0);
+      const w2 = numOpt(r, "w"), h2 = numOpt(r, "h");
+      const anchor = str(r, "anchor");
+      const baseline = str(r, "baseline");
+      const ax = w2 === void 0 ? num(r, "x") : anchor === "middle" ? num(r, "x") + w2 / 2 : anchor === "end" ? num(r, "x") + w2 : num(r, "x");
+      const ay = h2 === void 0 ? num(r, "y") : baseline === "middle" ? num(r, "y") + h2 / 2 : baseline === "bottom" ? num(r, "y") + h2 : num(r, "y");
+      const x3 = ax + num(r, "dx", 0), y3 = ay + num(r, "dy", 0);
       const style = styleOf(r);
       style.fontFamily ??= DEFAULT_FONT_FAMILY;
       const linesRaw = r.lines;
@@ -5630,8 +6129,14 @@ var markComponents = [
         pen.text(lines?.[0] ?? str(r, "text") ?? "", x3, y3, style);
     }
   }),
-  // image: an <image href> box at x,y sized w*h (src = the URL/data-URI). opacity rides the style.
-  defineMark({ type: "image", channels: { x: "positional-x", y: "positional-y", w: "pixel", h: "pixel", src: "text", opacity: "number" }, pixelAxes: { w: "x", h: "y" }, draw: (r, pen) => pen.image(num(r, "x"), num(r, "y"), num(r, "w", 0), num(r, "h", 0), str(r, "src") ?? "", styleOf(r)) })
+  // image: an <image href> box sized w*h (src = the URL/data-URI). opacity rides the style. Anchor
+  // defaults to CENTER (glyph usage — the box is centered on (x, y)); pass anchor:"topleft" for a
+  // corner-placed box (e.g. an image dropped into a band layout's solved rect).
+  defineMark({ type: "image", channels: { x: "positional-x", y: "positional-y", w: "pixel", h: "pixel", anchor: "shape", src: "text", opacity: "number" }, pixelAxes: { w: "x", h: "y" }, anchorDefault: "center", extentOf: boxEdges, needs: ["x", "y", "w", "h", "src"], draw: (r, pen) => {
+    const w2 = num(r, "w", 0), h2 = num(r, "h", 0);
+    const [x3, y3] = anchorOffset(r, "center", w2, h2);
+    pen.image(x3, y3, w2, h2, str(r, "src") ?? "", boxStyle(r));
+  } })
 ];
 
 // src/lib/dvl/components/internal/apply-only.ts
@@ -5996,7 +6501,7 @@ function gatherScatter(op2, store, _ctx) {
     throw new Error("gather-scatter: payload carries no union operator \u2014 emit through planDomainGroups/emitGatherScatter");
   const members = op2.reads.map((r) => store.read(r));
   const u = p2.union.js(members);
-  const union = jsRel(u.rows, u.schema);
+  const union = applyTreatment(u, p2.treatment);
   for (const w2 of op2.writes)
     store.write(w2, union, "assigned");
 }
@@ -6098,9 +6603,9 @@ async function iteratePerGroup(impl, inputs, b2, ctx) {
   const flags = iterFlags(inputs, b2, ctx);
   const norm = (v2) => String(v2 ?? "");
   const mats = await Promise.all(inputs.map((r, i) => flags[i] === true ? materialize(r, ctx.run) : Promise.resolve(void 0)));
-  const m3 = mats[0];
+  const m4 = mats[0];
   const groups = /* @__PURE__ */ new Map();
-  for (const r of m3.rows) {
+  for (const r of m4.rows) {
     const k2 = norm(r[by]);
     const g2 = groups.get(k2);
     if (g2 === void 0)
@@ -6117,7 +6622,7 @@ async function iteratePerGroup(impl, inputs, b2, ctx) {
       if (flags[i] !== true)
         return rel2;
       if (i === 0)
-        return jsRel(g2.rows, m3.schema);
+        return jsRel(g2.rows, m4.schema);
       const mi = mats[i];
       return jsRel(mi.rows.filter((r) => norm(r[by]) === k2), mi.schema);
     });
@@ -6180,8 +6685,8 @@ async function domain(op2, store, ctx) {
   const impl = p2.substrate !== void 0 ? train[p2.substrate] : chooseImpl(train, marks2.substrate);
   const fit = await dispatch2(impl, [marks2], p2.binding, { run: ctx.run, key: p2.by });
   store.write(op2.writes[0], fit, "assigned");
-  const m3 = await materialize(fit, ctx.run);
-  store.write(op2.writes[1], jsRel(m3.rows, m3.schema), "assigned");
+  const m4 = await materialize(fit, ctx.run);
+  store.write(op2.writes[1], applyTreatment(m4, p2.treatment), "assigned");
 }
 
 // src/lib/dvl/components/internal/ops/apply.ts
@@ -6225,14 +6730,14 @@ function render(scene, marks2) {
       parts.push(`<rect x="${f2.drawable.x}" y="${f2.drawable.y}" width="${f2.drawable.w}" height="${f2.drawable.h}" fill="${f2.background}"/>`);
     }
   }
-  for (const m3 of scene.marks) {
-    const desc = marks2.get(m3.markType);
+  for (const m4 of scene.marks) {
+    const desc = marks2.get(m4.markType);
     if (desc.draw === void 0)
-      throw new Error(`render: mark "${m3.markType}" has no draw (not renderable yet)`);
+      throw new Error(`render: mark "${m4.markType}" has no draw (not renderable yet)`);
     const pen = new SvgPen();
-    for (const row of m3.rows)
+    for (const row of m4.rows)
       desc.draw(row, pen);
-    parts.push(`<g data-dvl-plot="${m3.plot}">${pen.content()}</g>`);
+    parts.push(`<g data-dvl-plot="${m4.plot}">${pen.content()}</g>`);
   }
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${scene.width}" height="${scene.height}" font-family="${DVL_FONT_FAMILY}">${parts.join("")}</svg>`;
 }
@@ -6267,7 +6772,7 @@ async function renderOp(op2, store, ctx) {
 function inputBinding(layout, plotId) {
   const sc = layout;
   if (sc.members)
-    return { marks: sc.members.filter((m3) => m3.plot === plotId).map((m3) => m3.column) };
+    return { marks: sc.members.filter((m4) => m4.plot === plotId).map((m4) => m4.column) };
   const out = {};
   for (const [role, input] of Object.entries(layout.inputs)) {
     out[role] = Object.values(input.project ?? {}).filter((v2) => typeof v2 === "string");
@@ -6625,6 +7130,63 @@ async function plotMeasure(op2, store, ctx) {
   store.write(op2.writes[1], h2, "assigned");
 }
 
+// src/lib/dvl/components/internal/ops/overhang.ts
+async function overhang(op2, store, ctx) {
+  const p2 = op2.payload;
+  if (p2.kind !== "overhang")
+    return;
+  const rd = (c2) => {
+    const v2 = store.read(c2);
+    return typeof v2 === "number" ? v2 : 0;
+  };
+  const e0 = rd(p2.expand.lo), e1 = rd(p2.expand.hi);
+  const a0 = `dvl_${p2.axis}0`, a1 = `dvl_${p2.axis}1`;
+  let best0 = -Infinity, best1 = -Infinity, minSpan = Infinity;
+  for (const f2 of p2.frames) {
+    let minE = Infinity, maxE = -Infinity;
+    for (const ref of f2.boxes) {
+      const rel2 = store.read(ref);
+      if (rel2 === void 0)
+        continue;
+      const rows = rel2.substrate === "js" ? rel2.rows : await ctx.run(rel2.frag);
+      for (const row of rows) {
+        const lo = row[a0], hi = row[a1];
+        if (typeof lo === "number" && Number.isFinite(lo) && lo < minE)
+          minE = lo;
+        if (typeof hi === "number" && Number.isFinite(hi) && hi > maxE)
+          maxE = hi;
+      }
+    }
+    if (minE === Infinity && maxE === -Infinity)
+      continue;
+    const cLo = rd(f2.lo), cHi = rd(f2.hi);
+    const span = Math.abs(cHi - cLo);
+    if (span <= 0)
+      continue;
+    minSpan = Math.min(minSpan, span);
+    const flipped = cHi < cLo;
+    const overLo = flipped ? maxE - cLo : cLo - minE;
+    const overHi = flipped ? cHi - minE : maxE - cHi;
+    if (minE !== Infinity || maxE !== -Infinity) {
+      best0 = Math.max(best0, Math.max(0, e0 + overLo / span));
+      best1 = Math.max(best1, Math.max(0, e1 + overHi / span));
+    }
+  }
+  if (best0 === -Infinity && best1 === -Infinity)
+    return;
+  let n0 = best0 === -Infinity ? e0 : best0;
+  let n1 = best1 === -Infinity ? e1 : best1;
+  const cap = 1 - 1 / Math.max(minSpan, 2);
+  if (n0 + n1 > cap && n0 + n1 > 0) {
+    const f2 = cap / (n0 + n1);
+    console.warn(`[dvl] overhang(${p2.scale}): ${p2.axis}-axis mark extents need ${((n0 + n1) * 100).toFixed(0)}% of the span as slack (span ${minSpan.toFixed(0)}px) \u2014 expansion clamped, marks will bleed`);
+    n0 *= f2;
+    n1 *= f2;
+  }
+  store.write(p2.expand.lo, n0, "assigned");
+  store.write(p2.expand.hi, n1, "assigned");
+}
+
 // src/lib/dvl/components/internal/ops/materialize-op.ts
 async function materializeOp(op2, store, ctx) {
   const rel2 = store.read(op2.reads[0]);
@@ -6715,8 +7277,8 @@ function emitSource(op2, store, key, src) {
     return;
   }
   const cols = Object.keys(rows[0]);
-  const lit2 = (v2) => typeof v2 === "number" ? String(v2) : `'${String(v2).replace(/'/g, "''")}'`;
-  const body = `SELECT * FROM (VALUES ${rows.map((r) => `(${cols.map((c2) => lit2(r[c2])).join(", ")})`).join(", ")}) AS _v(${cols.map((c2) => `"${c2}"`).join(", ")})`;
+  const lit3 = (v2) => typeof v2 === "number" ? String(v2) : `'${String(v2).replace(/'/g, "''")}'`;
+  const body = `SELECT * FROM (VALUES ${rows.map((r) => `(${cols.map((c2) => lit3(r[c2])).join(", ")})`).join(", ")}) AS _v(${cols.map((c2) => `"${c2}"`).join(", ")})`;
   store.write(op2.writes[0], sqlRel(mkFrag(key, body, {}, { columns: cols.map((c2) => ({ name: c2, type: typeof rows[0][c2] === "number" ? "double" : "varchar" })) })), "assigned");
 }
 function cellValues(p2, store) {
@@ -6794,7 +7356,7 @@ async function viaAgg(op2, store, ctx) {
   }
   for (const [ch, a3] of Object.entries(p2.adds))
     checkFn(p2.key, ch, a3);
-  const cond2 = p2.on.length > 0 ? p2.on.map(([m3, f2, o]) => `m."${m3}" ${SQL_OP[o] ?? "="} f."${f2}"`).join(" AND ") : "TRUE";
+  const cond2 = p2.on.length > 0 ? p2.on.map(([m4, f2, o]) => `m."${m4}" ${SQL_OP[o] ?? "="} f."${f2}"`).join(" AND ") : "TRUE";
   const geomAdds = Object.entries(p2.adds).filter(([, a3]) => a3.sqlResolved !== void 0);
   const hasJs = Object.values(p2.adds).some((a3) => a3.js !== void 0 && a3.sqlResolved === void 0);
   const b2 = { key: p2.key, inputs: {}, outputs: Object.keys(p2.adds) };
@@ -6971,7 +7533,7 @@ function sigmaVerifyOp(op2, store, _ctx) {
   const host = store.read(op2.reads[1]);
   if (marks2.substrate !== "sql" || host.substrate !== "sql")
     throw new Error(`sigma-verify "${p2.key}": needs SQL inputs`);
-  const cond2 = p2.on.map(([m3, h2]) => `m.${q(m3)} = h.${q(h2)}`).join(" AND ");
+  const cond2 = p2.on.map(([m4, h2]) => `m.${q(m4)} = h.${q(h2)}`).join(" AND ");
   const body = `SELECT m.*, '${p2.key}' AS dvl_reason FROM @marks AS m LEFT JOIN @host AS h ON ${cond2} WHERE h."dvl_mark" IS NULL`;
   store.write(op2.writes[0], sqlRel(mkFrag(p2.key, body, { marks: { fragment: marks2.frag }, host: { fragment: host.frag } }, { passthrough: "marks", add: [{ name: "dvl_reason", type: "varchar" }] })), "assigned");
 }
@@ -7001,6 +7563,7 @@ function registerInternalOps(r) {
   r.ops.register("sigma-verify", sigmaVerifyOp, { canConsume: SQL, canProduce: SQL });
   r.ops.register("via-agg", viaAgg, { canConsume: SQL, canProduce: BOTH });
   r.ops.register("plot-measure", plotMeasure, SINK);
+  r.ops.register("overhang", overhang, SINK);
   r.ops.register("grid-stack", gridStackOp, { canConsume: BOTH, canProduce: JS, fixedOutput: "js" });
   r.ops.register("materialize", materializeOp, { canConsume: SQL, canProduce: JS, fixedOutput: "js" });
   r.ops.register("inject", injectOp, { canConsume: JS, canProduce: SQL, fixedOutput: "sql" });
@@ -7012,8 +7575,8 @@ function registerInternalOps(r) {
 // src/lib/dvl/components/reducers.ts
 var numsOf = (matches, col3) => {
   const out = [];
-  for (const m3 of matches) {
-    const v2 = m3[col3];
+  for (const m4 of matches) {
+    const v2 = m4[col3];
     if (v2 === null || v2 === void 0)
       continue;
     const n = Number(v2);
@@ -7030,9 +7593,9 @@ var oneCol = (matches, cols, name2) => {
 var extentsOf = (matches, cols, name2) => {
   if (cols !== void 0 && cols.length === 2) {
     const out = [];
-    for (const m3 of matches) {
-      const lo = Number(m3[cols[0]]);
-      const hi = Number(m3[cols[1]]);
+    for (const m4 of matches) {
+      const lo = Number(m4[cols[0]]);
+      const hi = Number(m4[cols[1]]);
       if (!Number.isNaN(lo) && !Number.isNaN(hi))
         out.push([lo, hi]);
     }
@@ -7045,9 +7608,9 @@ var pointsOf = (matches, cols) => {
   const xCol = cols !== void 0 && cols.length === 2 ? cols[0] : "x";
   const yCol = cols !== void 0 && cols.length === 2 ? cols[1] : "y";
   const out = [];
-  for (const m3 of matches) {
-    const x3 = Number(m3[xCol]);
-    const y3 = Number(m3[yCol]);
+  for (const m4 of matches) {
+    const x3 = Number(m4[xCol]);
+    const y3 = Number(m4[yCol]);
     if (!Number.isNaN(x3) && !Number.isNaN(y3))
       out.push([x3, y3]);
   }
@@ -7058,7 +7621,7 @@ var convexHull = (pts) => {
     return pts;
   const p2 = [...pts].sort((a3, b2) => a3[0] - b2[0] || a3[1] - b2[1]);
   const cross = (o, a3, b2) => (a3[0] - o[0]) * (b2[1] - o[1]) - (a3[1] - o[1]) * (b2[0] - o[0]);
-  const half = (src) => {
+  const half2 = (src) => {
     const h2 = [];
     for (const q3 of src) {
       while (h2.length >= 2 && cross(h2[h2.length - 2], h2[h2.length - 1], q3) <= 0)
@@ -7068,7 +7631,7 @@ var convexHull = (pts) => {
     h2.pop();
     return h2;
   };
-  return [...half(p2), ...half([...p2].reverse())];
+  return [...half2(p2), ...half2([...p2].reverse())];
 };
 var builtinReducers = {
   /** The most frequent value (ties: first seen). Not one SQL reduce. */
@@ -7077,8 +7640,8 @@ var builtinReducers = {
     const counts = /* @__PURE__ */ new Map();
     let best = null;
     let bestN = 0;
-    for (const m3 of matches) {
-      const v2 = m3[col3];
+    for (const m4 of matches) {
+      const v2 = m4[col3];
       if (v2 === null || v2 === void 0)
         continue;
       const n = (counts.get(v2) ?? 0) + 1;
@@ -7197,8 +7760,8 @@ var estimate = {
 };
 function defaultRegistries() {
   const r = emptyRegistries();
-  for (const m3 of markComponents)
-    r.marks.register(m3.type, m3);
+  for (const m4 of markComponents)
+    r.marks.register(m4.type, m4);
   registerScales(r);
   registerLayouts(r);
   registerTicks(r);
@@ -7221,6 +7784,42 @@ var SCALE_ABBREV = { linear: "lin", log: "log", ordinal: "ord", bandX: "band", b
 var isScaleSpec = (v2) => typeof v2 === "object" && v2 !== null && v2.__scale === "scale";
 var isPendingOutput = (v2) => typeof v2 === "object" && v2 !== null && v2.__out === "pending";
 var isPendingAll = (v2) => typeof v2 === "object" && v2 !== null && v2.__out === "pending-all";
+function desugarRouteInputs(ctx, channels) {
+  const done = /* @__PURE__ */ new Set();
+  for (const val of Object.values(channels)) {
+    if (!isPendingOutput(val) || val.producer.descriptor !== "route" || done.has(val.producer))
+      continue;
+    const p2 = val.producer;
+    done.add(p2);
+    const bag = p2.arg ?? {};
+    for (const [role, k2] of [["src", 1], ["dst", 2]]) {
+      const h2 = bag[role];
+      if (h2 === void 0 || typeof h2 !== "object" || typeof h2.via?.plot !== "string" || typeof h2.out !== "function") {
+        throw new Error(`route: "${role}" must be a plot via handle \u2014 route({ src: nodes.via(eq(...)), dst: nodes.via(eq(...)) })`);
+      }
+      const refPlot = ctx.spec.plots.get(h2.via.plot);
+      if (refPlot === void 0)
+        throw new Error(`route: "${role}" references unknown plot "${h2.via.plot}"`);
+      if (refPlot.channels["x"] === void 0 || refPlot.channels["y"] === void 0) {
+        throw new Error(`route: referent "${refPlot.id}" must bind x and y \u2014 route borrows the placed position as the endpoint anchor`);
+      }
+      channels[`dvl_a${k2}_x`] = h2.out("x");
+      channels[`dvl_a${k2}_y`] = h2.out("y");
+      const desc = ctx.registries.marks.has(refPlot.markType) ? ctx.registries.marks.get(refPlot.markType) : void 0;
+      const boxable = refPlot.origin === void 0 && desc !== void 0 && (desc.cardinality ?? "per-row") === "per-row";
+      const edges = boxable ? boxEdgesOf(refPlot, desc) : void 0;
+      if (edges?.left !== void 0 && edges.right !== void 0 && edges.top !== void 0 && edges.bottom !== void 0) {
+        refPlot.needsBox = true;
+        for (const [suffix, attr3, axis] of [["x0", "dvl_x0", "x"], ["y0", "dvl_y0", "y"], ["x1", "dvl_x1", "x"], ["y1", "dvl_y1", "y"]]) {
+          channels[`dvl_b${k2}_${suffix}`] = tableRef(refPlot.id, attr3, h2.via.on, { space: pixelSpace(coord(axis)), arity: "per-row" });
+        }
+        if (p2.options[`shape${k2}`] === void 0)
+          p2.options[`shape${k2}`] = desc.boundaryShape ?? "box";
+      }
+    }
+    p2.arg = void 0;
+  }
+}
 function expandLayoutOutputs(ctx, channels) {
   if (!Object.values(channels).some(isPendingAll))
     return channels;
@@ -7236,6 +7835,68 @@ function expandLayoutOutputs(ctx, channels) {
         out[name2] = w2.producer.out(name2);
   }
   return out;
+}
+function desugarDataLiterals(mark, channels) {
+  const lengthLits = [];
+  for (const [ch, val] of Object.entries(channels)) {
+    const kind = mark.channels[ch];
+    if (kind === void 0)
+      continue;
+    const bare = (typeof val === "number" || typeof val === "string" || typeof val === "boolean") && wrapOf(mark, ch) === "lit";
+    if (!bare && !isLitMarker(val))
+      continue;
+    const axis = kind === "positional-x" ? "x" : kind === "positional-y" ? "y" : null;
+    if (axis === null) {
+      if (isLitMarker(val) && kind === "pixel")
+        lengthLits.push([ch, val]);
+      continue;
+    }
+    const spec = axisSpecOf(mark, channels, axis);
+    if (spec === void 0)
+      continue;
+    const v2 = isLitMarker(val) ? val.value : val;
+    channels[ch] = { __exprBinding: "expr-binding", scale: spec, expr: literal(v2) };
+  }
+  for (const [ch, val] of lengthLits) {
+    const axis = mark.pixelAxes?.[ch];
+    if (axis !== "x" && axis !== "y")
+      continue;
+    const partner = `${axis}2`;
+    if (mark.channels[partner] !== (axis === "x" ? "positional-x" : "positional-y"))
+      continue;
+    if (channels[partner] !== void 0) {
+      throw new Error(`"${ch}: lit(${String(val.value)})" conflicts with an explicit ${partner} binding \u2014 the length desugars INTO ${partner}; bind one or the other`);
+    }
+    if (typeof val.value !== "number")
+      throw new Error(`"${ch}: lit(${String(val.value)})": a data-unit length must be a number`);
+    const primary = mark.spatial[axis][0];
+    const pv = channels[primary];
+    const base2 = isColumnBinding(pv) ? { scale: pv.scale, expr: col(pv.column) } : isExprBinding(pv) ? { scale: pv.scale, expr: pv.expr } : isScaleSpec(pv) && typeof pv.arg === "string" ? { scale: pv, expr: col(pv.arg) } : void 0;
+    if (base2 === void 0) {
+      throw new Error(`"${ch}: lit(${val.value})" needs "${primary}" bound through a scale over a column or expression \u2014 a pixel ${primary} has nothing to add ${val.value} data units to`);
+    }
+    channels[partner] = { __exprBinding: "expr-binding", scale: base2.scale, expr: binary("+", base2.expr, literal(val.value)) };
+    delete channels[ch];
+  }
+}
+function axisSpecOf(mark, channels, axis) {
+  const want = axis === "x" ? "positional-x" : "positional-y";
+  for (const [ch, val] of Object.entries(channels)) {
+    if (mark.channels[ch] !== want)
+      continue;
+    if (isScaleSpec(val))
+      return val;
+    if (isColumnBinding(val) || isDatumBinding(val) || isExprBinding(val))
+      return val.scale;
+  }
+  return void 0;
+}
+function litError(plotId, channel, kind, value) {
+  const axis = kind === "positional-x" ? "x" : kind === "positional-y" ? "y" : void 0;
+  if (axis !== void 0) {
+    return new Error(`${plotId}: "${channel}: ${String(value)}" is a data value but no ${axis} scale is bound on this mark \u2014 bind one on the ${axis} axis (e.g. ${axis}: linear("col")) or write px(${String(value)}) for a pixel coordinate`);
+  }
+  return new Error(`${plotId}: "${channel}: lit(${String(value)})" is a data-unit length, but "${channel}" has no single axis or no interval partner channel to desugar into \u2014 use a pixel size (${channel}: ${String(value)}) or bind the interval channel yourself`);
 }
 var isExpr = (v2) => typeof v2 === "object" && v2 !== null && "kind" in v2 && "type" in v2;
 var columnOf = (arg, fallback) => typeof arg === "string" ? arg : fallback;
@@ -7262,6 +7923,14 @@ function bindChannel(ctx, nodeId, plotId, source, mark, channel, value, producer
   }
   if (isExpr(value))
     return value;
+  if (isPxMarker(value)) {
+    const pxSpace = space2.space === "relative" ? pixelSpace(space2.geom) : space2;
+    return typeof value.value === "string" ? col(value.value, pxSpace) : literal(value.value, pxSpace, "scalar");
+  }
+  if (isLitMarker(value))
+    throw litError(plotId, channel, kind, value.value);
+  if (wrapOf(mark, channel) === "lit")
+    throw litError(plotId, channel, kind, value);
   const litSpace = space2.space === "relative" ? pixelSpace(space2.geom) : space2;
   return literal(value, litSpace, "scalar");
 }
@@ -7275,6 +7944,8 @@ function makeScale(ctx, id2, spec, source, columnOverride) {
     inputs: parseInputs(desc, effectiveArg, source),
     params: spec.params,
     shared: spec.shared,
+    // authored containment slack (scale-expansion §4) → instance options; allocScaleExpansion reads it
+    options: spec.expand !== void 0 ? { expand: spec.expand } : void 0,
     // derived default (ex-defaultDomain): a niceable domain ⇒ "nice", else "data" — recorded API
     // intent only (§12 S6: no execution consumer yet).
     treatment: spec.treatment ?? (desc.domain !== void 0 && "nice" in desc.domain && desc.domain.nice !== void 0 ? "nice" : "data"),
@@ -7334,7 +8005,7 @@ function coupleChannels(ctx, nodeId, plotId, mark, axis) {
   if (group === void 0 || group.length < 2)
     return;
   const node = ctx.spec.nodes.get(nodeId);
-  const insts = node.frame.scales.map((sid) => ctx.spec.layouts.get(sid)).filter((s) => s.dim === axis && s.channel !== void 0 && group.includes(s.channel) && s.members?.some((m3) => m3.plot === plotId));
+  const insts = node.frame.scales.map((sid) => ctx.spec.layouts.get(sid)).filter((s) => s.dim === axis && s.channel !== void 0 && group.includes(s.channel) && s.members?.some((m4) => m4.plot === plotId));
   if (insts.length < 2)
     return;
   const tags2 = [...new Set(insts.map((i) => i.equiv).filter((t2) => t2 !== void 0))];
@@ -7411,6 +8082,18 @@ var isColumnBinding = (v2) => typeof v2 === "object" && v2 !== null && v2.__colu
 var isDatumBinding = (v2) => typeof v2 === "object" && v2 !== null && v2.__datumBinding === "datum-binding";
 var isExprBinding = (v2) => typeof v2 === "object" && v2 !== null && v2.__exprBinding === "expr-binding";
 var isChannelExpr = (v2) => typeof v2 === "object" && v2 !== null && "kind" in v2 && "type" in v2;
+var isPxMarker = (v2) => typeof v2 === "object" && v2 !== null && v2.__px === "px-marker";
+var isLitMarker = (v2) => typeof v2 === "object" && v2 !== null && v2.__lit === "lit-marker";
+var lit2 = (value) => ({ __lit: "lit-marker", value });
+var px = Object.assign(
+  (value) => ({ __px: "px-marker", value }),
+  {
+    x: (c2) => col(c2, pixelSpace(coord("x"))),
+    y: (c2) => col(c2, pixelSpace(coord("y"))),
+    w: (c2) => col(c2, pixelSpace(len("xy"))),
+    h: (c2) => col(c2, pixelSpace(len("xy")))
+  }
+);
 var scaleFactory = (kind) => (arg, opts = {}) => {
   if (typeof arg === "number" || typeof arg === "boolean")
     throw new Error(`${kind}(${arg}): a scale cannot be fitted to a literal \u2014 bind a deferred scale to data (const S = ${kind}(); \u2026{ y: S('col') }\u2026), then S(${arg}) is a datum in its domain`);
@@ -7422,7 +8105,8 @@ var scaleFactory = (kind) => (arg, opts = {}) => {
     shared: opts.shared,
     side: opts.side,
     treatment: opts.domain,
-    axis: opts.axis
+    axis: opts.axis,
+    expand: opts.expand
   };
   if (arg === void 0) {
     const deferred = Object.assign(
@@ -7493,11 +8177,20 @@ var fitText2 = (bag = {}, options = {}) => {
     (FIT_TEXT_INPUTS.has(k2) ? inputs : opts)[k2] = v2;
   return layoutFactory("fitText")(Object.keys(inputs).length > 0 ? inputs : void 0, opts);
 };
+var ROUTE_INPUTS = /* @__PURE__ */ new Set(["src", "dst"]);
+var route = (bag, options = {}) => {
+  const inputs = {};
+  const opts = { ...options };
+  for (const [k2, v2] of Object.entries(bag ?? {}))
+    (ROUTE_INPUTS.has(k2) ? inputs : opts)[k2] = v2;
+  return layoutFactory("route")(inputs, opts);
+};
 var bandX2 = layoutFactory("bandX");
 var bandY2 = layoutFactory("bandY");
 var barX2 = layoutFactory("barX");
 var barY2 = layoutFactory("barY");
 var force2 = layoutFactory("force");
+var dag2 = layoutFactory("dag");
 var isViaHandle = (v2) => typeof v2 === "object" && v2 !== null && "via" in v2 && typeof v2.via?.plot === "string";
 var asPath = (on2) => Array.isArray(on2) ? on2 : [on2];
 var NodeBuilder = class {
@@ -7525,6 +8218,8 @@ var NodeBuilder = class {
     const desc = this.ctx.registries.marks.get(markType);
     const plotId = this.ctx.spec.ids.plot(this.nodeId, opts?.key);
     channels = expandLayoutOutputs(this.ctx, channels);
+    desugarDataLiterals(desc, channels);
+    desugarRouteInputs(this.ctx, channels);
     let src = isUnitSource(source) ? this.#unitSource(plotId, source.value) : source;
     const datumRow = {};
     for (const [ch, val] of Object.entries(channels))
@@ -7580,6 +8275,7 @@ var NodeBuilder = class {
     const plot = this.ctx.spec.plots.get(plotId);
     const desc = this.ctx.registries.marks.get(plot.markType);
     channels = expandLayoutOutputs(this.ctx, channels);
+    desugarDataLiterals(desc, channels);
     const producerIds = /* @__PURE__ */ new Map();
     for (const val of Object.values(channels)) {
       if (isPendingOutput(val) && !producerIds.has(val.producer)) {
@@ -7665,6 +8361,11 @@ var NodeBuilder = class {
   }
   link(s, c2, o) {
     return this.mark("link", s, c2, o);
+  }
+  /** link's curved sibling: one cubic Bézier per row between borrowed endpoints — `curvature`
+   *  bends it (fraction of the chord), or bind cx1/cy1/cx2/cy2 for explicit control points. */
+  bezier(s, c2, o) {
+    return this.mark("bezier", s, c2, o);
   }
   arrow(s, c2, o) {
     return this.mark("arrow", s, c2, o);
@@ -7778,7 +8479,7 @@ var PlotBuilder = class extends NodeBuilder {
     const plot = this.ctx.spec.plots.get(this.plotId);
     const plotId = this.plotId;
     const last = args[args.length - 1];
-    if (last !== void 0 && "resolve" in last && typeof last.resolve === "string" && this.ctx.registries.reducers.has(last.resolve)) {
+    if (last !== void 0 && typeof last !== "string" && "resolve" in last && typeof last.resolve === "string" && this.ctx.registries.reducers.has(last.resolve)) {
       const spec = this.ctx.registries.reducers.get(last.resolve);
       if (spec.defaultOutput !== void 0)
         args = [...args.slice(0, -1), { resolve: { [spec.defaultOutput]: { js: last.resolve } } }];
@@ -7864,6 +8565,9 @@ var NestBuilder = class {
   link(c2, o) {
     return this.layer("link", c2, o);
   }
+  bezier(c2, o) {
+    return this.layer("bezier", c2, o);
+  }
   hull(c2, o) {
     return this.layer("hull", c2, o);
   }
@@ -7894,7 +8598,7 @@ var UNIT = Object.assign(
 );
 
 // src/lib/dvl/ir/refs.ts
-var isFKRef = (s) => "kind" in s && s.kind === "fk";
+var isFKRef = (s) => typeof s === "object" && s !== null && "kind" in s && s.kind === "fk";
 var attr2 = (a3) => {
   if (typeof a3 !== "string")
     return a3;
@@ -7910,6 +8614,12 @@ var ge = cond("ge");
 var neq = cond("neq");
 var fk = (relation) => ({ kind: "fk", relation });
 var on = (col3) => col3 === "*" ? { op: "eq", left: attr2("*"), right: attr2("*"), cross: true } : eq(col3, col3);
+var normalizeStep = (s) => typeof s === "string" ? on(s) : s;
+function normalizePath(p2) {
+  if (p2 === null || !p2.some((s) => typeof s === "string"))
+    return p2;
+  return p2.map(normalizeStep);
+}
 function path(...relations) {
   return relations.map(fk);
 }
@@ -7935,6 +8645,11 @@ function tokenize(strings, exprs) {
       }
       if (ch === ")") {
         tokens.push({ kind: ")" });
+        j2++;
+        continue;
+      }
+      if (ch === ",") {
+        tokens.push({ kind: "," });
         j2++;
         continue;
       }
@@ -7977,10 +8692,10 @@ function tokenize(strings, exprs) {
           j2 = ce2;
           continue;
         }
-        if (UNARIES.has(word)) {
+        if (UNARIES.has(word) || FUNCTIONS[word] !== void 0) {
           tokens.push({ kind: "fn", value: word });
         } else
-          throw new Error(`expr template: unknown identifier "${word}" (use m.<col> / f.<col>, or interpolation)`);
+          throw new Error(`expr template: unknown identifier "${word}" (use m.<col> / f.<col>, a registered function, or interpolation)`);
         j2 = end;
         continue;
       }
@@ -8022,13 +8737,24 @@ function parse(tokens) {
       const lp = advance();
       if (!lp || lp.kind !== "(")
         throw new Error(`expr template: expected '(' after ${fn}`);
-      const arg = parseExpr(0);
+      const args = [parseExpr(0)];
+      while (peek()?.kind === ",") {
+        advance();
+        args.push(parseExpr(0));
+      }
       const rp = advance();
       if (!rp || rp.kind !== ")")
         throw new Error(`expr template: expected ')' after ${fn}(...`);
       if (fn === "nullif0")
-        return nullif0(arg);
-      return unary(fn, arg);
+        return nullif0(args[0]);
+      if (fn === "floor" || fn === "ln" || fn === "abs" || fn === "sqrt")
+        return unary(fn, args[0]);
+      const def = FUNCTIONS[fn];
+      if (def === void 0)
+        throw new Error(`expr template: unknown function "${fn}"`);
+      if (def.arity !== args.length)
+        throw new Error(`expr template: "${fn}" takes ${def.arity} argument(s), got ${args.length}`);
+      return call(fn, args);
     }
     throw new Error(`expr template: unexpected token ${JSON.stringify(t2)}`);
   }
@@ -8416,8 +9142,8 @@ function inferPartitionAxis(spec, arranged, domains) {
     const dim = spec.layouts.get(g2.ids[0])?.dim;
     const hit = /* @__PURE__ */ new Set();
     for (const id2 of g2.ids)
-      for (const m3 of spec.layouts.get(id2)?.members ?? []) {
-        const pn = spec.plots.get(m3.plot)?.node;
+      for (const m4 of spec.layouts.get(id2)?.members ?? []) {
+        const pn = spec.plots.get(m4.plot)?.node;
         if (pn !== void 0 && arrangedNodes.has(pn))
           hit.add(pn);
       }
@@ -8616,7 +9342,7 @@ function planDomainGroups(spec) {
     if (inst.shared === false)
       continue;
     const nid = nodeOf(inst);
-    const multiMember = new Set(inst.members.map((m3) => m3.plot)).size > 1;
+    const multiMember = new Set(inst.members.map((m4) => m4.plot)).size > 1;
     const uk = unionOf(opOf(inst));
     if (uk === void 0) {
       if (multiMember)
@@ -8630,7 +9356,7 @@ function planDomainGroups(spec) {
   const contributions = /* @__PURE__ */ new Map();
   const groups = [];
   for (const ids of byKey.values()) {
-    const memberPlots = new Set(ids.flatMap((id2) => (spec.layouts.get(id2).members ?? []).map((m3) => m3.plot)));
+    const memberPlots = new Set(ids.flatMap((id2) => (spec.layouts.get(id2).members ?? []).map((m4) => m4.plot)));
     if (ids.length === 1 && memberPlots.size === 1)
       continue;
     for (const id2 of ids)
@@ -8643,11 +9369,16 @@ function emitGatherScatter(spec, domains, specs) {
   for (const g2 of domains.groups) {
     if (g2.ids.some((id2) => (domains.contributions.get(id2) ?? []).length === 0))
       continue;
+    const actives = g2.ids.map((id2) => spec.layouts.get(id2)?.treatment).filter((t2) => isActiveTreatment(t2));
+    const treatment = actives[0];
+    if (actives.length > 1 && actives.some((t2) => JSON.stringify(t2) !== JSON.stringify(treatment))) {
+      warnOnce(`${g2.ids.join("+")}:treatment`, `shared scales ${g2.ids.join(", ")} declare DIFFERENT domain treatments \u2014 keeping the first (${JSON.stringify(treatment)})`);
+    }
     specs.push({
       id: `${g2.ids.join("+")}:gather-scatter`,
       reads: g2.ids.flatMap((id2) => domains.contributions.get(id2)),
       writes: g2.ids.map((id2) => spec.layouts.get(id2).domain),
-      payload: { kind: "gather-scatter", key: `${g2.ids.join("+")}:union`, union: g2.union }
+      payload: { kind: "gather-scatter", key: `${g2.ids.join("+")}:union`, union: g2.union, ...treatment !== void 0 ? { treatment } : {} }
     });
   }
 }
@@ -8661,6 +9392,8 @@ function toScalar(e) {
       return mcol(e.columnName);
     case "binary":
       return bin(e.op, toScalar(e.left), toScalar(e.right));
+    case "call":
+      return call(e.fn, e.args.map(toScalar));
     case "var":
       return cell(e.cell);
     default:
@@ -8683,7 +9416,7 @@ function resolvedOf(site) {
   if (site.resolved !== void 0)
     return site.resolved;
   if (site.on !== null && site.on.every((s) => !isFKRef(s)))
-    return [site.on];
+    return [site.on.map(normalizeStep)];
   return null;
 }
 function pairs(hop, opts) {
@@ -8698,20 +9431,38 @@ function pairs(hop, opts) {
 // src/lib/dvl/layout/frame.ts
 var affineRelop = (key, tag, axis, cols, lo, hi) => {
   const span = bin("-", hi, lo);
+  const boxOf = (c2) => {
+    if (c2.exp === void 0)
+      return { lo, hi, span };
+    const loC = bin("+", lo, bin("*", span, cell(c2.exp.lo)));
+    const hiC = bin("-", hi, bin("*", span, cell(c2.exp.hi)));
+    return { lo: loC, hi: hiC, span: bin("-", hiC, loC) };
+  };
   const add3 = {};
   const outTypes = {};
   const outSpaces = {};
   for (const c2 of cols.coords) {
-    add3[c2] = bin("+", lo, bin("*", span, mcol(c2)));
-    outTypes[c2] = "double";
-    outSpaces[c2] = pixelSpace(coord(axis));
+    const b2 = boxOf(c2);
+    add3[c2.name] = bin("+", b2.lo, bin("*", b2.span, mcol(c2.name)));
+    outTypes[c2.name] = "double";
+    outSpaces[c2.name] = pixelSpace(coord(axis));
   }
   for (const l of cols.lens) {
-    add3[l] = bin("*", unary("abs", span), mcol(l));
-    outTypes[l] = "double";
-    outSpaces[l] = pixelSpace(len(axis));
+    const b2 = boxOf(l);
+    add3[l.name] = bin("*", unary("abs", b2.span), mcol(l.name));
+    outTypes[l.name] = "double";
+    outSpaces[l.name] = pixelSpace(len(axis));
   }
   return { kind: "relop", key, add: add3, outTypes, outSpaces, replace: true, tag };
+};
+var expReads = (cols) => {
+  const out = /* @__PURE__ */ new Set();
+  for (const c2 of [...cols.coords, ...cols.lens])
+    if (c2.exp !== void 0) {
+      out.add(c2.exp.lo);
+      out.add(c2.exp.hi);
+    }
+  return [...out];
 };
 function emitFrameAffines(args) {
   const { plotId, relByAxis, template, cc, store, specs, dataInset } = args;
@@ -8724,7 +9475,7 @@ function emitFrameAffines(args) {
       const [lo, hi] = axis === "x" ? [bin("+", fcol("x"), cell(insetLo)), bin("-", bin("+", fcol("x"), fcol("w")), cell(insetHi))] : [bin("-", bin("+", fcol("y"), fcol("h")), cell(insetLo)), bin("+", fcol("y"), cell(insetHi))];
       specs.push({
         id: `${plotId}:affine:${axis}`,
-        reads: [marks2, template.hostMarks, insetLo, insetHi],
+        reads: [marks2, template.hostMarks, insetLo, insetHi, ...expReads(cols)],
         writes: [placed],
         payload: { ...affineRelop(`${plotId}:aff:${axis}`, `affine-k:${axis}`, axis, cols, lo, hi), join: { input: "host", on: [["dvl_cell", "dvl_mark"]] } }
       });
@@ -8733,14 +9484,101 @@ function emitFrameAffines(args) {
       const [insLo, insHi] = axis === "x" ? [dataInset?.left ?? 0, dataInset?.right ?? 0] : [dataInset?.bottom ?? 0, dataInset?.top ?? 0];
       const lo = insLo !== 0 ? bin(axis === "x" ? "+" : "-", cell(loC), lit(insLo)) : cell(loC);
       const hi = insHi !== 0 ? bin(axis === "x" ? "-" : "+", cell(hiC), lit(insHi)) : cell(hiC);
-      specs.push({ id: `${plotId}:affine:${axis}`, reads: [marks2, loC, hiC], writes: [placed], payload: affineRelop(`${plotId}:aff:${axis}`, `affine:${axis}`, axis, cols, lo, hi) });
+      specs.push({ id: `${plotId}:affine:${axis}`, reads: [marks2, loC, hiC, ...expReads(cols)], writes: [placed], payload: affineRelop(`${plotId}:aff:${axis}`, `affine:${axis}`, axis, cols, lo, hi) });
     }
     marks2 = placed;
   }
   return marks2;
 }
 
+// src/lib/dvl/plan/passes/scale-expansion.ts
+function baseInstanceOf(spec, id2) {
+  const inst = spec.layouts.get(id2);
+  const wrappedId = inst?.options?.wrappedId;
+  if (typeof wrappedId === "string") {
+    const base2 = spec.layouts.get(wrappedId);
+    if (base2 === void 0)
+      throw new Error(`scale-expansion: "${id2}" wraps unknown instance "${wrappedId}" \u2014 an apply-only wrapper must name its base scale's instance id`);
+    return base2;
+  }
+  return inst;
+}
+function baseScaleOf(spec, expr2) {
+  if (expr2.kind !== "layout-output")
+    return void 0;
+  const sp = expr2.type.space;
+  if (sp.space !== "relative" || sp.geom.kind !== "coord")
+    return void 0;
+  const inst = baseInstanceOf(spec, expr2.layout);
+  return inst === void 0 ? void 0 : { inst, axis: sp.geom.axis };
+}
+var EXTENT_CHANNELS = ["w", "h", "r", "x2", "y2", "text"];
+var participates = (plot) => plot.origin === void 0 && plot.resolvedMark?.extentOf !== void 0 && plot.resolvedMark.cardinality === "per-row" && EXTENT_CHANNELS.some((ch) => plot.channels[ch] !== void 0);
+function allocScaleExpansion(spec) {
+  for (const plot of spec.plots.values()) {
+    if (!participates(plot))
+      continue;
+    for (const expr2 of Object.values(plot.channels)) {
+      const found = baseScaleOf(spec, expr2);
+      if (found === void 0 || found.inst.expand !== void 0)
+        continue;
+      const { inst, axis } = found;
+      const authored = inst.options?.expand;
+      if (authored === 0 || authored === false)
+        continue;
+      const space2 = relativeSpace(len(axis));
+      if (typeof authored === "number" || Array.isArray(authored)) {
+        const [lo, hi] = Array.isArray(authored) ? authored : [authored, authored];
+        inst.expand = { lo: spec.cells.alloc("demand", lo, "scalar", space2), hi: spec.cells.alloc("demand", hi, "scalar", space2) };
+        spec.cells.seal(inst.expand.lo);
+        spec.cells.seal(inst.expand.hi);
+      } else {
+        inst.expand = { lo: spec.cells.alloc("demand", 0, "scalar", space2), hi: spec.cells.alloc("demand", 0, "scalar", space2) };
+      }
+    }
+  }
+}
+function emitScaleOverhang(spec, builds, specs) {
+  const perScale = /* @__PURE__ */ new Map();
+  for (const plot of spec.plots.values()) {
+    if (!participates(plot))
+      continue;
+    const boxed = builds.get(plot.id)?.boxed;
+    if (boxed === void 0)
+      continue;
+    for (const expr2 of Object.values(plot.channels)) {
+      const found = baseScaleOf(spec, expr2);
+      if (found === void 0 || found.inst.expand === void 0)
+        continue;
+      if (spec.cells.get(found.inst.expand.lo).status === "sealed")
+        continue;
+      let entry = perScale.get(found.inst.id);
+      if (entry === void 0)
+        perScale.set(found.inst.id, entry = { axis: found.axis, frames: /* @__PURE__ */ new Map() });
+      const frame2 = entry.frames.get(plot.node) ?? [];
+      if (!frame2.includes(boxed))
+        frame2.push(boxed);
+      entry.frames.set(plot.node, frame2);
+    }
+  }
+  for (const [scaleId, { axis, frames }] of perScale) {
+    const expand = spec.layouts.get(scaleId).expand;
+    const frameSpecs = [...frames].map(([nodeId, boxes]) => {
+      const cc = spec.nodes.get(nodeId).extent.content;
+      const [lo, hi] = axis === "x" ? [cc.left, cc.right] : [cc.bottom, cc.top];
+      return { boxes, lo, hi };
+    });
+    specs.push({
+      id: `${scaleId}:overhang`,
+      reads: [...frameSpecs.flatMap((f2) => [...f2.boxes, f2.lo, f2.hi]), expand.lo, expand.hi],
+      writes: [expand.lo, expand.hi],
+      payload: { kind: "overhang", scale: scaleId, axis, expand, frames: frameSpecs }
+    });
+  }
+}
+
 // src/lib/dvl/plan/compile/plot.ts
+var BOX_ATTRS = /* @__PURE__ */ new Set(["dvl_x0", "dvl_x1", "dvl_y0", "dvl_y1"]);
 function emitIntermediateHops(resolved, idPrefix, marksIn, specs, store, eqOnly) {
   const mint = (c2) => `dvl_h_${sanitizeOp(idPrefix)}_${c2}`;
   let marks2 = marksIn;
@@ -9074,6 +9912,7 @@ function compilePlot(spec, nodeId, plotId, specs, producers, contributions, opts
       relByAxis.set(axis, g2 = { coords: [], lens: [] });
     return g2;
   };
+  const expOf = (expr2) => expr2 === void 0 || expr2.kind !== "layout-output" ? void 0 : baseInstanceOf(spec, expr2.layout)?.expand;
   if (plot.baseProjections !== void 0 && Object.keys(plot.baseProjections).length > 0) {
     const prev = marks2;
     marks2 = store.alloc("marks", void 0, "relation");
@@ -9137,7 +9976,7 @@ function compilePlot(spec, nodeId, plotId, specs, producers, contributions, opts
         holes.contribution = contribution;
       }
       const key = template !== void 0 && inst.shared !== true && (inst.shared === false || desc.perCell === true) ? "dvl_cell" : void 0;
-      const io = { id: `${plotId}:${step.layoutId}`, binding, marksIn: prev, trainIn: pipelineBase, marksOut: next, holes, key, alloc: (role, kind) => store.alloc(role, void 0, kind) };
+      const io = { id: `${plotId}:${step.layoutId}`, binding, marksIn: prev, trainIn: pipelineBase, marksOut: next, holes, key, treatment: inst.treatment, alloc: (role, kind) => store.alloc(role, void 0, kind) };
       specs.push(...stampAlgo(algo, algo.plan(io)));
       for (const o of declared) {
         const chs = out2chs.get(o);
@@ -9163,7 +10002,7 @@ function compilePlot(spec, nodeId, plotId, specs, producers, contributions, opts
       specs.push({ id: `${plotId}:lit:${step.ch}`, reads: [prev], writes: [next], payload: { kind: "relop", key: `${plotId}:${step.ch}`, add: { [step.ch]: lit(step.expr.value, step.expr.type.space) }, outTypes: { [step.ch]: litType(step.expr.value) }, outSpaces: { [step.ch]: step.expr.type.space }, tag: `lit:${step.ch}` } });
     } else if (step.expr.kind === "local-column") {
       specs.push({ id: `${plotId}:col:${step.ch}`, reads: [prev], writes: [next], payload: { kind: "relop", key: `${plotId}:${step.ch}`, add: { [step.ch]: mcol(step.expr.columnName) }, outTypes: { [step.ch]: "unknown" }, outSpaces: { [step.ch]: step.expr.type.space }, tag: `col:${step.ch}` } });
-    } else if (step.expr.kind === "binary") {
+    } else if (step.expr.kind === "binary" || step.expr.kind === "call") {
       let plotLift = false;
       walk(step.expr, (n) => {
         if (n.kind === "local-column" && n.columnName.startsWith("dvl_lift_") && plot.channels[n.columnName]?.kind === "table-ref")
@@ -9207,9 +10046,9 @@ function compilePlot(spec, nodeId, plotId, specs, producers, contributions, opts
     });
     marks2 = next;
     if (sx.space === "relative" && sx.geom.kind === "coord")
-      rel2(sx.geom.axis).coords.push("x1", "x2");
+      rel2(sx.geom.axis).coords.push({ name: "x1", exp: expOf(plot.channels["x"]) }, { name: "x2", exp: expOf(plot.channels["x"]) });
     if (sy.space === "relative" && sy.geom.kind === "coord")
-      rel2(sy.geom.axis).coords.push("y1", "y2");
+      rel2(sy.geom.axis).coords.push({ name: "y1", exp: expOf(plot.channels["y"]) }, { name: "y2", exp: expOf(plot.channels["y"]) });
   }
   for (const [ch, expr2] of Object.entries(plot.channels)) {
     if (expr2.kind === "table-ref")
@@ -9218,17 +10057,18 @@ function compilePlot(spec, nodeId, plotId, specs, producers, contributions, opts
     if (sp.space !== "relative")
       continue;
     if (sp.geom.kind === "coord")
-      rel2(sp.geom.axis).coords.push(ch);
+      rel2(sp.geom.axis).coords.push({ name: ch, exp: expOf(expr2) });
     else if (sp.geom.kind === "len") {
       if (sp.geom.axis === "xy")
         throw new Error(`compilePlot: channel "${ch}" is a relative len\u27E8xy\u27E9 \u2014 an isotropic relative length has no frame axis to place into (declare len\u27E8x\u27E9 or len\u27E8y\u27E9, or bind a pixel value)`);
-      rel2(sp.geom.axis).lens.push(ch);
+      rel2(sp.geom.axis).lens.push({ name: ch, exp: expOf(expr2) });
     }
   }
   const relMarks = marks2;
   const dataInset = nodeId === spec.root ? opts.inset : void 0;
   marks2 = emitFrameAffines({ plotId, relByAxis, template, insets: node.insets, cc, store, specs, marks: marks2, dataInset });
-  for (const step of postAffineSteps) {
+  const postAffineOrdered = [...postAffineSteps.filter((s) => s.kind !== "layout"), ...postAffineSteps.filter((s) => s.kind === "layout")];
+  for (const step of postAffineOrdered) {
     if (step.kind === "expr") {
       const next2 = store.alloc("marks", void 0, "relation");
       specs.push({ id: `${plotId}:expr:${step.ch}`, reads: [marks2], writes: [next2], payload: { kind: "relop", key: `${plotId}:${step.ch}`, add: { [step.ch]: toScalar(step.expr) }, outTypes: { [step.ch]: "double" }, outSpaces: { [step.ch]: step.expr.type.space }, tag: `expr:${step.ch}` } });
@@ -9237,9 +10077,16 @@ function compilePlot(spec, nodeId, plotId, specs, producers, contributions, opts
     }
     if (step.kind === "via") {
       const ref = built.find((pb) => pb.pid === step.refPlot);
-      const refCell = ref !== void 0 ? ref.marks : `$ref:${step.refPlot}`;
+      const wantsBox = step.refPlot !== void 0 && step.chans.some((c2) => BOX_ATTRS.has(c2.attr));
+      let refCell;
+      if (wantsBox) {
+        if (ref !== void 0 && ref.boxed === void 0)
+          throw new Error(`compilePlot: via on "${plotId}" borrows box edges of "${step.refPlot}" but its box fork was never emitted \u2014 desugarRouteInputs must set needsBox at bind (compiler bug)`);
+        refCell = ref !== void 0 ? ref.boxed : `$plot-boxed:${step.refPlot}`;
+      } else {
+        refCell = ref !== void 0 ? ref.marks : `$ref:${step.refPlot}`;
+      }
       marks2 = emitViaJoins(step, refCell, marks2, plotId);
-      continue;
     }
     if (step.kind !== "layout")
       continue;
@@ -9287,7 +10134,33 @@ function compilePlot(spec, nodeId, plotId, specs, producers, contributions, opts
     specs.push({ id: `${plotId}:path`, reads: [marks2], writes: [placed], payload: { kind: "path-agg", key: `${plotId}:path`, shape: plot.markType === "area" ? "area" : "line", carry, group, ...orderCh !== void 0 && { order: orderCh } } });
     marks2 = placed;
   }
-  return { pid: plotId, marks: marks2, relMarks, base: base2, keyed: keyedCell };
+  let boxed;
+  const liveExpansion = Object.values(plot.channels).some((e) => {
+    const exp = expOf(e);
+    return exp !== void 0 && store.get(exp.lo).status !== "sealed";
+  });
+  if (liveExpansion && participates(plot) || plot.needsBox === true) {
+    const edges = boxEdgesOf(plot) ?? {};
+    const add3 = {};
+    const outTypes = {};
+    const outSpaces = {};
+    const put = (col3, e, axis) => {
+      if (e !== void 0) {
+        add3[col3] = e;
+        outTypes[col3] = "double";
+        outSpaces[col3] = pixelSpace(coord(axis));
+      }
+    };
+    put("dvl_x0", edges.left, "x");
+    put("dvl_x1", edges.right, "x");
+    put("dvl_y0", edges.top, "y");
+    put("dvl_y1", edges.bottom, "y");
+    if (Object.keys(add3).length > 0) {
+      boxed = store.alloc("marks", void 0, "relation");
+      specs.push({ id: `${plotId}:box`, reads: [marks2], writes: [boxed], payload: { kind: "relop", key: `${plotId}:box`, add: add3, outTypes, outSpaces, tag: "box" } });
+    }
+  }
+  return { pid: plotId, marks: marks2, relMarks, base: base2, keyed: keyedCell, boxed };
 }
 function resolveBase(spec, plot, producers, specs, store) {
   if (isProducerSource(plot.source)) {
@@ -9725,7 +10598,10 @@ function createAxis(spec, registries, node, scale, opts, template = false) {
     // anchor: an axis places a tick at the CENTER of its value's extent — a width-producing scale
     // (band) emits (idx+0.5)/n under this option; zero-extent (point) scales ignore it. The wrapped
     // scale's OWN options (band padding/align) ride along so ticks land at the SAME centers as bars.
-    options: { ...scale.options, wrapped: scale.descriptor, wrappedOutputs, anchor: "center" }
+    // `wrapped` is the REGISTRY name (apply-only's plan resolves algoName against it); `wrappedId`
+    // is the base INSTANCE — geometry passes (scale expansion) unwrap through it so a tick at value
+    // V and a mark at value V place through the SAME map (the false-axis bug, scale-expansion §8).
+    options: { ...scale.options, wrapped: scale.descriptor, wrappedId: scale.id, wrappedOutputs, anchor: "center" }
   });
   const posCh = () => layoutOutput(aoId, "value", { space: relCoord(axis), arity: "per-row" });
   addPlot(spec, node, `ax-${key}-tick`, "tick", { producer: vId }, {
@@ -9794,15 +10670,15 @@ function resolveTitle(spec, scale, cfg) {
   };
 }
 function deriveTitle(spec, scale) {
-  const m3 = scale.members?.[0];
-  if (m3 === void 0)
+  const m4 = scale.members?.[0];
+  if (m4 === void 0)
     return void 0;
-  if (m3.column.startsWith("dvl_se_")) {
-    const e = spec.plots.get(m3.plot)?.baseProjections?.[m3.column];
+  if (m4.column.startsWith("dvl_se_")) {
+    const e = spec.plots.get(m4.plot)?.baseProjections?.[m4.column];
     if (e !== void 0)
       return exprLabel(e);
   }
-  return m3.column;
+  return m4.column;
 }
 function exprLabel(e) {
   switch (e.kind) {
@@ -9812,6 +10688,8 @@ function exprLabel(e) {
       return String(e.value);
     case "binary":
       return `${exprLabel(e.left)} ${e.op} ${exprLabel(e.right)}`;
+    case "call":
+      return `${e.fn}(${e.args.map(exprLabel).join(", ")})`;
     case "agg":
       return e.op;
     default:
@@ -9835,7 +10713,7 @@ function ensureUnit(spec, nodeId) {
 }
 function addPlot(spec, node, key, markType, source, channels) {
   const id2 = spec.ids.plot(node.id, key);
-  spec.plots.set(id2, { id: id2, node: node.id, source, markType, channels, params: {} });
+  spec.plots.set(id2, { id: id2, node: node.id, source, markType, channels, params: {}, origin: "axis" });
   node.plots.push(id2);
 }
 function emitAxisMerge(spec, domains, specs) {
@@ -10187,7 +11065,7 @@ function resolveTickAlgo(scale, registries) {
 }
 function addPlot2(spec, node, key, markType, source, channels) {
   const id2 = spec.ids.plot(node.id, key);
-  spec.plots.set(id2, { id: id2, node: node.id, source, markType, channels, params: {} });
+  spec.plots.set(id2, { id: id2, node: node.id, source, markType, channels, params: {}, origin: "legend" });
   node.plots.push(id2);
   return id2;
 }
@@ -10265,7 +11143,7 @@ function createStrip(spec, _registries, node, dir) {
     fill: literal("#333")
   };
   const textPlotId = spec.ids.plot(node.id, `strip-${labelCol}`);
-  spec.plots.set(textPlotId, { id: textPlotId, node: node.id, source: producer2, markType: "text", channels, params: {} });
+  spec.plots.set(textPlotId, { id: textPlotId, node: node.id, source: producer2, markType: "text", channels, params: {}, origin: "strip" });
   node.plots.push(textPlotId);
   if (node.insets === void 0) {
     const rect = {
@@ -10366,6 +11244,7 @@ function fkHop(fks, current, next, site) {
   return fkConditions(edges[0], current);
 }
 function resolvePath(p2, ctx) {
+  p2 = normalizePath(p2);
   if (p2 === null) {
     if (ctx.source === null || ctx.target === null)
       throw new Error(`${ctx.site}: cannot infer an FK \u2014 the ${ctx.source === null ? "source" : "target"} relation has no catalog name; give explicit predicates`);
@@ -10442,7 +11321,7 @@ function enumerateFKPaths(from, to, fks, maxDepth = 3) {
 function pathTargetName(p2) {
   if (p2 === null || p2.length === 0)
     return null;
-  const last = p2[p2.length - 1];
+  const last = normalizeStep(p2[p2.length - 1]);
   if (isFKRef(last))
     return last.relation;
   return last.right.kind === "attr" ? last.right.relation.relation : null;
@@ -10471,10 +11350,10 @@ function hopMultiplicity(hop, fks) {
 function pathMultiplicity(resolved, fks) {
   let out = "single";
   for (const hop of resolved) {
-    const m3 = hopMultiplicity(hop, fks);
-    if (m3 === "multi")
+    const m4 = hopMultiplicity(hop, fks);
+    if (m4 === "multi")
       return "multi";
-    if (m3 === "unknown")
+    if (m4 === "unknown")
       out = "unknown";
   }
   return out;
@@ -10500,6 +11379,7 @@ function resolvePaths(spec, opts = {}) {
       if (c2.nest === null || c2.nest.resolved !== void 0)
         continue;
       const site = `nest(${c2.node})`;
+      c2.nest.on = normalizePath(c2.nest.on);
       c2.nest.resolved = resolvePath(c2.nest.on, { source: childRel, target: hostRel, fks, site });
       gateNestEq(c2.nest.resolved, site);
     }
@@ -10511,6 +11391,7 @@ function resolvePaths(spec, opts = {}) {
     const fr = plot.frame;
     if (fr === void 0 || fr.resolved !== void 0)
       continue;
+    fr.on = normalizePath(fr.on);
     const site = `frame(${plot.id})`;
     if (templates.has(plot.node))
       throw new Error(`${site}: a NESTED layer's panel comes from the partition (\u03C3) \u2014 drop frame:, or author the layer top-level`);
@@ -10562,6 +11443,7 @@ function resolvePaths(spec, opts = {}) {
       const hostPlot = [...spec.nodes.values()].flatMap((n) => n.children).find((c2) => c2.node === plot.node)?.hostPlot;
       const hostRel = relationName(hostPlot !== void 0 ? spec.plots.get(hostPlot)?.source : void 0);
       const site = `nest(${plot.id})`;
+      plot.nest.on = normalizePath(plot.nest.on);
       plot.nest.resolved = resolvePath(plot.nest.on, { source: relationName(plot.source), target: hostRel, fks, site });
       gateNestEq(plot.nest.resolved, site);
     }
@@ -10570,6 +11452,7 @@ function resolvePaths(spec, opts = {}) {
         continue;
       const refRel = expr2.kind === "table-ref" ? relationName(spec.plots.get(expr2.plotId)?.source) : expr2.tableName;
       const site = `via(${plot.id}.${ch})`;
+      expr2.viaSpec = normalizePath(expr2.viaSpec);
       expr2.resolvedVia = resolvePath(expr2.viaSpec, { source: relationName(plot.source), target: refRel, fks, site });
       if (expr2.kind === "table-ref" && ch === "cell" && expr2.attrName === "dvl_cell" && pathMultiplicity(expr2.resolvedVia, fks) !== "single") {
         throw new Error(`${site}: a cell borrow must be provably single-match end to end \u2014 declare the FKs it walks (db.declareFK) so every hop lands on a key`);
@@ -10586,9 +11469,10 @@ function resolvePaths(spec, opts = {}) {
       for (const [role, input] of Object.entries(inst.inputs ?? {})) {
         if (role === "marks" || input.on === void 0 || input.resolvedOn !== void 0)
           continue;
+        input.on = normalizePath(input.on) ?? void 0;
         const auxRel = typeof input.relation === "string" ? input.relation : relationName(input.relation);
         const marksRel = relationName(inst.inputs.marks?.relation);
-        input.resolvedOn = resolvePath(input.on, { source: auxRel, target: marksRel, fks, site: `layout(${inst.id}.${role})` });
+        input.resolvedOn = resolvePath(input.on ?? null, { source: auxRel, target: marksRel, fks, site: `layout(${inst.id}.${role})` });
       }
     }
   }
@@ -10623,8 +11507,8 @@ function extract(specs) {
         break;
       case "via-agg":
         if (p2.on !== void 0) {
-          for (const [m3, r] of p2.on) {
-            need(op2.reads[1], m3);
+          for (const [m4, r] of p2.on) {
+            need(op2.reads[1], m4);
             need(op2.reads[2], r);
           }
         }
@@ -10731,6 +11615,8 @@ function spaceOf(e, env) {
       return env.col(e.col, "marks");
     case "index":
       return e.list.every((v2) => typeof v2 === "string" && v2.startsWith("#")) ? styleSpace("color") : dataSpace;
+    case "call":
+      return dataSpace;
   }
 }
 
@@ -10844,30 +11730,49 @@ function assertResolvedPaths(spec) {
       `check-plan [unresolved-path]: ${site} has no resolved path after resolveSpec \u2014 a Path site not wired into resolvePaths (plan/resolve.ts), or a via in an unsupported position (nested in arithmetic \u2014 VIA_HARDENING \xA73)`
     );
   };
+  const unnormalized = (p2, site) => {
+    if (p2 != null && p2.some((s) => typeof s === "string")) {
+      throw new Error(
+        `check-plan [unnormalized-path]: ${site} still carries a bare-string step after resolveSpec \u2014 a Path site not wired into resolvePaths' in-place normalizePath (plan/resolve.ts)`
+      );
+    }
+  };
   const checkExpr = (e, site) => walk(e, (n) => {
     if ((n.kind === "bound-ref" || n.kind === "table-ref") && n.resolvedVia === void 0)
       miss(site);
+    if (n.kind === "bound-ref" || n.kind === "table-ref")
+      unnormalized(n.viaSpec, site);
     if (n.kind === "agg" && n.ref.resolvedVia === void 0)
       miss(site);
   });
   for (const node of spec.nodes.values()) {
     for (const c2 of node.children) {
-      if (c2.hostRow === void 0 && c2.nest !== null && c2.nest.resolved === void 0)
+      if (c2.hostRow !== void 0 || c2.nest === null)
+        continue;
+      if (c2.nest.resolved === void 0)
         miss(`nest(${c2.node})`);
+      unnormalized(c2.nest.on, `nest(${c2.node})`);
     }
   }
   for (const plot of spec.plots.values()) {
     if (plot.nest != null && plot.nest.resolved === void 0)
       miss(`nest(${plot.id})`);
+    if (plot.nest != null)
+      unnormalized(plot.nest.on, `nest(${plot.id})`);
     if (plot.frame !== void 0 && plot.frame.resolved === void 0)
       miss(`frame(${plot.id})`);
+    if (plot.frame !== void 0)
+      unnormalized(plot.frame.on, `frame(${plot.id})`);
     for (const [ch, expr2] of Object.entries(plot.channels))
       checkExpr(expr2, `via(${plot.id}.${ch})`);
   }
   for (const inst of spec.layouts.values()) {
     for (const [role, input] of Object.entries(inst.inputs ?? {})) {
-      if (role !== "marks" && input.on !== void 0 && input.resolvedOn === void 0)
+      if (role === "marks")
+        continue;
+      if (input.on !== void 0 && input.resolvedOn === void 0)
         miss(`layout(${inst.id}.${role})`);
+      unnormalized(input.on, `layout(${inst.id}.${role})`);
     }
   }
 }
@@ -10977,6 +11882,16 @@ function checkPlan(specs, spec, operators) {
       }
       continue;
     }
+    if (p2.kind === "via-agg") {
+      const vp = p2;
+      const inputCell = op2.reads[0];
+      const outCell = op2.writes[0];
+      if (inputCell !== void 0 && outCell !== void 0) {
+        const addAttrs = Object.keys(vp.adds).map((name2) => attr(name2, "unknown", vp.outSpaces?.[name2] ?? dataSpace));
+        schemas.set(outCell, composeAttrs(schemas.get(inputCell) ?? [], addAttrs));
+      }
+      continue;
+    }
     if (p2.kind === "render") {
       for (const r of op2.reads) {
         const sch = schemas.get(r);
@@ -10988,6 +11903,35 @@ function checkPlan(specs, spec, operators) {
             opId: op2.id,
             kind: "illegal-consumption",
             message: `render consumes relative column(s) ${rel2.map((a3) => a3.name).join(", ")} \u2014 un-affined placement reaching the scene sink`
+          });
+        }
+      }
+      const hostPlots = /* @__PURE__ */ new Set();
+      for (const n of spec.nodes.values())
+        for (const c2 of n.children)
+          hostPlots.add(c2.hostPlot);
+      const plotList = p2.plots ?? [];
+      for (const { plot: plotId, marks: marks2 } of plotList) {
+        const plot = spec.plots.get(plotId);
+        const desc = plot?.resolvedMark;
+        if (plot === void 0 || desc?.needs === void 0 || desc.draw === void 0)
+          continue;
+        if (plot.origin !== void 0)
+          continue;
+        if (hostPlots.has(plotId))
+          continue;
+        const sch = schemas.get(marks2);
+        if (sch === void 0)
+          continue;
+        const names = new Set(sch.map((a3) => a3.name));
+        for (const clause of desc.needs) {
+          const alts = typeof clause === "string" ? [clause] : clause;
+          if (alts.some((c2) => names.has(c2)))
+            continue;
+          fail({
+            opId: op2.id,
+            kind: "draw-needs",
+            message: `${desc.type} "${plotId}": draw needs ${alts.join(" or ")} \u2014 schema has ${[...names].filter((n) => !n.startsWith("dvl_")).join(", ") || "(no columns)"}`
           });
         }
       }
@@ -11011,6 +11955,10 @@ function liftViaExprs(spec) {
         const right = lift(e.right);
         return left2 === e.left && right === e.right ? e : { ...e, left: left2, right };
       }
+      if (e.kind === "call") {
+        const args = e.args.map(lift);
+        return args.every((a3, i) => a3 === e.args[i]) ? e : { ...e, args };
+      }
       if (!isRelationalLeaf(e))
         return e;
       changed = true;
@@ -11019,7 +11967,7 @@ function liftViaExprs(spec) {
       return { kind: "local-column", type: e.type, columnName: name2 };
     };
     for (const [ch, expr2] of Object.entries(plot.channels)) {
-      if (expr2.kind === "binary")
+      if (expr2.kind === "binary" || expr2.kind === "call")
         out[ch] = lift(expr2);
       else if (expr2.kind === "agg") {
         out[ch] = aggToVia(expr2);
@@ -11045,6 +11993,78 @@ var NULL_SINK = {
   flush: async () => {
   }
 };
+
+// src/lib/dvl/debug/graph-meta.ts
+var MARK_KINDS = /* @__PURE__ */ new Set(["marktable", "vtable", "render"]);
+function operatorMeta(op2, registries) {
+  const payload = op2.payload;
+  const kind = payload.kind;
+  const algoName = typeof payload.algoName === "string" ? payload.algoName : void 0;
+  if (algoName !== void 0 && registries.operators.has(algoName)) {
+    const o = registries.operators.get(algoName);
+    return {
+      op_class: o.domain !== void 0 || o.ticks !== void 0 ? "scale" : "layout",
+      has_sql: o.sql !== void 0,
+      has_js: o.js !== void 0,
+      trainable: o.train !== void 0,
+      in_schema: JSON.stringify(o.inputs),
+      out_schema: JSON.stringify(o.output)
+    };
+  }
+  const cap = registries.ops.has(kind) ? registries.ops.capability(kind) : { canProduce: [] };
+  return {
+    op_class: MARK_KINDS.has(kind) ? "mark" : "framework",
+    has_sql: cap.canProduce.includes("sql"),
+    has_js: cap.canProduce.includes("js"),
+    trainable: false
+  };
+}
+
+// src/lib/dvl/debug/snapshot.ts
+function recordGraph(specs, pass, sink, registries) {
+  for (const s of specs) {
+    const meta2 = operatorMeta(s, registries);
+    sink.record("dvl_operator", { pass, operator_id: s.id, kind: s.payload.kind, impl: s.payload.substrate, op_class: meta2.op_class, has_sql: meta2.has_sql, has_js: meta2.has_js, trainable: meta2.trainable, in_schema: meta2.in_schema, out_schema: meta2.out_schema, payload: s.payload });
+    for (const r of s.reads)
+      sink.record("dvl_op_io", { pass, operator_id: s.id, direction: "in", ref_kind: "cell", ref_id: r });
+    for (const w2 of s.writes)
+      sink.record("dvl_op_io", { pass, operator_id: s.id, direction: "out", ref_kind: "cell", ref_id: w2 });
+  }
+}
+function recordFragmentGraph(cells, pass, sink) {
+  const seen = /* @__PURE__ */ new Set();
+  const node = (id2, kind, opClass, impl) => {
+    if (seen.has(id2))
+      return;
+    seen.add(id2);
+    sink.record("dvl_operator", { pass, operator_id: id2, kind, op_class: opClass, impl });
+    sink.record("dvl_op_io", { pass, operator_id: id2, direction: "out", ref_kind: "frag", ref_id: id2 });
+  };
+  const walk2 = (f2) => {
+    const first = !seen.has(f2.id);
+    node(f2.id, f2.op, "fragment", "sql");
+    if (!first)
+      return;
+    for (const ref of Object.values(f2.inputs)) {
+      if ("base" in ref) {
+        node(ref.base, "base", "base", "sql");
+        sink.record("dvl_op_io", { pass, operator_id: f2.id, direction: "in", ref_kind: "frag", ref_id: ref.base });
+      } else {
+        sink.record("dvl_op_io", { pass, operator_id: f2.id, direction: "in", ref_kind: "frag", ref_id: ref.fragment.id });
+        walk2(ref.fragment);
+      }
+    }
+  };
+  for (const c2 of cells.values()) {
+    if (c2.kind !== "relation" || c2.value === void 0)
+      continue;
+    const rel2 = c2.value;
+    if (rel2.substrate === "sql" && rel2.frag !== void 0)
+      walk2(rel2.frag);
+    else if (rel2.substrate === "js")
+      node(`js:${c2.id}`, "js-rows", "js", "js");
+  }
+}
 
 // src/lib/dvl/optimizer/dataflow-graph.ts
 var DataflowGraph = class {
@@ -11120,8 +12140,8 @@ var substrateChooser = {
     const hasUnassigned = op2.writes.some((w2) => ctx.cellFormat(w2) === void 0 && cellIsRelation(w2, ctx));
     return hasUnassigned ? { anchor: op2 } : null;
   },
-  apply(m3, ctx) {
-    const op2 = m3.anchor;
+  apply(m4, ctx) {
+    const op2 = m4.anchor;
     const cap = ctx.opCapability(op2);
     if (cap.canProduce.length === 0)
       return;
@@ -11168,9 +12188,9 @@ var insertCrossings = {
     }
     return mismatched.length > 0 ? { anchor: op2, bindings: { mismatched } } : null;
   },
-  apply(m3, ctx) {
-    const op2 = m3.anchor;
-    const mismatched = m3.bindings.mismatched;
+  apply(m4, ctx) {
+    const op2 = m4.anchor;
+    const mismatched = m4.bindings.mismatched;
     const newOps = [];
     let rewiredReads = [...op2.reads];
     for (const oldCell of mismatched) {
@@ -11207,6 +12227,34 @@ function fusible(op2) {
   const p2 = op2.payload;
   return p2.source === void 0 && p2.join === void 0 && p2.replace !== true;
 }
+function markColsOf(e) {
+  switch (e.k) {
+    case "col":
+      return e.src === "marks" ? [e.name] : [];
+    case "rank":
+      return [e.col];
+    case "wsum":
+      return [e.col, ...e.partition !== void 0 ? [e.partition] : [], ...e.order !== void 0 ? [e.order] : []];
+    case "lead":
+      return [e.col, e.order, ...e.partition !== void 0 ? [e.partition] : []];
+    case "bin":
+      return [...markColsOf(e.l), ...markColsOf(e.r)];
+    case "nullif0":
+    case "unary":
+    case "round":
+      return markColsOf(e.x);
+    case "left":
+      return [...markColsOf(e.str), ...markColsOf(e.n)];
+    case "index":
+      return markColsOf(e.idx);
+    case "concat":
+      return e.parts.flatMap(markColsOf);
+    case "call":
+      return e.args.flatMap(markColsOf);
+    default:
+      return [];
+  }
+}
 var fuseLiterals = {
   name: "fuse-literals",
   match(op2, ctx) {
@@ -11216,6 +12264,7 @@ var fuseLiterals = {
     if (pred && fusible(pred))
       return null;
     const chain = [op2];
+    const minted = new Set(Object.keys(op2.payload.add));
     let cur2 = op2;
     while (true) {
       const consumers = ctx.graph.consumers(cur2.writes[0]);
@@ -11224,6 +12273,11 @@ var fuseLiterals = {
       const next = consumers[0];
       if (!fusible(next))
         break;
+      const np = next.payload;
+      if (Object.values(np.add).some((e) => markColsOf(e).some((c2) => minted.has(c2))))
+        break;
+      for (const c2 of Object.keys(np.add))
+        minted.add(c2);
       chain.push(next);
       cur2 = next;
     }
@@ -11231,8 +12285,8 @@ var fuseLiterals = {
       return null;
     return { anchor: chain[0], matched: chain };
   },
-  apply(m3, ctx) {
-    const chain = m3.matched;
+  apply(m4, ctx) {
+    const chain = m4.matched;
     const first = chain[0];
     const last = chain[chain.length - 1];
     const add3 = {};
@@ -11269,8 +12323,8 @@ var deadCodeElim = {
     const allDead = op2.writes.every((w2) => ctx.graph.consumers(w2).length === 0);
     return allDead ? { anchor: op2 } : null;
   },
-  apply(m3, ctx) {
-    ctx.graph.splice(m3.anchor, 1);
+  apply(m4, ctx) {
+    ctx.graph.splice(m4.anchor, 1);
   }
 };
 
@@ -11336,9 +12390,9 @@ function optimize(plan, cells, ops) {
           continue;
         let fired = false;
         for (const rule of phase.rules) {
-          const m3 = rule.match(op2, ctx);
-          if (m3 !== null) {
-            rule.apply(m3, ctx);
+          const m4 = rule.match(op2, ctx);
+          if (m4 !== null) {
+            rule.apply(m4, ctx);
             changed = true;
             fired = true;
             break;
@@ -11365,7 +12419,25 @@ function runOp(op2, store, ctx, dispatch3) {
   if (dbg === void 0)
     return dispatch3.get(kind)(op2, store, ctx);
   const tag = op2.payload.tag;
-  return dbg.span(op2.id, { kind: "operator", op_kind: kind, ...tag !== void 0 ? { tag } : {} }, () => dispatch3.get(kind)(op2, store, ctx));
+  const ran = dbg.span(op2.id, { kind: "operator", op_kind: kind, ...tag !== void 0 ? { tag } : {} }, () => dispatch3.get(kind)(op2, store, ctx));
+  if (dbg.level < 2)
+    return ran;
+  return Promise.resolve(ran).then(() => recordOpRun(op2, store, dbg));
+}
+function recordOpRun(op2, store, dbg) {
+  for (const w2 of op2.writes) {
+    let rel2;
+    try {
+      rel2 = store.read(w2);
+    } catch {
+      continue;
+    }
+    const sub = rel2 !== null && typeof rel2 === "object" && "substrate" in rel2 ? rel2.substrate : void 0;
+    if (sub === "sql" || sub === "js") {
+      dbg.record("dvl_op_run", { operator_id: op2.id, impl: sub });
+      return;
+    }
+  }
 }
 
 // src/lib/dvl/executor/schedule.ts
@@ -11426,17 +12498,17 @@ async function schedule(ops, store, opts = {}) {
 }
 var SCALAR2 = "scalar";
 function snapshotScalars(store, cells) {
-  const m3 = /* @__PURE__ */ new Map();
+  const m4 = /* @__PURE__ */ new Map();
   for (const c2 of cells) {
     const cell3 = store.get(c2);
     if (cell3.kind === SCALAR2) {
       if (typeof cell3.value === "number")
-        m3.set(c2, cell3.value);
+        m4.set(c2, cell3.value);
     } else if (cell3.value !== void 0) {
-      m3.set(c2, JSON.stringify(cell3.value));
+      m4.set(c2, JSON.stringify(cell3.value));
     }
   }
-  return m3;
+  return m4;
 }
 function residual(store, cells, snap) {
   let scalar = 0;
@@ -11565,12 +12637,14 @@ function compileSpec(spec, registries, opts = {}) {
   opts = mergeCanvasOpts(spec.canvas, opts);
   const dbg = opts.debug ?? NULL_SINK;
   const pass = (name2, body) => dbg.span(name2, { kind: "pass", pass: name2 }, body);
+  pass("validate", () => validate(spec, registries, opts.strict === false ? (w2) => console.warn(`dvl validate: ${w2.message}`) : void 0));
   pass("lower-axes", () => lowerAxes(spec, registries, { tickCount: opts.tickCount, strict: opts.strict }));
   const { controllers } = pass("lower-legends", () => lowerLegends(spec, registries));
   pass("lower-strips", () => lowerStrips(spec, registries));
   pass("lift-via-exprs", () => liftViaExprs(spec));
   pass("resolve", () => resolveSpec(spec, registries, { strictMultiplicity: opts.strictMultiplicity }));
   pass("assert-resolved-paths", () => assertResolvedPaths(spec));
+  pass("scale-expansion", () => allocScaleExpansion(spec));
   const specs = [];
   const plots = [];
   const domains = planDomainGroups(spec);
@@ -11620,6 +12694,14 @@ function compileSpec(spec, registries, opts = {}) {
         changed = true;
         return b2.keyed;
       }
+      if (r.startsWith("$plot-boxed:")) {
+        const pid = r.slice("$plot-boxed:".length);
+        const b2 = builds.get(pid);
+        if (b2?.boxed === void 0)
+          throw new Error(`compileSpec: a box borrow references plot "${pid}" but its box fork was never emitted \u2014 desugarRouteInputs must set needsBox at bind (compiler bug)`);
+        changed = true;
+        return b2.boxed;
+      }
       if (r.startsWith("$ref:")) {
         const pid = r.slice("$ref:".length);
         const b2 = builds.get(pid);
@@ -11633,6 +12715,7 @@ function compileSpec(spec, registries, opts = {}) {
     if (changed)
       specs[i] = { ...sp, reads };
   }
+  pass("overhang", () => emitScaleOverhang(spec, builds, specs));
   const globalStart = specs.length;
   pass("gather-scatter", () => emitGatherScatter(spec, domains, specs));
   pass("axis-merge", () => emitAxisMerge(spec, domains, specs));
@@ -11663,7 +12746,9 @@ async function renderSpec(spec, registries, plotId, db, opts = {}) {
   if (dbg.level >= 0)
     await dbg.beginRun({ root: spec.root, mode: "render" });
   const { specs: compiled, svgCell, controllers } = dbg.span("compile", { kind: "pass", pass: "compile" }, () => compileSpec(spec, registries, opts));
+  recordGraph(compiled, "compile", dbg, registries);
   const specs = dbg.span("optimize", { kind: "pass", pass: "optimize" }, () => optimize(compiled, spec.cells, registries.ops));
+  recordGraph(specs, "optimize", dbg, registries);
   const cellEnv = {
     get: (id2) => {
       const v2 = spec.cells.read(id2);
@@ -11688,6 +12773,9 @@ async function renderSpec(spec, registries, plotId, db, opts = {}) {
     await dbg.span("extensions", { kind: "pass", pass: "extensions" }, () => db.backend.ensureExtensions([...required2]));
   }
   await dbg.span("execute", { kind: "pass", pass: "execute" }, () => schedule(compileOps(specs, { spec, run, measure, debug: opts.debug }, registries.ops), spec.cells, { controllers }));
+  recordGraph(specs, "execute", dbg, registries);
+  if (dbg.level >= 1)
+    recordFragmentGraph(spec.cells, "fragments", dbg);
   if (dbg.level >= 0)
     await dbg.flush();
   return spec.cells.read(svgCell);
@@ -11699,8 +12787,8 @@ function canvasMeasureProvider() {
     name: "canvas",
     textExtent(text, font) {
       ctx2d.font = `${font.weight ?? 400} ${font.size}px ${font.family}`;
-      const m3 = ctx2d.measureText(text);
-      return { w: m3.width, h: font.size };
+      const m4 = ctx2d.measureText(text);
+      return { w: m4.width, h: font.size };
     }
   };
 }
@@ -11827,12 +12915,12 @@ var Database = class _Database {
    *  relation's. Resolved fresh each call, so a Table handed out before a later modeling step
    *  still reports the up-to-date columns. */
   async schemaOfIdentity(identity) {
-    const m3 = this.lookupModel(identity);
-    if (m3 === void 0)
+    const m4 = this.lookupModel(identity);
+    if (m4 === void 0)
       return this.ensureSchema(identity);
-    if (m3.schema.length === 0 && "base" in m3.ref)
-      return this.ensureSchema(m3.ref.base);
-    return m3.schema;
+    if (m4.schema.length === 0 && "base" in m4.ref)
+      return this.ensureSchema(m4.ref.base);
+    return m4.schema;
   }
   /** Record a modeling fragment under `identity` on this branch; returns the bound Table. The
    *  output schema is composed synchronously from the fragment's inputs (base leaves via the
@@ -11867,9 +12955,9 @@ var Database = class _Database {
   /** Schema of a base-leaf name for modeling composition: a recorded model's schema if the name is
    *  one of ours, else the loaded base-table schema. */
   schemaOfModeled(name2) {
-    const m3 = this.lookupModel(name2);
-    if (m3 !== void 0)
-      return m3.schema;
+    const m4 = this.lookupModel(name2);
+    if (m4 !== void 0)
+      return m4.schema;
     return this.schemaOf(name2);
   }
   /** Sync column schema a ref denotes — for operators typing their outputs (groupby keys). */
@@ -12236,9 +13324,9 @@ function __awaiter(thisArg, _arguments, P2, generator) {
   });
 }
 function __values(o) {
-  var s = typeof Symbol === "function" && Symbol.iterator, m3 = s && o[s], i = 0;
-  if (m3)
-    return m3.call(o);
+  var s = typeof Symbol === "function" && Symbol.iterator, m4 = s && o[s], i = 0;
+  if (m4)
+    return m4.call(o);
   if (o && typeof o.length === "number")
     return {
       next: function() {
@@ -12312,8 +13400,8 @@ function __asyncDelegator(o) {
 function __asyncValues(o) {
   if (!Symbol.asyncIterator)
     throw new TypeError("Symbol.asyncIterator is not defined.");
-  var m3 = o[Symbol.asyncIterator], i;
-  return m3 ? m3.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function() {
+  var m4 = o[Symbol.asyncIterator], i;
+  return m4 ? m4.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function() {
     return this;
   }, i);
   function verb(n) {
@@ -19047,8 +20135,8 @@ Field2.prototype.type = null;
 Field2.prototype.name = null;
 Field2.prototype.nullable = null;
 Field2.prototype.metadata = null;
-function mergeMaps(m1, m22) {
-  return new Map([...m1 || /* @__PURE__ */ new Map(), ...m22 || /* @__PURE__ */ new Map()]);
+function mergeMaps(m12, m22) {
+  return new Map([...m12 || /* @__PURE__ */ new Map(), ...m22 || /* @__PURE__ */ new Map()]);
 }
 function generateDictionaryMap(fields, dictionaries = /* @__PURE__ */ new Map()) {
   for (let i = -1, n = fields.length; ++i < n; ) {
@@ -21172,7 +22260,7 @@ var Table2 = class _Table {
    * @returns A new Table of columns matching the specified names.
    */
   select(columnNames) {
-    const nameToIndex = this.schema.fields.reduce((m3, f2, i) => m3.set(f2.name, i), /* @__PURE__ */ new Map());
+    const nameToIndex = this.schema.fields.reduce((m4, f2, i) => m4.set(f2.name, i), /* @__PURE__ */ new Map());
     return this.selectAt(columnNames.map((columnName) => nameToIndex.get(columnName)).filter((x3) => x3 > -1));
   }
   /**
@@ -21817,8 +22905,8 @@ function typeFromJSON(f2, children) {
     }
     case "union": {
       const t2 = f2["type"];
-      const [m3, ...ms] = (t2["mode"] + "").toLowerCase();
-      const mode = m3.toUpperCase() + ms.join("");
+      const [m4, ...ms] = (t2["mode"] + "").toLowerCase();
+      const mode = m4.toUpperCase() + ms.join("");
       return new Union_(UnionMode[mode], t2["typeIds"] || [], children || []);
     }
     case "fixedsizebinary": {
@@ -24541,10 +25629,10 @@ var B = () => (async (s) => {
     return false;
   }
 })(new Uint8Array([0, 97, 115, 109, 1, 0, 0, 0, 1, 4, 1, 96, 0, 0, 3, 2, 1, 0, 5, 4, 1, 3, 1, 1, 10, 11, 1, 9, 0, 65, 0, 254, 16, 2, 0, 26, 11]));
-var m2 = { name: "@duckdb/duckdb-wasm", version: "1.32.0", description: "DuckDB powered by WebAssembly", license: "MIT", repository: { type: "git", url: "https://github.com/duckdb/duckdb-wasm.git" }, keywords: ["sql", "duckdb", "relational", "database", "data", "query", "wasm", "analytics", "olap", "arrow", "parquet", "json", "csv"], dependencies: { "apache-arrow": "^17.0.0" }, devDependencies: { "@types/emscripten": "^1.39.10", "@types/jasmine": "^5.1.4", "@typescript-eslint/eslint-plugin": "^6.21.0", "@typescript-eslint/parser": "^6.21.0", esbuild: "^0.20.2", eslint: "^8.57.0", "eslint-plugin-jasmine": "^4.1.3", "eslint-plugin-react": "^7.34.0", "fast-glob": "^3.3.2", jasmine: "^5.1.0", "jasmine-core": "^5.1.2", "jasmine-spec-reporter": "^7.0.0", "js-sha256": "^0.11.1", karma: "^6.4.2", "karma-chrome-launcher": "^3.2.0", "karma-coverage": "^2.2.1", "karma-firefox-launcher": "^2.1.3", "karma-jasmine": "^5.1.0", "karma-jasmine-html-reporter": "^2.1.0", "karma-sourcemap-loader": "^0.4.0", "karma-spec-reporter": "^0.0.36", "make-dir": "^4.0.0", nyc: "^15.1.0", prettier: "^3.2.5", puppeteer: "^22.8.0", rimraf: "^5.0.5", s3rver: "^3.7.1", typedoc: "^0.25.13", typescript: "^5.3.3", "wasm-feature-detect": "^1.6.1", "web-worker": "^1.2.0" }, scripts: { "build:debug": "node bundle.mjs debug && tsc --emitDeclarationOnly", "build:release": "node bundle.mjs release && tsc --emitDeclarationOnly", docs: "typedoc", format: 'prettier --write "**/*.+(js|ts)"', report: "node ./coverage.mjs", "test:node": "node --enable-source-maps ../../node_modules/jasmine/bin/jasmine ./dist/tests-node.cjs", "test:node:debug": "node --inspect-brk --enable-source-maps ../../node_modules/jasmine/bin/jasmine ./dist/tests-node.cjs", "test:node:coverage": "nyc -r json --report-dir ./coverage/node node ../../node_modules/jasmine/bin/jasmine ./dist/tests-node.cjs", "test:firefox": "karma start ./karma/tests-firefox.cjs", "test:chrome": "karma start ./karma/tests-chrome.cjs", "test:chrome:eh": "karma start ./karma/tests-chrome-eh.cjs", "test:chrome:coverage": "karma start ./karma/tests-chrome-coverage.cjs", "test:browser": "karma start ./karma/tests-all.cjs", "test:browser:debug": "karma start ./karma/tests-debug.cjs", test: "npm run test:chrome && npm run test:node", "test:coverage": "npm run test:chrome:coverage && npm run test:node:coverage && npm run report", lint: "eslint src test" }, files: ["dist", "!dist/tests-*", "!dist/duckdb-browser-mvp.worker.js.map", "!dist/types/test"], main: "dist/duckdb-browser.cjs", module: "dist/duckdb-browser.mjs", types: "dist/duckdb-browser.d.ts", jsdelivr: "dist/duckdb-browser.cjs", unpkg: "dist/duckdb-browser.mjs", sideEffects: false, browser: { fs: false, path: false, perf_hooks: false, os: false, worker_threads: false }, exports: { "./dist/duckdb-mvp.wasm": "./dist/duckdb-mvp.wasm", "./dist/duckdb-eh.wasm": "./dist/duckdb-eh.wasm", "./dist/duckdb-coi.wasm": "./dist/duckdb-coi.wasm", "./dist/duckdb-browser": "./dist/duckdb-browser.mjs", "./dist/duckdb-browser.cjs": "./dist/duckdb-browser.cjs", "./dist/duckdb-browser.mjs": "./dist/duckdb-browser.mjs", "./dist/duckdb-browser-coi.pthread.worker.js": "./dist/duckdb-browser-coi.pthread.worker.js", "./dist/duckdb-browser-coi.worker.js": "./dist/duckdb-browser-coi.worker.js", "./dist/duckdb-browser-eh.worker.js": "./dist/duckdb-browser-eh.worker.js", "./dist/duckdb-browser-mvp.worker.js": "./dist/duckdb-browser-mvp.worker.js", "./dist/duckdb-node": "./dist/duckdb-node.cjs", "./dist/duckdb-node.cjs": "./dist/duckdb-node.cjs", "./dist/duckdb-node-blocking": "./dist/duckdb-node-blocking.cjs", "./dist/duckdb-node-blocking.cjs": "./dist/duckdb-node-blocking.cjs", "./dist/duckdb-node-eh.worker.cjs": "./dist/duckdb-node-eh.worker.cjs", "./dist/duckdb-node-mvp.worker.cjs": "./dist/duckdb-node-mvp.worker.cjs", "./blocking": { node: { types: "./dist/duckdb-node-blocking.d.ts", require: "./dist/duckdb-node-blocking.cjs", import: "./dist/duckdb-node-blocking.cjs" }, types: "./dist/duckdb-node-blocking.d.ts", import: "./dist/duckdb-node-blocking.mjs", require: "./dist/duckdb-node-blocking.cjs" }, ".": { browser: { types: "./dist/duckdb-browser.d.ts", import: "./dist/duckdb-browser.mjs", require: "./dist/duckdb-browser.cjs" }, node: { types: "./dist/duckdb-node.d.ts", import: "./dist/duckdb-node.cjs", require: "./dist/duckdb-node.cjs" }, types: "./dist/duckdb-browser.d.ts", import: "./dist/duckdb-browser.mjs", require: "./dist/duckdb-browser.cjs" } } };
-var M = m2.name;
-var G = m2.version;
-var I = m2.version.split(".");
+var m3 = { name: "@duckdb/duckdb-wasm", version: "1.32.0", description: "DuckDB powered by WebAssembly", license: "MIT", repository: { type: "git", url: "https://github.com/duckdb/duckdb-wasm.git" }, keywords: ["sql", "duckdb", "relational", "database", "data", "query", "wasm", "analytics", "olap", "arrow", "parquet", "json", "csv"], dependencies: { "apache-arrow": "^17.0.0" }, devDependencies: { "@types/emscripten": "^1.39.10", "@types/jasmine": "^5.1.4", "@typescript-eslint/eslint-plugin": "^6.21.0", "@typescript-eslint/parser": "^6.21.0", esbuild: "^0.20.2", eslint: "^8.57.0", "eslint-plugin-jasmine": "^4.1.3", "eslint-plugin-react": "^7.34.0", "fast-glob": "^3.3.2", jasmine: "^5.1.0", "jasmine-core": "^5.1.2", "jasmine-spec-reporter": "^7.0.0", "js-sha256": "^0.11.1", karma: "^6.4.2", "karma-chrome-launcher": "^3.2.0", "karma-coverage": "^2.2.1", "karma-firefox-launcher": "^2.1.3", "karma-jasmine": "^5.1.0", "karma-jasmine-html-reporter": "^2.1.0", "karma-sourcemap-loader": "^0.4.0", "karma-spec-reporter": "^0.0.36", "make-dir": "^4.0.0", nyc: "^15.1.0", prettier: "^3.2.5", puppeteer: "^22.8.0", rimraf: "^5.0.5", s3rver: "^3.7.1", typedoc: "^0.25.13", typescript: "^5.3.3", "wasm-feature-detect": "^1.6.1", "web-worker": "^1.2.0" }, scripts: { "build:debug": "node bundle.mjs debug && tsc --emitDeclarationOnly", "build:release": "node bundle.mjs release && tsc --emitDeclarationOnly", docs: "typedoc", format: 'prettier --write "**/*.+(js|ts)"', report: "node ./coverage.mjs", "test:node": "node --enable-source-maps ../../node_modules/jasmine/bin/jasmine ./dist/tests-node.cjs", "test:node:debug": "node --inspect-brk --enable-source-maps ../../node_modules/jasmine/bin/jasmine ./dist/tests-node.cjs", "test:node:coverage": "nyc -r json --report-dir ./coverage/node node ../../node_modules/jasmine/bin/jasmine ./dist/tests-node.cjs", "test:firefox": "karma start ./karma/tests-firefox.cjs", "test:chrome": "karma start ./karma/tests-chrome.cjs", "test:chrome:eh": "karma start ./karma/tests-chrome-eh.cjs", "test:chrome:coverage": "karma start ./karma/tests-chrome-coverage.cjs", "test:browser": "karma start ./karma/tests-all.cjs", "test:browser:debug": "karma start ./karma/tests-debug.cjs", test: "npm run test:chrome && npm run test:node", "test:coverage": "npm run test:chrome:coverage && npm run test:node:coverage && npm run report", lint: "eslint src test" }, files: ["dist", "!dist/tests-*", "!dist/duckdb-browser-mvp.worker.js.map", "!dist/types/test"], main: "dist/duckdb-browser.cjs", module: "dist/duckdb-browser.mjs", types: "dist/duckdb-browser.d.ts", jsdelivr: "dist/duckdb-browser.cjs", unpkg: "dist/duckdb-browser.mjs", sideEffects: false, browser: { fs: false, path: false, perf_hooks: false, os: false, worker_threads: false }, exports: { "./dist/duckdb-mvp.wasm": "./dist/duckdb-mvp.wasm", "./dist/duckdb-eh.wasm": "./dist/duckdb-eh.wasm", "./dist/duckdb-coi.wasm": "./dist/duckdb-coi.wasm", "./dist/duckdb-browser": "./dist/duckdb-browser.mjs", "./dist/duckdb-browser.cjs": "./dist/duckdb-browser.cjs", "./dist/duckdb-browser.mjs": "./dist/duckdb-browser.mjs", "./dist/duckdb-browser-coi.pthread.worker.js": "./dist/duckdb-browser-coi.pthread.worker.js", "./dist/duckdb-browser-coi.worker.js": "./dist/duckdb-browser-coi.worker.js", "./dist/duckdb-browser-eh.worker.js": "./dist/duckdb-browser-eh.worker.js", "./dist/duckdb-browser-mvp.worker.js": "./dist/duckdb-browser-mvp.worker.js", "./dist/duckdb-node": "./dist/duckdb-node.cjs", "./dist/duckdb-node.cjs": "./dist/duckdb-node.cjs", "./dist/duckdb-node-blocking": "./dist/duckdb-node-blocking.cjs", "./dist/duckdb-node-blocking.cjs": "./dist/duckdb-node-blocking.cjs", "./dist/duckdb-node-eh.worker.cjs": "./dist/duckdb-node-eh.worker.cjs", "./dist/duckdb-node-mvp.worker.cjs": "./dist/duckdb-node-mvp.worker.cjs", "./blocking": { node: { types: "./dist/duckdb-node-blocking.d.ts", require: "./dist/duckdb-node-blocking.cjs", import: "./dist/duckdb-node-blocking.cjs" }, types: "./dist/duckdb-node-blocking.d.ts", import: "./dist/duckdb-node-blocking.mjs", require: "./dist/duckdb-node-blocking.cjs" }, ".": { browser: { types: "./dist/duckdb-browser.d.ts", import: "./dist/duckdb-browser.mjs", require: "./dist/duckdb-browser.cjs" }, node: { types: "./dist/duckdb-node.d.ts", import: "./dist/duckdb-node.cjs", require: "./dist/duckdb-node.cjs" }, types: "./dist/duckdb-browser.d.ts", import: "./dist/duckdb-browser.mjs", require: "./dist/duckdb-browser.cjs" } } };
+var M = m3.name;
+var G = m3.version;
+var I = m3.version.split(".");
 var He = I[0];
 var qe = I[1];
 var Ye = I[2];
@@ -24754,18 +25842,12 @@ var BASE_TABLES = {
   orders: ORDERS,
   products: PRODUCTS
 };
-var px = {
-  x: (c2) => col(c2, { space: "pixel", geom: { kind: "coord", axis: "x" } }),
-  y: (c2) => col(c2, { space: "pixel", geom: { kind: "coord", axis: "y" } }),
-  w: (c2) => col(c2, { space: "pixel", geom: { kind: "len", axis: "xy" } }),
-  h: (c2) => col(c2, { space: "pixel", geom: { kind: "len", axis: "xy" } })
-};
 var field = (c2) => col(c2);
-var SANDBOX_PARAMS = ["canvas", "db", "linear", "log", "sqrt", "pow", "symlog", "ordinal", "point", "color", "quantize", "threshold", "bandX", "bandY", "barX", "barY", "stackX", "stackY", "pitchX", "pitchY", "eqX", "eqY", "force", "treemap", "fitText", "proportionalX", "proportionalY", "eq", "on", "fk", "path", "expr", "cexpr", "px", "field", "binary", "literal", "count", "sum", "avg", "min", "max", "median", "UNIT"];
+var SANDBOX_PARAMS = ["canvas", "db", "linear", "log", "sqrt", "pow", "symlog", "ordinal", "point", "color", "quantize", "threshold", "bandX", "bandY", "barX", "barY", "stackX", "stackY", "pitchX", "pitchY", "eqX", "eqY", "dag", "force", "treemap", "fitText", "route", "proportionalX", "proportionalY", "eq", "on", "fk", "path", "expr", "cexpr", "px", "lit", "field", "binary", "literal", "count", "sum", "avg", "min", "max", "median", "UNIT"];
 function buildVis(source, branch) {
   const fn = new Function(...SANDBOX_PARAMS, source);
   const canvasDb = (w2, h2, opts) => canvas(w2, h2, { db: branch, ...opts });
-  const v2 = fn(canvasDb, branch, linear2, log2, sqrt2, pow2, symlog2, ordinal3, point2, color2, quantize2, threshold2, bandX2, bandY2, barX2, barY2, stackX2, stackY2, pitchX2, pitchY2, eqX2, eqY2, force2, treemap2, fitText2, proportionalX2, proportionalY2, eq, on, fk, path, expr, cexpr, px, field, binary, literal, count, sum, avg, min, max, median, UNIT);
+  const v2 = fn(canvasDb, branch, linear2, log2, sqrt2, pow2, symlog2, ordinal3, point2, color2, quantize2, threshold2, bandX2, bandY2, barX2, barY2, stackX2, stackY2, pitchX2, pitchY2, eqX2, eqY2, dag2, force2, treemap2, fitText2, route, proportionalX2, proportionalY2, eq, on, fk, path, expr, cexpr, px, lit2, field, binary, literal, count, sum, avg, min, max, median, UNIT);
   if (v2 == null || v2.spec == null)
     throw new Error("Your code must end with `return canvas(\u2026)` (the builder handle).");
   return v2;
@@ -27347,11 +28429,11 @@ var EditorState = class _EditorState {
         break;
       }
     if (insert2.length)
-      phrase2 = phrase2.replace(/\$(\$|\d*)/g, (m3, i) => {
+      phrase2 = phrase2.replace(/\$(\$|\d*)/g, (m4, i) => {
         if (i == "$")
           return "$";
         let n = +(i || 1);
-        return !n || n > insert2.length ? m3 : insert2[n - 1];
+        return !n || n > insert2.length ? m4 : insert2[n - 1];
       });
     return phrase2;
   }
@@ -29147,9 +30229,9 @@ var DOMSelectionState = class {
     let { anchorNode, focusNode } = range;
     this.set(anchorNode, Math.min(range.anchorOffset, anchorNode ? maxOffset(anchorNode) : 0), focusNode, Math.min(range.focusOffset, focusNode ? maxOffset(focusNode) : 0));
   }
-  set(anchorNode, anchorOffset, focusNode, focusOffset) {
+  set(anchorNode, anchorOffset2, focusNode, focusOffset) {
     this.anchorNode = anchorNode;
-    this.anchorOffset = anchorOffset;
+    this.anchorOffset = anchorOffset2;
     this.focusNode = focusNode;
     this.focusOffset = focusOffset;
   }
@@ -29844,16 +30926,16 @@ var scrollMargins = /* @__PURE__ */ Facet.define();
 function getScrollMargins(view) {
   let left2 = 0, right = 0, top2 = 0, bottom = 0;
   for (let source of view.state.facet(scrollMargins)) {
-    let m3 = source(view);
-    if (m3) {
-      if (m3.left != null)
-        left2 = Math.max(left2, m3.left);
-      if (m3.right != null)
-        right = Math.max(right, m3.right);
-      if (m3.top != null)
-        top2 = Math.max(top2, m3.top);
-      if (m3.bottom != null)
-        bottom = Math.max(bottom, m3.bottom);
+    let m4 = source(view);
+    if (m4) {
+      if (m4.left != null)
+        left2 = Math.max(left2, m4.left);
+      if (m4.right != null)
+        right = Math.max(right, m4.right);
+      if (m4.top != null)
+        top2 = Math.max(top2, m4.top);
+      if (m4.bottom != null)
+        bottom = Math.max(bottom, m4.bottom);
     }
   }
   return { left: left2, right, top: top2, bottom };
@@ -30700,7 +31782,7 @@ var TileBuilder = class {
         parent = last;
         openStart--;
       } else {
-        let tile = MarkTile.of(mark, (_a6 = this.cache.find(MarkTile, (m3) => m3.mark.eq(mark))) === null || _a6 === void 0 ? void 0 : _a6.dom);
+        let tile = MarkTile.of(mark, (_a6 = this.cache.find(MarkTile, (m4) => m4.mark.eq(mark))) === null || _a6 === void 0 ? void 0 : _a6.dom);
         parent.append(tile);
         parent = tile;
         openStart = 0;
@@ -31399,7 +32481,7 @@ var DocView = class {
       return;
     let { view } = this, cursor = view.state.selection.main;
     let sel = getSelection(view.root);
-    let { anchorNode, anchorOffset } = view.observer.selectionRange;
+    let { anchorNode, anchorOffset: anchorOffset2 } = view.observer.selectionRange;
     if (!sel || !cursor.empty || !cursor.assoc || !sel.modify)
       return;
     let line = this.lineAt(cursor.head, cursor.assoc);
@@ -31417,7 +32499,7 @@ var DocView = class {
     view.observer.readSelectionRange();
     let newRange = view.observer.selectionRange;
     if (view.docView.posFromDOM(newRange.anchorNode, newRange.anchorOffset) != cursor.from)
-      sel.collapse(anchorNode, anchorOffset);
+      sel.collapse(anchorNode, anchorOffset2);
   }
   posFromDOM(node, offset) {
     let tile = this.tile.nearest(node);
@@ -32285,13 +33367,13 @@ var DOMReader = class {
       if (point3.node == node)
         point3.pos = this.text.length + Math.min(point3.offset, text.length);
     for (let off = 0, re2 = this.lineSeparator ? null : /\r\n?|\n/g; ; ) {
-      let nextBreak = -1, breakSize = 1, m3;
+      let nextBreak = -1, breakSize = 1, m4;
       if (this.lineSeparator) {
         nextBreak = text.indexOf(this.lineSeparator, off);
         breakSize = this.lineSeparator.length;
-      } else if (m3 = re2.exec(text)) {
-        nextBreak = m3.index;
-        breakSize = m3[0].length;
+      } else if (m4 = re2.exec(text)) {
+        nextBreak = m4.index;
+        breakSize = m4[0].length;
       }
       this.append(text.slice(off, nextBreak < 0 ? text.length : nextBreak));
       if (nextBreak < 0)
@@ -32622,10 +33704,10 @@ function selectionPoints(view) {
   let result = [];
   if (view.root.activeElement != view.contentDOM)
     return result;
-  let { anchorNode, anchorOffset, focusNode, focusOffset } = view.observer.selectionRange;
+  let { anchorNode, anchorOffset: anchorOffset2, focusNode, focusOffset } = view.observer.selectionRange;
   if (anchorNode) {
-    result.push(new DOMPoint(anchorNode, anchorOffset));
-    if (focusNode != anchorNode || focusOffset != anchorOffset)
+    result.push(new DOMPoint(anchorNode, anchorOffset2));
+    if (focusNode != anchorNode || focusOffset != anchorOffset2)
       result.push(new DOMPoint(focusNode, focusOffset));
   }
   return result;
@@ -34774,12 +35856,12 @@ var lightDarkIDs = { "&light": "." + baseLightID, "&dark": "." + baseDarkID };
 function buildTheme(main, spec, scopes) {
   return new StyleModule(spec, {
     finish(sel) {
-      return /&/.test(sel) ? sel.replace(/&\w*/, (m3) => {
-        if (m3 == "&")
+      return /&/.test(sel) ? sel.replace(/&\w*/, (m4) => {
+        if (m4 == "&")
           return main;
-        if (!scopes || !scopes[m3])
-          throw new RangeError(`Unsupported selector: ${m3}`);
-        return scopes[m3];
+        if (!scopes || !scopes[m4])
+          throw new RangeError(`Unsupported selector: ${m4}`);
+        return scopes[m4];
       }) : main + " " + sel;
     }
   });
@@ -35103,7 +36185,7 @@ var DOMObserver = class {
     this.observer = new MutationObserver((mutations) => {
       for (let mut of mutations)
         this.queue.push(mut);
-      if ((browser.ie && browser.ie_version <= 11 || browser.ios && view.composing) && mutations.some((m3) => m3.type == "childList" && m3.removedNodes.length || m3.type == "characterData" && m3.oldValue.length > m3.target.nodeValue.length))
+      if ((browser.ie && browser.ie_version <= 11 || browser.ios && view.composing) && mutations.some((m4) => m4.type == "childList" && m4.removedNodes.length || m4.type == "characterData" && m4.oldValue.length > m4.target.nodeValue.length))
         this.flushSoon();
       else
         this.flush();
@@ -35496,12 +36578,12 @@ function findChild(tile, dom, dir) {
   return null;
 }
 function buildSelectionRangeFromRange(view, range) {
-  let anchorNode = range.startContainer, anchorOffset = range.startOffset;
+  let anchorNode = range.startContainer, anchorOffset2 = range.startOffset;
   let focusNode = range.endContainer, focusOffset = range.endOffset;
   let curAnchor = view.docView.domAtPos(view.state.selection.main.anchor, 1);
   if (isEquivalentPosition(curAnchor.node, curAnchor.offset, focusNode, focusOffset))
-    [anchorNode, anchorOffset, focusNode, focusOffset] = [focusNode, focusOffset, anchorNode, anchorOffset];
-  return { anchorNode, anchorOffset, focusNode, focusOffset };
+    [anchorNode, anchorOffset2, focusNode, focusOffset] = [focusNode, focusOffset, anchorNode, anchorOffset2];
+  return { anchorNode, anchorOffset: anchorOffset2, focusNode, focusOffset };
 }
 function safariSelectionRangeHack(view, selection) {
   if (selection.getComposedRanges) {
@@ -36056,9 +37138,9 @@ var EditorView = class _EditorView {
         let measuring = [];
         if (!(changed & 4))
           [this.measureRequests, measuring] = [measuring, this.measureRequests];
-        let measured = measuring.map((m3) => {
+        let measured = measuring.map((m4) => {
           try {
-            return m3.read(this);
+            return m4.read(this);
           } catch (e) {
             logException(this.state, e);
             return BadMeasure;
@@ -36082,9 +37164,9 @@ var EditorView = class _EditorView {
         for (let i2 = 0; i2 < measuring.length; i2++)
           if (measured[i2] != BadMeasure) {
             try {
-              let m3 = measuring[i2];
-              if (m3.write)
-                m3.write(measured[i2], this);
+              let m4 = measuring[i2];
+              if (m4.write)
+                m4.write(measured[i2], this);
             } catch (e) {
               logException(this.state, e);
             }
@@ -37319,10 +38401,10 @@ function dropCursor() {
 }
 function iterMatches(doc2, re2, from, to, f2) {
   re2.lastIndex = 0;
-  for (let cursor = doc2.iterRange(from, to), pos = from, m3; !cursor.next().done; pos += cursor.value.length) {
+  for (let cursor = doc2.iterRange(from, to), pos = from, m4; !cursor.next().done; pos += cursor.value.length) {
     if (!cursor.lineBreak)
-      while (m3 = re2.exec(cursor.value))
-        f2(pos + m3.index, m3);
+      while (m4 = re2.exec(cursor.value))
+        f2(pos + m4.index, m4);
   }
 }
 function matchRanges(view, maxLength) {
@@ -37373,7 +38455,7 @@ var MatchDecorator = class {
   createDeco(view) {
     let build = new RangeSetBuilder(), add3 = build.add.bind(build);
     for (let { from, to } of matchRanges(view, this.maxLength))
-      iterMatches(view.state.doc, this.regexp, from, to, (from2, m3) => this.addMatch(m3, view, from2, add3));
+      iterMatches(view.state.doc, this.regexp, from, to, (from2, m4) => this.addMatch(m4, view, from2, add3));
     return build.finish();
   }
   /**
@@ -37414,14 +38496,14 @@ var MatchDecorator = class {
               break;
             }
         }
-        let ranges = [], m3;
+        let ranges = [], m4;
         let add3 = (from2, to2, deco2) => ranges.push(deco2.range(from2, to2));
         if (fromLine == toLine) {
           this.regexp.lastIndex = start - fromLine.from;
-          while ((m3 = this.regexp.exec(fromLine.text)) && m3.index < end - fromLine.from)
-            this.addMatch(m3, view, m3.index + fromLine.from, add3);
+          while ((m4 = this.regexp.exec(fromLine.text)) && m4.index < end - fromLine.from)
+            this.addMatch(m4, view, m4.index + fromLine.from, add3);
         } else {
-          iterMatches(view.state.doc, this.regexp, start, end, (from2, m4) => this.addMatch(m4, view, from2, add3));
+          iterMatches(view.state.doc, this.regexp, start, end, (from2, m5) => this.addMatch(m5, view, from2, add3));
         }
         deco = deco.update({ filterFrom: start, filterTo: end, filter: (from2, to2) => from2 < start || to2 > end, add: ranges });
       }
@@ -37493,9 +38575,9 @@ function specialCharPlugin() {
     makeDecorator(conf) {
       return new MatchDecorator({
         regexp: conf.specialChars,
-        decoration: (m3, view, pos) => {
+        decoration: (m4, view, pos) => {
           let { doc: doc2 } = view.state;
-          let code = codePointAt2(m3[0], 0);
+          let code = codePointAt2(m4[0], 0);
           if (code == 9) {
             let line = doc2.lineAt(pos);
             let size = view.state.tabSize, col3 = countColumn(line.text, size, pos - line.from);
@@ -39077,13 +40159,13 @@ var lineNumberGutter = /* @__PURE__ */ activeGutters.compute([lineNumberConfig],
     return view.state.facet(lineNumberMarkers);
   },
   lineMarker(view, line, others) {
-    if (others.some((m3) => m3.toDOM))
+    if (others.some((m4) => m4.toDOM))
       return null;
     return new NumberMarker(formatNumber(view, view.state.doc.lineAt(line.from).number));
   },
   widgetMarker: (view, widget, block) => {
-    for (let m3 of view.state.facet(lineNumberWidgetMarker)) {
-      let result = m3(view, widget, block);
+    for (let m4 of view.state.facet(lineNumberWidgetMarker)) {
+      let result = m4(view, widget, block);
       if (result)
         return result;
     }
@@ -40874,8 +41956,8 @@ var Modifier = class _Modifier {
     if (exists)
       return exists;
     let set2 = [], tag = new Tag(base2.name, set2, base2, mods);
-    for (let m3 of mods)
-      m3.instances.push(tag);
+    for (let m4 of mods)
+      m4.instances.push(tag);
     let configs = powerSet(mods);
     for (let parent of base2.set)
       if (!parent.modified.length)
@@ -40910,11 +41992,11 @@ function styleTags(spec) {
             mode = 1;
             break;
           }
-          let m3 = /^"(?:[^"\\]|\\.)*?"|[^\/!]+/.exec(rest);
-          if (!m3)
+          let m4 = /^"(?:[^"\\]|\\.)*?"|[^\/!]+/.exec(rest);
+          if (!m4)
             throw new RangeError("Invalid path: " + part);
-          pieces.push(m3[0] == "*" ? "" : m3[0][0] == '"' ? JSON.parse(m3[0]) : m3[0]);
-          pos += m3[0].length;
+          pieces.push(m4[0] == "*" ? "" : m4[0][0] == '"' ? JSON.parse(m4[0]) : m4[0]);
+          pos += m4[0].length;
           if (pos == part.length)
             break;
           let next = part[pos++];
@@ -44829,7 +45911,7 @@ var RegExpQuery = class extends QueryType2 {
     return this.prevMatchInRange(state, 0, curFrom) || this.prevMatchInRange(state, curTo, state.doc.length);
   }
   getReplacement(result) {
-    return this.spec.unquote(this.spec.replace).replace(/\$([$&]|\d+)/g, (m3, i) => {
+    return this.spec.unquote(this.spec.replace).replace(/\$([$&]|\d+)/g, (m4, i) => {
       if (i == "&")
         return result.match[0];
       if (i == "$")
@@ -44839,7 +45921,7 @@ var RegExpQuery = class extends QueryType2 {
         if (n > 0 && n < result.match.length)
           return result.match[n] + i.slice(l);
       }
-      return m3;
+      return m4;
     });
   }
   matchAll(state, limit) {
@@ -46669,13 +47751,13 @@ var Snippet = class _Snippet {
   }
   static parse(template) {
     let fields = [];
-    let lines = [], positions = [], m3;
+    let lines = [], positions = [], m4;
     for (let line of template.split(/\r\n?|\n/)) {
-      while (m3 = /[#$]\{(?:(\d+)(?::([^{}]*))?|((?:\\[{}]|[^{}])*))\}/.exec(line)) {
-        let seq = m3[1] ? +m3[1] : null, rawName = m3[2] || m3[3] || "", found = -1;
+      while (m4 = /[#$]\{(?:(\d+)(?::([^{}]*))?|((?:\\[{}]|[^{}])*))\}/.exec(line)) {
+        let seq = m4[1] ? +m4[1] : null, rawName = m4[2] || m4[3] || "", found = -1;
         if (seq === 0)
           seq = 1e9;
-        let name2 = rawName.replace(/\\[{}]/g, (m4) => m4[1]);
+        let name2 = rawName.replace(/\\[{}]/g, (m5) => m5[1]);
         for (let i = 0; i < fields.length; i++) {
           if (seq != null ? fields[i].seq == seq : name2 ? fields[i].name == name2 : false)
             found = i;
@@ -46691,13 +47773,13 @@ var Snippet = class _Snippet {
               pos.field++;
         }
         for (let pos of positions)
-          if (pos.line == lines.length && pos.from > m3.index) {
-            let snip = m3[2] ? 3 + (m3[1] || "").length : 2;
+          if (pos.line == lines.length && pos.from > m4.index) {
+            let snip = m4[2] ? 3 + (m4[1] || "").length : 2;
             pos.from -= snip;
             pos.to -= snip;
           }
-        positions.push(new FieldPos(found, lines.length, m3.index, m3.index + name2.length));
-        line = line.slice(0, m3.index) + rawName + line.slice(m3.index + m3[0].length);
+        positions.push(new FieldPos(found, lines.length, m4.index, m4.index + name2.length));
+        line = line.slice(0, m4.index) + rawName + line.slice(m4.index + m4[0].length);
       }
       line = line.replace(/\\([{}])/g, (_2, brace, index3) => {
         for (let pos of positions)
@@ -47042,7 +48124,7 @@ function nodeStart(state, pos) {
 }
 function probablyInString(state, pos, quoteToken, prefixes) {
   let node = syntaxTree(state).resolveInner(pos, -1);
-  let maxPrefix = prefixes.reduce((m3, p2) => Math.max(m3, p2.length), 0);
+  let maxPrefix = prefixes.reduce((m4, p2) => Math.max(m4, p2.length), 0);
   for (let i = 0; i < 5; i++) {
     let start = state.sliceDoc(node.from, Math.min(node.to, node.from + quoteToken.length + maxPrefix));
     let quotePos = start.indexOf(quoteToken);

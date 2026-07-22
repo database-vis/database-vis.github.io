@@ -118,6 +118,11 @@
       
         
         
+        <li><a href="../marks/bezier.html">bezier</a></li>
+        
+      
+        
+        
         <li><a href="../marks/cell.html">cell</a></li>
         
       
@@ -227,6 +232,9 @@
             <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
           
             
+            <li><a href="../layouts/dag.html">dag</a></li>
+          
+            
             <li><a href="../layouts/force.html">force</a></li>
           
             
@@ -242,6 +250,9 @@
           
             
             <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/route.html">route</a></li>
           
             
             <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
@@ -456,7 +467,7 @@ return v;
 <pre data-lang="dvl"><code class="lang-dvl">const byIsland = db.table(&quot;penguins&quot;).groupby([&quot;island&quot;], { n: count() });
 const v = canvas(320, 460);
 v.rect(byIsland, {
-  x: 40, w: 120,                              // one fixed column (pixels)
+  x: px(40), w: 120,                              // one fixed column (pixels)
   ...stackY({ weight: &quot;n&quot;, order: &quot;island&quot; }).pick(&quot;y&quot;, &quot;h&quot;),
   fill: ordinal(&quot;island&quot;),
 });

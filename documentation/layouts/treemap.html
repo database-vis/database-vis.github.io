@@ -118,6 +118,11 @@
       
         
         
+        <li><a href="../marks/bezier.html">bezier</a></li>
+        
+      
+        
+        
         <li><a href="../marks/cell.html">cell</a></li>
         
       
@@ -227,6 +232,9 @@
             <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
           
             
+            <li><a href="../layouts/dag.html">dag</a></li>
+          
+            
             <li><a href="../layouts/force.html">force</a></li>
           
             
@@ -242,6 +250,9 @@
           
             
             <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/route.html">route</a></li>
           
             
             <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
@@ -438,20 +449,16 @@ v.rect(byMass, { ...treemap('total').pick('x', 'y', 'w', 'h'),
                  fill: ordinal('species'), stroke: '#fff' });
 return v;
 </code></pre>
-<p>Fitted labels — the text layer borrows each tile's <strong>solved</strong> box through a via and computes its
-midpoint in the same breath (<code>f.x + f.w/2</code>, <code>f.y + f.h/2</code>), then <code>fitText</code> sizes the label against
-that box. <code>{ shared: true }</code> opts into one uniform size (capped at 14, no rotation):</p>
+<p>Fitted labels — the text layer borrows each tile's solved box through a via; anchor/baseline center the label within it and fitText sizes the label against that box.</p>
 <pre data-lang="dvl"><code class="lang-dvl">const revenue = db.table('orders').rollup(
   db.table('products'), { left: 'product_id', right: 'id' },
   'category', { amount: sum({ sql: 'qty * price' }) });
 const v = canvas(640, 460);
 const rects = v.rect(revenue, { ...treemap('amount').pick('x', 'y', 'w', 'h'),
                                 fill: ordinal('category'), stroke: '#fff' });
-const center = { resolve: { cx: { fn: 'avg', arg: expr`f.x + f.w / 2` },
-                            cy: { fn: 'avg', arg: expr`f.y + f.h / 2` } } };
 v.text(revenue, {
-  ...rects.via(eq('category', 'category'), center).pick({ x: 'cx', y: 'cy', w: 'w', h: 'h' }),
-  ...fitText().pick('fontSize'),
+  ...rects.via(eq('category', 'category')).pick({ x: 'x', y: 'y', w: 'w', h: 'h' }),
+  ...fitText(),
   text: field('category'), anchor: 'middle', baseline: 'middle', fill: '#333',
 });
 return v;
@@ -464,7 +471,7 @@ the <code>eq('year', 'year')</code> nest to bind, so group by <strong>both</stro
   .groupby(['year', 'category'], { amount: sum({ sql: 'qty * price' }) });
 const years = db.table('orders').groupby(['year'], {});
 const v = canvas(720, 320);
-v.rect(years, { ...eqX('year').pick('x', 'w'), y: 10, h: 300, fill: '#f5f6fa' })
+v.rect(years, { ...eqX('year').pick('x', 'w'), y: px(10), h: 300, fill: '#f5f6fa' })
  .rect(revenue,
    { ...treemap('amount').pick('x', 'y', 'w', 'h'), fill: ordinal('category'), stroke: '#fff' },
    { on: eq('year', 'year') });

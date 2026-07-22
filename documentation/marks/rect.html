@@ -118,6 +118,11 @@
       
         
         
+        <li><a href="../marks/bezier.html">bezier</a></li>
+        
+      
+        
+        
         <li><a href="../marks/cell.html">cell</a></li>
         
       
@@ -227,6 +232,9 @@
             <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
           
             
+            <li><a href="../layouts/dag.html">dag</a></li>
+          
+            
             <li><a href="../layouts/force.html">force</a></li>
           
             
@@ -242,6 +250,9 @@
           
             
             <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/route.html">route</a></li>
           
             
             <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
@@ -413,6 +424,12 @@ coloured by species.</p>
 <td>height in pixels (offset form)</td>
 </tr>
 <tr>
+<td><code>anchor</code></td>
+<td>shape</td>
+<td><code>topleft</code></td>
+<td>box reference point: <code>topleft</code> places <code>(x, y)</code> at the corner, <code>center</code> centers the box on <code>(x, y)</code></td>
+</tr>
+<tr>
 <td><code>fill</code></td>
 <td>color</td>
 <td>black</td>
@@ -462,7 +479,8 @@ coloured by species.</p>
 </tr>
 </tbody>
 </table>
-<p><code>w</code>, <code>h</code>, and <code>strokeWidth</code> are pixel channels (<code>w</code>→x axis, <code>h</code>→y axis).</p>
+<p><code>w</code>, <code>h</code>, and <code>strokeWidth</code> are pixel channels (<code>w</code>→x axis, <code>h</code>→y axis). <code>anchor</code> defaults to
+<code>topleft</code> — <code>x</code>/<code>y</code> are the box's corner, the convention <code>bandX</code>/<code>barY</code>/<code>treemap</code> layouts hand out.</p>
 <h2 id="examples">Examples</h2>
 <p><strong>Bar chart — <code>bandX</code> × <code>barY</code>.</strong> A bar needs four positional values from two multi-output layouts:
 <code>bandX(&quot;species&quot;)</code> gives <code>{x, w}</code> (band position + width), <code>barY(&quot;mass&quot;)</code> gives <code>{y, h}</code> (bar top +
@@ -505,7 +523,7 @@ keyed layers as you like.</p>
 <pre data-lang="dvl"><code class="lang-dvl">const species = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;], {});  // one row per species
 const v = canvas(760, 260);
 const cell = v.rect(species,
-    { ...eqX(&quot;species&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: 12, h: 236, fill: ordinal(&quot;species&quot;) })
+    { ...eqX(&quot;species&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: px(12), h: 236, fill: ordinal(&quot;species&quot;) })
   .nest(&quot;penguins&quot;, { on: eq(&quot;species&quot;, &quot;species&quot;) });
 cell.dot({ x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), fill: &quot;#ffffff&quot; });
 return v;
@@ -514,7 +532,7 @@ return v;
 single keyed nested layer. Shared scales make every panel's range identical.</p>
 <pre data-lang="dvl"><code class="lang-dvl">const species = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;], {});
 const v = canvas(760, 260);
-v.rect(species, { ...eqX(&quot;species&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: 12, h: 236, fill: &quot;#f5f6fa&quot; })
+v.rect(species, { ...eqX(&quot;species&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: px(12), h: 236, fill: &quot;#f5f6fa&quot; })
  .dot(&quot;penguins&quot;,
    { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), fill: &quot;#4e79a7&quot; },
    { on: eq(&quot;species&quot;, &quot;species&quot;) });
@@ -524,7 +542,7 @@ return v;
 its own species' range and the points fill every panel.</p>
 <pre data-lang="dvl"><code class="lang-dvl">const species = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;], {});
 const v = canvas(760, 260);
-v.rect(species, { ...eqX(&quot;species&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: 12, h: 236, fill: &quot;#f5f6fa&quot; })
+v.rect(species, { ...eqX(&quot;species&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: px(12), h: 236, fill: &quot;#f5f6fa&quot; })
  .dot(&quot;penguins&quot;,
    { x: linear(&quot;bill_length_mm&quot;, { shared: false }),
      y: linear(&quot;body_mass_g&quot;,    { shared: false }), fill: &quot;#59a14f&quot; },

@@ -118,6 +118,11 @@
       
         
         
+        <li><a href="../marks/bezier.html">bezier</a></li>
+        
+      
+        
+        
         <li><a href="../marks/cell.html">cell</a></li>
         
       
@@ -227,6 +232,9 @@
             <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
           
             
+            <li><a href="../layouts/dag.html">dag</a></li>
+          
+            
             <li><a href="../layouts/force.html">force</a></li>
           
             
@@ -242,6 +250,9 @@
           
             
             <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/route.html">route</a></li>
           
             
             <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
@@ -354,7 +365,7 @@ the same rank→step shape as <code>eqX</code>, on the y axis. Outputs are norma
 turns them into pixels.</p>
 <pre data-lang="dvl"><code class="lang-dvl">const species = db.table('penguins').groupby(['species'], {});  // one row per species (distinct)
 const v = canvas(420, 620);
-v.rect(species, { ...eqY('species').pick('y', 'h'), x: 12, w: 396, fill: '#f5f6fa' })
+v.rect(species, { ...eqY('species').pick('y', 'h'), x: px(12), w: 396, fill: '#f5f6fa' })
  .dot('penguins',
    { x: linear('bill_length_mm'), y: linear('body_mass_g'), fill: '#4e79a7' },
    { on: eq('species', 'species') });   // child.species = host.species

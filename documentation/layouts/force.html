@@ -118,6 +118,11 @@
       
         
         
+        <li><a href="../marks/bezier.html">bezier</a></li>
+        
+      
+        
+        
         <li><a href="../marks/cell.html">cell</a></li>
         
       
@@ -227,6 +232,9 @@
             <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
           
             
+            <li><a href="../layouts/dag.html">dag</a></li>
+          
+            
             <li class="active"><a href="../layouts/force.html">force</a></li>
           
             
@@ -242,6 +250,9 @@
           
             
             <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/route.html">route</a></li>
           
             
             <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
@@ -423,32 +434,30 @@ single node centers at 0.5.</p>
 v.dot('members', { ...force('follows').pick('x', 'y'), r: 8, fill: ordinal('community') });
 return v;
 </code></pre>
-<p>Nodes <strong>and</strong> edges — draw the links first (underneath), each endpoint borrowing the solved node
-position through a via on the FK. The nested linear scales in the node plot are unnecessary here;
-the link's endpoints come straight from the force solve:</p>
+<p>Nodes <strong>and</strong> edges — draw the links first (underneath), each endpoint attached to a node's circle
+boundary through <code>route()</code>. <code>route()</code> consumes the two endpoint vias directly and clips each edge
+to the referent's boundary, so a link lands exactly <code>r</code> from the node center instead of piercing it:</p>
 <pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
 const nodes = v.dot('members', { ...force('follows').pick('x', 'y'), r: 8, fill: ordinal('community') });
 v.link('follows', {
-  ...nodes.via(eq('follows.src', 'members.id')).pick({ x1: 'x', y1: 'y' }),
-  ...nodes.via(eq('follows.dst', 'members.id')).pick({ x2: 'x', y2: 'y' }),
+  ...route({ src: nodes.via(eq('follows.src', 'members.id')),
+             dst: nodes.via(eq('follows.dst', 'members.id')) }).pick('x1', 'y1', 'x2', 'y2'),
   stroke: '#b6bdc9',
 });
 return v;
 </code></pre>
 <p>Force <strong>rects</strong> — the nodes are rectangles hosting nested plots. Force solves the rect's top-left;
-<code>w</code>/<code>h</code> are pixel literals so every node is a little panel. The link endpoints want the middle, so
-each via computes a center (<code>f.x + 46</code>, <code>f.y + 32</code> — half of w/h). Each rect nests that member's
-outgoing follows on the FK <code>eq('src','id')</code>:</p>
+<code>w</code>/<code>h</code> are pixel literals so every node is a little panel. <code>route()</code> owns both endpoint borrows and
+lands each on the rect edge nearest the far node — no manual center via, no <code>resolve</code> boilerplate.
+Each rect nests that member's outgoing follows on the FK <code>eq('src','id')</code>:</p>
 <pre data-lang="dvl"><code class="lang-dvl">const v = canvas(760, 420);
 const nodes = v.rect('members', {
   ...force('follows').pick('x', 'y'),
   w: 92, h: 64, fill: '#ffffff', stroke: ordinal('community'), strokeWidth: 2,
 });
-const center = { resolve: { cx: { fn: 'avg', arg: expr`f.x + 46` },
-                            cy: { fn: 'avg', arg: expr`f.y + 32` } } };
 v.link('follows', {
-  ...nodes.via(eq('follows.src', 'members.id'), center).pick({ x1: 'cx', y1: 'cy' }),
-  ...nodes.via(eq('follows.dst', 'members.id'), center).pick({ x2: 'cx', y2: 'cy' }),
+  ...route({ src: nodes.via(eq('follows.src', 'members.id')),
+             dst: nodes.via(eq('follows.dst', 'members.id')) }).pick('x1', 'y1', 'x2', 'y2'),
   stroke: '#b6bdc9',
 });
 const cell = nodes.nest('follows', { on: eq('src', 'id') });
@@ -462,15 +471,15 @@ are solved independently inside their panel:</p>
 db.declareFK({ fromTable: 'members', fromCols: ['community'],
                toTable: communities.name, toCols: ['community'] });
 const v = canvas(760, 360);
-const panel = v.rect(communities, { ...eqX('community').pick('x', 'w'), y: 12, h: 330, fill: '#f5f6fa' });
+const panel = v.rect(communities, { ...eqX('community').pick('x', 'w'), y: px(12), h: 330, fill: '#f5f6fa' });
 const np = panel.nest('members', { on: eq('community', 'community') }).dot({
   ...force('follows').pick('x', 'y'),
   r: 6, fill: ordinal('community'),
 });
 // within-panel edges: σ derived from the FK catalog (both endpoints must be in the panel)
 panel.link('follows', {
-  ...np.via(eq('follows.src', 'members.id')).pick({ x1: 'x', y1: 'y' }),
-  ...np.via(eq('follows.dst', 'members.id')).pick({ x2: 'x', y2: 'y' }),
+  ...route({ src: np.via(eq('follows.src', 'members.id')),
+             dst: np.via(eq('follows.dst', 'members.id')) }).pick('x1', 'y1', 'x2', 'y2'),
   stroke: '#b6bdc9',
 });
 return v;
@@ -482,14 +491,13 @@ between panels). Authored first, it sits underneath the within-panel layer above
 db.declareFK({ fromTable: 'members', fromCols: ['community'],
                toTable: communities.name, toCols: ['community'] });
 const v = canvas(760, 360);
-const panel = v.rect(communities, { ...eqX('community').pick('x', 'w'), y: 12, h: 330, fill: '#f5f6fa' });
+const panel = v.rect(communities, { ...eqX('community').pick('x', 'w'), y: px(12), h: 330, fill: '#f5f6fa' });
 const np = panel.nest('members', { on: eq('community', 'community') }).dot({
   ...force('follows').pick('x', 'y'), r: 6, fill: ordinal('community'),
 });
 const src = np.via(eq('follows.src', 'members.id'));
 v.link('follows', {   // owner semantics: every edge, assigned to its src's panel
-  ...src.pick({ x1: 'x', y1: 'y' }),
-  ...np.via(eq('follows.dst', 'members.id')).pick({ x2: 'x', y2: 'y' }),
+  ...route({ src, dst: np.via(eq('follows.dst', 'members.id')) }).pick('x1', 'y1', 'x2', 'y2'),
   stroke: '#dfe3ec',
 }, { frame: src });
 return v;
@@ -498,7 +506,7 @@ return v;
 <ul>
 <li><a href="eqX.html">eqX</a> — the panel splitter force nests inside (<code>.nest(...)</code>) for per-panel simulations</li>
 <li><a href="treemap.html">treemap</a> — the other dual-substrate space-partition layout</li>
-<li><a href="../marks/link.html">link</a> — draws the edges between force-placed nodes</li>
+<li><a href="../marks/link.html">link</a> — draws the edges between force-placed nodes; use <code>route()</code> for boundary attachment (endpoints clipped to each node's edge)</li>
 </ul>
 
     </article>

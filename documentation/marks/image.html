@@ -118,6 +118,11 @@
       
         
         
+        <li><a href="../marks/bezier.html">bezier</a></li>
+        
+      
+        
+        
         <li><a href="../marks/cell.html">cell</a></li>
         
       
@@ -227,6 +232,9 @@
             <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
           
             
+            <li><a href="../layouts/dag.html">dag</a></li>
+          
+            
             <li><a href="../layouts/force.html">force</a></li>
           
             
@@ -242,6 +250,9 @@
           
             
             <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/route.html">route</a></li>
           
             
             <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
@@ -348,9 +359,10 @@
     <article class="markdown-section">
       <h1 id="image">image</h1>
 <p>The <code>image</code> mark draws a raster image — an SVG <code>&lt;image href&gt;</code> box — at each row's <code>(x, y)</code>, sized
-<code>w × h</code> pixels. The <code>src</code> channel is the image URL or <code>data:</code> URI; <code>(x, y)</code> is the box's top-left
-corner (the same anchor convention as <code>rect</code>). Like every mark, positional channels take scale
-bindings, layout outputs, or pixel literals, and <code>w</code>/<code>h</code> are pixel sizes.</p>
+<code>w × h</code> pixels. The <code>src</code> channel is the image URL or <code>data:</code> URI. By default <code>(x, y)</code> is the box's
+<strong>center</strong> (<code>anchor: &quot;center&quot;</code>) — a glyph sits <em>on</em> its point, like a <code>dot</code>. Pass <code>anchor: &quot;topleft&quot;</code>
+for the corner convention <code>rect</code> uses (placing an image into a layout's solved box). Like every mark,
+positional channels take scale bindings, layout outputs, or pixel literals, and <code>w</code>/<code>h</code> are pixel sizes.</p>
 <pre data-lang="dvl"><code class="lang-dvl">const birds = db.derive(&quot;birds&quot;, `SELECT *, 'data:image/svg+xml;utf8,&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;24&quot; height=&quot;24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot; fill=&quot;%234e79a7&quot; fill-opacity=&quot;0.8&quot;/&gt;&lt;/svg&gt;' AS icon_url FROM penguins`);
 const v = canvas(640, 460);
 v.image(birds, {
@@ -361,13 +373,14 @@ v.image(birds, {
 }).axis(&quot;x&quot;).axis(&quot;y&quot;);
 return v;
 </code></pre>
-<p>A scatter where each point is a 24×24 image loaded from its row's <code>icon_url</code> column, its top-left
-corner placed at the scaled <code>(x, y)</code>.</p>
+<p>A scatter where each point is a 24×24 image loaded from its row's <code>icon_url</code> column, centered on the
+scaled <code>(x, y)</code>.</p>
 <h2 id="options">Options</h2>
-<p>Positional <code>x</code>/<code>y</code> place the box's top-left corner. <code>w</code>/<code>h</code> are pixel sizes (default <code>0</code>, so you must
-set them or nothing is drawn). <code>src</code> is the content channel — bind it to <code>field(&quot;col&quot;)</code> for per-row
-URLs, or pass a bare string for one constant image on every row (the bare-string-is-a-literal rule).
-<code>opacity</code> rides the box's style.</p>
+<p>Positional <code>x</code>/<code>y</code> place the box's anchor point — its <strong>center</strong> by default. <code>w</code>/<code>h</code> are pixel sizes
+(default <code>0</code>, so you must set them or nothing is drawn). <code>anchor</code> switches between <code>center</code> (glyph, the
+default) and <code>topleft</code> (corner, matching <code>rect</code>). <code>src</code> is the content channel — bind it to
+<code>field(&quot;col&quot;)</code> for per-row URLs, or pass a bare string for one constant image on every row (the
+bare-string-is-a-literal rule). <code>opacity</code> rides the box's style.</p>
 <table>
 <thead>
 <tr>
@@ -382,13 +395,13 @@ URLs, or pass a bare string for one constant image on every row (the bare-string
 <td><code>x</code></td>
 <td>positional-x</td>
 <td>—</td>
-<td>box top-left x (scale binding, layout output, or pixel literal)</td>
+<td>box anchor x (scale binding, layout output, or pixel literal)</td>
 </tr>
 <tr>
 <td><code>y</code></td>
 <td>positional-y</td>
 <td>—</td>
-<td>box top-left y</td>
+<td>box anchor y</td>
 </tr>
 <tr>
 <td><code>w</code></td>
@@ -401,6 +414,12 @@ URLs, or pass a bare string for one constant image on every row (the bare-string
 <td>pixel</td>
 <td><code>0</code></td>
 <td>box height in px</td>
+</tr>
+<tr>
+<td><code>anchor</code></td>
+<td>shape</td>
+<td><code>center</code></td>
+<td>reference point: <code>center</code> centers the box on <code>(x, y)</code>, <code>topleft</code> places <code>(x, y)</code> at the corner</td>
 </tr>
 <tr>
 <td><code>src</code></td>
@@ -417,12 +436,12 @@ URLs, or pass a bare string for one constant image on every row (the bare-string
 </tbody>
 </table>
 <h2 id="examples">Examples</h2>
-<p>A single logo placed at a fixed pixel point. <code>src</code> is a bare string, so the SAME image is drawn once
-at <code>(x, y)</code> rather than per row.</p>
+<p>A single logo placed at a fixed pixel point. <code>anchor: &quot;topleft&quot;</code> pins the corner at <code>(x, y)</code>; <code>src</code> is a
+bare string, so the SAME image is drawn once rather than per row.</p>
 <pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
 v.image(&quot;penguins&quot;, {
-  x: 20, y: 20, w: 48, h: 48,
-  src: &quot;https://example.com/logo.png&quot;,
+  x: px(20), y: px(20), w: 48, h: 48, anchor: &quot;topleft&quot;,
+  src: &quot;https://www.pantsornopants.com/files/images/banana_undies.png&quot;,
 });
 return v;
 </code></pre>
@@ -447,7 +466,8 @@ v.dot(&quot;penguins&quot;,   { x, y, r: 2, fill: &quot;#333&quot; });
 return v;
 </code></pre>
 <p>Images placed into a layout's solved boxes — borrow a bandX × barY box and drop a data-sized image
-into it. <code>w</code>/<code>h</code> come from the layout instead of literals.</p>
+into it. <code>w</code>/<code>h</code> come from the layout instead of literals, so the image uses <code>anchor: &quot;topleft&quot;</code> to
+fill the box from its corner.</p>
 <pre data-lang="dvl"><code class="lang-dvl">const birds = db.derive(&quot;birds&quot;, `SELECT *, 'data:image/svg+xml;utf8,&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;24&quot; height=&quot;24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot; fill=&quot;%234e79a7&quot; fill-opacity=&quot;0.8&quot;/&gt;&lt;/svg&gt;' AS icon_url FROM penguins`);
 const v = canvas(640, 460);
 v.bar(&quot;penguins&quot;, {
@@ -458,6 +478,7 @@ v.bar(&quot;penguins&quot;, {
 v.image(birds, {
   ...bandX(&quot;species&quot;, { paddingInner: 0.15 }).pick(&quot;x&quot;, &quot;w&quot;),
   ...barY(&quot;body_mass_g&quot;).pick(&quot;y&quot;, &quot;h&quot;),
+  anchor: &quot;topleft&quot;,
   src: field(&quot;icon_url&quot;),
 });
 return v;
@@ -465,7 +486,7 @@ return v;
 <h2 id="see-also">See also</h2>
 <ul>
 <li><a href="./text.html">text</a> — the sibling glyph mark (a string box instead of a raster box)</li>
-<li><a href="./rect.html">rect</a> — the same top-left <code>(x, y)</code> + <code>w × h</code> box convention, filled instead of imaged</li>
+<li><a href="./rect.html">rect</a> — the same <code>w × h</code> box, filled instead of imaged (its <code>(x, y)</code> is the corner by default)</li>
 <li><a href="../layouts/bandX.html">bandX</a> / <a href="../layouts/barY.html">barY</a> — box layouts to place images into</li>
 </ul>
 

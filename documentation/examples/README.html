@@ -118,6 +118,11 @@
       
         
         
+        <li><a href="../marks/bezier.html">bezier</a></li>
+        
+      
+        
+        
         <li><a href="../marks/cell.html">cell</a></li>
         
       
@@ -227,6 +232,9 @@
             <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
           
             
+            <li><a href="../layouts/dag.html">dag</a></li>
+          
+            
             <li><a href="../layouts/force.html">force</a></li>
           
             
@@ -242,6 +250,9 @@
           
             
             <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/route.html">route</a></li>
           
             
             <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
@@ -412,11 +423,11 @@ in teaching order:</p>
 </tr>
 <tr>
 <td>fit-text</td>
-<td>labels fitted INSIDE differently sized bars: <code>barY</code>'s <code>{ zero: true }</code> (no degenerate min bar), a via computes each bar's midpoint (<code>expr`f.x + f.w / 2` </code>), and a bare <code>fitText()</code> — inputs inferred from the mark's channels (it sizes exactly what it draws), per-box + rotated + uncapped by default, the box bounds the solve</td>
+<td>labels fitted INSIDE differently sized bars: <code>barY</code>'s <code>{ zero: true }</code> (no degenerate min bar), a via borrows each bar's solved box (anchor/baseline center the label inside it), and a bare <code>fitText()</code> — inputs inferred from the mark's channels (it sizes exactly what it draws), per-box + rotated + uncapped by default, the box bounds the solve</td>
 </tr>
 <tr>
 <td>force-rects</td>
-<td>a node-link diagram of member rects (border color by community, white fill): edges connect computed rect CENTERS via per-endpoint resolutions (<code>{ resolve: { cx: { fn:'avg', arg: expr`f.x + 46` } } }</code>), and each rect hosts a nested plot of its outgoing follows (<code>nest('follows', { on: eq('src','id') })</code> — the FK itself), no axes</td>
+<td>a node-link diagram of member rects (border color by community, white fill): edges attach to rect BOUNDARIES via <code>route({ src, dst }).pick('x1','y1','x2','y2')</code> (no manual center resolution — route derives the center from the box and clips to the edge), and each rect hosts a nested plot of its outgoing follows (<code>nest('follows', { on: eq('src','id') })</code> — the FK itself), no axes</td>
 </tr>
 <tr>
 <td>force</td>

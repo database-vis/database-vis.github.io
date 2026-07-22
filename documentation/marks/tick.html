@@ -118,6 +118,11 @@
       
         
         
+        <li><a href="../marks/bezier.html">bezier</a></li>
+        
+      
+        
+        
         <li><a href="../marks/cell.html">cell</a></li>
         
       
@@ -227,6 +232,9 @@
             <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
           
             
+            <li><a href="../layouts/dag.html">dag</a></li>
+          
+            
             <li><a href="../layouts/force.html">force</a></li>
           
             
@@ -242,6 +250,9 @@
           
             
             <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/route.html">route</a></li>
           
             
             <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
@@ -443,14 +454,14 @@ during axis construction). <code>len</code> defaults to 4 px.</p>
 <pre data-lang="dvl"><code class="lang-dvl">const v = canvas(480, 460);
 const y = linear(&quot;body_mass_g&quot;);
 v.tick(&quot;penguins&quot;, {
-  x: 40, y, len: 12, orient: &quot;horizontal&quot;, stroke: &quot;#4e79a7&quot;, strokeOpacity: 0.6,
+  x: px(40), y, len: 12, orient: &quot;horizontal&quot;, stroke: &quot;#4e79a7&quot;, strokeOpacity: 0.6,
 }).axis(&quot;y&quot;);
 return v;
 </code></pre>
 <p><strong>A strip / one-dimensional distribution</strong> — ticks along a single axis, one per bird.</p>
 <pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 160);
 v.tick(&quot;penguins&quot;, {
-  x: linear(&quot;flipper_length_mm&quot;), y: 80,
+  x: linear(&quot;flipper_length_mm&quot;), y: px(80),
   len: 24, orient: &quot;vertical&quot;, stroke: &quot;#333&quot;, strokeOpacity: 0.4,
 }).axis(&quot;x&quot;);
 return v;
@@ -469,15 +480,15 @@ This is exactly what <code>.axis(&quot;x&quot;)</code> lowers to.</p>
 <pre data-lang="dvl"><code class="lang-dvl">const ticks = db.derive(&quot;ticks&quot;, `SELECT DISTINCT species FROM penguins`);
 const v = canvas(520, 260);
 const x = point();   // deferred, shared by the tick and text layers
-v.tick(ticks, { x: x(&quot;species&quot;), y: 220, len: 6, orient: &quot;vertical&quot;, stroke: &quot;#333&quot; });
-v.text(ticks, { x: x(&quot;species&quot;), y: 236, text: field(&quot;species&quot;), anchor: &quot;middle&quot;, fill: &quot;#333&quot; });
+v.tick(ticks, { x: x(&quot;species&quot;), y: px(220), len: 6, orient: &quot;vertical&quot;, stroke: &quot;#333&quot; });
+v.text(ticks, { x: x(&quot;species&quot;), y: px(236), text: field(&quot;species&quot;), anchor: &quot;middle&quot;, fill: &quot;#333&quot; });
 return v;
 </code></pre>
 <p><strong>Longer ticks as gridlines</strong> — one long horizontal tick per y gridline value, spanning the plot.</p>
 <pre data-lang="dvl"><code class="lang-dvl">const grid = db.derive(&quot;grid&quot;, `SELECT unnest([3000, 4000, 5000, 6000]) AS mass`);
 const v = canvas(640, 460);
 const y = linear(undefined, { domain: { explicit: [3000, 6000] } });  // deferred, shared by gridlines + dots
-v.tick(grid, { x: 640, y: y(&quot;mass&quot;), len: 600, orient: &quot;horizontal&quot;,
+v.tick(grid, { x: px(640), y: y(&quot;mass&quot;), len: 600, orient: &quot;horizontal&quot;,
                stroke: &quot;#eee&quot;, strokeWidth: 1 });
 v.dot(&quot;penguins&quot;, { x: linear(&quot;bill_length_mm&quot;), y: y(&quot;body_mass_g&quot;), r: 3, fill: &quot;#4e79a7&quot; })
  .axis(&quot;x&quot;).axis(&quot;y&quot;);

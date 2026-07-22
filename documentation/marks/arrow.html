@@ -118,6 +118,11 @@
       
         
         
+        <li><a href="../marks/bezier.html">bezier</a></li>
+        
+      
+        
+        
         <li><a href="../marks/cell.html">cell</a></li>
         
       
@@ -227,6 +232,9 @@
             <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
           
             
+            <li><a href="../layouts/dag.html">dag</a></li>
+          
+            
             <li><a href="../layouts/force.html">force</a></li>
           
             
@@ -242,6 +250,9 @@
           
             
             <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/route.html">route</a></li>
           
             
             <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
@@ -475,15 +486,19 @@ v.arrow(pairs, {
 }).axis(&quot;x&quot;).axis(&quot;y&quot;);
 return v;
 </code></pre>
-<p><strong>Directed FK edges</strong> over a force layout — arrows show which member follows which. Endpoints are
-borrowed from the node plot via the declared FK.</p>
+<p><strong>Directed FK edges</strong> over a force layout — arrows show which member follows which. <code>route()</code> owns
+both endpoint borrows and clips each end to the node's <strong>boundary</strong> (a circle for <code>dot</code>s), so the
+arrowHEAD lands exactly <strong>on</strong> the target node's edge instead of being buried under the disc. The
+optional <code>{ pad: 2 }</code> stands the head off the boundary by 2 px for a clean gap.</p>
 <pre data-lang="dvl"><code class="lang-dvl">const v = canvas(760, 420);
 const nodes = v.dot(&quot;members&quot;, {
   ...force(&quot;follows&quot;).pick(&quot;x&quot;, &quot;y&quot;), r: 8, fill: ordinal(&quot;community&quot;),
 });
 v.arrow(&quot;follows&quot;, {
-  ...nodes.via(eq(&quot;follows.src&quot;, &quot;members.id&quot;)).pick({ x1: &quot;x&quot;, y1: &quot;y&quot; }),
-  ...nodes.via(eq(&quot;follows.dst&quot;, &quot;members.id&quot;)).pick({ x2: &quot;x&quot;, y2: &quot;y&quot; }),
+  ...route({
+    src: nodes.via(eq(&quot;follows.src&quot;, &quot;members.id&quot;)),
+    dst: nodes.via(eq(&quot;follows.dst&quot;, &quot;members.id&quot;)),
+  }, { pad: 2 }).pick(&quot;x1&quot;, &quot;y1&quot;, &quot;x2&quot;, &quot;y2&quot;),
   headType: &quot;triangle&quot;, headSize: 7, stroke: &quot;#b6bdc9&quot;,
 });
 return v;
@@ -508,7 +523,7 @@ return v;
 toggling direction on/off from data).</p>
 <pre data-lang="dvl"><code class="lang-dvl">const v = canvas(400, 200);
 const seg = db.derive(&quot;seg&quot;, `SELECT 40 AS x1, 100 AS y1, 360 AS x2, 100 AS y2`);
-v.arrow(seg, { x1: field(&quot;x1&quot;), y1: field(&quot;y1&quot;), x2: field(&quot;x2&quot;), y2: field(&quot;y2&quot;),
+v.arrow(seg, { x1: px.x(&quot;x1&quot;), y1: px.y(&quot;y1&quot;), x2: px.x(&quot;x2&quot;), y2: px.y(&quot;y2&quot;),
                headType: &quot;none&quot;, stroke: &quot;#333&quot;, strokeWidth: 2 });
 return v;
 </code></pre>

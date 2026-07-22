@@ -118,6 +118,11 @@
       
         
         
+        <li><a href="../marks/bezier.html">bezier</a></li>
+        
+      
+        
+        
         <li><a href="../marks/cell.html">cell</a></li>
         
       
@@ -227,6 +232,9 @@
             <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
           
             
+            <li><a href="../layouts/dag.html">dag</a></li>
+          
+            
             <li><a href="../layouts/force.html">force</a></li>
           
             
@@ -242,6 +250,9 @@
           
             
             <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/route.html">route</a></li>
           
             
             <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
@@ -356,15 +367,16 @@ const stats = db.derive(&quot;stats&quot;, `SELECT avg(body_mass_g) AS mass FROM
 const v = canvas(640, 460);
 const y = linear();  // deferred scale, shared by the dots and the rule
 v.dot(&quot;penguins&quot;, { x: linear(&quot;bill_length_mm&quot;), y: y(&quot;body_mass_g&quot;), fill: &quot;#bbb&quot; }).axis(&quot;x&quot;).axis(&quot;y&quot;);
-v.rule(stats, { x: 0, x2: 640, y: y(&quot;mass&quot;), stroke: &quot;#e15759&quot;, strokeWidth: 2 });
+v.rule(stats, { x: px(0), x2: px(640), y: y(&quot;mass&quot;), stroke: &quot;#e15759&quot;, strokeWidth: 2 });
 return v;
 </code></pre>
 <p>A grey scatter with a single red mean-mass baseline drawn across the full width.</p>
 <h2 id="options">Options</h2>
 <p><code>rule</code> shares the segment draw with <code>connect</code> (<code>drawSegment(&quot;x&quot;, &quot;y&quot;, &quot;x2&quot;, &quot;y2&quot;)</code>). If <code>x2</code> is
 omitted it collapses to <code>x</code> (a vertical rule); if <code>y2</code> is omitted it collapses to <code>y</code> (a
-horizontal rule). All four positional channels are affine — bind a scale, a layout output, or a
-pixel literal.</p>
+horizontal rule). All four positional channels are affine — bind a scale, a layout output, a
+bare number (a <strong>data value</strong> placed through that axis's scale), or <code>px(v)</code> for a screen-pixel
+coordinate.</p>
 <table>
 <thead>
 <tr>
@@ -379,7 +391,7 @@ pixel literal.</p>
 <td><code>x</code></td>
 <td>positional-x</td>
 <td>—</td>
-<td>start x (affine: scale, layout, or pixel literal)</td>
+<td>start x (scale, layout, bare number = data value, or <code>px(v)</code>)</td>
 </tr>
 <tr>
 <td><code>y</code></td>
@@ -437,8 +449,9 @@ pixel literal.</p>
 </tr>
 </tbody>
 </table>
-<p>Bare strings on positional channels are PIXEL literals; wrap column values in <code>field(&quot;col&quot;)</code> or
-bind a scale.</p>
+<p>A bare number on a positional channel is a <strong>data value</strong>: it places through the axis's scale
+and widens the domain to include it (<code>x: 0</code> with <code>x2: x(&quot;bill&quot;)</code> reads &quot;from data-0 to the bill
+value&quot;). Pixel intent is spelled <code>px(v)</code>. Wrap column values in <code>field(&quot;col&quot;)</code> or bind a scale.</p>
 <h2 id="examples">Examples</h2>
 <p>A vertical rule per category — a lollipop stem from the baseline up to each species mean.</p>
 <pre data-lang="dvl"><code class="lang-dvl">const means = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;], { mass: avg(&quot;body_mass_g&quot;) });
@@ -450,7 +463,8 @@ v.rule(means, { x: x(&quot;species&quot;), y: 0, y2: y(&quot;mass&quot;), stroke
 v.dot(means, { x: x(&quot;species&quot;), y: y(&quot;mass&quot;), r: 5, fill: ordinal(&quot;species&quot;) }).axis(&quot;x&quot;);
 return v;
 </code></pre>
-<p>A horizontal rule per group — a dot plot with a whisker from zero to each mean.</p>
+<p>A horizontal rule per group — a dot plot with a whisker from zero to each mean. <code>x: 0</code> is a
+data value: it rides the same scale as <code>x2</code> and pulls the domain down to 0.</p>
 <pre data-lang="dvl"><code class="lang-dvl">const means = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;], { bill: avg(&quot;bill_length_mm&quot;) });
 const v = canvas(640, 300);
 const x = linear(undefined, { domain: { explicit: [0, 60] } });
@@ -465,7 +479,7 @@ const v = canvas(640, 460);
 const y = linear();  // deferred, shared by the dots and the threshold rule
 v.dot(&quot;penguins&quot;, { x: linear(&quot;bill_length_mm&quot;), y: y(&quot;body_mass_g&quot;), r: 3, fill: &quot;#4e79a7&quot; })
  .axis(&quot;x&quot;).axis(&quot;y&quot;);
-v.rule(line, { x: 0, x2: 640, y: y(&quot;threshold&quot;), stroke: &quot;#888&quot;, strokeDasharray: &quot;5 4&quot; });
+v.rule(line, { x: px(0), x2: px(640), y: y(&quot;threshold&quot;), stroke: &quot;#888&quot;, strokeDasharray: &quot;5 4&quot; });
 return v;
 </code></pre>
 <p>A diagonal reference (the <code>y = x</code> identity) drawn as a single sloped segment — both endpoints
@@ -482,10 +496,10 @@ return v;
 <code>via</code> join.</p>
 <pre data-lang="dvl"><code class="lang-dvl">const cats = db.table(&quot;products&quot;).groupby([&quot;category&quot;], {});
 const v = canvas(520, 260);
-const labels = v.text(cats, { x: 20, y: point(&quot;category&quot;), text: field(&quot;category&quot;), anchor: &quot;start&quot; });
+const labels = v.text(cats, { x: px(20), y: point(&quot;category&quot;), text: field(&quot;category&quot;), anchor: &quot;start&quot; });
 v.rule(cats, {
   ...labels.via(eq(&quot;category&quot;, &quot;category&quot;)).pick({ x: &quot;x&quot;, y: &quot;y&quot; }),
-  x2: 200, stroke: &quot;#333&quot;,
+  x2: px(200), stroke: &quot;#333&quot;,
 });
 return v;
 </code></pre>

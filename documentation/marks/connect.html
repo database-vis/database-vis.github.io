@@ -118,6 +118,11 @@
       
         
         
+        <li><a href="../marks/bezier.html">bezier</a></li>
+        
+      
+        
+        
         <li><a href="../marks/cell.html">cell</a></li>
         
       
@@ -227,6 +232,9 @@
             <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
           
             
+            <li><a href="../layouts/dag.html">dag</a></li>
+          
+            
             <li><a href="../layouts/force.html">force</a></li>
           
             
@@ -242,6 +250,9 @@
           
             
             <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/route.html">route</a></li>
           
             
             <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
@@ -444,10 +455,12 @@ and colours the segments.</p>
 string is a literal. Group tails draw an invisible zero-length segment (start == end), so a
 group of N points shows N−1 lines.</p>
 <h2 id="examples">Examples</h2>
-<p>Basic connect — a single group, sequenced by <code>x</code> (default order), chaining consecutive points:</p>
+<p>Basic connect — a single group, sequenced by <code>x</code> (default order), chaining consecutive points. A
+<code>connect</code> segment is stroke-only, so it needs a <code>stroke</code> to be visible (an unstroked <code>&lt;line&gt;</code>
+paints nothing):</p>
 <pre data-lang="dvl"><code class="lang-dvl">const yearly = db.table(&quot;penguins&quot;).groupby([&quot;year&quot;], { mass: avg(&quot;body_mass_g&quot;) });
 const v = canvas(480, 320);
-v.connect(yearly, { x: linear(&quot;year&quot;), y: linear(&quot;mass&quot;), strokeWidth: 2 })
+v.connect(yearly, { x: linear(&quot;year&quot;), y: linear(&quot;mass&quot;), stroke: &quot;#4e79a7&quot;, strokeWidth: 2 })
  .axis(&quot;x&quot;).axis(&quot;y&quot;);
 return v;
 </code></pre>
@@ -475,7 +488,7 @@ v.connect(hops, {
   x: linear(&quot;lon&quot;), y: linear(&quot;lat&quot;),
   order: field(&quot;step&quot;),
   stroke: ordinal(&quot;trip&quot;),
-  strokeWidth: field(&quot;w&quot;),       // each segment's width from its own row
+  strokeWidth: px(&quot;w&quot;),          // each segment's width from its own row (pixel column)
 }).axis(&quot;x&quot;).axis(&quot;y&quot;);
 return v;
 </code></pre>

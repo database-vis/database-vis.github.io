@@ -118,6 +118,11 @@
       
         
         
+        <li><a href="../marks/bezier.html">bezier</a></li>
+        
+      
+        
+        
         <li><a href="../marks/cell.html">cell</a></li>
         
       
@@ -227,6 +232,9 @@
             <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
           
             
+            <li><a href="../layouts/dag.html">dag</a></li>
+          
+            
             <li><a href="../layouts/force.html">force</a></li>
           
             
@@ -242,6 +250,9 @@
           
             
             <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/route.html">route</a></li>
           
             
             <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
@@ -460,7 +471,7 @@ so it is written once at the given pixel point, not per row.</p>
 <pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
 const x = linear(&quot;bill_length_mm&quot;), y = linear(&quot;body_mass_g&quot;);
 v.dot(&quot;penguins&quot;, { x, y, r: 3, fill: &quot;#cfd3dc&quot; });
-v.text(&quot;penguins&quot;, { x: 200, y: 40, text: &quot;penguin body mass&quot;, fontSize: 14, fill: &quot;#333&quot; });
+v.text(&quot;penguins&quot;, { x: px(200), y: px(40), text: &quot;penguin body mass&quot;, fontSize: 14, fill: &quot;#333&quot; });
 return v;
 </code></pre>
 <p>Column labels nudged off their points. <code>dx</code>/<code>dy</code> push the text to the dot's upper-right; <code>anchor: &quot;start&quot;</code> grows it rightward so it never overlaps the marker.</p>
@@ -492,10 +503,8 @@ const bars = v.bar(&quot;penguins&quot;, {
   ...barY(&quot;body_mass_g&quot;).pick(&quot;y&quot;, &quot;h&quot;),
   fill: ordinal(&quot;species&quot;),
 });
-const center = { resolve: { cx: { fn: &quot;avg&quot;, arg: expr`f.x + f.w / 2` },
-                            cy: { fn: &quot;avg&quot;, arg: expr`f.y + f.h / 2` } } };
 v.text(&quot;penguins&quot;, {
-  ...bars.via(eq(&quot;species&quot;, &quot;species&quot;), center).pick({ x: &quot;cx&quot;, y: &quot;cy&quot; }),
+  ...bars.via(eq(&quot;species&quot;, &quot;species&quot;)).pick({ x: &quot;x&quot;, y: &quot;y&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
   text: field(&quot;species&quot;), anchor: &quot;middle&quot;, baseline: &quot;middle&quot;, fill: &quot;#fff&quot;, fontSize: 11,
 });
 return v;
@@ -512,10 +521,8 @@ const bars = v.bar(revenue, {
   ...barY(&quot;amount&quot;, { zero: true }).pick(&quot;y&quot;, &quot;h&quot;),   // zero anchors baseline so small bars have a box
   fill: ordinal(&quot;category&quot;),
 });
-const center = { resolve: { cx: { fn: &quot;avg&quot;, arg: expr`f.x + f.w / 2` },
-                            cy: { fn: &quot;avg&quot;, arg: expr`f.y + f.h / 2` } } };
 v.text(revenue, {
-  ...bars.via(eq(&quot;category&quot;, &quot;category&quot;), center).pick({ x: &quot;cx&quot;, y: &quot;cy&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
+  ...bars.via(eq(&quot;category&quot;, &quot;category&quot;)).pick({ x: &quot;x&quot;, y: &quot;y&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
   ...fitText({ rotate: true }).pick(&quot;fontSize&quot;, &quot;rotate&quot;),
   text: field(&quot;category&quot;), anchor: &quot;middle&quot;, baseline: &quot;middle&quot;, fill: &quot;#fff&quot;,
 });
@@ -531,10 +538,8 @@ const rects = v.rect(revenue, {
   ...treemap(&quot;amount&quot;).pick(&quot;x&quot;, &quot;y&quot;, &quot;w&quot;, &quot;h&quot;),
   fill: ordinal(&quot;category&quot;), stroke: &quot;#fff&quot;,
 });
-const center = { resolve: { cx: { fn: &quot;avg&quot;, arg: expr`f.x + f.w / 2` },
-                            cy: { fn: &quot;avg&quot;, arg: expr`f.y + f.h / 2` } } };
 v.text(revenue, {
-  ...rects.via(eq(&quot;category&quot;, &quot;category&quot;), center).pick({ x: &quot;cx&quot;, y: &quot;cy&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
+  ...rects.via(eq(&quot;category&quot;, &quot;category&quot;)).pick({ x: &quot;x&quot;, y: &quot;y&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
   ...fitText({ shared: true }).pick(&quot;fontSize&quot;),
   text: field(&quot;category&quot;), anchor: &quot;middle&quot;, baseline: &quot;middle&quot;, fill: &quot;#333&quot;,
 });
@@ -550,10 +555,8 @@ const rects = v.rect(revenue, {
   ...treemap(&quot;amount&quot;).pick(&quot;x&quot;, &quot;y&quot;, &quot;w&quot;, &quot;h&quot;),
   fill: ordinal(&quot;category&quot;), stroke: &quot;#fff&quot;,
 });
-const center = { resolve: { cx: { fn: &quot;avg&quot;, arg: expr`f.x + f.w / 2` },
-                            cy: { fn: &quot;avg&quot;, arg: expr`f.y + f.h / 2` } } };
 v.text(revenue, {
-  ...rects.via(eq(&quot;category&quot;, &quot;category&quot;), center).pick({ x: &quot;cx&quot;, y: &quot;cy&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
+  ...rects.via(eq(&quot;category&quot;, &quot;category&quot;)).pick({ x: &quot;x&quot;, y: &quot;y&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
   ...fitText({ wrap: true }).pick(&quot;fontSize&quot;, &quot;lines&quot;),
   text: field(&quot;category&quot;), anchor: &quot;middle&quot;, baseline: &quot;middle&quot;, fill: &quot;#333&quot;,
 });

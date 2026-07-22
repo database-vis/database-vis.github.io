@@ -118,6 +118,11 @@
       
         
         
+        <li><a href="../marks/bezier.html">bezier</a></li>
+        
+      
+        
+        
         <li><a href="../marks/cell.html">cell</a></li>
         
       
@@ -227,6 +232,9 @@
             <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
           
             
+            <li><a href="../layouts/dag.html">dag</a></li>
+          
+            
             <li><a href="../layouts/force.html">force</a></li>
           
             
@@ -242,6 +250,9 @@
           
             
             <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/route.html">route</a></li>
           
             
             <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
@@ -357,9 +368,9 @@ the autolegend's item stack.</p>
 <pre data-lang="dvl"><code class="lang-dvl">const bySpecies = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;], { n: count() });
 const v = canvas(260, 220);
 const bands = pitchY(&quot;species&quot;, { pitch: 30, pad: 16 });
-v.rect(bySpecies, { ...bands.pick(&quot;y&quot;, &quot;h&quot;), x: 16, w: 22, fill: ordinal(&quot;species&quot;) });
-v.text(bySpecies, { ...bands.pick(&quot;y&quot;, &quot;h&quot;), x: 48, text: field(&quot;species&quot;),
-                    fill: &quot;#c5cbe0&quot;, anchor: &quot;start&quot; });
+v.rect(bySpecies, { ...bands.pick(&quot;y&quot;, &quot;h&quot;), x: px(16), w: 22, fill: ordinal(&quot;species&quot;) });
+v.text(bySpecies, { ...bands.pick(&quot;y&quot;, &quot;h&quot;), x: px(48), dy: 15, text: field(&quot;species&quot;),
+                    fill: &quot;#c5cbe0&quot;, anchor: &quot;start&quot;, baseline: &quot;middle&quot; });
 return v;
 </code></pre>
 <p>A hand-built legend column: one swatch rect + one label per species, ranked by name at a constant
@@ -430,24 +441,24 @@ The first constructor argument is the order column (<code>pitchY(&quot;species&q
 <pre data-lang="dvl"><code class="lang-dvl">const bySpecies = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;], { n: count() });
 const v = canvas(260, 220);
 const bands = pitchY(&quot;species&quot;, { pitch: 30, pad: 16 });
-v.rect(bySpecies, { ...bands.pick(&quot;y&quot;, &quot;h&quot;), x: 16, w: 22, fill: ordinal(&quot;species&quot;) });
-v.text(bySpecies, { ...bands.pick(&quot;y&quot;, &quot;h&quot;), x: 48, text: field(&quot;species&quot;),
-                    fill: &quot;#c5cbe0&quot;, anchor: &quot;start&quot; });
+v.rect(bySpecies, { ...bands.pick(&quot;y&quot;, &quot;h&quot;), x: px(16), w: 22, fill: ordinal(&quot;species&quot;) });
+v.text(bySpecies, { ...bands.pick(&quot;y&quot;, &quot;h&quot;), x: px(48), dy: 15, text: field(&quot;species&quot;),
+                    fill: &quot;#c5cbe0&quot;, anchor: &quot;start&quot;, baseline: &quot;middle&quot; });
 return v;
 </code></pre>
 <p>Tighter pitch with a gap between swatches:</p>
 <pre data-lang="dvl"><code class="lang-dvl">const bySpecies = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;], { n: count() });
 const v = canvas(200, 200);
 const bands = pitchY(&quot;species&quot;, { pitch: 14, gap: 6, pad: 8 });
-v.rect(bySpecies, { ...bands.pick(&quot;y&quot;, &quot;h&quot;), x: 12, w: 18, fill: ordinal(&quot;species&quot;) });
+v.rect(bySpecies, { ...bands.pick(&quot;y&quot;, &quot;h&quot;), x: px(12), w: 18, fill: ordinal(&quot;species&quot;) });
 return v;
 </code></pre>
 <p>Any categorical ranks it — an island swatch column at the default 16px pitch:</p>
 <pre data-lang="dvl"><code class="lang-dvl">const byIsland = db.table(&quot;penguins&quot;).groupby([&quot;island&quot;], { n: count() });
 const v = canvas(200, 160);
 const bands = pitchY(&quot;island&quot;);   // default pitch 16, gap 0, pad 0
-v.rect(byIsland, { ...bands.pick(&quot;y&quot;, &quot;h&quot;), x: 12, w: 18, fill: ordinal(&quot;island&quot;) });
-v.text(byIsland, { ...bands.pick(&quot;y&quot;, &quot;h&quot;), x: 40, text: field(&quot;island&quot;), anchor: &quot;start&quot; });
+v.rect(byIsland, { ...bands.pick(&quot;y&quot;, &quot;h&quot;), x: px(12), w: 18, fill: ordinal(&quot;island&quot;) });
+v.text(byIsland, { ...bands.pick(&quot;y&quot;, &quot;h&quot;), x: px(40), dy: 8, text: field(&quot;island&quot;), anchor: &quot;start&quot;, baseline: &quot;middle&quot; });
 return v;
 </code></pre>
 <p><strong>Contrast with <code>stackY</code>.</strong> <code>stackY</code> fills a box (relative <code>[0,1]</code> shares that the frame stretches);

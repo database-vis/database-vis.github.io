@@ -1,0 +1,631 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The data layer · DVL</title>
+  <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="app-name" href="../index.html">DVL</a>
+    <nav class="sidebar-nav">
+    
+      <h2>Introduction</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../what-is-dvl.html">What is DVL?</a></li>
+        
+      
+        
+        
+        <li><a href="../getting-started.html">Getting started</a></li>
+        
+      
+        
+        
+        <li><a href="../architecture.html">Architecture</a></li>
+        
+      
+      </ul>
+    
+      <h2>Features</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#channels">Channels</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#scales">Scales</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#data">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        
+      
+      </ul>
+    
+      <h2>Marks</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../marks/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/area.html">area</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/arrow.html">arrow</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/bar.html">bar</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/bezier.html">bezier</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/cell.html">cell</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/connect.html">connect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/dot.html">dot</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/image.html">image</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/line.html">line</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/link.html">link</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/path.html">path</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rect.html">rect</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/rule.html">rule</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/text.html">text</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/tick.html">tick</a></li>
+        
+      
+        
+        
+        <li><a href="../marks/vector.html">vector</a></li>
+        
+      
+      </ul>
+    
+      <h2>Layouts</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../layouts/README.html">Overview</a></li>
+        
+      
+        
+        <li><strong>Produce</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/bandX.html">bandX</a></li>
+          
+            
+            <li><a href="../layouts/bandY.html">bandY</a></li>
+          
+            
+            <li><a href="../layouts/barX.html">barX</a></li>
+          
+            
+            <li><a href="../layouts/barY.html">barY</a></li>
+          
+            
+            <li><a href="../layouts/stackX.html">stackX</a></li>
+          
+            
+            <li><a href="../layouts/stackY.html">stackY</a></li>
+          
+            
+            <li><a href="../layouts/pitchX.html">pitchX</a></li>
+          
+            
+            <li><a href="../layouts/pitchY.html">pitchY</a></li>
+          
+            
+            <li><a href="../layouts/eqX.html">eqX</a></li>
+          
+            
+            <li><a href="../layouts/eqY.html">eqY</a></li>
+          
+            
+            <li><a href="../layouts/proportionalX.html">proportionalX</a></li>
+          
+            
+            <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
+          
+            
+            <li><a href="../layouts/dag.html">dag</a></li>
+          
+            
+            <li><a href="../layouts/force.html">force</a></li>
+          
+            
+            <li><a href="../layouts/treemap.html">treemap</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Refine</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/route.html">route</a></li>
+          
+            
+            <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
+          
+          </ul>
+        </li>
+        
+      
+        
+        <li><strong>Resolver</strong>
+          <ul>
+          
+            
+            <li><a href="../layouts/hull.html">hull</a></li>
+          
+          </ul>
+        </li>
+        
+      
+      </ul>
+    
+      <h2>Scales</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../scales/README.html">Overview</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/linear.html">linear</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/log.html">log</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/sqrt.html">sqrt</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/pow.html">pow</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/symlog.html">symlog</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/ordinal.html">ordinal</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/point.html">point</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/color.html">color</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/quantize.html">quantize</a></li>
+        
+      
+        
+        
+        <li><a href="../scales/threshold.html">threshold</a></li>
+        
+      
+      </ul>
+    
+      <h2>Examples</h2>
+      <ul>
+      
+        
+        
+        <li><a href="../examples/README.html">Gallery</a></li>
+        
+      
+      </ul>
+    
+    </nav>
+  </aside>
+
+  <header id="topbar">
+    <button class="sidebar-toggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+    <div class="topbar-spacer"></div>
+    <a class="github-link" href="https://github.com/cudbg/database-vis" target="_blank" rel="noopener" aria-label="GitHub repository">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+  </header>
+
+  <main class="content">
+    <article class="markdown-section">
+      <h1 id="the-data-layer">The data layer</h1>
+<p>Every DVL visualization is a query over a <strong>database</strong>. The <code>Database</code> object is the front door:
+it registers your data, hands out <code>Table</code> handles, models new relations from old ones, resolves
+foreign keys, and owns the DuckDB backend (DuckDB-Wasm in the browser, the same engine in Node).
+This page is the reference for that layer — what a developer touches <em>before</em> the first
+<code>canvas(...)</code>.</p>
+<p>Two ideas run through all of it:</p>
+<ul>
+<li><strong>Everything is a relation.</strong> A base table, a <code>groupby</code>, a raw-SQL view — all are <code>Table</code>s the
+canvas can plot. There is one query language underneath, and marks never care which kind of
+relation they read.</li>
+<li><strong>Modeling is metadata, not materialization.</strong> A modeling step (<code>groupby</code>, <code>filter</code>, <code>join</code>, …)
+records a <strong>query object</strong> — a fragment of SQL whose inputs point at its dependencies — and
+never writes a view. At render time the whole chain from a modeled table back to the base tables
+<strong>folds into one query</strong>; only base tables actually hit the backend. So you can reshape freely
+without a view lifecycle to manage.</li>
+</ul>
+<pre data-lang="ts"><code class="language-ts">import { Database } from &quot;$lib/dvl/data/database&quot;;
+const db = new Database({ backend });          // backend = a DuckDBBackend
+// mode: &quot;strict&quot; throws on warnings; &quot;non-strict&quot; (default) routes them to onWarning.
+</code></pre>
+<p>In the live playground and the documentation examples, the sandbox hands you a <code>db</code> that is
+already booted with the demo base tables — <code>penguins</code>, <code>members</code>/<code>follows</code>, and a normalized sales
+star <code>customers</code>/<code>orders</code>/<code>products</code> — with their foreign keys declared. That <code>db</code> is a <strong>branch</strong>
+(see <a href="#branches">Branches</a>); everything below works the same on it.</p>
+<h2 id="loading-data">Loading data</h2>
+<p>Four ways in, each returning a <code>Table</code> <strong>synchronously</strong> — spec construction never blocks on the
+backend. The actual push into DuckDB is <strong>lazy</strong>: it happens on the first query that needs the
+relation (or when you call <code>db.register()</code> explicitly).</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Source</th>
+<th>Schema</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>db.fromRows(name, rows)</code></td>
+<td>an array of JS objects</td>
+<td>inferred from the rows</td>
+</tr>
+<tr>
+<td><code>db.fromColumnar(name, cols)</code></td>
+<td>a <code>{ col: [...] }</code> columnar bundle</td>
+<td>inferred from the columns</td>
+</tr>
+<tr>
+<td><code>db.table(name)</code></td>
+<td>a relation <strong>already in the backend</strong></td>
+<td>introspected on demand</td>
+</tr>
+<tr>
+<td><code>db.fromQuery(name, sql)</code></td>
+<td>opaque user SQL, registered as a view</td>
+<td>introspected on demand</td>
+</tr>
+</tbody>
+</table>
+<pre data-lang="dvl"><code class="lang-dvl">// fromRows builds a base relation from literal JS rows; the canvas queries it like any table.
+db.fromRows(&quot;quarters&quot;, [
+  { q: &quot;Q1&quot;, rev: 120 }, { q: &quot;Q2&quot;, rev: 180 }, { q: &quot;Q3&quot;, rev: 90 }, { q: &quot;Q4&quot;, rev: 210 },
+]);
+const v = canvas(440, 300);
+v.bar(&quot;quarters&quot;, { ...bandX(&quot;q&quot;).pick(&quot;x&quot;, &quot;w&quot;), ...barY(&quot;rev&quot;, { zero: true }).pick(&quot;y&quot;, &quot;h&quot;), fill: &quot;#4e79a7&quot; })
+ .axis(&quot;x&quot;).axis(&quot;y&quot;);
+return v;
+</code></pre>
+<p>You can pass a base table to a mark <strong>by name</strong> (<code>v.dot(&quot;penguins&quot;, …)</code>) or by its <code>Table</code> handle
+(<code>v.dot(db.table(&quot;penguins&quot;), …)</code>) — a name is resolved through the branch, so both reach the same
+relation. <code>await db.register()</code> forces all pending JS data into the backend up front (only needed
+if you query the DB directly before rendering); <code>table.schema()</code> resolves and caches a relation's
+columns.</p>
+<h2 id="branches">Branches</h2>
+<p>A <strong>branch</strong> is a lightweight child overlay of a database: <code>db.branch(name?)</code>. Names resolve
+<strong>through</strong> the branch — a relation defined on the branch shadows the parent, and a miss falls
+through to the parent, then to a base table of that name. This is how DVL isolates work: the
+documentation runs <strong>every example on its own throwaway branch</strong> so one example's modeled tables
+can never leak into the next, and the base data is never mutated.</p>
+<pre data-lang="js"><code class="language-js">const scenario = db.branch(&quot;q3-forecast&quot;);   // a child overlay; parent untouched
+scenario.table(&quot;orders&quot;).filter(&quot;year = 2007&quot;);   // modeled ONLY on this branch
+// … build and render against `scenario` …
+await scenario.release();                    // reclaim anything it materialized
+</code></pre>
+<p>Because modeling records query objects rather than views, a branch needs <strong>no view lifecycle to be
+correct</strong> — <code>release()</code> only has to drop the handful of things that genuinely created backend
+objects (<code>materialize</code>, <code>derive</code>). A child holds its parent alive; reclamation cascades up as
+children release.</p>
+<p>Two escape hatches when the fold isn't enough:</p>
+<ul>
+<li><strong><code>db.materialize(identity)</code></strong> — snapshot a modeled relation into a real backend table. Use it
+when a deep fragment stack is re-queried in a hot loop; the identity then resolves to the table
+(a base leaf) instead of re-folding. Namespaced, so <code>release()</code> reclaims it.</li>
+<li><strong><code>db.derive(identity, sql)</code></strong> — register a branch-scoped <strong>view</strong> from raw SQL, returning the
+bound <code>Table</code>. This is the hatch for shapes the structural operators don't cover (window→pixel
+geometry, exotic SQL). Its SQL stays visible in your code — no hidden boot view — and it is
+reclaimed on release like a materialized relation.</li>
+</ul>
+<pre data-lang="dvl"><code class="lang-dvl">// derive is the raw-SQL escape hatch: a branch-scoped view whose SQL is right here. It joins the
+// sales star and rolls revenue up to region — then the canvas plots it like any table.
+const byRegion = db.derive(&quot;region_rev&quot;, `
+  SELECT c.region, sum(o.qty * p.price) AS revenue
+  FROM orders o
+  JOIN customers c ON o.cust_id = c.id
+  JOIN products  p ON o.product_id = p.id
+  GROUP BY c.region`);
+const v = canvas(440, 300);
+v.bar(byRegion, { ...bandX(&quot;region&quot;).pick(&quot;x&quot;, &quot;w&quot;), ...barY(&quot;revenue&quot;, { zero: true }).pick(&quot;y&quot;, &quot;h&quot;), fill: ordinal(&quot;region&quot;) })
+ .axis(&quot;x&quot;).axis(&quot;y&quot;).legend(&quot;fill&quot;);
+return v;
+</code></pre>
+<h2 id="table-and-its-operations">Table and its operations</h2>
+<p>A <code>Table</code> is the uniform handle over any relation. Beyond <code>schema()</code>, it carries the
+<strong>modeling operators</strong> — each returns a <strong>new</strong> <code>Table</code> (a fresh identity on the branch) and leaves
+its input untouched, so operations <strong>chain</strong>. They are query objects: nothing runs until render,
+and the whole chain folds into one query.</p>
+<table>
+<thead>
+<tr>
+<th>Operator</th>
+<th>Signature</th>
+<th>Produces</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>copy</code></td>
+<td><code>copy(name?)</code></td>
+<td>a working copy under a fresh identity — reshape it without shadowing the original</td>
+</tr>
+<tr>
+<td><code>filter</code></td>
+<td><code>filter(predicate, name?)</code></td>
+<td>same columns, fewer rows; <code>predicate</code> is a raw SQL boolean over the row (<code>&quot;species &lt;&gt; 'Gentoo'&quot;</code>)</td>
+</tr>
+<tr>
+<td><code>groupby</code></td>
+<td><code>groupby(keys, aggs, name?)</code></td>
+<td>one row per distinct <code>keys</code> combo + one column per named aggregate</td>
+</tr>
+<tr>
+<td><code>rank</code></td>
+<td><code>rank(order, { partition?, as?, name? })</code></td>
+<td>all rows + a 1-based <code>rank</code> column, per partition, by <code>order</code></td>
+</tr>
+<tr>
+<td><code>top</code></td>
+<td><code>top(n, order, { partition?, name? })</code></td>
+<td>the top-<code>n</code> rows per partition by <code>order</code> (rank-then-filter)</td>
+</tr>
+<tr>
+<td><code>join</code></td>
+<td><code>join(other, on, name?)</code></td>
+<td>this table's columns + <code>other</code>'s; <code>on</code> is a shared column or <code>{ left, right }</code></td>
+</tr>
+<tr>
+<td><code>rollup</code></td>
+<td><code>rollup(other, on, key, aggs, name?)</code></td>
+<td><code>join(other, on).groupby([key], aggs)</code> in one call — &quot;denormalize then summarize&quot;</td>
+</tr>
+<tr>
+<td><code>normalize</code></td>
+<td><code>normalize(col, { bin? })</code></td>
+<td>splits <code>col</code> into its own keyed <strong>dimension</strong> table + rewrites this table to carry <code>&lt;col&gt;_id</code> (and declares the FK); returns the dimension</td>
+</tr>
+<tr>
+<td><code>unpivot</code></td>
+<td><code>unpivot(cols, { into?, value?, name? })</code></td>
+<td>stacks wide <code>cols</code> into long <code>(name, value)</code> rows (SQL UNPIVOT)</td>
+</tr>
+<tr>
+<td><code>withKey</code></td>
+<td><code>withKey(as?, name?)</code></td>
+<td>adds a stable 1-based surrogate key column (the tuple identity a <code>via</code> joins on)</td>
+</tr>
+</tbody>
+</table>
+<p><code>order</code> for <code>rank</code>/<code>top</code> is a column name (ascending) or <code>{ col, desc }</code>. Every operator takes an
+optional final <code>name</code> to pin the resulting relation's identity (otherwise a fresh, reproducible
+one is minted).</p>
+<pre data-lang="dvl"><code class="lang-dvl">// operations CHAIN — each returns a new modeled table on the branch. Filter rows, then keep the
+// heaviest two penguins per species; the base `penguins` (grey cloud) is untouched.
+const heavy = db.table(&quot;penguins&quot;)
+  .filter(&quot;body_mass_g &gt; 3400&quot;)
+  .top(2, { col: &quot;body_mass_g&quot;, desc: true }, { partition: [&quot;species&quot;] });
+const v = canvas(560, 320);
+const x = linear(&quot;bill_length_mm&quot;), y = linear(&quot;body_mass_g&quot;);
+v.dot(&quot;penguins&quot;, { x, y, fill: &quot;#d0d5dd&quot; });
+v.dot(heavy, { x, y, r: 6, fill: ordinal(&quot;species&quot;) }).axis(&quot;x&quot;).axis(&quot;y&quot;).legend(&quot;fill&quot;);
+return v;
+</code></pre>
+<p><strong>Aggregates</strong> for <code>groupby</code>/<code>rollup</code> come from a small vocabulary: <code>count()</code>, <code>sum(arg)</code>,
+<code>avg(arg)</code>, <code>min(arg)</code>, <code>max(arg)</code>, <code>median(arg)</code>. An <code>arg</code> is a bare <strong>column name</strong> or a raw SQL
+expression <code>{ sql: &quot;qty * price&quot; }</code>:</p>
+<pre data-lang="dvl"><code class="lang-dvl">// rollup = join then aggregate: revenue per product category. `orders` carry qty; the join to
+// `products` brings price; sum({ sql: 'qty * price' }) is a raw-SQL aggregate argument.
+const byCat = db.table(&quot;orders&quot;)
+  .rollup(db.table(&quot;products&quot;), { left: &quot;product_id&quot;, right: &quot;id&quot; }, &quot;category&quot;,
+          { revenue: sum({ sql: &quot;qty * price&quot; }) });
+const v = canvas(440, 300);
+v.bar(byCat, { ...bandX(&quot;category&quot;).pick(&quot;x&quot;, &quot;w&quot;), ...barY(&quot;revenue&quot;, { zero: true }).pick(&quot;y&quot;, &quot;h&quot;), fill: ordinal(&quot;category&quot;) })
+ .axis(&quot;x&quot;).axis(&quot;y&quot;).legend(&quot;fill&quot;);
+return v;
+</code></pre>
+<p><code>normalize</code> is the modeling step that turns a denormalized column into a star: it mints a
+dimension table with a dense surrogate key, rewrites the fact table to carry the FK, and
+<strong>declares that FK</strong> — so <code>via(fk(col))</code> and <code>nest({ on: fk(col) })</code> traverse it with no extra
+wiring (<code>{ bin: n }</code> buckets a continuous column first). <code>withKey</code> adds the surrogate identity that
+parallel-coordinate and link diagrams join on.</p>
+<h2 id="strings-raw-sql-and-the-expression-templates">Strings: raw SQL and the expression templates</h2>
+<p>DVL has two ways to write an expression as text, with different powers:</p>
+<p><strong>Raw SQL</strong> is the data layer's escape hatch — <code>filter(predicate)</code>, <code>derive(id, sql)</code>,
+<code>fromQuery(name, sql)</code>, and the <code>{ sql: … }</code> aggregate argument. It is exactly SQL, so it is
+maximally expressive but <strong>SQL-only</strong>: a relation defined by raw SQL stays in the database
+(it can't run in the JS substrate). Reach for it when the structural operators don't cover a shape.</p>
+<p><strong>Tagged templates</strong> build a small expression <strong>AST</strong> that lowers <strong>once to both substrates</strong>
+(SQL in the database, JS in the browser) — you never pick a backend:</p>
+<ul>
+<li><code>expr`…`</code> (from <code>algebra/expr-template</code>) — a <strong>scalar expression</strong> over the <em>two-sided</em> row a
+<code>via</code> resolution sees: bare <code>m.&lt;col&gt;</code> is the mark side, <code>f.&lt;col&gt;</code> the referent side. Operators
+<code>+ - * /</code> with normal precedence and parentheses; unary <code>floor</code>, <code>ln</code>, <code>abs</code>, <code>sqrt</code>, <code>nullif0</code>;
+bare numbers become literals; <code>${…}</code> splices another expression node. It is the argument form for
+computed <a href="via.html">via resolutions</a>: <code>{ resolve: { spend: { fn: &quot;sum&quot;, arg: expr</code>f.price * f.qty<code> } } }</code>.</li>
+<li><code>cexpr`…`</code> (from <code>ir/expr</code>) — the <strong>channel</strong> expression template: bare names are <em>columns</em>,
+<code>${…}</code> splices a channel expression. <code>cexpr`x + dx`</code> ≡ <code>binary(&quot;+&quot;, field(&quot;x&quot;), field(&quot;dx&quot;))</code>.
+Full treatment on the <a href="channels.html#arithmetic-combining-expressions">Channels</a> page.</li>
+</ul>
+<p>The rule of thumb: <strong>tagged templates</strong> for arithmetic that should follow the data into either
+substrate; <strong>raw SQL</strong> for whole-relation shapes that live in the database.</p>
+<h2 id="the-fk-catalog">The FK catalog</h2>
+<p>Foreign keys are what DVL's <a href="README.html#join-paths">join paths</a> resolve against — <code>fk()</code> hops,
+inferred nest keys, and the <strong>multiplicity</strong> judgment (landing on an FK's target column is provably
+single-match, so it never fans out silently).</p>
+<pre data-lang="js"><code class="language-js">db.declareFK({ fromTable: &quot;orders&quot;, fromCols: [&quot;cust_id&quot;], toTable: &quot;customers&quot;, toCols: [&quot;id&quot;] });
+await db.loadFKs();                 // also pull in the backend's introspected FKs (deduped)
+</code></pre>
+<p>The catalog is <strong>branch-scoped with inheritance</strong>: <code>db.fks</code> is this branch's edges plus every
+ancestor's, so base-table FKs declared on the root are visible in every branch. <code>normalize</code>
+auto-declares the FK it creates. Without a catalog, <strong>explicit predicates still work everywhere</strong> —
+only inference and provability degrade (an unprovable join compiles as single-match, today's
+lenient default; tighten it with <code>{ strictMultiplicity: true }</code> to <code>renderSpec</code>).</p>
+<h2 id="when-data-crosses-sql-js">When data crosses SQL ↔ JS</h2>
+<p>You author one spec; the optimizer's <strong>substrate chooser</strong> decides where each relation lives and
+keeps data where it already is — SQL marks stay in the database (no materialize round-trip), and a
+few operators (<code>force</code>, <code>treemap</code> in SQL; <code>dag</code>, <code>fitText</code> in JS) run in whichever substrate suits
+them, inserting a materialize/inject only at a genuine boundary. What pins the choice:</p>
+<ul>
+<li><strong>Raw SQL</strong> (<code>derive</code>/<code>fromQuery</code>/<code>filter</code>/<code>{ sql }</code>) keeps that relation in <strong>SQL</strong>.</li>
+<li><strong>JS data</strong> (<code>fromRows</code>/<code>fromColumnar</code>) can go either way — the chooser materializes it into the
+backend when a downstream operator wants SQL.</li>
+</ul>
+<p>You rarely think about this; it matters only when you're reasoning about performance or writing an
+operator. The <a href="README.html#debugging">Debugging</a> tools show the chosen substrate per operator (the
+Graph tab colors each node by <code>sql</code> / <code>js</code> / framework).</p>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="channels.html">Channels</a> — how a column or expression becomes a mark input (<code>field</code>, <code>cexpr</code>, scales)</li>
+<li><a href="README.html#join-paths">Join paths</a> — the <code>eq</code>/<code>on</code>/<code>fk</code>/<code>path</code> vocabulary the FK catalog resolves</li>
+<li><a href="via.html">Via</a> — borrowing values across relations, where <code>expr`…`</code> resolutions live</li>
+<li><a href="README.html#facets-and-nesting">Facets and nesting</a> — partitioning a database by a nest key</li>
+</ul>
+
+    </article>
+  </main>
+
+  <script src="../assets/docs.js"></script>
+  <script src="../assets/dvl-example.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
+</body>
+</html>

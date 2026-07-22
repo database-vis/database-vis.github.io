@@ -118,6 +118,11 @@
       
         
         
+        <li><a href="../marks/bezier.html">bezier</a></li>
+        
+      
+        
+        
         <li><a href="../marks/cell.html">cell</a></li>
         
       
@@ -227,6 +232,9 @@
             <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
           
             
+            <li><a href="../layouts/dag.html">dag</a></li>
+          
+            
             <li><a href="../layouts/force.html">force</a></li>
           
             
@@ -242,6 +250,9 @@
           
             
             <li class="active"><a href="../layouts/fitText.html">fitText</a></li>
+          
+            
+            <li><a href="../layouts/route.html">route</a></li>
           
             
             <li><a href="../layouts/grid-stack.html">grid-stack</a></li>
@@ -363,11 +374,9 @@ const bars = v.bar(revenue, {
   ...barY(&quot;amount&quot;, { zero: true }).pick(&quot;y&quot;, &quot;h&quot;),
   fill: ordinal(&quot;category&quot;),
 });
-// Borrow each bar's SOLVED box, compute its midpoint, fit the label inside it.
-const center = { resolve: { cx: { fn: &quot;avg&quot;, arg: expr`f.x + f.w / 2` },
-                            cy: { fn: &quot;avg&quot;, arg: expr`f.y + f.h / 2` } } };
+// Borrow each bar's SOLVED box; anchor/baseline center the label inside it.
 v.text(revenue, {
-  ...bars.via(eq(&quot;category&quot;, &quot;category&quot;), center).pick({ x: &quot;cx&quot;, y: &quot;cy&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
+  ...bars.via(eq(&quot;category&quot;, &quot;category&quot;)).pick({ x: &quot;x&quot;, y: &quot;y&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
   ...fitText().pick(&quot;fontSize&quot;, &quot;rotate&quot;),
   text: field(&quot;category&quot;),
   anchor: &quot;middle&quot;, baseline: &quot;middle&quot;, fill: &quot;#fff&quot;,
@@ -503,10 +512,8 @@ const rects = v.rect(revenue, {
   ...treemap(&quot;amount&quot;).pick(&quot;x&quot;, &quot;y&quot;, &quot;w&quot;, &quot;h&quot;),
   fill: ordinal(&quot;category&quot;), stroke: &quot;#fff&quot;,
 });
-const center = { resolve: { cx: { fn: &quot;avg&quot;, arg: expr`f.x + f.w / 2` },
-                            cy: { fn: &quot;avg&quot;, arg: expr`f.y + f.h / 2` } } };
 v.text(revenue, {
-  ...rects.via(eq(&quot;category&quot;, &quot;category&quot;), center).pick({ x: &quot;cx&quot;, y: &quot;cy&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
+  ...rects.via(eq(&quot;category&quot;, &quot;category&quot;)).pick({ x: &quot;x&quot;, y: &quot;y&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
   ...fitText().pick(&quot;fontSize&quot;),
   text: field(&quot;category&quot;), anchor: &quot;middle&quot;, baseline: &quot;middle&quot;, fill: &quot;#333&quot;,
 });
