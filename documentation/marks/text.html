@@ -540,7 +540,7 @@ const rects = v.rect(revenue, {
 });
 v.text(revenue, {
   ...rects.via(eq(&quot;category&quot;, &quot;category&quot;)).pick({ x: &quot;x&quot;, y: &quot;y&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
-  ...fitText({ shared: true }).pick(&quot;fontSize&quot;),
+  ...fitText({ shared: true }),
   text: field(&quot;category&quot;), anchor: &quot;middle&quot;, baseline: &quot;middle&quot;, fill: &quot;#333&quot;,
 });
 return v;
@@ -557,7 +557,7 @@ const rects = v.rect(revenue, {
 });
 v.text(revenue, {
   ...rects.via(eq(&quot;category&quot;, &quot;category&quot;)).pick({ x: &quot;x&quot;, y: &quot;y&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
-  ...fitText({ wrap: true }).pick(&quot;fontSize&quot;, &quot;lines&quot;),
+  ...fitText({ wrap: true, rotate: false }).pick(&quot;fontSize&quot;, &quot;lines&quot;),
   text: field(&quot;category&quot;), anchor: &quot;middle&quot;, baseline: &quot;middle&quot;, fill: &quot;#333&quot;,
 });
 return v;
