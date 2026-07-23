@@ -25749,7 +25749,7 @@ async function createBrowserDuckDB() {
   };
 }
 
-// src/lib/dvl-demo/runtime.ts
+// src/lib/dvl-demo/demo-data.ts
 var PENGUINS = [
   { bill_length_mm: 39.1, bill_depth_mm: 18.7, flipper_length_mm: 181, body_mass_g: 3750, species: "Adelie", island: "Torgersen" },
   { bill_length_mm: 39.5, bill_depth_mm: 17.4, flipper_length_mm: 186, body_mass_g: 3800, species: "Adelie", island: "Torgersen" },
@@ -25842,6 +25842,15 @@ var BASE_TABLES = {
   orders: ORDERS,
   products: PRODUCTS
 };
+var BASE_TABLE_NAMES = Object.keys(BASE_TABLES);
+var FK_CATALOG = [
+  { fromTable: "follows", fromCols: ["src"], toTable: "members", toCols: ["id"] },
+  { fromTable: "follows", fromCols: ["dst"], toTable: "members", toCols: ["id"] },
+  { fromTable: "orders", fromCols: ["cust_id"], toTable: "customers", toCols: ["id"] },
+  { fromTable: "orders", fromCols: ["product_id"], toTable: "products", toCols: ["id"] }
+];
+
+// src/lib/dvl-demo/runtime.ts
 var field = (c2) => col(c2);
 var SANDBOX_PARAMS = ["canvas", "db", "linear", "log", "sqrt", "pow", "symlog", "ordinal", "point", "color", "quantize", "threshold", "bandX", "bandY", "barX", "barY", "stackX", "stackY", "pitchX", "pitchY", "eqX", "eqY", "dag", "force", "treemap", "fitText", "route", "proportionalX", "proportionalY", "eq", "on", "fk", "path", "expr", "cexpr", "px", "lit", "field", "binary", "literal", "count", "sum", "avg", "min", "max", "median", "UNIT"];
 function buildVis(source, branch) {
@@ -25852,17 +25861,25 @@ function buildVis(source, branch) {
     throw new Error("Your code must end with `return canvas(\u2026)` (the builder handle).");
   return v2;
 }
-async function bootDemoDb() {
+async function bootDemoDb(seedUrl) {
   const duck = await createBrowserDuckDB();
+  const [main, wal] = await Promise.all([
+    fetch(seedUrl).then((r) => r.arrayBuffer()),
+    fetch(`${seedUrl}.wal`).then((r) => r.ok ? r.arrayBuffer() : null)
+    // absent if a build folded it in
+  ]);
+  await duck.db.registerFileBuffer("dvl_seed.duckdb", new Uint8Array(main));
+  if (wal)
+    await duck.db.registerFileBuffer("dvl_seed.duckdb.wal", new Uint8Array(wal));
+  await duck.conn.exec("ATTACH 'dvl_seed.duckdb' AS seed (READ_ONLY)");
+  for (const name2 of BASE_TABLE_NAMES)
+    await duck.conn.exec(`CREATE TABLE "${name2}" AS SELECT * FROM seed."${name2}"`);
+  await duck.conn.exec("DETACH seed");
   const db = new Database({ backend: new DuckDBBackend(duck.conn) });
-  for (const [name2, rows] of Object.entries(BASE_TABLES))
-    db.fromRows(name2, rows);
-  for (const name2 of Object.keys(BASE_TABLES))
-    await db.register(name2);
-  db.declareFK({ fromTable: "follows", fromCols: ["src"], toTable: "members", toCols: ["id"] });
-  db.declareFK({ fromTable: "follows", fromCols: ["dst"], toTable: "members", toCols: ["id"] });
-  db.declareFK({ fromTable: "orders", fromCols: ["cust_id"], toTable: "customers", toCols: ["id"] });
-  db.declareFK({ fromTable: "orders", fromCols: ["product_id"], toTable: "products", toCols: ["id"] });
+  for (const name2 of BASE_TABLE_NAMES)
+    await db.ensureSchema(name2);
+  for (const e of FK_CATALOG)
+    db.declareFK(e);
   return { db, duck, close: () => duck.close() };
 }
 var exampleCounter = 0;
@@ -51159,7 +51176,6 @@ function createDvlEditor(opts) {
   });
 }
 export {
-  BASE_TABLES,
   SANDBOX_PARAMS,
   bootDemoDb,
   buildVis,

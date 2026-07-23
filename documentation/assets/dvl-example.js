@@ -36,7 +36,9 @@
     if (!runtimePromise) {
       runtimePromise = (async function () {
         var mod = await loadModule();
-        var boot = await mod.bootDemoDb();
+        // the seed DB sits next to this script + the bundle — resolve against our own URL so any
+        // base path works, exactly like the dvl.js import above.
+        var boot = await mod.bootDemoDb(new URL("seed.duckdb", ASSETS_BASE).href);
         return { mod: mod, db: boot.db };
       })();
     }
