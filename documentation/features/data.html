@@ -38,57 +38,62 @@
       
         
         
-        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        <li><a href="../features/README.html">Overview</a></li>
         
       
         
         
-        <li><a href="../features/README.html#channels">Channels</a></li>
+        <li><a href="../features/plots.html">Plots and marks</a></li>
         
       
         
         
-        <li><a href="../features/README.html#scales">Scales</a></li>
+        <li><a href="../features/channels.html">Channels</a></li>
         
       
         
         
-        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        <li><a href="../features/scales.html">Scales</a></li>
         
       
         
         
-        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        <li><a href="../features/layouts.html">Layouts</a></li>
         
       
         
         
-        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        <li><a href="../features/frame.html">The frame</a></li>
         
       
         
         
-        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        <li><a href="../features/join-paths.html">Join paths</a></li>
         
       
         
         
-        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        <li><a href="../features/facets.html">Facets and nesting</a></li>
         
       
         
         
-        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        <li><a href="../features/via.html">Via</a></li>
         
       
         
         
-        <li><a href="../features/README.html#data">Data</a></li>
+        <li><a href="../features/subplots.html">Subplots</a></li>
         
       
         
         
-        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        <li class="active"><a href="../features/data.html">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/debugging.html">Debugging</a></li>
         
       
       </ul>
@@ -431,6 +436,36 @@ return v;
 relation. <code>await db.register()</code> forces all pending JS data into the backend up front (only needed
 if you query the DB directly before rendering); <code>table.schema()</code> resolves and caches a relation's
 columns.</p>
+<h2 id="the-unit-table">The unit table</h2>
+<p><code>UNIT</code> is a synthesized relation the builder exports: exactly <strong>one row</strong>, one column named
+<code>value</code>. It is the anchor for a mark that has no table of its own. Bare <code>UNIT</code> carries
+<code>value</code> = 1; <code>UNIT(v)</code> carries <code>v</code>. It never hits the backend — <code>mark()</code> rewrites it to a
+values producer.</p>
+<p>Three uses. First, <strong>one-off annotations and reference lines</strong>: sourcing a constant mark from a
+data table draws it once <em>per row</em> — N identical marks stacked on top of each other. <code>UNIT</code> is
+the one-row source that sidesteps that footgun:</p>
+<pre data-lang="dvl"><code class="lang-dvl">// UNIT: a one-row source — the reference rule draws ONCE, not once per penguin row.
+const v = canvas(640, 400);
+const y = linear();
+v.dot(&quot;penguins&quot;, { x: linear(&quot;bill_length_mm&quot;), y: y(&quot;body_mass_g&quot;) });
+v.rule(UNIT, { x: px(40), x2: px(600), y: y(4000), stroke: &quot;#e15759&quot; });
+return v;
+</code></pre>
+<p>Second, <strong>one row to reduce a whole referent onto</strong>: a whole-set reduction needs a single
+consuming row for its one output. <code>on(&quot;*&quot;)</code> declares the cross product; <code>UNIT</code> anchors the row:</p>
+<pre data-lang="dvl"><code class="lang-dvl">// one row to reduce a WHOLE referent onto: a single convex hull over every dot —
+// on(&quot;*&quot;) is the declared cross product, UNIT anchors the one output row.
+const v = canvas(640, 400);
+const pts = v.dot(&quot;penguins&quot;, { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), fill: &quot;#4e79a7&quot; });
+v.hull(UNIT, { ...pts.via(on(&quot;*&quot;), { resolve: &quot;convex&quot; }).pick(&quot;path&quot;), stroke: &quot;#e15759&quot; });
+return v;
+</code></pre>
+<p>Third, <strong>carrying one datum</strong>: <code>UNIT(v)</code> puts <code>v</code> in the row's one column, named <code>value</code>:</p>
+<pre data-lang="dvl"><code class="lang-dvl">// UNIT(v) carries a value — the row's one column is named `value`.
+const v = canvas(240, 80);
+v.text(UNIT(&quot;hello&quot;), { x: px(120), y: px(40), text: field(&quot;value&quot;), anchor: &quot;middle&quot; });
+return v;
+</code></pre>
 <h2 id="branches">Branches</h2>
 <p>A <strong>branch</strong> is a lightweight child overlay of a database: <code>db.branch(name?)</code>. Names resolve
 <strong>through</strong> the branch — a relation defined on the branch shadows the parent, and a miss falls
@@ -588,7 +623,7 @@ Full treatment on the <a href="channels.html#arithmetic-combining-expressions">C
 <p>The rule of thumb: <strong>tagged templates</strong> for arithmetic that should follow the data into either
 substrate; <strong>raw SQL</strong> for whole-relation shapes that live in the database.</p>
 <h2 id="the-fk-catalog">The FK catalog</h2>
-<p>Foreign keys are what DVL's <a href="README.html#join-paths">join paths</a> resolve against — <code>fk()</code> hops,
+<p>Foreign keys are what DVL's <a href="join-paths.html">join paths</a> resolve against — <code>fk()</code> hops,
 inferred nest keys, and the <strong>multiplicity</strong> judgment (landing on an FK's target column is provably
 single-match, so it never fans out silently).</p>
 <pre data-lang="js"><code class="language-js">db.declareFK({ fromTable: &quot;orders&quot;, fromCols: [&quot;cust_id&quot;], toTable: &quot;customers&quot;, toCols: [&quot;id&quot;] });
@@ -610,14 +645,15 @@ them, inserting a materialize/inject only at a genuine boundary. What pins the c
 backend when a downstream operator wants SQL.</li>
 </ul>
 <p>You rarely think about this; it matters only when you're reasoning about performance or writing an
-operator. The <a href="README.html#debugging">Debugging</a> tools show the chosen substrate per operator (the
+operator. The <a href="debugging.html">Debugging</a> tools show the chosen substrate per operator (the
 Graph tab colors each node by <code>sql</code> / <code>js</code> / framework).</p>
 <h2 id="see-also">See also</h2>
 <ul>
 <li><a href="channels.html">Channels</a> — how a column or expression becomes a mark input (<code>field</code>, <code>cexpr</code>, scales)</li>
-<li><a href="README.html#join-paths">Join paths</a> — the <code>eq</code>/<code>on</code>/<code>fk</code>/<code>path</code> vocabulary the FK catalog resolves</li>
+<li><a href="join-paths.html">Join paths</a> — the <code>eq</code>/<code>on</code>/<code>fk</code>/<code>path</code> vocabulary the FK catalog resolves</li>
 <li><a href="via.html">Via</a> — borrowing values across relations, where <code>expr`…`</code> resolutions live</li>
-<li><a href="README.html#facets-and-nesting">Facets and nesting</a> — partitioning a database by a nest key</li>
+<li><a href="facets.html">Facets and nesting</a> — partitioning a database by a nest key</li>
+<li><a href="#the-unit-table">The unit table</a> — the synthesized one-row <code>UNIT</code> relation for marks with no table of their own</li>
 </ul>
 
     </article>

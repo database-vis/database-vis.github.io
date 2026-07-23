@@ -38,57 +38,62 @@
       
         
         
-        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        <li><a href="../features/README.html">Overview</a></li>
         
       
         
         
-        <li><a href="../features/README.html#channels">Channels</a></li>
+        <li><a href="../features/plots.html">Plots and marks</a></li>
         
       
         
         
-        <li><a href="../features/README.html#scales">Scales</a></li>
+        <li><a href="../features/channels.html">Channels</a></li>
         
       
         
         
-        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        <li><a href="../features/scales.html">Scales</a></li>
         
       
         
         
-        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        <li><a href="../features/layouts.html">Layouts</a></li>
         
       
         
         
-        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        <li><a href="../features/frame.html">The frame</a></li>
         
       
         
         
-        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        <li><a href="../features/join-paths.html">Join paths</a></li>
         
       
         
         
-        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        <li><a href="../features/facets.html">Facets and nesting</a></li>
         
       
         
         
-        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        <li class="active"><a href="../features/via.html">Via</a></li>
         
       
         
         
-        <li><a href="../features/README.html#data">Data</a></li>
+        <li><a href="../features/subplots.html">Subplots</a></li>
         
       
         
         
-        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        <li><a href="../features/data.html">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/debugging.html">Debugging</a></li>
         
       
       </ul>
@@ -366,7 +371,7 @@ consuming layer lives</strong> (top-level or nested inside a panel template).</p
 <pre data-lang="js"><code class="language-js">// the shape: referent.via(path…, opts?).pick({ channel: output, … })
 np.via(eq('follows.src', 'members.id')).pick({ x1: 'x', y1: 'y' })
 </code></pre>
-<p>Paths are the same <a href="README.html#join-paths">join-path vocabulary</a> as everywhere else —
+<p>Paths are the same <a href="join-paths.html">join-path vocabulary</a> as everywhere else —
 <code>eq</code>/<code>lt</code>/…, <code>on('col')</code>, <code>fk('table')</code>, multi-hop <code>path(...)</code> — resolved once against the FK
 catalog. A bare string is the same-column shorthand: <code>via(&quot;id&quot;)</code> ≡ <code>via(eq(&quot;id&quot;, &quot;id&quot;))</code>, mixing
 freely with other steps (<code>via(&quot;id&quot;, fk(&quot;islands&quot;))</code>) — and it works at every path site that takes
@@ -414,8 +419,8 @@ const p = db.table(&quot;penguins&quot;).withKey(&quot;id&quot;);
 const v = canvas(640, 360);
 const dots = v.dot(p, { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), fill: ordinal(&quot;species&quot;), title: field(&quot;id&quot;) });
 v.link(p, {
-  ...dots.via(eq(&quot;id&quot;, &quot;id&quot;)).pick({ x1: &quot;x&quot;, y1: &quot;y&quot; }),
-  ...dots.via(eq(&quot;species&quot;, &quot;species&quot;), { resolve: &quot;avg&quot; }).pick({ x2: &quot;x&quot;, y2: &quot;y&quot; }),
+  ...dots.via(&quot;id&quot;).pick({ x1: &quot;x&quot;, y1: &quot;y&quot; }),
+  ...dots.via(&quot;species&quot;, { resolve: &quot;avg&quot; }).pick({ x2: &quot;x&quot;, y2: &quot;y&quot; }),
   stroke: &quot;#bbb&quot;, strokeOpacity: 0.5,
 });
 return v;
@@ -480,15 +485,56 @@ is known as soon as the referent is nested;</li>
 references (a top-level layer borrowing from a plot nested in a later-compiled panel) work
 because the compiler patches late-bound plot references after the full walk — see
 <a href="../architecture.html#late-bound-plot-references--placeholder-reads">Architecture → late-bound plot references</a>.</p>
-<h2 id="multiplicity-and-resolutions">Multiplicity and resolutions</h2>
-<p>A via join that can match <strong>several</strong> referent rows per mark must declare how the match set
-reduces to one value — a bare AggFn, an ordered positional form, a named expression over the
-two-sided <code>(m, f)</code> row, or an opaque JS function (inline, or a named reducer registered in
-<code>registries.reducers</code>). Provably multi-match joins without a resolution are a build error, never a silent
-fan-out; the lenient default for <em>unprovable</em> joins tightens to an error under
-<code>{ strictMultiplicity: true }</code>. The full grammar with examples is in
-<a href="README.html#cross-mark-and-cross-table-references">Cross-mark &amp; cross-table references</a>; the design rationale
-(input schema, naming of computed outputs, the emitted SQL) is in
+<h2 id="resolutions-the-grammar">Resolutions — the grammar</h2>
+<p>A via join that can match <strong>several</strong> referent rows per mark must declare its <strong>resolution</strong> —
+how the match set reduces to one value. Five forms, from a bare aggregate to a registered JS
+reducer:</p>
+<pre data-lang="js"><code class="language-js">// a bare AggFn applies to EVERY picked channel independently (centroid of my cities)
+cityDots.via(eq('regions.id', 'cities.region'), { resolve: 'avg' }).pick({ cx: 'x', cy: 'y' })
+
+// positional forms order within the match set (each order's LAST quote before it)
+quoteDots.via(gt('orders.ts', 'quotes.ts'), { resolve: { fn: 'last', order: 'ts' } })
+         .pick({ fill: 'price' })
+
+// an EXPRESSION argument over the two-sided row — m is your mark, f is one match;
+// a computed resolution declares a NEW output name (the map key) and is picked by it
+quoteDots.via(gt('orders.ts', 'quotes.ts'),
+              { resolve: { spend: { fn: 'sum', arg: expr`f.price * f.qty` } } }).pick('spend')
+
+// an opaque JS reduce — a bare function as the map value: (matches, mark) =&gt; value
+cityDots.via(eq('regions.id', 'cities.region'), {
+  resolve: { far: (matches, mark) =&gt;
+    Math.max(...matches.map(c =&gt; Math.hypot(c.x - mark.x, c.y - mark.y))) },
+}).pick({ r: 'far' })
+
+// a NAMED reducer — a string map value looks up a registered JS reducer by name
+// (register with registries.reducers; keeps the spec serializable, unlike an inline fn)
+cityDots.via(eq('regions.id', 'cities.region'), { resolve: { pick: 'mode' } }).pick({ fill: 'pick' })
+</code></pre>
+<p>Declarative resolutions lower entirely to SQL (a staged join, one <code>GROUP BY dvl_mark</code> reduce,
+a LEFT-JOIN attach — a mark with no matches gets NULL, never dropped); a JS reduce (inline
+function or named registered reducer) materializes its match sets. The <code>expr</code> tagged template
+writes arguments as plain strings — <code>m.&lt;col&gt;</code>/<code>f.&lt;col&gt;</code> reference the two sides. A computed
+output's space defaults to data; declare one with <code>{ fn, arg, space: pixelSpace(len('x')) }</code> when
+the value is really a pixel quantity. If a borrowed name collides with an existing mark column,
+the referent's value wins (that's the point of the via) — with a one-time warning. A provably
+multi-match join <strong>without</strong> a resolution is a build error; the lenient single-match default for
+<em>unprovable</em> joins can be tightened by passing <code>{ strictMultiplicity: true }</code> to <code>renderSpec</code>/<code>compileSpec</code>, which makes
+every unprovable multiplicity a build error too. The basis for node-link diagrams, annotations,
+connectors, and ER-style diagrams.</p>
+<pre data-lang="dvl"><code class="lang-dvl">// PLOT referent + a resolution, live: each species label sits at the CENTROID of its
+// dots — the via matches MANY dots per species; resolve: 'avg' reduces every picked
+// channel independently. The borrowed values are solved pixels, never re-placed.
+const species = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;], {});
+const v = canvas(640, 360);
+const dots = v.dot(&quot;penguins&quot;, { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), fill: ordinal(&quot;species&quot;), fillOpacity: 0.5 });
+v.text(species, {
+  ...dots.via(&quot;species&quot;, { resolve: &quot;avg&quot; }).pick({ x: &quot;x&quot;, y: &quot;y&quot; }),
+  text: field(&quot;species&quot;), fontSize: 12, fill: &quot;#333&quot;, anchor: &quot;middle&quot;,
+});
+return v;
+</code></pre>
+<p>The design rationale (input schema, naming of computed outputs, the emitted SQL) is in
 <code>design/CELL_KEY_VIA.html</code> §3b–§3c.</p>
 <h2 id="choosing-quickly">Choosing, quickly</h2>
 <ul>
@@ -517,6 +563,13 @@ endpoint lands on the referent's boundary nearest the far end — a <code>dot</c
 center from the box edges <em>and</em> clips to the true boundary in one step. <code>arrow</code> composes the same
 way — its head then lands on the target boundary. <code>route()</code> is post-affine and segment-only, so
 it does not apply to curved <code>bezier</code> links yet.</p>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="join-paths.html">Join paths</a> — the <code>eq</code>/<code>on</code>/<code>fk</code>/<code>path</code> vocabulary every via path resolves with</li>
+<li><a href="channels.html">Channels</a> — what a picked output becomes on the consuming mark</li>
+<li><a href="facets.html">Facets and nesting</a> — the panel templates nested consumers live in</li>
+<li><a href="data.html">The data layer</a> — <code>withKey</code>, the FK catalog, and the <code>expr</code> template's home</li>
+</ul>
 
     </article>
   </main>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>dot · DVL</title>
+  <title>Facets and nesting · DVL</title>
   <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
   <link rel="stylesheet" href="../assets/styles.css">
@@ -73,7 +73,7 @@
       
         
         
-        <li><a href="../features/facets.html">Facets and nesting</a></li>
+        <li class="active"><a href="../features/facets.html">Facets and nesting</a></li>
         
       
         
@@ -138,7 +138,7 @@
       
         
         
-        <li class="active"><a href="../marks/dot.html">dot</a></li>
+        <li><a href="../marks/dot.html">dot</a></li>
         
       
         
@@ -362,195 +362,70 @@
 
   <main class="content">
     <article class="markdown-section">
-      <h1 id="dot">dot</h1>
-<p>The <code>dot</code> mark emits one <code>&lt;circle&gt;</code> per row. <code>x</code> and <code>y</code> place its centre through positional
-scales; <code>r</code> is its pixel radius; <code>fill</code>/<code>stroke</code> paint it. It is the point mark (Vega-Lite
-point/circle/square, Plot dot) — the workhorse for scatterplots and, layered, for anything that
-sits <em>on</em> a placed point.</p>
-<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
-v.dot(&quot;penguins&quot;, {
-  x: linear(&quot;bill_length_mm&quot;),
-  y: linear(&quot;flipper_length_mm&quot;),
-  fill: ordinal(&quot;species&quot;),
-});
-return v;
+      <h1 id="facets-and-nesting">Facets and nesting</h1>
+<p>Small multiples are a container plot plus a <strong>nest key</strong> — any <a href="join-paths.html">join path</a>.
+There is no separate faceting subsystem: the container is an ordinary plot (a <code>rect</code> per
+group), the key is the same path vocabulary used everywhere, and nested layers are ordinary
+plots whose data is scoped to their panel.</p>
+<h2 id="nest-keys">Nest keys</h2>
+<p>The nest key accepts the full path vocabulary:</p>
+<pre data-lang="js"><code class="language-js">panel.nest('penguins', { on: on('island') })       // same-column eq shorthand
+panel.nest('penguins', { on: fk('islands') })      // a named FK hop
+panel.nest('penguins')                             // infer the unique FK from the catalog
+panel.link('friends', { on: path('friends', 'penguins', 'islands') })  // MULTI-HOP: the link
+// needn't carry a denormalized panel column — the key travels friends.src → penguins → islands
 </code></pre>
-<p>Bill length versus flipper length, one circle per bird, coloured by species. The <code>linear</code> scales
-train their domains from the data; <code>ordinal</code> maps each species to a categorical palette entry.</p>
-<h2 id="options">Options</h2>
-<p><code>x</code>/<code>y</code> are the only required channels. Everything else has a draw-time default (radius 3, black
-fill). A bare string on any channel is a <strong>literal</strong>, not a column — <code>fill: &quot;species&quot;</code> paints every
-dot the CSS colour <code>species</code>; use <code>field(&quot;species&quot;)</code> (from <code>$lib/dvl/ir/expr</code>) or a scale binding
-to read a column.</p>
-<table>
-<thead>
-<tr>
-<th>channel</th>
-<th>kind</th>
-<th>default</th>
-<th>meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>x</code></td>
-<td>positional-x</td>
-<td>—</td>
-<td>centre x (scale binding, layout output, or pixel literal)</td>
-</tr>
-<tr>
-<td><code>y</code></td>
-<td>positional-y</td>
-<td>—</td>
-<td>centre y</td>
-</tr>
-<tr>
-<td><code>r</code></td>
-<td>pixel</td>
-<td>3</td>
-<td>radius in pixels (bind a scale for a bubble chart)</td>
-</tr>
-<tr>
-<td><code>shape</code></td>
-<td>shape</td>
-<td>circle</td>
-<td>glyph shape</td>
-</tr>
-<tr>
-<td><code>fill</code></td>
-<td>color</td>
-<td>black</td>
-<td>interior paint</td>
-</tr>
-<tr>
-<td><code>stroke</code></td>
-<td>color</td>
-<td>none</td>
-<td>outline paint</td>
-</tr>
-<tr>
-<td><code>strokeWidth</code></td>
-<td>pixel</td>
-<td>—</td>
-<td>outline width</td>
-</tr>
-<tr>
-<td><code>strokeDasharray</code></td>
-<td>text</td>
-<td>—</td>
-<td>SVG dash pattern</td>
-</tr>
-<tr>
-<td><code>opacity</code></td>
-<td>number</td>
-<td>1</td>
-<td>whole-mark opacity</td>
-</tr>
-<tr>
-<td><code>fillOpacity</code></td>
-<td>number</td>
-<td>1</td>
-<td>interior opacity</td>
-</tr>
-<tr>
-<td><code>strokeOpacity</code></td>
-<td>number</td>
-<td>1</td>
-<td>outline opacity</td>
-</tr>
-<tr>
-<td><code>title</code></td>
-<td>text</td>
-<td>—</td>
-<td>per-mark hover tooltip (SVG <code>&lt;title&gt;</code>); also a join carrier for <code>via</code></td>
-</tr>
-</tbody>
-</table>
-<p><code>r</code> and <code>strokeWidth</code> are pixel channels scaled on both axes. A dot is centered on <code>(x, y)</code> by
-nature — it has no <code>anchor</code> option (unlike the box marks <code>rect</code>/<code>image</code>).</p>
-<h2 id="examples">Examples</h2>
-<p>Colour <em>and</em> size encoded — a bubble chart. <code>r</code> is a raw <strong>pixel</strong> radius, so drive it with a
-channel expression: <code>sqrt(body_mass_g)</code> makes the <em>area</em> (∝ r²) proportional to mass, and <code>/ 10</code>
-scales the bubbles to a legible range. (A size <em>scale</em> — <code>sqrt(&quot;body_mass_g&quot;)</code> — is the wrong tool
-here: scales emit a relative <code>[0, 1]</code>, which the frame affine turns into pixels only for
-<em>positional</em> channels; on a bare radius that <code>[0, 1]</code> is sub-pixel, so the dots vanish.)</p>
-<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
-v.dot(&quot;penguins&quot;, {
-  x: linear(&quot;bill_length_mm&quot;),
-  y: linear(&quot;bill_depth_mm&quot;),
-  r: cexpr`sqrt(body_mass_g) / 10`,   // area ∝ mass; the /10 keeps radii in a legible px range
-  fill: ordinal(&quot;species&quot;),
-  fillOpacity: 0.7,
-});
-return v;
+<p>A multi-hop key compiles to one join per hop; the panel key (<code>dvl_cell</code>) threads through scales,
+ticks, and placement.</p>
+<h2 id="borrowing-the-referents-cell">Borrowing the referent's cell</h2>
+<p>Better still, a layer whose <em>referent</em> is already nested can <strong>borrow the
+referent's cell</strong> instead of re-deriving it — pick the reserved <code>cell</code> output:</p>
+<pre data-lang="js"><code class="language-js">panel.link('friends', {
+  ...np.via(eq('friends.src', 'penguins.id')).pick({ x1: 'x', y1: 'y', cell: 'dvl_cell' }),
+  ...np.via(eq('friends.dst', 'penguins.id')).pick({ x2: 'x', y2: 'y' }),
+})
 </code></pre>
-<p>Two layers over one table, sharing the same <code>x</code>/<code>y</code> scale objects, so the label lands <em>on</em> its dot
-rather than re-deriving a position. <code>field</code> reads a column; <code>dx</code>/<code>dy</code> nudge the label a few pixels.</p>
-<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
-const x = linear(&quot;bill_length_mm&quot;), y = linear(&quot;body_mass_g&quot;);
-v.dot(&quot;penguins&quot;, { x, y, fill: &quot;#cfd3dc&quot; });
-v.text(&quot;penguins&quot;, {
-  x, y,   // same scale objects → the label is placed relative to its dot
-  text: field(&quot;species&quot;), dx: 6, dy: -6, anchor: &quot;start&quot;, fontSize: 10, fill: &quot;#333&quot;,
-});
-return v;
-</code></pre>
-<p><strong>Shared scales across two tables.</strong> Reusing the same <code>x</code>/<code>y</code> objects across marks over <em>different</em>
-tables declares them the same quantity: the compiler unions the domains, so both layers share one
-frame and compare directly. The highlights (heaviest bird per species) are modelled inline.</p>
-<pre data-lang="dvl"><code class="lang-dvl">const highlights = db.table(&quot;penguins&quot;).top(1, { col: &quot;body_mass_g&quot;, desc: true }, { partition: [&quot;species&quot;] });
-const v = canvas(640, 440);
-const x = linear(&quot;bill_length_mm&quot;);
-const y = linear(&quot;body_mass_g&quot;);
-v.dot(&quot;penguins&quot;,  { x, y, fill: &quot;#cfd3dc&quot; });  // the full cloud
-v.dot(highlights,  { x, y, fill: &quot;#e15759&quot; });  // the heaviest bird per species
-return v;
-</code></pre>
-<p><strong>Axes.</strong> Ask a plot for its axes; each is lowered to an ordinary tick+text plot over the scale.</p>
-<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
-v.dot(&quot;penguins&quot;, {
-  x: linear(&quot;bill_length_mm&quot;),
-  y: linear(&quot;body_mass_g&quot;),
-  fill: ordinal(&quot;species&quot;),
-}).axis(&quot;x&quot;).axis(&quot;y&quot;).legend(&quot;fill&quot;);
-return v;
-</code></pre>
-<p><strong>Faceted (small multiples).</strong> A container <code>rect</code> per species hosts a nested dot plot keyed on
-species. The panel count comes from the data; shared scales make every panel's range identical.</p>
-<pre data-lang="dvl"><code class="lang-dvl">const species = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;], {});  // one row per species
-const v = canvas(760, 260);
+<p>One declared FK, read twice: the <strong>cell</strong> resolves early (it stands in for the nest key, before
+layout), the <strong>positions</strong> resolve late (post-placement pixels). The borrow path must be provably
+single-match end to end — declare the FKs it walks. Also covers <code>.nest()</code> multi-layer panels and
+per-panel vs shared domains (<code>shared: false</code>). <code>route()</code> composes with these borrows too: wrap
+the two position vias in <code>route({ src, dst })</code> to clip each edge to the nested node's boundary
+while the cell borrow still resolves the panel.</p>
+<h2 id="the-partition-model-which-rows-belong-to-a-panel">The partition model: which rows belong to a panel?</h2>
+<p><strong>Which rows belong to a panel?</strong> Take the partition seriously: a nested subplot scopes the
+<em>whole database</em> — inside a panel, a table name denotes its restriction to that panel, derived
+through the declared FK paths. A nested layer over an edge table needs <strong>no <code>on</code> and no
+borrow</strong>: <code>panel.link('follows', { …position vias… })</code> derives its partition, and a cross-panel
+edge doesn't get filtered — it simply doesn't exist in either panel's data (the strict,
+conjoin-the-paths default). <code>{ scope: 'union' }</code> puts a multi-path row in <em>every</em> panel it
+touches (local-subgraph small multiples). A layer that genuinely wants global data with a
+per-panel identity is a <strong>top-level layer with a <code>frame:</code> opt</strong> naming its assigning path
+(<code>v.link('follows', …, { frame: srcVia })</code>) — an explicit opt-out of the partition. The rows a
+conjoin drops are reported as data (the layer's <code>sigmaDropped</code> diagnostics relation), and the
+old <code>pick({ cell: 'dvl_cell' })</code> spelling still works with a deprecation warning.</p>
+<p>Three postures, then, ordered by how much of the database a nested layer sees:</p>
+<ol>
+<li><strong>Strict default</strong> — the partition conjoins every declared path; a row that touches two
+panels exists in neither.</li>
+<li><strong><code>{ scope: 'union' }</code></strong> — a multi-path row appears in every panel it touches.</li>
+<li><strong><code>frame:</code> opt-out</strong> — a top-level layer keeps global data but names the path that assigns
+each mark its panel identity.</li>
+</ol>
+<h2 id="example">Example</h2>
+<pre data-lang="dvl"><code class="lang-dvl">// a container rect per species + a nest key (any join path): panels partition the data,
+// and the shared x/y scales keep every panel comparable.
+const species = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;], {});
+const v = canvas(760, 280);
 v.rect(species, { ...eqX(&quot;species&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: px(12), h: 236, fill: &quot;#f5f6fa&quot; })
- .dot(&quot;penguins&quot;,
-   { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), fill: &quot;#4e79a7&quot; },
-   { on: &quot;species&quot; });
-return v;
-</code></pre>
-<p><strong>Parallel coordinates.</strong> One normalized dot plot per attribute at a fixed x; <code>title</code> carries a
-stable tuple key so <code>link.via</code> can reconstruct each tuple's polyline across adjacent axes.</p>
-<pre data-lang="dvl"><code class="lang-dvl">const p = db.table(&quot;penguins&quot;).withKey(&quot;id&quot;);
-const attrs = [&quot;bill_length_mm&quot;, &quot;bill_depth_mm&quot;, &quot;flipper_length_mm&quot;, &quot;body_mass_g&quot;];
-const xs = [90, 300, 500, 670];
-const v = canvas(740, 460);
-const axes = attrs.map((a, i) =&gt; v.dot(p, {
-  x: px(xs[i]), y: linear(a, { axis: false }),
-  r: 3, fill: ordinal(&quot;species&quot;), title: field(&quot;id&quot;),
-}));
-for (let i = 0; i &lt; attrs.length - 1; i++) {
-  v.link(p, {
-    ...axes[i].via(&quot;id&quot;).pick({ x1: &quot;x&quot;, y1: &quot;y&quot; }),
-    ...axes[i + 1].via(&quot;id&quot;).pick({ x2: &quot;x&quot;, y2: &quot;y&quot; }),
-    stroke: ordinal(&quot;species&quot;), strokeWidth: 1, strokeOpacity: 0.3,
-  });
-}
+ .dot(&quot;penguins&quot;, { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), fill: ordinal(&quot;species&quot;) },
+      { on: &quot;species&quot; });
 return v;
 </code></pre>
 <h2 id="see-also">See also</h2>
 <ul>
-<li><a href="./rect.html">rect</a> — the container mark; a &quot;squared&quot; dot when given <code>w</code>/<code>h</code></li>
-<li><a href="./cell.html">cell</a> — a positioned box with no explicit size</li>
-<li><a href="./line.html">line</a> — the aggregate sibling: N dots collapse to one path</li>
-<li><a href="./text.html">text</a> — labels layered onto placed dots</li>
-<li><a href="./link.html">link</a> — connectors that borrow dot positions; <code>route()</code> clips an edge endpoint to a dot's circle</li>
+<li><a href="join-paths.html">Join paths</a> — the path vocabulary nest keys are written in</li>
+<li><a href="subplots.html">Subplots</a> — heterogeneous panels over a virtual panels table</li>
+<li><a href="via.html">Via: cross-plot and cross-table references</a> — the borrow mechanism behind cell picks</li>
 </ul>
 
     </article>

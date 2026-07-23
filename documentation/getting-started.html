@@ -38,57 +38,62 @@
       
         
         
-        <li><a href="features/README.html#plots-and-marks">Plots and marks</a></li>
+        <li><a href="features/README.html">Overview</a></li>
         
       
         
         
-        <li><a href="features/README.html#channels">Channels</a></li>
+        <li><a href="features/plots.html">Plots and marks</a></li>
         
       
         
         
-        <li><a href="features/README.html#scales">Scales</a></li>
+        <li><a href="features/channels.html">Channels</a></li>
         
       
         
         
-        <li><a href="features/README.html#layouts">Layouts</a></li>
+        <li><a href="features/scales.html">Scales</a></li>
         
       
         
         
-        <li><a href="features/README.html#the-frame">The frame</a></li>
+        <li><a href="features/layouts.html">Layouts</a></li>
         
       
         
         
-        <li><a href="features/README.html#join-paths">Join paths</a></li>
+        <li><a href="features/frame.html">The frame</a></li>
         
       
         
         
-        <li><a href="features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        <li><a href="features/join-paths.html">Join paths</a></li>
         
       
         
         
-        <li><a href="features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        <li><a href="features/facets.html">Facets and nesting</a></li>
         
       
         
         
-        <li><a href="features/README.html#subplots">Subplots</a></li>
+        <li><a href="features/via.html">Via</a></li>
         
       
         
         
-        <li><a href="features/README.html#data">Data</a></li>
+        <li><a href="features/subplots.html">Subplots</a></li>
         
       
         
         
-        <li><a href="features/README.html#debugging">Debugging</a></li>
+        <li><a href="features/data.html">Data</a></li>
+        
+      
+        
+        
+        <li><a href="features/debugging.html">Debugging</a></li>
         
       
       </ul>
@@ -475,13 +480,13 @@ import { eq } from &quot;$lib/dvl/ir/refs&quot;;
 v.rect(&quot;species&quot;, { ...eqX(&quot;species&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: px(12), h: 236, fill: &quot;#f5f6fa&quot; })
  .dot(&quot;penguins&quot;,
       { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;) },
-      { on: eq(&quot;species&quot;, &quot;species&quot;) });     // each panel shows its own species' rows
+      { on: &quot;species&quot; });     // each panel shows its own species' rows
 </code></pre>
 <p>Scales are shared across panels by default; opt out per scale with
 <code>linear(&quot;col&quot;, { shared: false })</code> for per-panel domains. <code>.nest()</code> names the pattern when a
 panel hosts several layers:</p>
 <pre data-lang="js"><code class="language-js">const panel = v.rect(&quot;clusters&quot;, { ...eqX(&quot;cluster&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: px(12), h: 330 })
-  .nest(&quot;fnodes&quot;, { on: eq(&quot;cluster&quot;, &quot;cluster&quot;) });
+  .nest(&quot;fnodes&quot;, { on: &quot;cluster&quot; });
 const dots = panel.dot({ ...force(&quot;fedges&quot;).pick(&quot;x&quot;, &quot;y&quot;), r: 6 });
 panel.link(&quot;fedges&quot;, {                        // edges layer in the same panels — route()
   ...route({ src: dots.via(eq(&quot;fedges.src&quot;, &quot;fnodes.id&quot;)),   // attaches each end to a node
@@ -489,7 +494,7 @@ panel.link(&quot;fedges&quot;, {                        // edges layer in the sa
 });
 </code></pre>
 <p>For ad-hoc side-by-side plots without a driving table, see
-<a href="features/README.html#subplots">subplots</a>: <code>v.subplot()</code> / <code>v.subplots({...eqX(&quot;i&quot;).pick(&quot;x&quot;,&quot;w&quot;)})</code>.</p>
+<a href="features/subplots.html">subplots</a>: <code>v.subplot()</code> / <code>v.subplots({...eqX(&quot;i&quot;).pick(&quot;x&quot;,&quot;w&quot;)})</code>.</p>
 <h2 id="connecting-marks-across-plots-via">Connecting marks across plots: <code>via</code></h2>
 <p>Layers can borrow another plot's <em>solved</em> positions through a join — how node-link diagrams,
 annotations, and connectors are built:</p>
@@ -504,7 +509,7 @@ v.link(&quot;highlights&quot;, {
 positions arrive in pixels and are not re-transformed. For node-link edges, wrap the two
 endpoint vias in <code>route({ src, dst })</code> — that is how an edge attaches to each node's <em>boundary</em>
 (the circle or rect edge) instead of borrowing its raw center. See
-<a href="features/README.html#cross-mark-and-cross-table-references">cross-mark references</a> and
+<a href="features/via.html">cross-mark references</a> and
 <a href="features/via.html#turning-borrowed-endpoints-into-boundary-attachments-route">via → route()</a>.</p>
 <h2 id="rendering">Rendering</h2>
 <p><code>renderSpec</code> returns SVG. In the browser, insert it; in Node, rasterize with
@@ -516,7 +521,7 @@ const sink = new DuckDbSink(db.backend, 2);
 const svg = await renderSpec(v.spec, v.registries, &quot;&quot;, db, {}, sink);
 // then: spanTimeline(db, sink.runId), sqlProfile(db, sink.runId), …
 </code></pre>
-<p>See <a href="features/README.html#debugging">debugging</a>.</p>
+<p>See <a href="features/debugging.html">debugging</a>.</p>
 <h2 id="where-next">Where next</h2>
 <ul>
 <li><a href="features/README.html">Features</a> — each concept, one page at a time.</li>

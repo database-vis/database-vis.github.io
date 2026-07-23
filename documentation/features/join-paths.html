@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>dot · DVL</title>
+  <title>Join paths · DVL</title>
   <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
   <link rel="stylesheet" href="../assets/styles.css">
@@ -68,7 +68,7 @@
       
         
         
-        <li><a href="../features/join-paths.html">Join paths</a></li>
+        <li class="active"><a href="../features/join-paths.html">Join paths</a></li>
         
       
         
@@ -138,7 +138,7 @@
       
         
         
-        <li class="active"><a href="../marks/dot.html">dot</a></li>
+        <li><a href="../marks/dot.html">dot</a></li>
         
       
         
@@ -362,195 +362,64 @@
 
   <main class="content">
     <article class="markdown-section">
-      <h1 id="dot">dot</h1>
-<p>The <code>dot</code> mark emits one <code>&lt;circle&gt;</code> per row. <code>x</code> and <code>y</code> place its centre through positional
-scales; <code>r</code> is its pixel radius; <code>fill</code>/<code>stroke</code> paint it. It is the point mark (Vega-Lite
-point/circle/square, Plot dot) — the workhorse for scatterplots and, layered, for anything that
-sits <em>on</em> a placed point.</p>
-<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
-v.dot(&quot;penguins&quot;, {
-  x: linear(&quot;bill_length_mm&quot;),
-  y: linear(&quot;flipper_length_mm&quot;),
-  fill: ordinal(&quot;species&quot;),
+      <h1 id="join-paths">Join paths</h1>
+<p>&quot;Relate this relation to that one, on these columns, possibly through intermediates&quot; is <strong>one
+concept</strong> — a <code>Path</code> — and every join site in DVL consumes it: nest keys, cross-mark and
+cross-table <code>via</code>, layout aux inputs (force's edges). Whatever the site, you describe the
+relationship once, in one vocabulary, and the compiler emits the joins.</p>
+<h2 id="one-vocabulary">One vocabulary</h2>
+<p>One constructor vocabulary:</p>
+<pre data-lang="js"><code class="language-js">eq('penguins.island', 'islands.island')   // an explicit predicate (also lt/le/gt/ge/neq)
+on('island')                              // same-column eq shorthand
+fk('islands')                             // a named FK hop — expands against the catalog
+path('friends', 'penguins', 'islands')    // a multi-hop chain of FK hops
+// …and OMITTING the path infers the unique FK between source and target
+</code></pre>
+<p>The constructors range from fully explicit to fully inferred: <code>eq</code> (and its comparison
+siblings <code>lt</code>/<code>le</code>/<code>gt</code>/<code>ge</code>/<code>neq</code>) spells out a predicate column by column; <code>on('island')</code> is
+the same-column <code>eq</code> shorthand; <code>fk('islands')</code> names a foreign key and expands it against the
+catalog; <code>path(...)</code> chains FK hops through intermediate tables; and omitting the path
+entirely asks the resolver to infer the unique FK between source and target.</p>
+<h2 id="one-path-many-sites-policy-not-type">One Path, many sites — policy, not type</h2>
+<p>Paths resolve once (against the database's FK catalog — see <a href="data.html">Data</a>); what varies per
+site is <em>policy</em>, not type: a <strong>nest key</strong> must resolve to all-eq conditions (it feeds a
+partition key), while a <strong>via</strong> admits any predicate — a range join just matches a <em>set</em>, which
+is what <a href="via.html">resolutions</a> are for. The resolver also judges <strong>multiplicity</strong>:
+a hop that lands on a known key (an FK's target) is provably single-match; a non-eq hop is
+provably multi; multi without a declared resolution is a build-time error, never a silent
+fan-out.</p>
+<h2 id="multiplicity">Multiplicity</h2>
+<p>The resolver's multiplicity judgment is what keeps joins honest. It classifies each resolved
+path:</p>
+<ul>
+<li>a hop that lands on a known key (an FK's target) is <strong>provably single-match</strong>;</li>
+<li>a non-eq hop (a range predicate like <code>gt</code>/<code>lt</code>) is <strong>provably multi-match</strong>;</li>
+<li>a provably multi-match join without a declared resolution is a <strong>build-time error</strong> — never
+a silent fan-out.</li>
+</ul>
+<p>This is why declaring FKs pays off: they are the facts the judgment reads (see
+<a href="data.html">Data</a> for the catalog).</p>
+<h2 id="example-paths-at-a-via-site">Example: paths at a via site</h2>
+<pre data-lang="dvl"><code class="lang-dvl">// a node-link diagram: force places the members; route() OWNS both endpoint borrows and
+// clips each edge to the node BOUNDARY nearest the far end. The `eq('follows.src','members.id')`
+// predicates ARE the join paths — `on('col')` (same-column eq), `fk('table')` (named hop), and
+// `path(...)` (multi-hop) are the shorthands the section lists, resolved against the same FK catalog.
+const v = canvas(640, 420);
+const nodes = v.dot(&quot;members&quot;, { ...force(&quot;follows&quot;).pick(&quot;x&quot;, &quot;y&quot;), r: 8, fill: ordinal(&quot;community&quot;) });
+v.link(&quot;follows&quot;, {
+  ...route({ src: nodes.via(eq(&quot;follows.src&quot;, &quot;members.id&quot;)),
+             dst: nodes.via(eq(&quot;follows.dst&quot;, &quot;members.id&quot;)) }).pick(&quot;x1&quot;, &quot;y1&quot;, &quot;x2&quot;, &quot;y2&quot;),
+  stroke: &quot;#bbb&quot;, strokeOpacity: 0.6,
 });
 return v;
 </code></pre>
-<p>Bill length versus flipper length, one circle per bird, coloured by species. The <code>linear</code> scales
-train their domains from the data; <code>ordinal</code> maps each species to a categorical palette entry.</p>
-<h2 id="options">Options</h2>
-<p><code>x</code>/<code>y</code> are the only required channels. Everything else has a draw-time default (radius 3, black
-fill). A bare string on any channel is a <strong>literal</strong>, not a column — <code>fill: &quot;species&quot;</code> paints every
-dot the CSS colour <code>species</code>; use <code>field(&quot;species&quot;)</code> (from <code>$lib/dvl/ir/expr</code>) or a scale binding
-to read a column.</p>
-<table>
-<thead>
-<tr>
-<th>channel</th>
-<th>kind</th>
-<th>default</th>
-<th>meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>x</code></td>
-<td>positional-x</td>
-<td>—</td>
-<td>centre x (scale binding, layout output, or pixel literal)</td>
-</tr>
-<tr>
-<td><code>y</code></td>
-<td>positional-y</td>
-<td>—</td>
-<td>centre y</td>
-</tr>
-<tr>
-<td><code>r</code></td>
-<td>pixel</td>
-<td>3</td>
-<td>radius in pixels (bind a scale for a bubble chart)</td>
-</tr>
-<tr>
-<td><code>shape</code></td>
-<td>shape</td>
-<td>circle</td>
-<td>glyph shape</td>
-</tr>
-<tr>
-<td><code>fill</code></td>
-<td>color</td>
-<td>black</td>
-<td>interior paint</td>
-</tr>
-<tr>
-<td><code>stroke</code></td>
-<td>color</td>
-<td>none</td>
-<td>outline paint</td>
-</tr>
-<tr>
-<td><code>strokeWidth</code></td>
-<td>pixel</td>
-<td>—</td>
-<td>outline width</td>
-</tr>
-<tr>
-<td><code>strokeDasharray</code></td>
-<td>text</td>
-<td>—</td>
-<td>SVG dash pattern</td>
-</tr>
-<tr>
-<td><code>opacity</code></td>
-<td>number</td>
-<td>1</td>
-<td>whole-mark opacity</td>
-</tr>
-<tr>
-<td><code>fillOpacity</code></td>
-<td>number</td>
-<td>1</td>
-<td>interior opacity</td>
-</tr>
-<tr>
-<td><code>strokeOpacity</code></td>
-<td>number</td>
-<td>1</td>
-<td>outline opacity</td>
-</tr>
-<tr>
-<td><code>title</code></td>
-<td>text</td>
-<td>—</td>
-<td>per-mark hover tooltip (SVG <code>&lt;title&gt;</code>); also a join carrier for <code>via</code></td>
-</tr>
-</tbody>
-</table>
-<p><code>r</code> and <code>strokeWidth</code> are pixel channels scaled on both axes. A dot is centered on <code>(x, y)</code> by
-nature — it has no <code>anchor</code> option (unlike the box marks <code>rect</code>/<code>image</code>).</p>
-<h2 id="examples">Examples</h2>
-<p>Colour <em>and</em> size encoded — a bubble chart. <code>r</code> is a raw <strong>pixel</strong> radius, so drive it with a
-channel expression: <code>sqrt(body_mass_g)</code> makes the <em>area</em> (∝ r²) proportional to mass, and <code>/ 10</code>
-scales the bubbles to a legible range. (A size <em>scale</em> — <code>sqrt(&quot;body_mass_g&quot;)</code> — is the wrong tool
-here: scales emit a relative <code>[0, 1]</code>, which the frame affine turns into pixels only for
-<em>positional</em> channels; on a bare radius that <code>[0, 1]</code> is sub-pixel, so the dots vanish.)</p>
-<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
-v.dot(&quot;penguins&quot;, {
-  x: linear(&quot;bill_length_mm&quot;),
-  y: linear(&quot;bill_depth_mm&quot;),
-  r: cexpr`sqrt(body_mass_g) / 10`,   // area ∝ mass; the /10 keeps radii in a legible px range
-  fill: ordinal(&quot;species&quot;),
-  fillOpacity: 0.7,
-});
-return v;
-</code></pre>
-<p>Two layers over one table, sharing the same <code>x</code>/<code>y</code> scale objects, so the label lands <em>on</em> its dot
-rather than re-deriving a position. <code>field</code> reads a column; <code>dx</code>/<code>dy</code> nudge the label a few pixels.</p>
-<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
-const x = linear(&quot;bill_length_mm&quot;), y = linear(&quot;body_mass_g&quot;);
-v.dot(&quot;penguins&quot;, { x, y, fill: &quot;#cfd3dc&quot; });
-v.text(&quot;penguins&quot;, {
-  x, y,   // same scale objects → the label is placed relative to its dot
-  text: field(&quot;species&quot;), dx: 6, dy: -6, anchor: &quot;start&quot;, fontSize: 10, fill: &quot;#333&quot;,
-});
-return v;
-</code></pre>
-<p><strong>Shared scales across two tables.</strong> Reusing the same <code>x</code>/<code>y</code> objects across marks over <em>different</em>
-tables declares them the same quantity: the compiler unions the domains, so both layers share one
-frame and compare directly. The highlights (heaviest bird per species) are modelled inline.</p>
-<pre data-lang="dvl"><code class="lang-dvl">const highlights = db.table(&quot;penguins&quot;).top(1, { col: &quot;body_mass_g&quot;, desc: true }, { partition: [&quot;species&quot;] });
-const v = canvas(640, 440);
-const x = linear(&quot;bill_length_mm&quot;);
-const y = linear(&quot;body_mass_g&quot;);
-v.dot(&quot;penguins&quot;,  { x, y, fill: &quot;#cfd3dc&quot; });  // the full cloud
-v.dot(highlights,  { x, y, fill: &quot;#e15759&quot; });  // the heaviest bird per species
-return v;
-</code></pre>
-<p><strong>Axes.</strong> Ask a plot for its axes; each is lowered to an ordinary tick+text plot over the scale.</p>
-<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
-v.dot(&quot;penguins&quot;, {
-  x: linear(&quot;bill_length_mm&quot;),
-  y: linear(&quot;body_mass_g&quot;),
-  fill: ordinal(&quot;species&quot;),
-}).axis(&quot;x&quot;).axis(&quot;y&quot;).legend(&quot;fill&quot;);
-return v;
-</code></pre>
-<p><strong>Faceted (small multiples).</strong> A container <code>rect</code> per species hosts a nested dot plot keyed on
-species. The panel count comes from the data; shared scales make every panel's range identical.</p>
-<pre data-lang="dvl"><code class="lang-dvl">const species = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;], {});  // one row per species
-const v = canvas(760, 260);
-v.rect(species, { ...eqX(&quot;species&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: px(12), h: 236, fill: &quot;#f5f6fa&quot; })
- .dot(&quot;penguins&quot;,
-   { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), fill: &quot;#4e79a7&quot; },
-   { on: &quot;species&quot; });
-return v;
-</code></pre>
-<p><strong>Parallel coordinates.</strong> One normalized dot plot per attribute at a fixed x; <code>title</code> carries a
-stable tuple key so <code>link.via</code> can reconstruct each tuple's polyline across adjacent axes.</p>
-<pre data-lang="dvl"><code class="lang-dvl">const p = db.table(&quot;penguins&quot;).withKey(&quot;id&quot;);
-const attrs = [&quot;bill_length_mm&quot;, &quot;bill_depth_mm&quot;, &quot;flipper_length_mm&quot;, &quot;body_mass_g&quot;];
-const xs = [90, 300, 500, 670];
-const v = canvas(740, 460);
-const axes = attrs.map((a, i) =&gt; v.dot(p, {
-  x: px(xs[i]), y: linear(a, { axis: false }),
-  r: 3, fill: ordinal(&quot;species&quot;), title: field(&quot;id&quot;),
-}));
-for (let i = 0; i &lt; attrs.length - 1; i++) {
-  v.link(p, {
-    ...axes[i].via(&quot;id&quot;).pick({ x1: &quot;x&quot;, y1: &quot;y&quot; }),
-    ...axes[i + 1].via(&quot;id&quot;).pick({ x2: &quot;x&quot;, y2: &quot;y&quot; }),
-    stroke: ordinal(&quot;species&quot;), strokeWidth: 1, strokeOpacity: 0.3,
-  });
-}
-return v;
-</code></pre>
+<p>Because <code>route()</code> owns the endpoint joins, each edge lands on the node's boundary (a <code>dot</code>
+clips on its circle) — not its center — so arrowheads and links meet the mark cleanly.</p>
 <h2 id="see-also">See also</h2>
 <ul>
-<li><a href="./rect.html">rect</a> — the container mark; a &quot;squared&quot; dot when given <code>w</code>/<code>h</code></li>
-<li><a href="./cell.html">cell</a> — a positioned box with no explicit size</li>
-<li><a href="./line.html">line</a> — the aggregate sibling: N dots collapse to one path</li>
-<li><a href="./text.html">text</a> — labels layered onto placed dots</li>
-<li><a href="./link.html">link</a> — connectors that borrow dot positions; <code>route()</code> clips an edge endpoint to a dot's circle</li>
+<li><a href="facets.html">Facets and nesting</a> — nest keys are join paths with an all-eq policy</li>
+<li><a href="via.html">Via: cross-plot and cross-table references</a> — the via site and its resolution grammar</li>
+<li><a href="data.html">Data</a> — the FK catalog that paths resolve against</li>
 </ul>
 
     </article>

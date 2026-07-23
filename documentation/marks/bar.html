@@ -38,57 +38,62 @@
       
         
         
-        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        <li><a href="../features/README.html">Overview</a></li>
         
       
         
         
-        <li><a href="../features/README.html#channels">Channels</a></li>
+        <li><a href="../features/plots.html">Plots and marks</a></li>
         
       
         
         
-        <li><a href="../features/README.html#scales">Scales</a></li>
+        <li><a href="../features/channels.html">Channels</a></li>
         
       
         
         
-        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        <li><a href="../features/scales.html">Scales</a></li>
         
       
         
         
-        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        <li><a href="../features/layouts.html">Layouts</a></li>
         
       
         
         
-        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        <li><a href="../features/frame.html">The frame</a></li>
         
       
         
         
-        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        <li><a href="../features/join-paths.html">Join paths</a></li>
         
       
         
         
-        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        <li><a href="../features/facets.html">Facets and nesting</a></li>
         
       
         
         
-        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        <li><a href="../features/via.html">Via</a></li>
         
       
         
         
-        <li><a href="../features/README.html#data">Data</a></li>
+        <li><a href="../features/subplots.html">Subplots</a></li>
         
       
         
         
-        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        <li><a href="../features/data.html">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/debugging.html">Debugging</a></li>
         
       
       </ul>
@@ -538,7 +543,7 @@ const bars = v.bar(bySpecies, {
   fill: ordinal(&quot;species&quot;),
 });
 v.text(bySpecies, {
-  ...bars.via(eq(&quot;species&quot;, &quot;species&quot;)).pick({ x: &quot;x&quot;, y: &quot;y&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
+  ...bars.via(&quot;species&quot;).pick({ x: &quot;x&quot;, y: &quot;y&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
   ...fitText(),
   text: field(&quot;species&quot;), anchor: &quot;middle&quot;, baseline: &quot;middle&quot;, fill: &quot;#fff&quot;,
 });
@@ -551,7 +556,7 @@ const v = canvas(760, 260);
 v.bar(species, { ...eqX(&quot;species&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: px(12), h: 236, fill: &quot;#f5f6fa&quot; })
  .dot(&quot;penguins&quot;,
    { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), fill: &quot;#4e79a7&quot; },
-   { on: eq(&quot;species&quot;, &quot;species&quot;) });
+   { on: &quot;species&quot; });
 return v;
 </code></pre>
 <h2 id="see-also">See also</h2>

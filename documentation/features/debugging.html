@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>dag · DVL</title>
+  <title>Debugging · DVL</title>
   <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
   <link rel="stylesheet" href="../assets/styles.css">
@@ -93,7 +93,7 @@
       
         
         
-        <li><a href="../features/debugging.html">Debugging</a></li>
+        <li class="active"><a href="../features/debugging.html">Debugging</a></li>
         
       
       </ul>
@@ -237,7 +237,7 @@
             <li><a href="../layouts/proportionalY.html">proportionalY</a></li>
           
             
-            <li class="active"><a href="../layouts/dag.html">dag</a></li>
+            <li><a href="../layouts/dag.html">dag</a></li>
           
             
             <li><a href="../layouts/force.html">force</a></li>
@@ -362,121 +362,27 @@
 
   <main class="content">
     <article class="markdown-section">
-      <h1 id="dag">dag</h1>
-<p><code>dag</code> places the nodes of a <strong>directed acyclic graph</strong> in topological layers — the layered
-(Sugiyama-style) layout used for dataflow/dependency diagrams — and emits an <code>x</code>, <code>y</code> per node,
-normalized to <code>[pad, 1−pad]</code> (the frame affine turns them into pixels). Like
-<a href="force.html">force</a> it takes an <strong>edges table</strong> — <code>dag('edges')</code> — whose endpoint columns come from
-the declared join (<code>edges.src → marks.id</code>, <code>edges.dst → marks.id</code>) or an <code>on</code> override. There is
-no trained domain: positions carry no data-space meaning, so nothing is tickable.</p>
-<p>Three deterministic steps (no simulation, no iteration):</p>
-<ol>
-<li><strong>Layer</strong> — each node sits one layer below its <em>deepest</em> parent (longest path from the roots);
-roots on top, sinks at the bottom. A cycle's back-edge counts zero, so cyclic inputs
-terminate (with an arbitrary split inside the cycle).</li>
-<li><strong>Order</strong> — one downward sweep sorts each layer by the <em>barycenter</em> (mean position) of its
-parents in the layer above, pulling connected nodes into vertical alignment and reducing edge
-crossings.</li>
-<li><strong>Center</strong> — each layer's row centers on <code>x = 0.5</code> with one uniform step shared across layers
-(the widest layer spans the full width).</li>
-</ol>
-<p>This is the algorithm behind DVL's own compute-graph debugger: the playground's <strong>Graph</strong> tab is
-an ordinary DVL spec that reads the dataflow log (<code>dvl_operator</code>/<code>dvl_op_io</code>) back from the
-profiling database and draws it with <code>dag</code> (see <code>design/2026-07-21-compute-graph-vis.html</code>).</p>
-<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 400);
-v.dot('members', {
-  ...dag('follows').pick('x', 'y'),
-  r: 8, fill: ordinal('community'),
-});
-return v;
-</code></pre>
-<p>The members social graph as a hierarchy: <code>dag('follows')</code> reads the <code>follows</code> edge table
-(<code>src</code>/<code>dst</code> FK-joined to <code>members.id</code>) and stacks each member below the people they follow.</p>
-<h2 id="options">Options</h2>
-<p><code>dag(edges)</code> takes the marks (the nodes, whose id column is the primary input) plus an aux
-<strong>edges</strong> relation named as the argument. Edges to nodes absent from a panel are ignored (a
-per-panel run sees only its panel's nodes). In a template it runs <strong>per cell</strong> by default — one
-layered graph per panel (<code>perCell: true</code>). js-only: an ordering algorithm over the whole node
-set has no meaningful SQL form.</p>
-<table>
-<thead>
-<tr>
-<th>Input</th>
-<th>Type</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>id</code> (marks)</td>
-<td>int</td>
-<td>the node identity column, matched against edge endpoints</td>
-</tr>
-<tr>
-<td><code>edges</code></td>
-<td>table</td>
-<td>the edge relation; <code>src</code>/<code>dst</code> (or the declared refs) are its endpoint columns</td>
-</tr>
-</tbody>
-</table>
-<p><code>.pick()</code> outputs:</p>
-<table>
-<thead>
-<tr>
-<th>Output</th>
-<th>Space</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>x</code></td>
-<td>relative coord x</td>
-<td>the node's slot in its layer's row, rows centered on 0.5</td>
-</tr>
-<tr>
-<td><code>y</code></td>
-<td>relative coord y</td>
-<td>the node's layer: roots at the top, deepest layer at the bottom</td>
-</tr>
-</tbody>
-</table>
-<p>Bind by spreading: <code>...dag('follows').pick('x', 'y')</code>. An empty edge set puts every node in one
-top row; a single layer (or single node) centers at 0.5.</p>
-<h2 id="examples">Examples</h2>
-<p>Nodes <strong>and</strong> edges — draw the links underneath with <code>route()</code>, which owns both endpoint borrows
-and clips each end to the node it lands on, so an edge meets the dot <strong>boundary</strong> nearest the far
-end rather than the center (the same pattern as <a href="force.html">force</a>):</p>
-<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 400);
-const nodes = v.dot('members', { ...dag('follows').pick('x', 'y'), r: 8, fill: ordinal('community') });
-v.link('follows', {
-  ...route({
-    src: nodes.via(eq('follows.src', 'members.id')),
-    dst: nodes.via(eq('follows.dst', 'members.id')),
-  }).pick('x1', 'y1', 'x2', 'y2'),
-  stroke: '#b6bdc9',
-});
-return v;
-</code></pre>
-<p>Labelled nodes — a <code>text</code> layer rides the same <code>dag</code> placement (the layout is deterministic, so
-a second <code>dag('follows')</code> over the same nodes reproduces exactly the same positions):</p>
-<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(700, 400);
-const nodes = v.dot('members', { ...dag('follows').pick('x', 'y'), r: 8, fill: ordinal('community') });
-v.text('members', { ...dag('follows').pick('x', 'y'), text: field('name'), dy: -12, fill: '#343a40' });
-v.link('follows', {
-  ...route({
-    src: nodes.via(eq('follows.src', 'members.id')),
-    dst: nodes.via(eq('follows.dst', 'members.id')),
-  }).pick('x1', 'y1', 'x2', 'y2'),
-  stroke: '#b6bdc9',
-});
-return v;
-</code></pre>
+      <h1 id="debugging">Debugging</h1>
+<p>DVL's debugging story is relational: the pipeline's own execution is recorded as tables, so
+you inspect a render the same way you inspect any data — with queries, or with plots.</p>
+<h2 id="the-duckdbsink-and-the-dvl_-tables">The <code>DuckDbSink</code> and the <code>dvl_*</code> tables</h2>
+<p>Pass a <code>DuckDbSink</code> to <code>renderSpec</code> and every compile pass, operator run, SQL statement, cell
+write, and solver iteration is recorded into <code>dvl_*</code> tables — then explore them with SQL, or
+with DVL's own self-visualizations (<code>spanTimeline</code>, <code>sqlProfile</code>, <code>convergenceTrace</code>,
+<code>convergenceResidual</code>, <code>entityCounts</code>, <code>erDiagram</code>).</p>
+<h2 id="self-visualizations">Self-visualizations</h2>
+<p>The named self-visualizations are DVL specs over the <code>dvl_*</code> tables:</p>
+<ul>
+<li><code>spanTimeline</code> — compile passes and operator runs over time</li>
+<li><code>sqlProfile</code> — the recorded SQL statements</li>
+<li><code>convergenceTrace</code>, <code>convergenceResidual</code> — solver iterations</li>
+<li><code>entityCounts</code> — recorded entities by kind</li>
+<li><code>erDiagram</code> — the schema as an ER-style diagram</li>
+</ul>
 <h2 id="see-also">See also</h2>
 <ul>
-<li><a href="force.html">force</a> — free-form node-link placement (simulation instead of layers)</li>
-<li><a href="../marks/link.html">link</a> — draws the edges between dag-placed nodes</li>
-<li><a href="treemap.html">treemap</a> — the other whole-set 2-D layout</li>
+<li><a href="data.html">Data</a> — the <code>Database</code> wrapper and backends the sink records against</li>
+<li><a href="../architecture.html">Architecture</a> — the passes and operators the traces describe</li>
 </ul>
 
     </article>

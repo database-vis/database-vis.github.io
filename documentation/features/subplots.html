@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>eqX · DVL</title>
+  <title>Subplots · DVL</title>
   <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
   <link rel="stylesheet" href="../assets/styles.css">
@@ -83,7 +83,7 @@
       
         
         
-        <li><a href="../features/subplots.html">Subplots</a></li>
+        <li class="active"><a href="../features/subplots.html">Subplots</a></li>
         
       
         
@@ -362,137 +362,168 @@
 
   <main class="content">
     <article class="markdown-section">
-      <h1 id="eqx">eqX</h1>
-<p><code>eqX</code> equal-splits a set of panels across the horizontal range: it distributes the distinct
-keys of an index column evenly and emits an <code>x</code> (panel left) and <code>w</code> (panel width, the step) for
-each. It is the simplest <strong>subplot / facet driver</strong> — the same rank→step shape as the <code>bandX</code>
-scale, promoted to a layout. Outputs are normalized [0, 1]; the frame affine turns them into
-pixels. Its y-mirror is <a href="eqY.html"><code>eqY</code></a> (row facets); pick the orientation by which operator
-you reach for (or, historically, by which channels you <code>.pick()</code> onto).</p>
-<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(720, 320);
-v.subplot().dot('penguins', { x: linear('bill_length_mm'),    y: linear('body_mass_g') });
-v.subplot().dot('penguins', { x: linear('flipper_length_mm'), y: linear('body_mass_g') });
-v.subplots({ ...eqX('i').pick('x', 'w') });   // 'i' = the panel index (a virtual table)
-return v;
-</code></pre>
-<p>Two side-by-side panels sharing a single y-axis. <code>v.subplot()</code> appends one row <code>{ i: k }</code> to a
-virtual panel-index table; <code>eqX('i')</code> splits over that index; the panel widths are solved from
-label demand so the plot areas line up.</p>
-<h2 id="options">Options</h2>
-<p><code>eqX(key)</code> takes a single input — the index/key column to split over. It fits a 1-row broadcast
-domain (a <code>countDistinct</code> of the key) and emits equal shares: <code>x = rank(key) / n</code>, <code>w = 1 / n</code>.
-The fit is a bare count, so the domain is <strong>unshareable and unticked</strong> (two panel counts do not
-union into a shared domain — there is no axis for it).</p>
+      <h1 id="subplots">Subplots</h1>
+<p>Subplots are <strong>ad-hoc, heterogeneous panels</strong>: each panel hosts its own child plots — its own
+data, marks, encodings — side by side on one canvas. The whole feature is one idea taken
+seriously: <strong>panels are rows</strong>. Each panel is a row of a virtual table, the panel container is an
+ordinary <code>rect</code> plot over that table, and arranging panels is the same problem as arranging
+marks — solved by the same layouts. There is no separate subplot engine to learn; everything you
+know about layouts, scales, and adornments transfers.</p>
+<p>Why that's worth understanding:</p>
+<ul>
+<li><strong>One layout vocabulary.</strong> <code>eqX</code> splits marks into columns, so it splits panels into columns.
+<code>bandX</code>'s <code>paddingInner</code> opens gaps between bars, so it opens gutters between panels. Any
+layout that can place a rect can place your dashboard.</li>
+<li><strong>Composition is free.</strong> Panels share the canvas's scale machinery: bind the same quantity in
+two panels and the domains union, the frames align, and the redundant interior axis merges
+away — no manual axis alignment.</li>
+<li><strong>Heterogeneity is the point.</strong> Facets repeat ONE spec over partitions of ONE dataset;
+subplots compose DIFFERENT specs — a scatter beside a bar chart beside a node-link diagram.</li>
+</ul>
+<h2 id="subplot-vs-subplots"><code>subplot()</code> vs <code>subplots()</code></h2>
+<p>Two calls, two orthogonal roles:</p>
 <table>
 <thead>
 <tr>
-<th>Input</th>
+<th>Call</th>
+<th>Role</th>
+<th>Cardinality</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>v.subplot()</code></td>
+<td><strong>content</strong> — appends one row <code>{ i: k }</code> to the node's virtual panels table, hosts a child in that row's rect, and returns the child's builder (<code>.dot(...)</code>, <code>.bar(...)</code>, …)</td>
+<td>once per panel</td>
+</tr>
+<tr>
+<td><code>v.subplots({ ...channels })</code></td>
+<td><strong>arrangement</strong> — binds channels (usually a layout's <code>.pick()</code>) on the shared container plot, over the whole panels table</td>
+<td>zero or one call</td>
+</tr>
+</tbody>
+</table>
+<p><code>subplot()</code> without <code>subplots()</code> is legal: with no layout bound, the panels' extents are <strong>holes</strong>
+and the constraint solver derives the split (two panels → half/half). So <code>subplots()</code> is an
+override — reach for it when you want a <em>specific</em> arrangement, not to make panels work at all.</p>
+<h2 id="the-virtual-panels-table">The virtual panels table</h2>
+<p>The table <code>subplots()</code> binds over is real — it just isn't yours. It is a synthesized <code>values</code>
+relation with one row per <code>subplot()</code> call:</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
 <th>Type</th>
-<th>Meaning</th>
+<th>Value</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>key</code></td>
-<td>unknown</td>
-<td>the index column whose distinct values become panels (<code>'i'</code>, <code>'species'</code>, …)</td>
+<td><code>i</code></td>
+<td>number</td>
+<td>the panel index — 0-based, in <code>subplot()</code> call order</td>
+</tr>
+<tr>
+<td><code>strip_label</code></td>
+<td>string</td>
+<td>present only when <code>v.strip([...labels])</code> injected labels (one per panel)</td>
 </tr>
 </tbody>
 </table>
-<p><code>.pick()</code> outputs:</p>
+<p>That is the whole schema, and it is exactly what a layout argument can name: <code>eqX(&quot;i&quot;)</code>,
+<code>eqY(&quot;i&quot;)</code>, <code>bandX(&quot;i&quot;)</code>. Channels not produced by the layout can still be bound as literals —
+a literal broadcasts to every panel row (e.g. one fixed <code>y</code>/<code>h</code> band for all panels).</p>
+<h2 id="choosing-a-layout">Choosing a layout</h2>
+<p>The container is a <code>rect</code>, so any <code>{x, w}</code> / <code>{y, h}</code> producer arranges the panels.</p>
+<p>Columns — <code>eqX(&quot;i&quot;)</code> splits the width equally:</p>
+<pre data-lang="dvl"><code class="lang-dvl">// two panels over the panel-index virtual table; both encode body_mass on y, so the
+// solver UNIONS that scale and the interior y-axis merges away — ONE axis speaks for both.
+const v = canvas(720, 300);
+v.subplot().dot(&quot;penguins&quot;, { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;) });
+v.subplot().dot(&quot;penguins&quot;, { x: linear(&quot;flipper_length_mm&quot;), y: linear(&quot;body_mass_g&quot;) });
+v.subplots({ ...eqX(&quot;i&quot;).pick(&quot;x&quot;, &quot;w&quot;) });
+return v;
+</code></pre>
+<p>Rows — same spec, swap the axis pair (<code>eqY</code> gives <code>{y, h}</code>):</p>
+<pre data-lang="dvl"><code class="lang-dvl">// stacked rows instead of columns: the X/Y pair convention applies to panels too.
+const v = canvas(720, 460);
+v.subplot().dot(&quot;penguins&quot;, { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;) });
+v.subplot().dot(&quot;penguins&quot;, { x: linear(&quot;flipper_length_mm&quot;), y: linear(&quot;body_mass_g&quot;) });
+v.subplots({ ...eqY(&quot;i&quot;).pick(&quot;y&quot;, &quot;h&quot;) });
+return v;
+</code></pre>
+<p>Gutters — <code>bandX</code> treats panel indices as a categorical band scale, so <code>paddingInner</code> opens
+space between panels exactly as it opens space between bars:</p>
+<pre data-lang="dvl"><code class="lang-dvl">// bandX over the panel index: paddingInner is the panel gutter.
+const v = canvas(720, 300);
+v.subplot().dot(&quot;penguins&quot;, { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;) });
+v.subplot().dot(&quot;penguins&quot;, { x: linear(&quot;flipper_length_mm&quot;), y: linear(&quot;body_mass_g&quot;) });
+v.subplots({ ...bandX(&quot;i&quot;, { paddingInner: 0.15 }).pick(&quot;x&quot;, &quot;w&quot;) });
+return v;
+</code></pre>
+<p>Mixed — a layout on one axis, pixel literals on the other (a literal broadcasts to every panel):</p>
+<pre data-lang="dvl"><code class="lang-dvl">// panels in a fixed-height strip: eqX solves x/w per panel; y/h are one pixel band.
+const v = canvas(720, 300);
+v.subplot().dot(&quot;penguins&quot;, { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;) });
+v.subplot().dot(&quot;penguins&quot;, { x: linear(&quot;flipper_length_mm&quot;), y: linear(&quot;body_mass_g&quot;) });
+v.subplots({ ...eqX(&quot;i&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: px(30), h: px(220) });
+return v;
+</code></pre>
+<h2 id="heterogeneous-panels">Heterogeneous panels</h2>
+<p>Each <code>subplot()</code> is an independent host — different tables, different marks. Titles ride the
+same virtual table: <code>v.strip([...])</code> injects <code>strip_label</code> and draws one label per panel
+(<code>v.strip()</code> with no argument labels by <code>i</code>).</p>
+<pre data-lang="dvl"><code class="lang-dvl">// a scatter beside a bar chart — two datasets, two mark types, one canvas.
+db.fromRows(&quot;budgets&quot;, [
+  { category: &quot;Eng&quot;, amount: 420 }, { category: &quot;Mkt&quot;, amount: 210 }, { category: &quot;Sales&quot;, amount: 180 },
+]);
+const v = canvas(720, 320);
+v.subplot().dot(&quot;penguins&quot;, { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), fill: ordinal(&quot;species&quot;) });
+v.subplot().bar(&quot;budgets&quot;, { ...bandX(&quot;category&quot;).pick(&quot;x&quot;, &quot;w&quot;), ...barY(&quot;amount&quot;, { zero: true }).pick(&quot;y&quot;, &quot;h&quot;), fill: &quot;#4e79a7&quot; });
+v.subplots({ ...eqX(&quot;i&quot;).pick(&quot;x&quot;, &quot;w&quot;) });
+v.strip([&quot;Penguins&quot;, &quot;Budget&quot;]);
+return v;
+</code></pre>
+<h2 id="subplots-vs-facets">Subplots vs facets</h2>
+<p>Both draw side-by-side panels; they answer different questions.</p>
 <table>
 <thead>
 <tr>
-<th>Output</th>
-<th>Space</th>
-<th>Meaning</th>
+<th></th>
+<th>Subplots</th>
+<th><a href="facets.html">Facets / nesting</a></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>x</code></td>
-<td>relative coord x</td>
-<td>panel left edge = <code>rank(key) / n</code></td>
+<td>Panels come from</td>
+<td>explicit <code>subplot()</code> calls (a virtual index table)</td>
+<td>the rows of a real table + a nest key</td>
 </tr>
 <tr>
-<td><code>w</code></td>
-<td>relative len x</td>
-<td>panel width = <code>1 / n</code> (the step)</td>
+<td>Content per panel</td>
+<td>anything — each panel is authored separately</td>
+<td>ONE spec, repeated over the key's partitions</td>
+</tr>
+<tr>
+<td>Panel count</td>
+<td>fixed by the spec</td>
+<td>driven by the data</td>
+</tr>
+<tr>
+<td>Use it for</td>
+<td>dashboard composition, before/after pairs, mixed chart types</td>
+<td>small multiples of the same chart</td>
 </tr>
 </tbody>
 </table>
-<p>Bind by spreading into a channel object: <code>...eqX('species').pick('x', 'w')</code>. <code>eqX</code> takes no
-options bag — spacing is exactly equal (use <code>bandX</code> if you want inner/outer padding).</p>
-<h2 id="examples">Examples</h2>
-<p>Two subplots over the panel index — the canonical form. <code>v.subplots({...})</code> binds the
-container's box channels from the virtual <code>i</code> table:</p>
-<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(720, 320);
-v.subplot().dot('penguins', { x: linear('bill_length_mm'),    y: linear('body_mass_g') });
-v.subplot().dot('penguins', { x: linear('flipper_length_mm'), y: linear('body_mass_g') });
-v.subplots({ ...eqX('i').pick('x', 'w') });
-return v;
-</code></pre>
-<p>Data-driven small multiples — one panel per <strong>row of a host table</strong>. The <code>species</code> rect table is
-the container; <code>eqX('species')</code> lays out its panels; the nested dot layer is keyed on species:</p>
-<pre data-lang="dvl"><code class="lang-dvl">const species = db.table('penguins').groupby(['species'], {});  // one row per species (distinct)
-const v = canvas(760, 260);
-v.rect(species, { ...eqX('species').pick('x', 'w'), y: px(12), h: 236, fill: '#f5f6fa' })
- .dot('penguins',
-   { x: linear('bill_length_mm'), y: linear('body_mass_g'), fill: '#4e79a7' },
-   { on: 'species' });   // child.species = host.species
-return v;
-</code></pre>
-<p>Free (per-panel) scales — <code>shared: false</code> trains a domain <strong>per panel</strong> so each panel's axis
-spans its own species' range and the points fill every panel:</p>
-<pre data-lang="dvl"><code class="lang-dvl">const species = db.table('penguins').groupby(['species'], {});
-const v = canvas(760, 260);
-v.rect(species, { ...eqX('species').pick('x', 'w'), y: px(12), h: 236, fill: '#f5f6fa' })
- .dot('penguins',
-   { x: linear('bill_length_mm', { shared: false }),
-     y: linear('body_mass_g',    { shared: false }), fill: '#59a14f' },
-   { on: 'species' });
-return v;
-</code></pre>
-<p>The general nesting mechanism — the container rect is itself encoded (an ordinal fill), and
-<code>nest()</code> opens the template explicitly so you can add as many keyed layers as you like:</p>
-<pre data-lang="dvl"><code class="lang-dvl">const species = db.table('penguins').groupby(['species'], {});
-const v = canvas(760, 260);
-const cell = v.rect(species,
-    { ...eqX('species').pick('x', 'w'), y: px(12), h: 236, fill: ordinal('species') })
-  .nest('penguins', { on: 'species' });
-cell.dot({ x: linear('bill_length_mm'), y: linear('body_mass_g'), fill: '#ffffff' });
-return v;
-</code></pre>
-<p>The partition model — <code>eqX</code> lays out one rect per distinct community, and a nested <code>force</code> runs
-per panel. <code>eqX</code> supplies only the panel <code>x</code>/<code>w</code>; the panel's <code>y</code>/<code>h</code> are pixel literals:</p>
-<pre data-lang="dvl"><code class="lang-dvl">const communities = db.table('members').groupby(['community'], {});  // distinct communities
-db.declareFK({ fromTable: 'members', fromCols: ['community'],
-               toTable: communities.name, toCols: ['community'] });
-const v = canvas(760, 360);
-const panel = v.rect(communities, {
-  ...eqX('community').pick('x', 'w'), y: px(12), h: 330, fill: '#f5f6fa',
-});
-panel.nest('members', { on: 'community' }).dot({
-  ...force('follows').pick('x', 'y'),
-  r: 6, fill: ordinal('community'),
-});
-return v;
-</code></pre>
-<p>No layout at all — for the record, <code>eqX</code> is what you'd reach for to force a row, but you often
-don't need it: two panels that <strong>share</strong> a scale let the solver infer the row on its own:</p>
-<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(720, 320);
-v.subplot().dot('penguins', { x: linear('bill_length_mm'),    y: linear('body_mass_g') });
-v.subplot().dot('penguins', { x: linear('flipper_length_mm'), y: linear('body_mass_g') });
-// no v.subplots(...): the shared y makes the solver place the panels side by side
-return v;
-</code></pre>
+<p>If your panels are &quot;the same chart per species&quot;, nest. If they are &quot;these two charts, together&quot;,
+subplot.</p>
 <h2 id="see-also">See also</h2>
 <ul>
-<li><a href="eqY.html">eqY</a> — the y-mirror; distinct keys → equal <strong>vertical</strong> split (row facets)</li>
-<li><a href="bandX.html">bandX</a> — the same rank→step shape as a trained categorical scale (with padding options)</li>
-<li><a href="proportionalX.html">proportionalX</a> — panels sized by a <strong>value</strong> instead of equally</li>
-<li><a href="treemap.html">treemap</a> — 2D space partition when one row of panels isn't enough</li>
-<li><a href="force.html">force</a> — composes with <code>eqX</code> panels via <code>.nest(...)</code> for a per-panel simulation</li>
+<li><a href="facets.html">Facets and nesting</a> — homogeneous small multiples driven by a nest key</li>
+<li><a href="layouts.html">Layouts</a> — the arrangement operators panels reuse (<code>eqX</code>/<code>eqY</code>, <code>bandX</code>, the X/Y pair convention)</li>
+<li><a href="scales.html">Scales</a> — domain sharing, which is what merges the redundant interior axes</li>
 </ul>
 
     </article>

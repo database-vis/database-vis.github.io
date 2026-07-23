@@ -38,57 +38,62 @@
       
         
         
-        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        <li><a href="../features/README.html">Overview</a></li>
         
       
         
         
-        <li><a href="../features/README.html#channels">Channels</a></li>
+        <li><a href="../features/plots.html">Plots and marks</a></li>
         
       
         
         
-        <li><a href="../features/README.html#scales">Scales</a></li>
+        <li><a href="../features/channels.html">Channels</a></li>
         
       
         
         
-        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        <li><a href="../features/scales.html">Scales</a></li>
         
       
         
         
-        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        <li><a href="../features/layouts.html">Layouts</a></li>
         
       
         
         
-        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        <li><a href="../features/frame.html">The frame</a></li>
         
       
         
         
-        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        <li><a href="../features/join-paths.html">Join paths</a></li>
         
       
         
         
-        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        <li><a href="../features/facets.html">Facets and nesting</a></li>
         
       
         
         
-        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        <li><a href="../features/via.html">Via</a></li>
         
       
         
         
-        <li><a href="../features/README.html#data">Data</a></li>
+        <li><a href="../features/subplots.html">Subplots</a></li>
         
       
         
         
-        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        <li><a href="../features/data.html">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/debugging.html">Debugging</a></li>
         
       
       </ul>
@@ -446,7 +451,7 @@ const v = canvas(260, 460);
 const bars = v.rect(revenue, { ...proportionalY('amount').pick('y', 'h'), x: px(40), w: 140,
                               fill: ordinal('category'), stroke: '#fff' });
 v.text(revenue, {
-  ...bars.via(eq('category', 'category')).pick({ x: 'x', y: 'y', w: 'w', h: 'h' }),
+  ...bars.via('category').pick({ x: 'x', y: 'y', w: 'w', h: 'h' }),
   ...fitText(),
   text: field('category'), anchor: 'middle', baseline: 'middle', fill: '#fff',
 });

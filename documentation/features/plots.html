@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>dot · DVL</title>
+  <title>Plots and marks · DVL</title>
   <meta name="description" content="DVL — the constraint-based visualization-to-SQL language">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css">
   <link rel="stylesheet" href="../assets/styles.css">
@@ -43,7 +43,7 @@
       
         
         
-        <li><a href="../features/plots.html">Plots and marks</a></li>
+        <li class="active"><a href="../features/plots.html">Plots and marks</a></li>
         
       
         
@@ -138,7 +138,7 @@
       
         
         
-        <li class="active"><a href="../marks/dot.html">dot</a></li>
+        <li><a href="../marks/dot.html">dot</a></li>
         
       
         
@@ -362,195 +362,58 @@
 
   <main class="content">
     <article class="markdown-section">
-      <h1 id="dot">dot</h1>
-<p>The <code>dot</code> mark emits one <code>&lt;circle&gt;</code> per row. <code>x</code> and <code>y</code> place its centre through positional
-scales; <code>r</code> is its pixel radius; <code>fill</code>/<code>stroke</code> paint it. It is the point mark (Vega-Lite
-point/circle/square, Plot dot) — the workhorse for scatterplots and, layered, for anything that
-sits <em>on</em> a placed point.</p>
-<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
-v.dot(&quot;penguins&quot;, {
-  x: linear(&quot;bill_length_mm&quot;),
-  y: linear(&quot;flipper_length_mm&quot;),
-  fill: ordinal(&quot;species&quot;),
-});
-return v;
-</code></pre>
-<p>Bill length versus flipper length, one circle per bird, coloured by species. The <code>linear</code> scales
-train their domains from the data; <code>ordinal</code> maps each species to a categorical palette entry.</p>
-<h2 id="options">Options</h2>
-<p><code>x</code>/<code>y</code> are the only required channels. Everything else has a draw-time default (radius 3, black
-fill). A bare string on any channel is a <strong>literal</strong>, not a column — <code>fill: &quot;species&quot;</code> paints every
-dot the CSS colour <code>species</code>; use <code>field(&quot;species&quot;)</code> (from <code>$lib/dvl/ir/expr</code>) or a scale binding
-to read a column.</p>
-<table>
-<thead>
-<tr>
-<th>channel</th>
-<th>kind</th>
-<th>default</th>
-<th>meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>x</code></td>
-<td>positional-x</td>
-<td>—</td>
-<td>centre x (scale binding, layout output, or pixel literal)</td>
-</tr>
-<tr>
-<td><code>y</code></td>
-<td>positional-y</td>
-<td>—</td>
-<td>centre y</td>
-</tr>
-<tr>
-<td><code>r</code></td>
-<td>pixel</td>
-<td>3</td>
-<td>radius in pixels (bind a scale for a bubble chart)</td>
-</tr>
-<tr>
-<td><code>shape</code></td>
-<td>shape</td>
-<td>circle</td>
-<td>glyph shape</td>
-</tr>
-<tr>
-<td><code>fill</code></td>
-<td>color</td>
-<td>black</td>
-<td>interior paint</td>
-</tr>
-<tr>
-<td><code>stroke</code></td>
-<td>color</td>
-<td>none</td>
-<td>outline paint</td>
-</tr>
-<tr>
-<td><code>strokeWidth</code></td>
-<td>pixel</td>
-<td>—</td>
-<td>outline width</td>
-</tr>
-<tr>
-<td><code>strokeDasharray</code></td>
-<td>text</td>
-<td>—</td>
-<td>SVG dash pattern</td>
-</tr>
-<tr>
-<td><code>opacity</code></td>
-<td>number</td>
-<td>1</td>
-<td>whole-mark opacity</td>
-</tr>
-<tr>
-<td><code>fillOpacity</code></td>
-<td>number</td>
-<td>1</td>
-<td>interior opacity</td>
-</tr>
-<tr>
-<td><code>strokeOpacity</code></td>
-<td>number</td>
-<td>1</td>
-<td>outline opacity</td>
-</tr>
-<tr>
-<td><code>title</code></td>
-<td>text</td>
-<td>—</td>
-<td>per-mark hover tooltip (SVG <code>&lt;title&gt;</code>); also a join carrier for <code>via</code></td>
-</tr>
-</tbody>
-</table>
-<p><code>r</code> and <code>strokeWidth</code> are pixel channels scaled on both axes. A dot is centered on <code>(x, y)</code> by
-nature — it has no <code>anchor</code> option (unlike the box marks <code>rect</code>/<code>image</code>).</p>
-<h2 id="examples">Examples</h2>
-<p>Colour <em>and</em> size encoded — a bubble chart. <code>r</code> is a raw <strong>pixel</strong> radius, so drive it with a
-channel expression: <code>sqrt(body_mass_g)</code> makes the <em>area</em> (∝ r²) proportional to mass, and <code>/ 10</code>
-scales the bubbles to a legible range. (A size <em>scale</em> — <code>sqrt(&quot;body_mass_g&quot;)</code> — is the wrong tool
-here: scales emit a relative <code>[0, 1]</code>, which the frame affine turns into pixels only for
-<em>positional</em> channels; on a bare radius that <code>[0, 1]</code> is sub-pixel, so the dots vanish.)</p>
-<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
-v.dot(&quot;penguins&quot;, {
-  x: linear(&quot;bill_length_mm&quot;),
-  y: linear(&quot;bill_depth_mm&quot;),
-  r: cexpr`sqrt(body_mass_g) / 10`,   // area ∝ mass; the /10 keeps radii in a legible px range
-  fill: ordinal(&quot;species&quot;),
-  fillOpacity: 0.7,
-});
-return v;
-</code></pre>
-<p>Two layers over one table, sharing the same <code>x</code>/<code>y</code> scale objects, so the label lands <em>on</em> its dot
-rather than re-deriving a position. <code>field</code> reads a column; <code>dx</code>/<code>dy</code> nudge the label a few pixels.</p>
-<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
+      <h1 id="plots-and-marks">Plots and marks</h1>
+<p>A <strong>plot</strong> is one mark type over one source relation; a <strong>canvas</strong> hosts plots and solves their
+shared frame. Marks are deliberately simple — a channel list and a draw function — so all
+intelligence about position lives in scales and layouts. Covers: <code>canvas</code>, the mark methods,
+layering order, containers (<code>rect</code>/<code>bar</code>/<code>cell</code> can host nested plots), and <code>params</code>.</p>
+<pre data-lang="dvl"><code class="lang-dvl">// three layers over one canvas share a frame: the cloud, a per-species highlight
+// (modelled inline on the db branch), and labels riding the highlight's scales.
+const heaviest = db.table(&quot;penguins&quot;).top(1, { col: &quot;body_mass_g&quot;, desc: true }, { partition: [&quot;species&quot;] });
+const v = canvas(640, 360);
 const x = linear(&quot;bill_length_mm&quot;), y = linear(&quot;body_mass_g&quot;);
 v.dot(&quot;penguins&quot;, { x, y, fill: &quot;#cfd3dc&quot; });
-v.text(&quot;penguins&quot;, {
-  x, y,   // same scale objects → the label is placed relative to its dot
-  text: field(&quot;species&quot;), dx: 6, dy: -6, anchor: &quot;start&quot;, fontSize: 10, fill: &quot;#333&quot;,
-});
+v.dot(heaviest, { x, y, r: 5, fill: &quot;#e15759&quot; });
+v.text(heaviest, { x, y, text: field(&quot;species&quot;), dx: 8, anchor: &quot;start&quot;, fontSize: 10, fill: &quot;#333&quot; });
 return v;
 </code></pre>
-<p><strong>Shared scales across two tables.</strong> Reusing the same <code>x</code>/<code>y</code> objects across marks over <em>different</em>
-tables declares them the same quantity: the compiler unions the domains, so both layers share one
-frame and compare directly. The highlights (heaviest bird per species) are modelled inline.</p>
-<pre data-lang="dvl"><code class="lang-dvl">const highlights = db.table(&quot;penguins&quot;).top(1, { col: &quot;body_mass_g&quot;, desc: true }, { partition: [&quot;species&quot;] });
-const v = canvas(640, 440);
-const x = linear(&quot;bill_length_mm&quot;);
-const y = linear(&quot;body_mass_g&quot;);
-v.dot(&quot;penguins&quot;,  { x, y, fill: &quot;#cfd3dc&quot; });  // the full cloud
-v.dot(highlights,  { x, y, fill: &quot;#e15759&quot; });  // the heaviest bird per species
-return v;
-</code></pre>
-<p><strong>Axes.</strong> Ask a plot for its axes; each is lowered to an ordinary tick+text plot over the scale.</p>
-<pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
-v.dot(&quot;penguins&quot;, {
-  x: linear(&quot;bill_length_mm&quot;),
-  y: linear(&quot;body_mass_g&quot;),
-  fill: ordinal(&quot;species&quot;),
-}).axis(&quot;x&quot;).axis(&quot;y&quot;).legend(&quot;fill&quot;);
-return v;
-</code></pre>
-<p><strong>Faceted (small multiples).</strong> A container <code>rect</code> per species hosts a nested dot plot keyed on
-species. The panel count comes from the data; shared scales make every panel's range identical.</p>
-<pre data-lang="dvl"><code class="lang-dvl">const species = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;], {});  // one row per species
-const v = canvas(760, 260);
-v.rect(species, { ...eqX(&quot;species&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: px(12), h: 236, fill: &quot;#f5f6fa&quot; })
- .dot(&quot;penguins&quot;,
-   { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), fill: &quot;#4e79a7&quot; },
-   { on: &quot;species&quot; });
-return v;
-</code></pre>
-<p><strong>Parallel coordinates.</strong> One normalized dot plot per attribute at a fixed x; <code>title</code> carries a
-stable tuple key so <code>link.via</code> can reconstruct each tuple's polyline across adjacent axes.</p>
-<pre data-lang="dvl"><code class="lang-dvl">const p = db.table(&quot;penguins&quot;).withKey(&quot;id&quot;);
-const attrs = [&quot;bill_length_mm&quot;, &quot;bill_depth_mm&quot;, &quot;flipper_length_mm&quot;, &quot;body_mass_g&quot;];
-const xs = [90, 300, 500, 670];
-const v = canvas(740, 460);
-const axes = attrs.map((a, i) =&gt; v.dot(p, {
-  x: px(xs[i]), y: linear(a, { axis: false }),
-  r: 3, fill: ordinal(&quot;species&quot;), title: field(&quot;id&quot;),
-}));
-for (let i = 0; i &lt; attrs.length - 1; i++) {
-  v.link(p, {
-    ...axes[i].via(&quot;id&quot;).pick({ x1: &quot;x&quot;, y1: &quot;y&quot; }),
-    ...axes[i + 1].via(&quot;id&quot;).pick({ x2: &quot;x&quot;, y2: &quot;y&quot; }),
-    stroke: ordinal(&quot;species&quot;), strokeWidth: 1, strokeOpacity: 0.3,
-  });
-}
-return v;
-</code></pre>
+<h2 id="the-canvas">The canvas</h2>
+<p><code>canvas(width, height)</code> creates the root container. It owns the pixel box every plot shares:
+plots emit normalized positions, and the canvas's frame solves the arrangement and maps them to
+pixels (see <a href="frame.html">The frame</a>). All plots added to one canvas participate in the same
+constraint solve, so their axes, gutters, and panels are laid out together. A DVL program ends
+with <code>return v;</code> — the canvas is the value that renders.</p>
+<h2 id="the-mark-methods">The mark methods</h2>
+<p>Each mark is a method on the canvas (or on a container plot): <code>v.&lt;mark&gt;(source, channels)</code>.
+The source is a table name or a derived relation; the channels object binds each of the mark's
+declared channels to a value — a scale, a layout output via <code>.pick()</code>, a literal, an
+expression, or a cross-mark reference (see <a href="channels.html">Channels</a>).</p>
+<p>The built-in marks — each has its own reference page under <a href="../marks/README.html">marks/</a>:</p>
+<ul>
+<li><strong>Point-like:</strong> <code>dot</code> (circles, <code>r</code> in pixels), <code>cell</code> (grid cell), <code>image</code>, <code>text</code>.</li>
+<li><strong>Box-like:</strong> <code>rect</code>, <code>bar</code> — the container-eligible family together with <code>cell</code>.</li>
+<li><strong>Sequence marks</strong> (N rows → paths/segments per series): <code>line</code>, <code>path</code>, <code>area</code>, <code>connect</code> —
+these also take an <code>order</code> channel (default <code>x</code>) that sets point sequence.</li>
+<li><strong>Segments and connectors:</strong> <code>rule</code>, <code>link</code>, <code>bezier</code>, <code>arrow</code>, <code>vector</code>, <code>tick</code>.</li>
+</ul>
+<p>A mark method returns a plot handle. The handle carries the per-plot directives seen throughout
+these pages: <code>.axis(dim, opts)</code> and <code>.legend(channel)</code> attach guides, <code>.via(path)</code> lets other
+plots borrow this plot's solved positions, and container plots add nested layers with further
+mark calls (below).</p>
+<h2 id="layering-order">Layering order</h2>
+<p>Layers draw in call order: the first plot added to a canvas renders first (bottom), later
+plots render on top. In the example above the gray cloud is called first, the red highlights
+second, and the labels last — so the labels sit above both.</p>
+<h2 id="containers">Containers</h2>
+<p><code>rect</code>, <code>bar</code>, and <code>cell</code> can host nested plots: a mark call chained on a container's handle
+draws inside each container instance rather than on the canvas. With a nest key this is how
+small multiples work — see <a href="facets.html">Facets and nesting</a> and <a href="subplots.html">Subplots</a>.</p>
 <h2 id="see-also">See also</h2>
 <ul>
-<li><a href="./rect.html">rect</a> — the container mark; a &quot;squared&quot; dot when given <code>w</code>/<code>h</code></li>
-<li><a href="./cell.html">cell</a> — a positioned box with no explicit size</li>
-<li><a href="./line.html">line</a> — the aggregate sibling: N dots collapse to one path</li>
-<li><a href="./text.html">text</a> — labels layered onto placed dots</li>
-<li><a href="./link.html">link</a> — connectors that borrow dot positions; <code>route()</code> clips an edge endpoint to a dot's circle</li>
+<li><a href="channels.html">Channels</a> — how channel values bind</li>
+<li><a href="../marks/README.html">Marks reference</a> — per-mark channels and options</li>
+<li><a href="scales.html">Scales</a> · <a href="layouts.html">Layouts</a> — where position intelligence lives</li>
+<li><a href="frame.html">The frame</a> — how normalized positions become pixels</li>
 </ul>
 
     </article>

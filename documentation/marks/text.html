@@ -38,57 +38,62 @@
       
         
         
-        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        <li><a href="../features/README.html">Overview</a></li>
         
       
         
         
-        <li><a href="../features/README.html#channels">Channels</a></li>
+        <li><a href="../features/plots.html">Plots and marks</a></li>
         
       
         
         
-        <li><a href="../features/README.html#scales">Scales</a></li>
+        <li><a href="../features/channels.html">Channels</a></li>
         
       
         
         
-        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        <li><a href="../features/scales.html">Scales</a></li>
         
       
         
         
-        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        <li><a href="../features/layouts.html">Layouts</a></li>
         
       
         
         
-        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        <li><a href="../features/frame.html">The frame</a></li>
         
       
         
         
-        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        <li><a href="../features/join-paths.html">Join paths</a></li>
         
       
         
         
-        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        <li><a href="../features/facets.html">Facets and nesting</a></li>
         
       
         
         
-        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        <li><a href="../features/via.html">Via</a></li>
         
       
         
         
-        <li><a href="../features/README.html#data">Data</a></li>
+        <li><a href="../features/subplots.html">Subplots</a></li>
         
       
         
         
-        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        <li><a href="../features/data.html">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/debugging.html">Debugging</a></li>
         
       
       </ul>
@@ -504,7 +509,7 @@ const bars = v.bar(&quot;penguins&quot;, {
   fill: ordinal(&quot;species&quot;),
 });
 v.text(&quot;penguins&quot;, {
-  ...bars.via(eq(&quot;species&quot;, &quot;species&quot;)).pick({ x: &quot;x&quot;, y: &quot;y&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
+  ...bars.via(&quot;species&quot;).pick({ x: &quot;x&quot;, y: &quot;y&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
   text: field(&quot;species&quot;), anchor: &quot;middle&quot;, baseline: &quot;middle&quot;, fill: &quot;#fff&quot;, fontSize: 11,
 });
 return v;
@@ -522,7 +527,7 @@ const bars = v.bar(revenue, {
   fill: ordinal(&quot;category&quot;),
 });
 v.text(revenue, {
-  ...bars.via(eq(&quot;category&quot;, &quot;category&quot;)).pick({ x: &quot;x&quot;, y: &quot;y&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
+  ...bars.via(&quot;category&quot;).pick({ x: &quot;x&quot;, y: &quot;y&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
   ...fitText({ rotate: true }).pick(&quot;fontSize&quot;, &quot;rotate&quot;),
   text: field(&quot;category&quot;), anchor: &quot;middle&quot;, baseline: &quot;middle&quot;, fill: &quot;#fff&quot;,
 });
@@ -539,7 +544,7 @@ const rects = v.rect(revenue, {
   fill: ordinal(&quot;category&quot;), stroke: &quot;#fff&quot;,
 });
 v.text(revenue, {
-  ...rects.via(eq(&quot;category&quot;, &quot;category&quot;)).pick({ x: &quot;x&quot;, y: &quot;y&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
+  ...rects.via(&quot;category&quot;).pick({ x: &quot;x&quot;, y: &quot;y&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
   ...fitText({ shared: true }),
   text: field(&quot;category&quot;), anchor: &quot;middle&quot;, baseline: &quot;middle&quot;, fill: &quot;#333&quot;,
 });
@@ -556,7 +561,7 @@ const rects = v.rect(revenue, {
   fill: ordinal(&quot;category&quot;), stroke: &quot;#fff&quot;,
 });
 v.text(revenue, {
-  ...rects.via(eq(&quot;category&quot;, &quot;category&quot;)).pick({ x: &quot;x&quot;, y: &quot;y&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
+  ...rects.via(&quot;category&quot;).pick({ x: &quot;x&quot;, y: &quot;y&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
   ...fitText({ wrap: true, rotate: false }).pick(&quot;fontSize&quot;, &quot;lines&quot;),
   text: field(&quot;category&quot;), anchor: &quot;middle&quot;, baseline: &quot;middle&quot;, fill: &quot;#333&quot;,
 });

@@ -38,57 +38,62 @@
       
         
         
-        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        <li><a href="../features/README.html">Overview</a></li>
         
       
         
         
-        <li><a href="../features/README.html#channels">Channels</a></li>
+        <li><a href="../features/plots.html">Plots and marks</a></li>
         
       
         
         
-        <li><a href="../features/README.html#scales">Scales</a></li>
+        <li><a href="../features/channels.html">Channels</a></li>
         
       
         
         
-        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        <li><a href="../features/scales.html">Scales</a></li>
         
       
         
         
-        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        <li><a href="../features/layouts.html">Layouts</a></li>
         
       
         
         
-        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        <li><a href="../features/frame.html">The frame</a></li>
         
       
         
         
-        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        <li><a href="../features/join-paths.html">Join paths</a></li>
         
       
         
         
-        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        <li><a href="../features/facets.html">Facets and nesting</a></li>
         
       
         
         
-        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        <li><a href="../features/via.html">Via</a></li>
         
       
         
         
-        <li><a href="../features/README.html#data">Data</a></li>
+        <li><a href="../features/subplots.html">Subplots</a></li>
         
       
         
         
-        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        <li><a href="../features/data.html">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/debugging.html">Debugging</a></li>
         
       
       </ul>
@@ -439,7 +444,7 @@ is niceable. Ticks use the <code>nice-linear</code> algorithm.</p>
 <p><strong>On a colour channel</strong> any continuous scale is a <strong>sequential ramp</strong>: bind <code>linear(&quot;col&quot;)</code> to
 <code>fill</code>/<code>stroke</code> and its <code>t</code> indexes a 256-step colour ramp (default scheme <code>blues</code>) — smooth, not
 banded. The legend for a continuous colour is a <strong>gradient bar</strong>, not swatches. (The explicit-intent
-factory for this is <a href="../features/README.html"><code>color</code></a>; <code>linear</code> on a colour channel is identical.)</p>
+factory for this is <a href="color.html"><code>color</code></a>; <code>linear</code> on a colour channel is identical.)</p>
 <h2 id="examples">Examples</h2>
 <p>Explicit domain — force the y-axis to start at zero regardless of the data minimum.</p>
 <pre data-lang="dvl"><code class="lang-dvl">const v = canvas(640, 460);
@@ -486,7 +491,7 @@ v.rect(species, { ...eqX(&quot;species&quot;).pick(&quot;x&quot;, &quot;w&quot;)
  .dot(&quot;penguins&quot;,
    { x: linear(&quot;bill_length_mm&quot;, { shared: false }),
      y: linear(&quot;body_mass_g&quot;,    { shared: false }), fill: &quot;#59a14f&quot; },
-   { on: eq(&quot;species&quot;, &quot;species&quot;) });
+   { on: &quot;species&quot; });
 return v;
 </code></pre>
 <p>Datum in the domain — a deferred scale lets a constant reference line share the frame's units.

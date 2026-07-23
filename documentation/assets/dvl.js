@@ -104,6 +104,13 @@ var init_svg_pen = __esm({
 });
 
 // src/lib/dvl/ir/plot.ts
+var BOX_EDGE_ATTRS = {
+  left: "dvl_x0",
+  right: "dvl_x1",
+  top: "dvl_y0",
+  bottom: "dvl_y1"
+};
+var BOX_ATTRS = new Set(Object.values(BOX_EDGE_ATTRS));
 var isRelationSource = (s) => typeof s === "object" && s !== null && "relation" in s;
 var isProducerSource = (s) => typeof s === "object" && s !== null && "producer" in s;
 var isUnitSource = (s) => (typeof s === "object" || typeof s === "function") && s !== null && "__unit" in s && s.__unit === "unit-source";
@@ -2293,14 +2300,14 @@ var CELL_RE = /\{([A-Za-z_][A-Za-z0-9_]*)\}/y;
 function rewriteSql(body, opts) {
   let out = "";
   let i = 0;
-  const len3 = body.length;
-  while (i < len3) {
+  const len2 = body.length;
+  while (i < len2) {
     const ch = body[i];
     if (ch === "'" || ch === '"') {
       const quote = ch;
       out += ch;
       i++;
-      while (i < len3) {
+      while (i < len2) {
         const c2 = body[i];
         out += c2;
         i++;
@@ -5739,14 +5746,14 @@ var routeComponent = op({
       if (a1 === void 0 || a22 === void 0)
         return { ...r, [ox1]: r[c1.ax] ?? null, [oy1]: r[c1.ay] ?? null, [ox2]: r[c2.ax] ?? null, [oy2]: r[c2.ay] ?? null };
       const dx = a22.cx - a1.cx, dy = a22.cy - a1.cy;
-      const len3 = Math.hypot(dx, dy);
+      const len2 = Math.hypot(dx, dy);
       const centers = { ...r, [ox1]: a1.cx, [oy1]: a1.cy, [ox2]: a22.cx, [oy2]: a22.cy };
-      if (len3 === 0)
+      if (len2 === 0)
         return centers;
       const t1 = a1.boxed ? exitT(a1, dx, dy) : 0;
       const t2 = a22.boxed ? exitT(a22, -dx, -dy) : 0;
-      const p1 = t1 + (a1.boxed ? pad / len3 : 0);
-      const p2 = t2 + (a22.boxed ? pad / len3 : 0);
+      const p1 = t1 + (a1.boxed ? pad / len2 : 0);
+      const p2 = t2 + (a22.boxed ? pad / len2 : 0);
       if (p1 + p2 >= 1)
         return centers;
       return {
@@ -5941,12 +5948,12 @@ var drawHull = (r, pen) => {
 var least = (a3, b2) => bin("/", bin("-", bin("+", a3, b2), unary("abs", bin("-", a3, b2))), lit(2));
 var greatest = (a3, b2) => bin("/", bin("+", bin("+", a3, b2), unary("abs", bin("-", a3, b2))), lit(2));
 var half = (c2) => bin("/", mcol(c2), lit(2));
-function boxAxis(ctx, pos, len3, pos2) {
+function boxAxis(ctx, pos, len2, pos2) {
   if (!ctx.bound.has(pos))
     return void 0;
   const p2 = mcol(pos);
-  if (ctx.bound.has(len3)) {
-    return ctx.anchor === "center" ? [bin("-", p2, half(len3)), bin("+", p2, half(len3))] : [p2, bin("+", p2, mcol(len3))];
+  if (ctx.bound.has(len2)) {
+    return ctx.anchor === "center" ? [bin("-", p2, half(len2)), bin("+", p2, half(len2))] : [p2, bin("+", p2, mcol(len2))];
   }
   if (ctx.bound.has(pos2))
     return [least(p2, mcol(pos2)), greatest(p2, mcol(pos2))];
@@ -6079,9 +6086,9 @@ var markComponents = [
     draw: (r, pen) => {
       const x3 = num(r, "x");
       const y3 = num(r, "y");
-      const len3 = num(r, "length");
+      const len2 = num(r, "length");
       const a3 = num(r, "angle");
-      pen.line(x3, y3, x3 + len3 * Math.cos(a3), y3 + len3 * Math.sin(a3), styleOf(r));
+      pen.line(x3, y3, x3 + len2 * Math.cos(a3), y3 + len2 * Math.sin(a3), styleOf(r));
     }
   }),
   // tick orientation: "vertical" (x-axis, extends in y) | "horizontal" (y-axis, extends in x).
@@ -6094,11 +6101,11 @@ var markComponents = [
     draw: (r, pen) => {
       const x3 = num(r, "x");
       const y3 = num(r, "y");
-      const len3 = num(r, "len", 4);
+      const len2 = num(r, "len", 4);
       if (str(r, "orient") === "horizontal")
-        pen.line(x3, y3, x3 - len3, y3, styleOf(r));
+        pen.line(x3, y3, x3 - len2, y3, styleOf(r));
       else
-        pen.line(x3, y3, x3, y3 + len3, styleOf(r));
+        pen.line(x3, y3, x3, y3 + len2, styleOf(r));
     }
   }),
   // text & image (VL/Plot text, image). dx/dy: PIXEL nudges the draw applies after placement
@@ -6880,7 +6887,7 @@ async function asRows(data, run) {
 }
 
 // src/lib/dvl/components/internal/ops/vtable-op.ts
-var clampCount = (len3) => Number.isFinite(len3) ? Math.max(2, Math.min(10, Math.round(Math.abs(len3) / 60))) : 5;
+var clampCount = (len2) => Number.isFinite(len2) ? Math.max(2, Math.min(10, Math.round(Math.abs(len2) / 60))) : 5;
 function tickCountFor(store, extent) {
   const lo = Number(store.read(extent[0]));
   const hi = Number(store.read(extent[1]));
@@ -6921,8 +6928,8 @@ async function vtableOp(op2, store, ctx) {
       const iHi = Number(store.read(p2.insetHi));
       cells = boxRows.map((b2) => {
         const r = b2;
-        const len3 = Number(p2.countFrom === "x" ? r.w : r.h) - iLo - iHi;
-        return { k: Number(r.dvl_mark), count: p2.count ?? clampCount(len3) };
+        const len2 = Number(p2.countFrom === "x" ? r.w : r.h) - iLo - iHi;
+        return { k: Number(r.dvl_mark), count: p2.count ?? clampCount(len2) };
       });
     } else {
       const cnt = p2.count ?? 5;
@@ -6931,14 +6938,14 @@ async function vtableOp(op2, store, ctx) {
     cells.sort((a3, b2) => a3.k - b2.k);
     const rows = [];
     let schema = [];
-    for (const cell3 of cells) {
-      const drows = keyedDomain ? groups.get(cell3.k) : domain2.rows;
+    for (const cell2 of cells) {
+      const drows = keyedDomain ? groups.get(cell2.k) : domain2.rows;
       if (drows === void 0 || drows.length === 0)
         continue;
-      const one = await genTicks(algo, paramsFor(drows), { column: p2.column, count: cell3.count }, jsRel([], []), "js", ctx.run);
+      const one = await genTicks(algo, paramsFor(drows), { column: p2.column, count: cell2.count }, jsRel([], []), "js", ctx.run);
       schema = one.schema;
       for (const t2 of one.rows)
-        rows.push({ [p2.by]: cell3.k, ...t2 });
+        rows.push({ [p2.by]: cell2.k, ...t2 });
     }
     if (rows.length === 0) {
       store.write(op2.writes[0], sqlRel(mkFrag(`${op2.id}:off`, `SELECT * FROM (VALUES (0, 0, 0.0, '')) AS _v("${p2.by}", idx, "${p2.column}", label) WHERE FALSE`, {}, { columns: [{ name: p2.by, type: "int" }, { name: "idx", type: "int" }, { name: p2.column, type: "double" }, { name: "label", type: "varchar" }] })), "assigned");
@@ -7810,7 +7817,7 @@ function desugarRouteInputs(ctx, channels) {
       const edges = boxable ? boxEdgesOf(refPlot, desc) : void 0;
       if (edges?.left !== void 0 && edges.right !== void 0 && edges.top !== void 0 && edges.bottom !== void 0) {
         refPlot.needsBox = true;
-        for (const [suffix, attr3, axis] of [["x0", "dvl_x0", "x"], ["y0", "dvl_y0", "y"], ["x1", "dvl_x1", "x"], ["y1", "dvl_y1", "y"]]) {
+        for (const [suffix, attr3, axis] of [["x0", BOX_EDGE_ATTRS.left, "x"], ["y0", BOX_EDGE_ATTRS.top, "y"], ["x1", BOX_EDGE_ATTRS.right, "x"], ["y1", BOX_EDGE_ATTRS.bottom, "y"]]) {
           channels[`dvl_b${k2}_${suffix}`] = tableRef(refPlot.id, attr3, h2.via.on, { space: pixelSpace(coord(axis)), arity: "per-row" });
         }
         if (p2.options[`shape${k2}`] === void 0)
@@ -8269,12 +8276,16 @@ var NodeBuilder = class {
     return new PlotBuilder(this.ctx, this.nodeId, plotId).child();
   }
   /** Choose the panels' LAYOUT exactly as any data plot chooses one — channel bindings over the
-   *  virtual table (WULAYOUT_IMPL §C6): `v.subplots({ x: eqx("i") })`. Unbound channels stay holes. */
+   *  virtual table (WULAYOUT_IMPL §C6): `v.subplots({ x: eqx("i") })`. Unbound channels stay holes.
+   *  The container is GEOMETRY, not paint: with no authored fill it defaults to "none" — a fully
+   *  boxed rect would otherwise paint SVG-default BLACK over the panel (the silent-black bug
+   *  class). An authored fill/stroke always wins. */
   subplots(channels) {
     const { plotId, source } = this.#panels();
     const plot = this.ctx.spec.plots.get(plotId);
     const desc = this.ctx.registries.marks.get(plot.markType);
     channels = expandLayoutOutputs(this.ctx, channels);
+    channels.fill ??= "none";
     desugarDataLiterals(desc, channels);
     const producerIds = /* @__PURE__ */ new Map();
     for (const val of Object.values(channels)) {
@@ -9020,7 +9031,7 @@ function shedToFit(items, budget) {
 // src/lib/dvl/layout/arrange.ts
 var DEFAULT_MARGIN = { left: 0, right: 0, top: 0, bottom: 0 };
 var NESTED_MARGIN = { left: 30, right: 8, top: 8, bottom: 22 };
-var lerp = (cell3, lo, hi, f2) => ({ terms: [{ coef: 1, edge: cell3 }, { coef: -(1 - f2), edge: lo }, { coef: -f2, edge: hi }], op: "=", constant: 0, strength: "required" });
+var lerp = (cell2, lo, hi, f2) => ({ terms: [{ coef: 1, edge: cell2 }, { coef: -(1 - f2), edge: lo }, { coef: -f2, edge: hi }], op: "=", constant: 0, strength: "required" });
 var SHED_MIN_PLOT = 40;
 function applyShedding(spec, node) {
   const bands = node.sideBands;
@@ -9093,14 +9104,15 @@ function arrangeTemplate(spec, nodeId, margin) {
   if (node === void 0)
     throw new Error(`arrangeTemplate: no node "${nodeId}"`);
   node.insets ??= { left: spec.cells.alloc("extent", void 0, "scalar", pixelSpace(coord("x"))), right: spec.cells.alloc("extent", void 0, "scalar", pixelSpace(coord("x"))), top: spec.cells.alloc("extent", void 0, "scalar", pixelSpace(coord("y"))), bottom: spec.cells.alloc("extent", void 0, "scalar", pixelSpace(coord("y"))) };
-  const one = (edge, k2, side) => ({ terms: [{ coef: 1, edge }], op: "=", constant: k2, strength: "strong", label: `inset:${side}` });
+  const zeroed = new Set((node.constraints ?? []).map((c2) => c2.label ?? "").filter((l) => l.startsWith("shared-zero:")).map((l) => l.slice("shared-zero:".length)));
+  const one = (edge, k2, side) => zeroed.has(side) ? void 0 : { terms: [{ coef: 1, edge }], op: "=", constant: k2, strength: "strong", label: `inset:${side}` };
   const cons = [
     one(node.insets.left, margin.left, "left"),
     one(node.insets.right, margin.right, "right"),
     one(node.insets.top, margin.top, "top"),
     one(node.insets.bottom, margin.bottom, "bottom"),
     ...node.constraints
-  ];
+  ].filter((c2) => c2 !== void 0);
   const writes = [node.insets.left, node.insets.right, node.insets.top, node.insets.bottom];
   const own = new Set(writes);
   const reads = [];
@@ -9170,9 +9182,9 @@ function fillChildExtentHoles(spec, specs, domains) {
     const extra = [];
     const holes = [];
     const readsExtra = [];
-    const cover = (cell3, lo, hi, f2) => {
-      extra.push(lerp(cell3, lo, hi, f2));
-      holes.push(cell3);
+    const cover = (cell2, lo, hi, f2) => {
+      extra.push(lerp(cell2, lo, hi, f2));
+      holes.push(cell2);
     };
     for (const ch of node.children) {
       if (ch.hostRow === void 0)
@@ -9216,9 +9228,9 @@ function fillChildExtentHoles(spec, specs, domains) {
     for (let k2 = 1; k2 < N; k2++) {
       shares.push(spec.cells.alloc("param", -(1 - k2 / N), "scalar", dataSpace), spec.cells.alloc("param", -(k2 / N), "scalar", dataSpace));
     }
-    const boundary = (cell3, k2) => {
-      extra.push({ terms: [{ coef: 1, edge: cell3 }, { coef: shares[2 * (k2 - 1)], edge: cLoP }, { coef: shares[2 * (k2 - 1) + 1], edge: cHiP }], op: "=", constant: 0, strength: "required" });
-      holes.push(cell3);
+    const boundary = (cell2, k2) => {
+      extra.push({ terms: [{ coef: 1, edge: cell2 }, { coef: shares[2 * (k2 - 1)], edge: cLoP }, { coef: shares[2 * (k2 - 1) + 1], edge: cHiP }], op: "=", constant: 0, strength: "required" });
+      holes.push(cell2);
     };
     fullyHoled.forEach((ch, i2) => {
       const co = spec.nodes.get(ch.node).extent.outer;
@@ -9383,51 +9395,6 @@ function emitGatherScatter(spec, domains, specs) {
   }
 }
 
-// src/lib/dvl/plan/compile/expr-scalar.ts
-function toScalar(e) {
-  switch (e.kind) {
-    case "literal":
-      return lit(e.value, e.type.space);
-    case "local-column":
-      return mcol(e.columnName);
-    case "binary":
-      return bin(e.op, toScalar(e.left), toScalar(e.right));
-    case "call":
-      return call(e.fn, e.args.map(toScalar));
-    case "var":
-      return cell(e.cell);
-    default:
-      throw new Error(`toScalar: "${e.kind}" is a relational leaf \u2014 it must be lifted into its own step before scalar lowering (VIA_HARDENING \xA73.3 B1)`);
-  }
-}
-
-// src/lib/dvl/plan/compile/pairs.ts
-var col2 = (a3) => {
-  if (a3.kind === "local-column")
-    return a3.columnName;
-  if (a3.kind === "attr")
-    return a3.column;
-  throw new Error("join path: a predicate operand must be a column");
-};
-var rel = (a3) => a3.kind === "attr" ? a3.relation.relation : null;
-function resolvedOf(site) {
-  if (site == null)
-    return null;
-  if (site.resolved !== void 0)
-    return site.resolved;
-  if (site.on !== null && site.on.every((s) => !isFKRef(s)))
-    return [site.on.map(normalizeStep)];
-  return null;
-}
-function pairs(hop, opts) {
-  return hop.filter((pr) => pr.cross !== true).map((pr) => {
-    if (opts?.eqOnly !== void 0 && pr.op !== "eq") {
-      throw new Error(`${opts.eqOnly}: only eq predicates are supported here (got ${pr.op})`);
-    }
-    return { left: col2(pr.left), right: col2(pr.right), op: pr.op, leftRel: rel(pr.left), rightRel: rel(pr.right) };
-  });
-}
-
 // src/lib/dvl/layout/frame.ts
 var affineRelop = (key, tag, axis, cols, lo, hi) => {
   const span = bin("-", hi, lo);
@@ -9489,6 +9456,250 @@ function emitFrameAffines(args) {
     marks2 = placed;
   }
   return marks2;
+}
+
+// src/lib/dvl/plan/compile/expr-scalar.ts
+function toScalar(e) {
+  switch (e.kind) {
+    case "literal":
+      return lit(e.value, e.type.space);
+    case "local-column":
+      return mcol(e.columnName);
+    case "binary":
+      return bin(e.op, toScalar(e.left), toScalar(e.right));
+    case "call":
+      return call(e.fn, e.args.map(toScalar));
+    case "var":
+      return cell(e.cell);
+    default:
+      throw new Error(`toScalar: "${e.kind}" is a relational leaf \u2014 it must be lifted into its own step before scalar lowering (VIA_HARDENING \xA73.3 B1)`);
+  }
+}
+
+// src/lib/dvl/plan/compile/pairs.ts
+var col2 = (a3) => {
+  if (a3.kind === "local-column")
+    return a3.columnName;
+  if (a3.kind === "attr")
+    return a3.column;
+  throw new Error("join path: a predicate operand must be a column");
+};
+var rel = (a3) => a3.kind === "attr" ? a3.relation.relation : null;
+function resolvedOf(site) {
+  if (site == null)
+    return null;
+  if (site.resolved !== void 0)
+    return site.resolved;
+  if (site.on !== null && site.on.every((s) => !isFKRef(s)))
+    return [site.on.map(normalizeStep)];
+  return null;
+}
+function pairs(hop, opts) {
+  return hop.filter((pr) => pr.cross !== true).map((pr) => {
+    if (opts?.eqOnly !== void 0 && pr.op !== "eq") {
+      throw new Error(`${opts.eqOnly}: only eq predicates are supported here (got ${pr.op})`);
+    }
+    return { left: col2(pr.left), right: col2(pr.right), op: pr.op, leftRel: rel(pr.left), rightRel: rel(pr.right) };
+  });
+}
+
+// src/lib/dvl/plan/compile/hops.ts
+function emitIntermediateHops(resolved, idPrefix, marksIn, specs, store, eqOnly) {
+  const mint = (c2) => `dvl_h_${sanitizeOp(idPrefix)}_${c2}`;
+  let marks2 = marksIn;
+  for (let h2 = 0; h2 < resolved.length - 1; h2++) {
+    const ps = pairs(resolved[h2], eqOnly !== void 0 ? { eqOnly } : void 0);
+    const rel2 = [...new Set(ps.map((p2) => p2.rightRel).filter((r) => r !== null))];
+    if (rel2.length !== 1)
+      throw new Error(`compileNode: hop ${h2} of "${idPrefix}" does not name one intermediate relation \u2014 resolveSpec must qualify multi-hop paths`);
+    const tCell = store.alloc("marks", void 0, "relation");
+    specs.push({ id: `${idPrefix}:hop${h2}:table`, reads: [], writes: [tCell], payload: { kind: "relop", key: `${idPrefix}:hop${h2}:table`, add: {}, outTypes: {}, source: { rows: [], table: rel2[0] } } });
+    const nextLeft = pairs(resolved[h2 + 1]).map((p2) => p2.left);
+    const keyed = store.alloc("marks", void 0, "relation");
+    specs.push({
+      id: `${idPrefix}:hop${h2}`,
+      reads: [marks2, tCell],
+      writes: [keyed],
+      payload: {
+        kind: "relop",
+        key: `${idPrefix}:hop${h2}`,
+        add: Object.fromEntries(nextLeft.map((c2) => [mint(c2), fcol(c2)])),
+        outTypes: Object.fromEntries(nextLeft.map((c2) => [mint(c2), "unknown"])),
+        outSpaces: Object.fromEntries(nextLeft.map((c2) => [mint(c2), dataSpace])),
+        join: { input: "hop", on: ps.map((p2) => [h2 === 0 ? p2.left : mint(p2.left), p2.right]) },
+        tag: "path-hop"
+      }
+    });
+    marks2 = keyed;
+  }
+  const last = pairs(resolved[resolved.length - 1], eqOnly !== void 0 ? { eqOnly } : void 0);
+  const finalOn = last.map((p2) => [resolved.length > 1 ? mint(p2.left) : p2.left, p2.right]);
+  return { marks: marks2, finalOn };
+}
+
+// src/lib/dvl/plan/compile/cell-key.ts
+function assignCellKey(args) {
+  const { spec, plot, plotId, template, built, specs, store } = args;
+  let marks2 = args.marks;
+  let keyedCell;
+  if (template !== void 0) {
+    const alreadyKeyed = isProducerSource(plot.source) && spec.layouts.get(plot.source.producer)?.options?.by !== void 0;
+    const broadcast = isProducerSource(plot.source) && !alreadyKeyed;
+    const borrowExpr = plot.channels.cell;
+    if (alreadyKeyed) {
+    } else if (!broadcast && borrowExpr !== void 0 && borrowExpr.kind === "table-ref" && borrowExpr.attrName === "dvl_cell") {
+      const ref = built.find((build) => build.pid === borrowExpr.plotId);
+      if (ref?.keyed === void 0) {
+        throw new Error(`compileNode: cell borrow on "${plotId}" \u2014 referent "${borrowExpr.plotId}" is not co-nested under this template (no cell key to borrow)`);
+      }
+      const resolved = resolvedOf({ on: borrowExpr.viaSpec, resolved: borrowExpr.resolvedVia });
+      if (resolved === null || resolved.length === 0)
+        throw new Error(`compileNode: cell borrow on "${plotId}" has no join predicates`);
+      const walk2 = emitIntermediateHops(resolved, `${plotId}:cell-borrow`, marks2, specs, store, `cell borrow "${plotId}"`);
+      marks2 = walk2.marks;
+      if (walk2.finalOn.length === 0)
+        throw new Error(`compileNode: cell borrow on "${plotId}" has no join predicates`);
+      const keyed = store.alloc("marks", void 0, "relation");
+      specs.push({
+        id: `${plotId}:cell-borrow`,
+        reads: [marks2, ref.keyed],
+        writes: [keyed],
+        payload: {
+          kind: "relop",
+          key: `${plotId}:cell-borrow`,
+          add: { dvl_cell: fcol("dvl_cell") },
+          outTypes: { dvl_cell: "int" },
+          outSpaces: { dvl_cell: dataSpace },
+          join: { input: "ref", on: walk2.finalOn },
+          tag: "cell-key"
+        }
+      });
+      marks2 = keyed;
+    } else if (!broadcast && plot.sigma !== void 0) {
+      const site = `sigma "${plotId}"`;
+      const { paths, mode } = plot.sigma;
+      if (mode === "panel") {
+        const first = emitIntermediateHops(paths[0], `${plotId}:cell-key`, marks2, specs, store, site);
+        marks2 = first.marks;
+        const keyed = store.alloc("marks", void 0, "relation");
+        specs.push({
+          id: `${plotId}:cell-key`,
+          reads: [marks2, template.hostBase],
+          writes: [keyed],
+          payload: {
+            kind: "relop",
+            key: `${plotId}:cell-key`,
+            add: { dvl_cell: fcol("dvl_mark") },
+            outTypes: { dvl_cell: "int" },
+            outSpaces: { dvl_cell: dataSpace },
+            join: { input: "host", on: first.finalOn },
+            tag: "cell-key"
+          }
+        });
+        marks2 = keyed;
+        for (let index3 = 1; index3 < paths.length; index3++) {
+          const walk2 = emitIntermediateHops(paths[index3], `${plotId}:sigma${index3}`, marks2, specs, store, site);
+          marks2 = walk2.marks;
+          const dropped = store.alloc("sink", void 0, "relation");
+          plot.sigmaDropped = dropped;
+          specs.push({
+            id: `${plotId}:sigma${index3}:verify`,
+            reads: [marks2, template.hostBase],
+            writes: [dropped],
+            payload: { kind: "sigma-verify", key: `${plotId}:sigma${index3}:verify`, on: [...walk2.finalOn, ["dvl_cell", "dvl_mark"]] }
+          });
+          const agreed = store.alloc("marks", void 0, "relation");
+          specs.push({
+            id: `${plotId}:sigma${index3}:agree`,
+            reads: [marks2, template.hostBase],
+            writes: [agreed],
+            payload: {
+              kind: "relop",
+              key: `${plotId}:sigma${index3}:agree`,
+              add: {},
+              outTypes: {},
+              outSpaces: {},
+              join: { input: "host", on: [...walk2.finalOn, ["dvl_cell", "dvl_mark"]] },
+              tag: "sigma-agree"
+            }
+          });
+          marks2 = agreed;
+        }
+      } else {
+        const branchBase = marks2;
+        const branches = paths.map((path2, index3) => {
+          const walk2 = emitIntermediateHops(path2, `${plotId}:sigmaU${index3}`, branchBase, specs, store, site);
+          const branch = store.alloc("marks", void 0, "relation");
+          specs.push({
+            id: `${plotId}:sigmaU${index3}`,
+            reads: [walk2.marks, template.hostBase],
+            writes: [branch],
+            payload: {
+              kind: "relop",
+              key: `${plotId}:sigmaU${index3}`,
+              add: { dvl_cell: fcol("dvl_mark") },
+              outTypes: { dvl_cell: "int" },
+              outSpaces: { dvl_cell: dataSpace },
+              join: { input: "host", on: walk2.finalOn },
+              tag: "cell-key"
+            }
+          });
+          return branch;
+        });
+        const keyed = store.alloc("marks", void 0, "relation");
+        specs.push({ id: `${plotId}:sigma-union`, reads: branches, writes: [keyed], payload: { kind: "union-all", key: `${plotId}:sigma-union`, dedupBy: ["dvl_mark", "dvl_cell"] } });
+        marks2 = keyed;
+      }
+    } else {
+      const resolved = broadcast ? [[]] : resolvedOf(plot.nest) ?? (template.resolved.length > 0 ? template.resolved : null);
+      if (resolved === null || !broadcast && resolved.every((hop) => hop.length === 0)) {
+        throw new Error(`compileNode: template plot "${plotId}" has no nest predicates`);
+      }
+      const walk2 = emitIntermediateHops(resolved, `${plotId}:cell-key`, marks2, specs, store, `cell-key "${plotId}"`);
+      marks2 = walk2.marks;
+      const keyed = store.alloc("marks", void 0, "relation");
+      specs.push({
+        id: `${plotId}:cell-key`,
+        reads: [marks2, template.hostBase],
+        writes: [keyed],
+        payload: {
+          kind: "relop",
+          key: `${plotId}:cell-key`,
+          add: { dvl_cell: fcol("dvl_mark") },
+          outTypes: { dvl_cell: "int" },
+          outSpaces: { dvl_cell: dataSpace },
+          join: { input: "host", on: walk2.finalOn },
+          tag: "cell-key"
+        }
+      });
+      marks2 = keyed;
+    }
+    keyedCell = marks2;
+  }
+  if (template === void 0 && plot.frame?.resolved !== void 0) {
+    const frame2 = plot.frame;
+    const walk2 = emitIntermediateHops(frame2.resolved, `${plotId}:frame`, marks2, specs, store, `frame "${plotId}"`);
+    marks2 = walk2.marks;
+    const refKeyed = built.find((build) => build.pid === frame2.plot)?.keyed ?? `$plot-keyed:${frame2.plot}`;
+    const keyed = store.alloc("marks", void 0, "relation");
+    specs.push({
+      id: `${plotId}:frame-borrow`,
+      reads: [marks2, refKeyed],
+      writes: [keyed],
+      payload: {
+        kind: "relop",
+        key: `${plotId}:frame-borrow`,
+        add: { dvl_cell: fcol("dvl_cell") },
+        outTypes: { dvl_cell: "int" },
+        outSpaces: { dvl_cell: dataSpace },
+        join: { input: "ref", on: walk2.finalOn },
+        tag: "cell-key"
+      }
+    });
+    marks2 = keyed;
+    keyedCell = marks2;
+  }
+  return { marks: marks2, keyed: keyedCell };
 }
 
 // src/lib/dvl/plan/passes/scale-expansion.ts
@@ -9577,606 +9788,639 @@ function emitScaleOverhang(spec, builds, specs) {
   }
 }
 
-// src/lib/dvl/plan/compile/plot.ts
-var BOX_ATTRS = /* @__PURE__ */ new Set(["dvl_x0", "dvl_x1", "dvl_y0", "dvl_y1"]);
-function emitIntermediateHops(resolved, idPrefix, marksIn, specs, store, eqOnly) {
-  const mint = (c2) => `dvl_h_${sanitizeOp(idPrefix)}_${c2}`;
-  let marks2 = marksIn;
-  for (let h2 = 0; h2 < resolved.length - 1; h2++) {
-    const ps = pairs(resolved[h2], eqOnly !== void 0 ? { eqOnly } : void 0);
-    const rel2 = [...new Set(ps.map((p2) => p2.rightRel).filter((r) => r !== null))];
-    if (rel2.length !== 1)
-      throw new Error(`compileNode: hop ${h2} of "${idPrefix}" does not name one intermediate relation \u2014 resolveSpec must qualify multi-hop paths`);
-    const tCell = store.alloc("marks", void 0, "relation");
-    specs.push({ id: `${idPrefix}:hop${h2}:table`, reads: [], writes: [tCell], payload: { kind: "relop", key: `${idPrefix}:hop${h2}:table`, add: {}, outTypes: {}, source: { rows: [], table: rel2[0] } } });
-    const nextLeft = pairs(resolved[h2 + 1]).map((p2) => p2.left);
-    const keyed = store.alloc("marks", void 0, "relation");
-    specs.push({
-      id: `${idPrefix}:hop${h2}`,
-      reads: [marks2, tCell],
-      writes: [keyed],
-      payload: {
-        kind: "relop",
-        key: `${idPrefix}:hop${h2}`,
-        add: Object.fromEntries(nextLeft.map((c2) => [mint(c2), fcol(c2)])),
-        outTypes: Object.fromEntries(nextLeft.map((c2) => [mint(c2), "unknown"])),
-        outSpaces: Object.fromEntries(nextLeft.map((c2) => [mint(c2), dataSpace])),
-        join: { input: "hop", on: ps.map((p2) => [h2 === 0 ? p2.left : mint(p2.left), p2.right]) },
-        tag: "path-hop"
-      }
-    });
-    marks2 = keyed;
-  }
-  const last = pairs(resolved[resolved.length - 1], eqOnly !== void 0 ? { eqOnly } : void 0);
-  const finalOn = last.map((p2) => [resolved.length > 1 ? mint(p2.left) : p2.left, p2.right]);
-  return { marks: marks2, finalOn };
+// src/lib/dvl/plan/compile/box.ts
+function emitBoxFork(plot, plotId, marks2, liveExpansion, specs, store) {
+  if ((!liveExpansion || !participates(plot)) && plot.needsBox !== true)
+    return void 0;
+  const edges = boxEdgesOf(plot) ?? {};
+  const add3 = {};
+  const outTypes = {};
+  const outSpaces = {};
+  const put = (column, expr2, axis) => {
+    if (expr2 === void 0)
+      return;
+    add3[column] = expr2;
+    outTypes[column] = "double";
+    outSpaces[column] = pixelSpace(coord(axis));
+  };
+  put(BOX_EDGE_ATTRS.left, edges.left, "x");
+  put(BOX_EDGE_ATTRS.right, edges.right, "x");
+  put(BOX_EDGE_ATTRS.top, edges.top, "y");
+  put(BOX_EDGE_ATTRS.bottom, edges.bottom, "y");
+  if (Object.keys(add3).length === 0)
+    return void 0;
+  const boxed = store.alloc("marks", void 0, "relation");
+  specs.push({ id: `${plotId}:box`, reads: [marks2], writes: [boxed], payload: { kind: "relop", key: `${plotId}:box`, add: add3, outTypes, outSpaces, tag: "box" } });
+  return boxed;
 }
-function auxRefs(desc, inst) {
-  const out = {};
-  for (const [role, input] of Object.entries(inst.inputs ?? {})) {
-    if (role === "marks" || input.resolvedOn === void 0 || input.resolvedOn.length === 0)
-      continue;
-    out[role] = pairs(input.resolvedOn[input.resolvedOn.length - 1]).map((p2) => ({ from: p2.left, to: p2.right }));
-  }
-  const defaults3 = {};
-  for (const r of desc.refs ?? []) {
-    const dot2 = r.from.indexOf(".");
-    if (dot2 < 0)
-      continue;
-    (defaults3[r.from.slice(0, dot2)] ??= []).push({ from: r.from.slice(dot2 + 1), to: r.to.slice(r.to.indexOf(".") + 1) });
-  }
-  for (const [role, ps] of Object.entries(defaults3))
-    if (out[role] === void 0)
-      out[role] = ps;
-  return Object.keys(out).length > 0 ? out : void 0;
-}
-function compilePlot(spec, nodeId, plotId, specs, producers, contributions, opts, template, built) {
-  const plot = spec.plots.get(plotId);
-  if (plot === void 0)
-    throw new Error(`compileNode: no plot "${plotId}"`);
-  const node = spec.nodes.get(nodeId);
-  const cc = node.extent.content;
-  const store = spec.cells;
-  const base2 = resolveBase(spec, plot, producers, specs, store);
-  let marks2 = base2;
-  let keyedCell;
-  if (template !== void 0) {
-    const alreadyKeyed = isProducerSource(plot.source) && spec.layouts.get(plot.source.producer)?.options?.by !== void 0;
-    const broadcast = isProducerSource(plot.source) && !alreadyKeyed;
-    const borrowExpr = plot.channels["cell"];
-    if (alreadyKeyed) {
-    } else if (!broadcast && borrowExpr !== void 0 && borrowExpr.kind === "table-ref" && borrowExpr.attrName === "dvl_cell") {
-      const ref = built.find((pb) => pb.pid === borrowExpr.plotId);
-      if (ref?.keyed === void 0)
-        throw new Error(`compileNode: cell borrow on "${plotId}" \u2014 referent "${borrowExpr.plotId}" is not co-nested under this template (no cell key to borrow)`);
-      const resolvedVia = resolvedOf({ on: borrowExpr.viaSpec, resolved: borrowExpr.resolvedVia });
-      if (resolvedVia === null || resolvedVia.length === 0)
-        throw new Error(`compileNode: cell borrow on "${plotId}" has no join predicates`);
-      const borrowWalk = emitIntermediateHops(resolvedVia, `${plotId}:cell-borrow`, marks2, specs, store, `cell borrow "${plotId}"`);
-      marks2 = borrowWalk.marks;
-      const ps = borrowWalk.finalOn;
-      if (ps.length === 0)
-        throw new Error(`compileNode: cell borrow on "${plotId}" has no join predicates`);
-      const keyed = store.alloc("marks", void 0, "relation");
-      specs.push({
-        id: `${plotId}:cell-borrow`,
-        reads: [marks2, ref.keyed],
-        writes: [keyed],
-        payload: { kind: "relop", key: `${plotId}:cell-borrow`, add: { dvl_cell: fcol("dvl_cell") }, outTypes: { dvl_cell: "int" }, outSpaces: { dvl_cell: dataSpace }, join: { input: "ref", on: ps }, tag: "cell-key" }
-      });
-      marks2 = keyed;
-    } else if (!broadcast && plot.sigma !== void 0) {
-      const eqSite = `sigma "${plotId}"`;
-      const { paths, mode } = plot.sigma;
-      if (mode === "panel") {
-        const walk0 = emitIntermediateHops(paths[0], `${plotId}:cell-key`, marks2, specs, store, eqSite);
-        marks2 = walk0.marks;
-        const ps0 = walk0.finalOn;
-        const keyed0 = store.alloc("marks", void 0, "relation");
-        specs.push({
-          id: `${plotId}:cell-key`,
-          reads: [marks2, template.hostBase],
-          writes: [keyed0],
-          payload: { kind: "relop", key: `${plotId}:cell-key`, add: { dvl_cell: fcol("dvl_mark") }, outTypes: { dvl_cell: "int" }, outSpaces: { dvl_cell: dataSpace }, join: { input: "host", on: ps0 }, tag: "cell-key" }
-        });
-        marks2 = keyed0;
-        for (let k2 = 1; k2 < paths.length; k2++) {
-          const walkK = emitIntermediateHops(paths[k2], `${plotId}:sigma${k2}`, marks2, specs, store, eqSite);
-          marks2 = walkK.marks;
-          const psk = walkK.finalOn;
-          const dropped = store.alloc("sink", void 0, "relation");
-          plot.sigmaDropped = dropped;
-          specs.push({
-            id: `${plotId}:sigma${k2}:verify`,
-            reads: [marks2, template.hostBase],
-            writes: [dropped],
-            payload: { kind: "sigma-verify", key: `${plotId}:sigma${k2}:verify`, on: [...psk, ["dvl_cell", "dvl_mark"]] }
-          });
-          const agreed = store.alloc("marks", void 0, "relation");
-          specs.push({
-            id: `${plotId}:sigma${k2}:agree`,
-            reads: [marks2, template.hostBase],
-            writes: [agreed],
-            payload: { kind: "relop", key: `${plotId}:sigma${k2}:agree`, add: {}, outTypes: {}, outSpaces: {}, join: { input: "host", on: [...psk, ["dvl_cell", "dvl_mark"]] }, tag: "sigma-agree" }
-          });
-          marks2 = agreed;
-        }
-      } else {
-        const base3 = marks2;
-        const outs = paths.map((path2, k2) => {
-          const walked = emitIntermediateHops(path2, `${plotId}:sigmaU${k2}`, base3, specs, store, eqSite);
-          const ps = walked.finalOn;
-          const out = store.alloc("marks", void 0, "relation");
-          specs.push({
-            id: `${plotId}:sigmaU${k2}`,
-            reads: [walked.marks, template.hostBase],
-            writes: [out],
-            payload: { kind: "relop", key: `${plotId}:sigmaU${k2}`, add: { dvl_cell: fcol("dvl_mark") }, outTypes: { dvl_cell: "int" }, outSpaces: { dvl_cell: dataSpace }, join: { input: "host", on: ps }, tag: "cell-key" }
-          });
-          return out;
-        });
-        const keyed = store.alloc("marks", void 0, "relation");
-        specs.push({ id: `${plotId}:sigma-union`, reads: outs, writes: [keyed], payload: { kind: "union-all", key: `${plotId}:sigma-union`, dedupBy: ["dvl_mark", "dvl_cell"] } });
-        marks2 = keyed;
-      }
-    } else {
-      const resolved = broadcast ? [[]] : resolvedOf(plot.nest) ?? (template.resolved.length > 0 ? template.resolved : null);
-      if (resolved === null || !broadcast && resolved.every((h2) => h2.length === 0))
-        throw new Error(`compileNode: template plot "${plotId}" has no nest predicates`);
-      const nestWalk = emitIntermediateHops(resolved, `${plotId}:cell-key`, marks2, specs, store, `cell-key "${plotId}"`);
-      marks2 = nestWalk.marks;
-      const ps = nestWalk.finalOn;
-      const keyed = store.alloc("marks", void 0, "relation");
-      specs.push({
-        id: `${plotId}:cell-key`,
-        reads: [marks2, template.hostBase],
-        writes: [keyed],
-        payload: { kind: "relop", key: `${plotId}:cell-key`, add: { dvl_cell: fcol("dvl_mark") }, outTypes: { dvl_cell: "int" }, outSpaces: { dvl_cell: dataSpace }, join: { input: "host", on: ps }, tag: "cell-key" }
-      });
-      marks2 = keyed;
-    }
-    keyedCell = marks2;
-  }
-  if (template === void 0 && plot.frame?.resolved !== void 0) {
-    const fr = plot.frame;
-    const site = `frame "${plotId}"`;
-    const frameWalk = emitIntermediateHops(fr.resolved, `${plotId}:frame`, marks2, specs, store, site);
-    marks2 = frameWalk.marks;
-    const ps = frameWalk.finalOn;
-    const refKeyed = built.find((pb) => pb.pid === fr.plot)?.keyed ?? `$plot-keyed:${fr.plot}`;
-    const keyed = store.alloc("marks", void 0, "relation");
-    specs.push({
-      id: `${plotId}:frame-borrow`,
-      reads: [marks2, refKeyed],
-      writes: [keyed],
-      payload: { kind: "relop", key: `${plotId}:frame-borrow`, add: { dvl_cell: fcol("dvl_cell") }, outTypes: { dvl_cell: "int" }, outSpaces: { dvl_cell: dataSpace }, join: { input: "ref", on: ps }, tag: "cell-key" }
-    });
-    marks2 = keyed;
-    keyedCell = marks2;
-  }
+
+// src/lib/dvl/plan/compile/channel-steps.ts
+function groupChannelSteps(spec, plot, plotId) {
   const steps = [];
   const seen = /* @__PURE__ */ new Map();
   const seenVia = /* @__PURE__ */ new Map();
   for (const [ch, expr2] of Object.entries(plot.channels)) {
     if (expr2.kind === "layout-output") {
-      let s = seen.get(expr2.layout);
-      if (s === void 0) {
-        s = { kind: "layout", layoutId: expr2.layout, chans: [] };
-        seen.set(expr2.layout, s);
-        steps.push(s);
+      let step = seen.get(expr2.layout);
+      if (step === void 0) {
+        step = { kind: "layout", layoutId: expr2.layout, chans: [] };
+        seen.set(expr2.layout, step);
+        steps.push(step);
       }
-      s.chans.push({ ch, output: expr2.output });
-    } else if (expr2.kind === "table-ref") {
+      step.chans.push({ ch, output: expr2.output });
+      continue;
+    }
+    if (expr2.kind === "table-ref") {
       if (ch === "cell" && expr2.attrName === "dvl_cell")
         continue;
-      const resolvedVia = resolvedOf({ on: expr2.viaSpec, resolved: expr2.resolvedVia });
-      if (resolvedVia === null || resolvedVia.length === 0 || resolvedVia.some((h2) => h2.length === 0))
+      const resolved = resolvedOf({ on: expr2.viaSpec, resolved: expr2.resolvedVia });
+      if (resolved === null || resolved.length === 0 || resolved.some((h2) => h2.length === 0)) {
         throw new Error(`compileNode: via reference on "${plotId}:${ch}" needs join predicates`);
-      const k2 = `${expr2.plotId}|${JSON.stringify(resolvedVia)}`;
-      let vs = seenVia.get(k2);
-      if (vs === void 0) {
-        vs = { kind: "via", refPlot: expr2.plotId, resolved: resolvedVia, chans: [] };
-        seenVia.set(k2, vs);
-        steps.push(vs);
+      }
+      const key = `${expr2.plotId}|${JSON.stringify(resolved)}`;
+      let step = seenVia.get(key);
+      if (step === void 0) {
+        step = { kind: "via", refPlot: expr2.plotId, resolved, chans: [] };
+        seenVia.set(key, step);
+        steps.push(step);
       }
       const resolve = typeof expr2.resolve === "string" ? { fn: expr2.resolve } : expr2.resolve;
-      vs.chans.push({ ch, attr: expr2.attrName, space: expr2.type.space, resolve });
-    } else if (expr2.kind === "bound-ref") {
-      const resolvedVia = resolvedOf({ on: expr2.viaSpec, resolved: expr2.resolvedVia });
-      if (resolvedVia === null || resolvedVia.length === 0 || resolvedVia.some((h2) => h2.length === 0))
+      step.chans.push({ ch, attr: expr2.attrName, space: expr2.type.space, resolve });
+      continue;
+    }
+    if (expr2.kind === "bound-ref") {
+      const resolved = resolvedOf({ on: expr2.viaSpec, resolved: expr2.resolvedVia });
+      if (resolved === null || resolved.length === 0 || resolved.some((h2) => h2.length === 0)) {
         throw new Error(`compileNode: table via on "${plotId}:${ch}" needs join predicates`);
-      const k2 = `t:${expr2.tableName}|${JSON.stringify(resolvedVia)}`;
-      let vs = seenVia.get(k2);
-      if (vs === void 0) {
-        vs = { kind: "via", refTable: expr2.tableName, resolved: resolvedVia, chans: [] };
-        seenVia.set(k2, vs);
-        steps.push(vs);
+      }
+      const key = `t:${expr2.tableName}|${JSON.stringify(resolved)}`;
+      let step = seenVia.get(key);
+      if (step === void 0) {
+        step = { kind: "via", refTable: expr2.tableName, resolved, chans: [] };
+        seenVia.set(key, step);
+        steps.push(step);
       }
       const resolve = typeof expr2.resolve === "string" ? { fn: expr2.resolve } : expr2.resolve;
-      vs.chans.push({ ch, attr: expr2.columnName, space: expr2.type.space, resolve });
-    } else {
-      steps.push({ kind: "expr", ch, expr: expr2 });
+      step.chans.push({ ch, attr: expr2.columnName, space: expr2.type.space, resolve });
+      continue;
     }
+    steps.push({ kind: "expr", ch, expr: expr2 });
   }
-  const emitViaJoins = (step, refCell, marksIn, idBase) => {
-    let cur2 = marksIn;
-    const lastHop = pairs(step.resolved[step.resolved.length - 1]).map((pr) => [pr.left, pr.right, pr.op]);
-    const spaceOfChan = (c2) => c2.space.space === "relative" ? pixelSpace(c2.space.geom) : c2.space;
-    const carrier = step.refTable !== void 0 ? "unknown" : "double";
-    const plain = step.chans.filter((c2) => c2.resolve === void 0);
-    const resolved = step.chans.filter((c2) => c2.resolve !== void 0);
-    if (plain.length > 0) {
-      const viaWalk = emitIntermediateHops(step.resolved, `${idBase}:via`, cur2, specs, store);
-      const prev = viaWalk.marks;
-      const next = store.alloc("marks", void 0, "relation");
-      specs.push({
-        id: `${idBase}:via:${plain.map((c2) => c2.ch).join(",")}`,
-        reads: [prev, refCell],
-        writes: [next],
-        payload: {
-          kind: "relop",
-          key: `${idBase}:via:${plain[0].ch}`,
-          add: Object.fromEntries(plain.map((c2) => [c2.ch, fcol(c2.attr)])),
-          outTypes: Object.fromEntries(plain.map((c2) => [c2.ch, carrier])),
-          outSpaces: Object.fromEntries(plain.map((c2) => [c2.ch, spaceOfChan(c2)])),
-          join: { input: "ref", on: viaWalk.finalOn },
-          tag: `via:${plain[0].ch}`
-        }
-      });
-      cur2 = next;
-    }
-    if (resolved.length > 0) {
-      const aggWalk = step.resolved.length > 1 ? emitIntermediateHops(step.resolved, `${idBase}:via-agg`, cur2, specs, store) : null;
-      const joinBase = aggWalk !== null ? aggWalk.marks : cur2;
-      const stageOn = lastHop.map(([l, r, op2], i) => [aggWalk !== null ? aggWalk.finalOn[i][0] : l, r, op2]);
-      const declarative = resolved.filter((c2) => c2.resolve.js === void 0);
-      const opaque = resolved.filter((c2) => c2.resolve.js !== void 0);
-      if (declarative.length > 0) {
-        const stageAdd = {};
-        const stageSpaces = {};
-        const reduceAdds = {};
-        for (const c2 of declarative) {
-          stageAdd[`dvl_v_${c2.ch}`] = c2.resolve.arg ?? fcol(c2.attr);
-          stageSpaces[`dvl_v_${c2.ch}`] = dataSpace;
-          if (c2.resolve.order !== void 0) {
-            stageAdd[`dvl_o_${c2.ch}`] = fcol(c2.resolve.order);
-            stageSpaces[`dvl_o_${c2.ch}`] = dataSpace;
-          }
-          reduceAdds[c2.ch] = { fn: c2.resolve.fn, col: `dvl_v_${c2.ch}`, ...c2.resolve.order !== void 0 && { order: `dvl_o_${c2.ch}`, desc: c2.resolve.desc } };
-        }
-        const stageCell = store.alloc("marks", void 0, "relation");
-        specs.push({
-          id: `${idBase}:via-stage:${declarative.map((c2) => c2.ch).join(",")}`,
-          reads: [joinBase, refCell],
-          writes: [stageCell],
-          payload: {
-            kind: "relop",
-            key: `${idBase}:via-stage:${declarative[0].ch}`,
-            add: stageAdd,
-            outTypes: Object.fromEntries(Object.keys(stageAdd).map((c2) => [c2, "unknown"])),
-            outSpaces: stageSpaces,
-            join: { input: "ref", on: stageOn },
-            tag: `via-stage:${declarative[0].ch}`
-          }
-        });
-        const reducedCell = store.alloc("marks", void 0, "relation");
-        specs.push({
-          id: `${idBase}:via-reduce:${declarative.map((c2) => c2.ch).join(",")}`,
-          reads: [stageCell],
-          writes: [reducedCell],
-          payload: { kind: "reduce", key: `${idBase}:via-reduce:${declarative[0].ch}`, by: "dvl_mark", adds: reduceAdds, outSpaces: Object.fromEntries(declarative.map((c2) => [c2.ch, spaceOfChan(c2)])) }
-        });
-        const prev = cur2;
-        const next = store.alloc("marks", void 0, "relation");
-        specs.push({
-          id: `${idBase}:via-attach:${declarative.map((c2) => c2.ch).join(",")}`,
-          reads: [prev, reducedCell],
-          writes: [next],
-          payload: {
-            kind: "relop",
-            key: `${idBase}:via-attach:${declarative[0].ch}`,
-            add: Object.fromEntries(declarative.map((c2) => [c2.ch, fcol(c2.ch)])),
-            outTypes: Object.fromEntries(declarative.map((c2) => [c2.ch, "double"])),
-            outSpaces: Object.fromEntries(declarative.map((c2) => [c2.ch, spaceOfChan(c2)])),
-            join: { input: "fit", on: [["dvl_mark", "dvl_mark"]], kind: "LEFT JOIN" },
-            // no match ⇒ NULL, never a dropped mark
-            tag: `via-attach:${declarative[0].ch}`
-          }
-        });
-        cur2 = next;
-      }
-      if (opaque.length > 0) {
-        const prev = cur2;
-        const next = store.alloc("marks", void 0, "relation");
-        specs.push({
-          id: `${idBase}:via-agg:${opaque.map((c2) => c2.ch).join(",")}`,
-          reads: [prev, joinBase, refCell],
-          writes: [next],
-          payload: {
-            kind: "via-agg",
-            key: `${idBase}:via-agg:${opaque[0].ch}`,
-            on: stageOn,
-            adds: Object.fromEntries(opaque.map((c2) => [c2.ch, { attr: c2.attr, ...c2.resolve }])),
-            outSpaces: Object.fromEntries(opaque.map((c2) => [c2.ch, spaceOfChan(c2)]))
-          }
-        });
-        cur2 = next;
-      }
-    }
-    return cur2;
-  };
-  const relByAxis = /* @__PURE__ */ new Map();
-  const rel2 = (axis) => {
-    let g2 = relByAxis.get(axis);
-    if (g2 === void 0)
-      relByAxis.set(axis, g2 = { coords: [], lens: [] });
-    return g2;
-  };
-  const expOf = (expr2) => expr2 === void 0 || expr2.kind !== "layout-output" ? void 0 : baseInstanceOf(spec, expr2.layout)?.expand;
-  if (plot.baseProjections !== void 0 && Object.keys(plot.baseProjections).length > 0) {
-    const prev = marks2;
-    marks2 = store.alloc("marks", void 0, "relation");
-    const add3 = {};
-    const outTypes = {};
-    const outSpaces = {};
-    for (const [col3, e] of Object.entries(plot.baseProjections)) {
-      add3[col3] = toScalar(e);
-      outTypes[col3] = "double";
-      outSpaces[col3] = e.type.space;
-    }
-    specs.push({ id: `${plotId}:base-proj`, reads: [prev], writes: [marks2], payload: { kind: "relop", key: `${plotId}:base-proj`, add: add3, outTypes, outSpaces, tag: "base-proj" } });
-  }
-  const pipelineBase = marks2;
-  const postAffineSteps = [];
+  const preAffine = [];
+  const postAffineInputs = [];
+  const postAffineLayouts = [];
   for (const step of steps) {
     if (step.kind === "layout") {
-      const instCheck = spec.layouts.get(step.layoutId);
-      const descCheck = instCheck && opOf(instCheck);
-      if (descCheck?.requiresPixelInputs) {
-        postAffineSteps.push(step);
-        continue;
-      }
-    }
-    const prev = marks2;
-    let next = store.alloc("marks", void 0, "relation");
-    if (step.kind === "layout") {
       const inst = spec.layouts.get(step.layoutId);
-      if (inst === void 0)
-        throw new Error(`compileNode: no layout instance "${step.layoutId}"`);
-      const desc = opOf(inst);
-      const column = inputBinding(inst, plotId).marks?.[0];
-      if (column === void 0)
-        throw new Error(`compileNode: layout "${step.layoutId}" has no source column`);
-      const algo = desc;
-      const declared = desc.outSpaces !== void 0 ? Object.keys(desc.outSpaces) : "add" in desc.output ? desc.output.add.map((a3) => a3.name) : [];
-      const out2chs = /* @__PURE__ */ new Map();
-      for (const c2 of step.chans)
-        out2chs.set(c2.output, [...out2chs.get(c2.output) ?? [], c2.ch]);
-      const outputs = declared.map((o) => out2chs.get(o)?.[0]).filter((c2) => c2 !== void 0);
-      const marksInputs = (desc.inputs.marks ?? []).map((c2) => c2.name);
-      const proj = inst.inputs.marks?.project;
-      const extraInputs = {};
-      for (let mi = 1; mi < marksInputs.length; mi++) {
-        const col3 = proj?.[marksInputs[mi]];
-        if (typeof col3 === "string")
-          extraInputs[marksInputs[mi]] = col3;
-      }
-      for (const [role, input] of Object.entries(inst.inputs)) {
-        if (role === "marks" || typeof input.relation !== "string")
-          continue;
-        extraInputs[role] = input.relation;
-      }
-      const binding = { key: `${plotId}:${step.layoutId}`, inputs: { value: column, ...extraInputs }, outputs, options: inst.options, refs: auxRefs(desc, inst), outSpace: plot.channels[outputs[0]]?.type.space };
-      const domainCell = inst.domain;
-      const holes = domainCell !== void 0 ? { domain: domainCell } : {};
-      const contribs = contributions.get(step.layoutId);
-      if (contribs !== void 0 && domainCell !== void 0) {
-        const contribution = store.alloc("domain", void 0, "relation");
-        contribs.push(contribution);
-        holes.contribution = contribution;
-      }
-      const key = template !== void 0 && inst.shared !== true && (inst.shared === false || desc.perCell === true) ? "dvl_cell" : void 0;
-      const io = { id: `${plotId}:${step.layoutId}`, binding, marksIn: prev, trainIn: pipelineBase, marksOut: next, holes, key, treatment: inst.treatment, alloc: (role, kind) => store.alloc(role, void 0, kind) };
-      specs.push(...stampAlgo(algo, algo.plan(io)));
-      for (const o of declared) {
-        const chs = out2chs.get(o);
-        if (chs === void 0 || chs.length < 2)
-          continue;
-        for (const sib of chs.slice(1)) {
-          const src = next;
-          next = store.alloc("marks", void 0, "relation");
-          const copySpace = staticOutSpace(desc.outSpaces?.[o]) ?? plot.channels[chs[0]].type.space;
-          specs.push({ id: `${plotId}:copy:${sib}`, reads: [src], writes: [next], payload: { kind: "relop", key: `${plotId}:${sib}`, add: { [sib]: mcol(chs[0]) }, outTypes: { [sib]: "unknown" }, outSpaces: { [sib]: copySpace }, tag: `col:${sib}` } });
-        }
-      }
-    } else if (step.kind === "via") {
-      if (step.refTable !== void 0) {
-        const tCell = store.alloc("marks", void 0, "relation");
-        specs.push({ id: `${plotId}:tvia:${step.chans[0].ch}:table`, reads: [], writes: [tCell], payload: { kind: "relop", key: `${plotId}:tvia:${step.chans[0].ch}:table`, add: {}, outTypes: {}, source: { rows: [], table: step.refTable } } });
-        next = emitViaJoins(step, tCell, prev, `${plotId}:t`);
-      } else {
-        postAffineSteps.push(step);
-        next = prev;
-      }
-    } else if (step.expr.kind === "literal") {
-      specs.push({ id: `${plotId}:lit:${step.ch}`, reads: [prev], writes: [next], payload: { kind: "relop", key: `${plotId}:${step.ch}`, add: { [step.ch]: lit(step.expr.value, step.expr.type.space) }, outTypes: { [step.ch]: litType(step.expr.value) }, outSpaces: { [step.ch]: step.expr.type.space }, tag: `lit:${step.ch}` } });
-    } else if (step.expr.kind === "local-column") {
-      specs.push({ id: `${plotId}:col:${step.ch}`, reads: [prev], writes: [next], payload: { kind: "relop", key: `${plotId}:${step.ch}`, add: { [step.ch]: mcol(step.expr.columnName) }, outTypes: { [step.ch]: "unknown" }, outSpaces: { [step.ch]: step.expr.type.space }, tag: `col:${step.ch}` } });
-    } else if (step.expr.kind === "binary" || step.expr.kind === "call") {
+      if (inst !== void 0 && opOf(inst).requiresPixelInputs)
+        postAffineLayouts.push(step);
+      else
+        preAffine.push({ kind: "emit", step });
+      continue;
+    }
+    if (step.kind === "via" && step.refPlot !== void 0) {
+      preAffine.push({ kind: "reserve-deferred-cell" });
+      postAffineInputs.push(step);
+      continue;
+    }
+    if (step.kind === "expr" && (step.expr.kind === "binary" || step.expr.kind === "call")) {
       let plotLift = false;
       walk(step.expr, (n) => {
         if (n.kind === "local-column" && n.columnName.startsWith("dvl_lift_") && plot.channels[n.columnName]?.kind === "table-ref")
           plotLift = true;
       });
       if (plotLift) {
-        postAffineSteps.push(step);
-        next = prev;
-      } else
-        specs.push({ id: `${plotId}:expr:${step.ch}`, reads: [prev], writes: [next], payload: { kind: "relop", key: `${plotId}:${step.ch}`, add: { [step.ch]: toScalar(step.expr) }, outTypes: { [step.ch]: "double" }, outSpaces: { [step.ch]: step.expr.type.space }, tag: `expr:${step.ch}` } });
-    } else {
-      throw new Error(`compileNode: channel "${step.ch}" (${step.expr.kind}) is unsupported`);
-    }
-    marks2 = next;
-  }
-  if (plot.resolvedMark?.cardinality === "pairs") {
-    const kinds = plot.resolvedMark.channels;
-    const pBound = Object.keys(plot.channels);
-    if (plot.channels["x"] === void 0 || plot.channels["y"] === void 0)
-      throw new Error(`compilePlot: connect "${plotId}" needs both x and y channels`);
-    const pGroup = pBound.filter((ch) => kinds[ch] === "color" || kinds[ch] === "shape");
-    if (pGroup.length > 1)
-      throw new Error(`compilePlot: connect "${plotId}" supports ONE series channel for now (got ${pGroup.join(", ")})`);
-    const w2 = { partition: pGroup[0], order: plot.channels["order"] !== void 0 ? "order" : "x" };
-    const prev = marks2;
-    const next = store.alloc("marks", void 0, "relation");
-    const sx = plot.channels["x"].type.space;
-    const sy = plot.channels["y"].type.space;
-    specs.push({
-      id: `${plotId}:pairs`,
-      reads: [prev],
-      writes: [next],
-      payload: {
-        kind: "relop",
-        key: `${plotId}:pairs`,
-        add: { x1: mcol("x"), y1: mcol("y"), x2: lead("x", w2), y2: lead("y", w2) },
-        outTypes: { x1: "double", y1: "double", x2: "double", y2: "double" },
-        outSpaces: { x1: sx, y1: sy, x2: sx, y2: sy },
-        tag: "pairs"
+        preAffine.push({ kind: "reserve-deferred-cell" });
+        postAffineInputs.push(step);
+        continue;
       }
-    });
-    marks2 = next;
-    if (sx.space === "relative" && sx.geom.kind === "coord")
-      rel2(sx.geom.axis).coords.push({ name: "x1", exp: expOf(plot.channels["x"]) }, { name: "x2", exp: expOf(plot.channels["x"]) });
-    if (sy.space === "relative" && sy.geom.kind === "coord")
-      rel2(sy.geom.axis).coords.push({ name: "y1", exp: expOf(plot.channels["y"]) }, { name: "y2", exp: expOf(plot.channels["y"]) });
+    }
+    preAffine.push({ kind: "emit", step });
   }
+  return { preAffine, postAffineInputs, postAffineLayouts };
+}
+
+// src/lib/dvl/plan/compile/layout-step.ts
+function auxRefs(desc, inst) {
+  const out = {};
+  for (const [role, input] of Object.entries(inst.inputs ?? {})) {
+    if (role === "marks" || input.resolvedOn === void 0 || input.resolvedOn.length === 0)
+      continue;
+    out[role] = pairs(input.resolvedOn[input.resolvedOn.length - 1]).map((pair2) => ({ from: pair2.left, to: pair2.right }));
+  }
+  const defaults3 = {};
+  for (const ref of desc.refs ?? []) {
+    const dot2 = ref.from.indexOf(".");
+    if (dot2 < 0)
+      continue;
+    (defaults3[ref.from.slice(0, dot2)] ??= []).push({ from: ref.from.slice(dot2 + 1), to: ref.to.slice(ref.to.indexOf(".") + 1) });
+  }
+  for (const [role, refs] of Object.entries(defaults3))
+    if (out[role] === void 0)
+      out[role] = refs;
+  return Object.keys(out).length > 0 ? out : void 0;
+}
+function emitLayoutStep(args) {
+  const { spec, plot, plotId, step, stage, marksIn, trainIn, contributions, template, specs, store } = args;
+  let marks2 = store.alloc("marks", void 0, "relation");
+  const inst = spec.layouts.get(step.layoutId);
+  if (inst === void 0)
+    throw new Error(`compileNode: no layout instance "${step.layoutId}"`);
+  const desc = opOf(inst);
+  const column = inputBinding(inst, plotId).marks?.[0];
+  if (column === void 0) {
+    const prefix = stage === "post-affine" ? "post-affine " : "";
+    throw new Error(`compileNode: ${prefix}layout "${step.layoutId}" has no source column`);
+  }
+  const declared = desc.outSpaces !== void 0 ? Object.keys(desc.outSpaces) : "add" in desc.output ? desc.output.add.map((output) => output.name) : [];
+  const out2chs = /* @__PURE__ */ new Map();
+  for (const channel of step.chans)
+    out2chs.set(channel.output, [...out2chs.get(channel.output) ?? [], channel.ch]);
+  const outputs = declared.map((output) => out2chs.get(output)?.[0]).filter((channel) => channel !== void 0);
+  const marksInputs = (desc.inputs.marks ?? []).map((input) => input.name);
+  const project = inst.inputs.marks?.project;
+  const extraInputs = {};
+  for (let index3 = 1; index3 < marksInputs.length; index3++) {
+    const projected = project?.[marksInputs[index3]];
+    if (typeof projected === "string")
+      extraInputs[marksInputs[index3]] = projected;
+  }
+  if (stage === "pre-affine") {
+    for (const [role, input] of Object.entries(inst.inputs)) {
+      if (role === "marks" || typeof input.relation !== "string")
+        continue;
+      extraInputs[role] = input.relation;
+    }
+  }
+  const binding = {
+    key: `${plotId}:${step.layoutId}`,
+    inputs: { value: column, ...extraInputs },
+    outputs,
+    options: inst.options,
+    refs: auxRefs(desc, inst),
+    outSpace: plot.channels[outputs[0]]?.type.space
+  };
+  const holes = {};
+  if (stage === "pre-affine" && inst.domain !== void 0) {
+    holes.domain = inst.domain;
+    if (contributions !== void 0) {
+      const contribution = store.alloc("domain", void 0, "relation");
+      contributions.push(contribution);
+      holes.contribution = contribution;
+    }
+  }
+  const key = template !== void 0 && inst.shared !== true && (inst.shared === false || desc.perCell === true) ? "dvl_cell" : void 0;
+  const io = {
+    id: `${plotId}:${step.layoutId}`,
+    binding,
+    marksIn,
+    trainIn,
+    marksOut: marks2,
+    holes,
+    key,
+    ...stage === "pre-affine" && { treatment: inst.treatment },
+    alloc: (role, kind) => store.alloc(role, void 0, kind)
+  };
+  specs.push(...stampAlgo(desc, desc.plan(io)));
+  if (stage === "pre-affine") {
+    for (const output of declared) {
+      const channels = out2chs.get(output);
+      if (channels === void 0 || channels.length < 2)
+        continue;
+      for (const sibling of channels.slice(1)) {
+        const source = marks2;
+        marks2 = store.alloc("marks", void 0, "relation");
+        const copySpace = staticOutSpace(desc.outSpaces?.[output]) ?? plot.channels[channels[0]].type.space;
+        specs.push({
+          id: `${plotId}:copy:${sibling}`,
+          reads: [source],
+          writes: [marks2],
+          payload: {
+            kind: "relop",
+            key: `${plotId}:${sibling}`,
+            add: { [sibling]: mcol(channels[0]) },
+            outTypes: { [sibling]: "unknown" },
+            outSpaces: { [sibling]: copySpace },
+            tag: `col:${sibling}`
+          }
+        });
+      }
+    }
+  }
+  return marks2;
+}
+
+// src/lib/dvl/plan/compile/placed-columns.ts
+var expansionOf = (spec, expr2) => expr2 === void 0 || expr2.kind !== "layout-output" ? void 0 : baseInstanceOf(spec, expr2.layout)?.expand;
+function collectPlacedColumns(spec, plot, minted, store) {
+  const relByAxis = /* @__PURE__ */ new Map();
+  const rel2 = (axis) => {
+    let group = relByAxis.get(axis);
+    if (group === void 0)
+      relByAxis.set(axis, group = { coords: [], lens: [] });
+    return group;
+  };
+  for (const item of minted) {
+    const group = rel2(item.axis);
+    (item.kind === "coord" ? group.coords : group.lens).push(item.column);
+  }
+  let liveExpansion = false;
   for (const [ch, expr2] of Object.entries(plot.channels)) {
+    const exp = expansionOf(spec, expr2);
+    if (exp !== void 0 && store.get(exp.lo).status !== "sealed")
+      liveExpansion = true;
     if (expr2.kind === "table-ref")
       continue;
-    const sp = expr2.type.space;
-    if (sp.space !== "relative")
+    const space2 = expr2.type.space;
+    if (space2.space !== "relative")
       continue;
-    if (sp.geom.kind === "coord")
-      rel2(sp.geom.axis).coords.push({ name: ch, exp: expOf(expr2) });
-    else if (sp.geom.kind === "len") {
-      if (sp.geom.axis === "xy")
+    if (space2.geom.kind === "coord")
+      rel2(space2.geom.axis).coords.push({ name: ch, exp });
+    else if (space2.geom.kind === "len") {
+      if (space2.geom.axis === "xy") {
         throw new Error(`compilePlot: channel "${ch}" is a relative len\u27E8xy\u27E9 \u2014 an isotropic relative length has no frame axis to place into (declare len\u27E8x\u27E9 or len\u27E8y\u27E9, or bind a pixel value)`);
-      rel2(sp.geom.axis).lens.push({ name: ch, exp: expOf(expr2) });
-    }
-  }
-  const relMarks = marks2;
-  const dataInset = nodeId === spec.root ? opts.inset : void 0;
-  marks2 = emitFrameAffines({ plotId, relByAxis, template, insets: node.insets, cc, store, specs, marks: marks2, dataInset });
-  const postAffineOrdered = [...postAffineSteps.filter((s) => s.kind !== "layout"), ...postAffineSteps.filter((s) => s.kind === "layout")];
-  for (const step of postAffineOrdered) {
-    if (step.kind === "expr") {
-      const next2 = store.alloc("marks", void 0, "relation");
-      specs.push({ id: `${plotId}:expr:${step.ch}`, reads: [marks2], writes: [next2], payload: { kind: "relop", key: `${plotId}:${step.ch}`, add: { [step.ch]: toScalar(step.expr) }, outTypes: { [step.ch]: "double" }, outSpaces: { [step.ch]: step.expr.type.space }, tag: `expr:${step.ch}` } });
-      marks2 = next2;
-      continue;
-    }
-    if (step.kind === "via") {
-      const ref = built.find((pb) => pb.pid === step.refPlot);
-      const wantsBox = step.refPlot !== void 0 && step.chans.some((c2) => BOX_ATTRS.has(c2.attr));
-      let refCell;
-      if (wantsBox) {
-        if (ref !== void 0 && ref.boxed === void 0)
-          throw new Error(`compilePlot: via on "${plotId}" borrows box edges of "${step.refPlot}" but its box fork was never emitted \u2014 desugarRouteInputs must set needsBox at bind (compiler bug)`);
-        refCell = ref !== void 0 ? ref.boxed : `$plot-boxed:${step.refPlot}`;
-      } else {
-        refCell = ref !== void 0 ? ref.marks : `$ref:${step.refPlot}`;
       }
-      marks2 = emitViaJoins(step, refCell, marks2, plotId);
+      rel2(space2.geom.axis).lens.push({ name: ch, exp });
     }
-    if (step.kind !== "layout")
-      continue;
-    const prev = marks2;
-    const next = store.alloc("marks", void 0, "relation");
-    const inst = spec.layouts.get(step.layoutId);
-    const desc = opOf(inst);
-    const algo = desc;
-    const marksInputs = (desc.inputs.marks ?? []).map((c2) => c2.name);
-    const proj = inst.inputs.marks?.project;
-    const extraInputs = {};
-    for (let mi = 1; mi < marksInputs.length; mi++) {
-      const col3 = proj?.[marksInputs[mi]];
-      if (typeof col3 === "string")
-        extraInputs[marksInputs[mi]] = col3;
+  }
+  return { relByAxis, liveExpansion };
+}
+
+// src/lib/dvl/plan/compile/mark-shape.ts
+function emitPairsShape(spec, plot, plotId, marksIn, specs, store) {
+  if (plot.resolvedMark?.cardinality !== "pairs")
+    return { marks: marksIn, minted: [] };
+  const kinds = plot.resolvedMark.channels;
+  const bound = Object.keys(plot.channels);
+  if (plot.channels.x === void 0 || plot.channels.y === void 0)
+    throw new Error(`compilePlot: connect "${plotId}" needs both x and y channels`);
+  const group = bound.filter((ch) => kinds[ch] === "color" || kinds[ch] === "shape");
+  if (group.length > 1)
+    throw new Error(`compilePlot: connect "${plotId}" supports ONE series channel for now (got ${group.join(", ")})`);
+  const window2 = { partition: group[0], order: plot.channels.order !== void 0 ? "order" : "x" };
+  const marks2 = store.alloc("marks", void 0, "relation");
+  const sx = plot.channels.x.type.space;
+  const sy = plot.channels.y.type.space;
+  specs.push({
+    id: `${plotId}:pairs`,
+    reads: [marksIn],
+    writes: [marks2],
+    payload: {
+      kind: "relop",
+      key: `${plotId}:pairs`,
+      add: { x1: mcol("x"), y1: mcol("y"), x2: lead("x", window2), y2: lead("y", window2) },
+      outTypes: { x1: "double", y1: "double", x2: "double", y2: "double" },
+      outSpaces: { x1: sx, y1: sy, x2: sx, y2: sy },
+      tag: "pairs"
     }
-    const column = inputBinding(inst, plotId).marks?.[0];
-    if (column === void 0)
-      throw new Error(`compileNode: post-affine layout "${step.layoutId}" has no source column`);
-    const declared = desc.outSpaces !== void 0 ? Object.keys(desc.outSpaces) : "add" in desc.output ? desc.output.add.map((a3) => a3.name) : [];
-    const out2chs = /* @__PURE__ */ new Map();
-    for (const c2 of step.chans)
-      out2chs.set(c2.output, [...out2chs.get(c2.output) ?? [], c2.ch]);
-    const outputs = declared.map((o) => out2chs.get(o)?.[0]).filter((c2) => c2 !== void 0);
-    const binding = { key: `${plotId}:${step.layoutId}`, inputs: { value: column, ...extraInputs }, outputs, options: inst.options, refs: auxRefs(desc, inst), outSpace: plot.channels[outputs[0]]?.type.space };
-    const key = template !== void 0 && inst.shared !== true && (inst.shared === false || desc.perCell === true) ? "dvl_cell" : void 0;
-    const holes = {};
-    const io = { id: `${plotId}:${step.layoutId}`, binding, marksIn: prev, trainIn: prev, marksOut: next, holes, key, alloc: (role, kind) => store.alloc(role, void 0, kind) };
-    specs.push(...stampAlgo(algo, algo.plan(io)));
-    marks2 = next;
-  }
-  const markDesc = plot.resolvedMark;
-  if (markDesc === void 0)
-    throw new Error(`compile: plot "${plotId}" has an unresolved mark \u2014 call resolveSpec(spec, registries) after the lowerings`);
-  if (markDesc.cardinality === "aggregate") {
-    const positional = (ch) => {
-      const k2 = markDesc.channels[ch];
-      return k2 === "positional-x" || k2 === "positional-y";
-    };
-    const bound = Object.keys(plot.channels);
-    const group = bound.filter((ch) => markDesc.channels[ch] === "color" || markDesc.channels[ch] === "shape");
-    const orderCh = plot.channels["order"] !== void 0 ? "order" : void 0;
-    const carry = bound.filter((ch) => !positional(ch) && !group.includes(ch) && ch !== "order");
-    const placed = store.alloc("marks", void 0, "relation");
-    specs.push({ id: `${plotId}:path`, reads: [marks2], writes: [placed], payload: { kind: "path-agg", key: `${plotId}:path`, shape: plot.markType === "area" ? "area" : "line", carry, group, ...orderCh !== void 0 && { order: orderCh } } });
-    marks2 = placed;
-  }
-  let boxed;
-  const liveExpansion = Object.values(plot.channels).some((e) => {
-    const exp = expOf(e);
-    return exp !== void 0 && store.get(exp.lo).status !== "sealed";
   });
-  if (liveExpansion && participates(plot) || plot.needsBox === true) {
-    const edges = boxEdgesOf(plot) ?? {};
+  const minted = [];
+  if (sx.space === "relative" && sx.geom.kind === "coord") {
+    const exp = expansionOf(spec, plot.channels.x);
+    minted.push({ axis: sx.geom.axis, kind: "coord", column: { name: "x1", exp } }, { axis: sx.geom.axis, kind: "coord", column: { name: "x2", exp } });
+  }
+  if (sy.space === "relative" && sy.geom.kind === "coord") {
+    const exp = expansionOf(spec, plot.channels.y);
+    minted.push({ axis: sy.geom.axis, kind: "coord", column: { name: "y1", exp } }, { axis: sy.geom.axis, kind: "coord", column: { name: "y2", exp } });
+  }
+  return { marks: marks2, minted };
+}
+function emitAggregateShape(plot, plotId, marksIn, specs, store) {
+  const desc = plot.resolvedMark;
+  if (desc === void 0)
+    throw new Error(`compile: plot "${plotId}" has an unresolved mark \u2014 call resolveSpec(spec, registries) after the lowerings`);
+  if (desc.cardinality !== "aggregate")
+    return marksIn;
+  const positional = (ch) => desc.channels[ch] === "positional-x" || desc.channels[ch] === "positional-y";
+  const bound = Object.keys(plot.channels);
+  const group = bound.filter((ch) => desc.channels[ch] === "color" || desc.channels[ch] === "shape");
+  const order = plot.channels.order !== void 0 ? "order" : void 0;
+  const carry = bound.filter((ch) => !positional(ch) && !group.includes(ch) && ch !== "order");
+  const marks2 = store.alloc("marks", void 0, "relation");
+  specs.push({ id: `${plotId}:path`, reads: [marksIn], writes: [marks2], payload: { kind: "path-agg", key: `${plotId}:path`, shape: plot.markType === "area" ? "area" : "line", carry, group, ...order !== void 0 && { order } } });
+  return marks2;
+}
+
+// src/lib/dvl/plan/compile/via.ts
+var outputSpace = (channel) => channel.space.space === "relative" ? pixelSpace(channel.space.geom) : channel.space;
+function emitPlainVia(args) {
+  const { step, channels, refCell, marksIn, idBase, specs, store } = args;
+  const walk2 = emitIntermediateHops(step.resolved, `${idBase}:via`, marksIn, specs, store);
+  const marks2 = store.alloc("marks", void 0, "relation");
+  const carrier = step.refTable !== void 0 ? "unknown" : "double";
+  specs.push({
+    id: `${idBase}:via:${channels.map((channel) => channel.ch).join(",")}`,
+    reads: [walk2.marks, refCell],
+    writes: [marks2],
+    payload: {
+      kind: "relop",
+      key: `${idBase}:via:${channels[0].ch}`,
+      add: Object.fromEntries(channels.map((channel) => [channel.ch, fcol(channel.attr)])),
+      outTypes: Object.fromEntries(channels.map((channel) => [channel.ch, carrier])),
+      outSpaces: Object.fromEntries(channels.map((channel) => [channel.ch, outputSpace(channel)])),
+      join: { input: "ref", on: walk2.finalOn },
+      tag: `via:${channels[0].ch}`
+    }
+  });
+  return marks2;
+}
+function emitDeclarativeResolve(args) {
+  const { channels, refCell, pipelineMarks, joinBase, stageOn, idBase, specs, store } = args;
+  if (channels.length === 0)
+    return pipelineMarks;
+  const stageAdd = {};
+  const stageSpaces = {};
+  const reduceAdds = {};
+  for (const channel of channels) {
+    stageAdd[`dvl_v_${channel.ch}`] = channel.resolve.arg ?? fcol(channel.attr);
+    stageSpaces[`dvl_v_${channel.ch}`] = dataSpace;
+    if (channel.resolve.order !== void 0) {
+      stageAdd[`dvl_o_${channel.ch}`] = fcol(channel.resolve.order);
+      stageSpaces[`dvl_o_${channel.ch}`] = dataSpace;
+    }
+    reduceAdds[channel.ch] = {
+      fn: channel.resolve.fn,
+      col: `dvl_v_${channel.ch}`,
+      ...channel.resolve.order !== void 0 && { order: `dvl_o_${channel.ch}`, desc: channel.resolve.desc }
+    };
+  }
+  const stage = store.alloc("marks", void 0, "relation");
+  specs.push({
+    id: `${idBase}:via-stage:${channels.map((channel) => channel.ch).join(",")}`,
+    reads: [joinBase, refCell],
+    writes: [stage],
+    payload: {
+      kind: "relop",
+      key: `${idBase}:via-stage:${channels[0].ch}`,
+      add: stageAdd,
+      outTypes: Object.fromEntries(Object.keys(stageAdd).map((column) => [column, "unknown"])),
+      outSpaces: stageSpaces,
+      join: { input: "ref", on: stageOn },
+      tag: `via-stage:${channels[0].ch}`
+    }
+  });
+  const reduced = store.alloc("marks", void 0, "relation");
+  specs.push({
+    id: `${idBase}:via-reduce:${channels.map((channel) => channel.ch).join(",")}`,
+    reads: [stage],
+    writes: [reduced],
+    payload: {
+      kind: "reduce",
+      key: `${idBase}:via-reduce:${channels[0].ch}`,
+      by: "dvl_mark",
+      adds: reduceAdds,
+      outSpaces: Object.fromEntries(channels.map((channel) => [channel.ch, outputSpace(channel)]))
+    }
+  });
+  const marks2 = store.alloc("marks", void 0, "relation");
+  specs.push({
+    id: `${idBase}:via-attach:${channels.map((channel) => channel.ch).join(",")}`,
+    reads: [pipelineMarks, reduced],
+    writes: [marks2],
+    payload: {
+      kind: "relop",
+      key: `${idBase}:via-attach:${channels[0].ch}`,
+      add: Object.fromEntries(channels.map((channel) => [channel.ch, fcol(channel.ch)])),
+      outTypes: Object.fromEntries(channels.map((channel) => [channel.ch, "double"])),
+      outSpaces: Object.fromEntries(channels.map((channel) => [channel.ch, outputSpace(channel)])),
+      join: { input: "fit", on: [["dvl_mark", "dvl_mark"]], kind: "LEFT JOIN" },
+      tag: `via-attach:${channels[0].ch}`
+    }
+  });
+  return marks2;
+}
+function emitOpaqueResolve(args) {
+  const { channels, refCell, pipelineMarks, joinBase, stageOn, idBase, specs, store } = args;
+  if (channels.length === 0)
+    return pipelineMarks;
+  const marks2 = store.alloc("marks", void 0, "relation");
+  specs.push({
+    id: `${idBase}:via-agg:${channels.map((channel) => channel.ch).join(",")}`,
+    reads: [pipelineMarks, joinBase, refCell],
+    writes: [marks2],
+    payload: {
+      kind: "via-agg",
+      key: `${idBase}:via-agg:${channels[0].ch}`,
+      on: stageOn,
+      adds: Object.fromEntries(channels.map((channel) => [channel.ch, { attr: channel.attr, ...channel.resolve }])),
+      outSpaces: Object.fromEntries(channels.map((channel) => [channel.ch, outputSpace(channel)]))
+    }
+  });
+  return marks2;
+}
+function emitViaJoins(step, refCell, marksIn, idBase, specs, store) {
+  let marks2 = marksIn;
+  const plain = step.chans.filter((channel) => channel.resolve === void 0);
+  const resolved = step.chans.filter((channel) => channel.resolve !== void 0);
+  if (plain.length > 0)
+    marks2 = emitPlainVia({ step, channels: plain, refCell, marksIn: marks2, idBase, specs, store });
+  if (resolved.length === 0)
+    return marks2;
+  const lastHop = pairs(step.resolved[step.resolved.length - 1]).map((pair2) => [pair2.left, pair2.right, pair2.op]);
+  const aggregateWalk = step.resolved.length > 1 ? emitIntermediateHops(step.resolved, `${idBase}:via-agg`, marks2, specs, store) : null;
+  const joinBase = aggregateWalk?.marks ?? marks2;
+  const stageOn = lastHop.map(([left2, right, op2], index3) => [aggregateWalk !== null ? aggregateWalk.finalOn[index3][0] : left2, right, op2]);
+  const declarative = resolved.filter((channel) => channel.resolve.js === void 0);
+  const opaque = resolved.filter((channel) => channel.resolve.js !== void 0);
+  marks2 = emitDeclarativeResolve({ channels: declarative, refCell, pipelineMarks: marks2, joinBase, stageOn, idBase, specs, store });
+  marks2 = emitOpaqueResolve({ channels: opaque, refCell, pipelineMarks: marks2, joinBase, stageOn, idBase, specs, store });
+  return marks2;
+}
+function emitTableVia(step, marks2, plotId, specs, store) {
+  const table = store.alloc("marks", void 0, "relation");
+  specs.push({
+    id: `${plotId}:tvia:${step.chans[0].ch}:table`,
+    reads: [],
+    writes: [table],
+    payload: { kind: "relop", key: `${plotId}:tvia:${step.chans[0].ch}:table`, add: {}, outTypes: {}, source: { rows: [], table: step.refTable } }
+  });
+  return emitViaJoins(step, table, marks2, `${plotId}:t`, specs, store);
+}
+function emitPlotVia(step, marks2, plotId, built, specs, store) {
+  const ref = built.find((build) => build.pid === step.refPlot);
+  const wantsBox = step.refPlot !== void 0 && step.chans.some((channel) => BOX_ATTRS.has(channel.attr));
+  let refCell;
+  if (wantsBox) {
+    if (ref !== void 0 && ref.boxed === void 0) {
+      throw new Error(`compilePlot: via on "${plotId}" borrows box edges of "${step.refPlot}" but its box fork was never emitted \u2014 desugarRouteInputs must set needsBox at bind (compiler bug)`);
+    }
+    refCell = ref !== void 0 ? ref.boxed : `$plot-boxed:${step.refPlot}`;
+  } else {
+    refCell = ref !== void 0 ? ref.marks : `$ref:${step.refPlot}`;
+  }
+  return emitViaJoins(step, refCell, marks2, plotId, specs, store);
+}
+
+// src/lib/dvl/plan/compile/plot.ts
+function compilePlot(spec, nodeId, plotId, specs, producers, contributions, opts, template, built) {
+  const plot = spec.plots.get(plotId);
+  if (plot === void 0)
+    throw new Error(`compileNode: no plot "${plotId}"`);
+  const node = spec.nodes.get(nodeId);
+  const store = spec.cells;
+  const base2 = resolveBase(spec, plot, producers, specs, store);
+  let marks2 = base2;
+  const keyed = assignCellKey({ spec, plot, plotId, marks: marks2, template, built, specs, store });
+  marks2 = keyed.marks;
+  const phases2 = groupChannelSteps(spec, plot, plotId);
+  if (plot.baseProjections !== void 0 && Object.keys(plot.baseProjections).length > 0) {
+    const previous = marks2;
+    marks2 = store.alloc("marks", void 0, "relation");
     const add3 = {};
     const outTypes = {};
     const outSpaces = {};
-    const put = (col3, e, axis) => {
-      if (e !== void 0) {
-        add3[col3] = e;
-        outTypes[col3] = "double";
-        outSpaces[col3] = pixelSpace(coord(axis));
-      }
-    };
-    put("dvl_x0", edges.left, "x");
-    put("dvl_x1", edges.right, "x");
-    put("dvl_y0", edges.top, "y");
-    put("dvl_y1", edges.bottom, "y");
-    if (Object.keys(add3).length > 0) {
-      boxed = store.alloc("marks", void 0, "relation");
-      specs.push({ id: `${plotId}:box`, reads: [marks2], writes: [boxed], payload: { kind: "relop", key: `${plotId}:box`, add: add3, outTypes, outSpaces, tag: "box" } });
+    for (const [column, expr2] of Object.entries(plot.baseProjections)) {
+      add3[column] = toScalar(expr2);
+      outTypes[column] = "double";
+      outSpaces[column] = expr2.type.space;
+    }
+    specs.push({
+      id: `${plotId}:base-proj`,
+      reads: [previous],
+      writes: [marks2],
+      payload: { kind: "relop", key: `${plotId}:base-proj`, add: add3, outTypes, outSpaces, tag: "base-proj" }
+    });
+  }
+  const pipelineBase = marks2;
+  for (const action of phases2.preAffine) {
+    if (action.kind === "reserve-deferred-cell") {
+      store.alloc("marks", void 0, "relation");
+      continue;
+    }
+    const step = action.step;
+    if (step.kind === "layout") {
+      marks2 = emitLayoutStep({
+        spec,
+        plot,
+        plotId,
+        step,
+        stage: "pre-affine",
+        marksIn: marks2,
+        trainIn: pipelineBase,
+        contributions: contributions.get(step.layoutId),
+        template,
+        specs,
+        store
+      });
+    } else if (step.kind === "via") {
+      store.alloc("marks", void 0, "relation");
+      marks2 = emitTableVia(step, marks2, plotId, specs, store);
+    } else {
+      marks2 = emitExprStep(step, marks2, plotId, specs, store);
     }
   }
-  return { pid: plotId, marks: marks2, relMarks, base: base2, keyed: keyedCell, boxed };
+  const pairs2 = emitPairsShape(spec, plot, plotId, marks2, specs, store);
+  marks2 = pairs2.marks;
+  const placed = collectPlacedColumns(spec, plot, pairs2.minted, store);
+  const relMarks = marks2;
+  marks2 = emitFrameAffines({
+    plotId,
+    relByAxis: placed.relByAxis,
+    template,
+    insets: node.insets,
+    cc: node.extent.content,
+    store,
+    specs,
+    marks: marks2,
+    dataInset: nodeId === spec.root ? opts.inset : void 0
+  });
+  for (const step of phases2.postAffineInputs) {
+    if (step.kind === "via")
+      marks2 = emitPlotVia(step, marks2, plotId, built, specs, store);
+    else
+      marks2 = emitExprStep(step, marks2, plotId, specs, store);
+  }
+  for (const step of phases2.postAffineLayouts) {
+    marks2 = emitLayoutStep({
+      spec,
+      plot,
+      plotId,
+      step,
+      stage: "post-affine",
+      marksIn: marks2,
+      trainIn: marks2,
+      template,
+      specs,
+      store
+    });
+  }
+  marks2 = emitAggregateShape(plot, plotId, marks2, specs, store);
+  const boxed = emitBoxFork(plot, plotId, marks2, placed.liveExpansion, specs, store);
+  return { pid: plotId, marks: marks2, relMarks, base: base2, keyed: keyed.keyed, boxed };
+}
+function emitExprStep(step, marksIn, plotId, specs, store) {
+  const marks2 = store.alloc("marks", void 0, "relation");
+  if (step.expr.kind === "literal") {
+    specs.push({
+      id: `${plotId}:lit:${step.ch}`,
+      reads: [marksIn],
+      writes: [marks2],
+      payload: {
+        kind: "relop",
+        key: `${plotId}:${step.ch}`,
+        add: { [step.ch]: lit(step.expr.value, step.expr.type.space) },
+        outTypes: { [step.ch]: litType(step.expr.value) },
+        outSpaces: { [step.ch]: step.expr.type.space },
+        tag: `lit:${step.ch}`
+      }
+    });
+    return marks2;
+  }
+  if (step.expr.kind === "local-column") {
+    specs.push({
+      id: `${plotId}:col:${step.ch}`,
+      reads: [marksIn],
+      writes: [marks2],
+      payload: {
+        kind: "relop",
+        key: `${plotId}:${step.ch}`,
+        add: { [step.ch]: mcol(step.expr.columnName) },
+        outTypes: { [step.ch]: "unknown" },
+        outSpaces: { [step.ch]: step.expr.type.space },
+        tag: `col:${step.ch}`
+      }
+    });
+    return marks2;
+  }
+  if (step.expr.kind === "binary" || step.expr.kind === "call") {
+    specs.push({
+      id: `${plotId}:expr:${step.ch}`,
+      reads: [marksIn],
+      writes: [marks2],
+      payload: {
+        kind: "relop",
+        key: `${plotId}:${step.ch}`,
+        add: { [step.ch]: toScalar(step.expr) },
+        outTypes: { [step.ch]: "double" },
+        outSpaces: { [step.ch]: step.expr.type.space },
+        tag: `expr:${step.ch}`
+      }
+    });
+    return marks2;
+  }
+  throw new Error(`compileNode: channel "${step.ch}" (${step.expr.kind}) is unsupported`);
 }
 function resolveBase(spec, plot, producers, specs, store) {
   if (isProducerSource(plot.source)) {
-    const pid = plot.source.producer;
-    let cell3 = producers.get(pid);
-    if (cell3 === void 0) {
-      const inst = spec.layouts.get(pid);
+    const producerId = plot.source.producer;
+    let cell2 = producers.get(producerId);
+    if (cell2 === void 0) {
+      const inst = spec.layouts.get(producerId);
       if (inst === void 0)
-        throw new Error(`compileNode: no producer instance "${pid}"`);
-      cell3 = store.alloc("marks", void 0, "relation");
+        throw new Error(`compileNode: no producer instance "${producerId}"`);
+      cell2 = store.alloc("marks", void 0, "relation");
       const algo = opOf(inst);
-      const io = { id: `${pid}:prod`, binding: { key: `${pid}:prod`, inputs: {}, outputs: [], options: inst.options }, marksOut: cell3, holes: inst.domain !== void 0 ? { domain: inst.domain } : {}, alloc: (role, kind) => store.alloc(role, void 0, kind) };
+      const io = {
+        id: `${producerId}:prod`,
+        binding: { key: `${producerId}:prod`, inputs: {}, outputs: [], options: inst.options },
+        marksOut: cell2,
+        holes: inst.domain !== void 0 ? { domain: inst.domain } : {},
+        alloc: (role, kind) => store.alloc(role, void 0, kind)
+      };
       specs.push(...stampAlgo(algo, algo.plan(io)));
-      producers.set(pid, cell3);
+      producers.set(producerId, cell2);
     }
-    return cell3;
+    return cell2;
   }
   if (isRelationSource(plot.source))
     return plot.source.relation;
@@ -10651,9 +10895,9 @@ function pxNum(v2, what) {
 }
 function resolveTitle(spec, scale, cfg) {
   const t2 = cfg?.title;
-  if (t2 === void 0 || t2 === false)
+  if (t2 === false)
     return void 0;
-  const o = t2 === true ? {} : typeof t2 === "string" ? { text: t2 } : t2;
+  const o = t2 === void 0 || t2 === true ? {} : typeof t2 === "string" ? { text: t2 } : t2;
   const text = o.text ?? deriveTitle(spec, scale);
   if (text === void 0 || text.length === 0)
     return void 0;
@@ -10671,14 +10915,16 @@ function resolveTitle(spec, scale, cfg) {
 }
 function deriveTitle(spec, scale) {
   const m4 = scale.members?.[0];
-  if (m4 === void 0)
-    return void 0;
-  if (m4.column.startsWith("dvl_se_")) {
-    const e = spec.plots.get(m4.plot)?.baseProjections?.[m4.column];
-    if (e !== void 0)
-      return exprLabel(e);
+  if (m4 !== void 0) {
+    if (m4.column.startsWith("dvl_se_")) {
+      const e = spec.plots.get(m4.plot)?.baseProjections?.[m4.column];
+      if (e !== void 0)
+        return exprLabel(e);
+    }
+    return m4.column;
   }
-  return m4.column;
+  const col3 = Object.values(scale.inputs?.marks?.project ?? {}).find((v2) => typeof v2 === "string");
+  return col3 === void 0 || col3.startsWith("dvl_") ? void 0 : col3;
 }
 function exprLabel(e) {
   switch (e.kind) {
@@ -11490,9 +11736,9 @@ function columnsAdded(op2) {
 }
 function extract(specs) {
   const reqs = [];
-  const need = (cell3, column) => {
-    if (cell3 !== void 0 && isSourceColumn(column))
-      reqs.push({ cell: cell3, column });
+  const need = (cell2, column) => {
+    if (cell2 !== void 0 && isSourceColumn(column))
+      reqs.push({ cell: cell2, column });
   };
   for (const op2 of specs) {
     const p2 = op2.payload;
@@ -11537,11 +11783,11 @@ function trace(req, producer2, demand) {
   const seen = /* @__PURE__ */ new Set();
   const stack = [req.cell];
   while (stack.length > 0) {
-    const cell3 = stack.pop();
-    if (seen.has(cell3))
+    const cell2 = stack.pop();
+    if (seen.has(cell2))
       continue;
-    seen.add(cell3);
-    const op2 = producer2.get(cell3);
+    seen.add(cell2);
+    const op2 = producer2.get(cell2);
     if (op2 === void 0)
       continue;
     const p2 = op2.payload;
@@ -12078,11 +12324,11 @@ var DataflowGraph = class {
   get ops() {
     return this.#ops;
   }
-  producer(cell3) {
-    return this.#producerOf.get(cell3);
+  producer(cell2) {
+    return this.#producerOf.get(cell2);
   }
-  consumers(cell3) {
-    return this.#consumersOf.get(cell3) ?? [];
+  consumers(cell2) {
+    return this.#consumersOf.get(cell2) ?? [];
   }
   splice(anchor, deleteCount, ...newOps) {
     const idx = this.#ops.indexOf(anchor);
@@ -12452,6 +12698,7 @@ async function schedule(ops, store, opts = {}) {
     const cyclic = scc.length > 1 || scc[0].reads.some((r) => scc[0].writes.includes(r));
     if (!cyclic) {
       await runOp2(scc[0]);
+      opts.onSweep?.({ iteration: 0, cells: scc[0].writes });
       for (const w2 of scc[0].writes)
         store.seal(w2);
       continue;
@@ -12459,7 +12706,7 @@ async function schedule(ops, store, opts = {}) {
     const writes = scc.flatMap((o) => [...o.writes]);
     const ordered = seedOrder(store, scc);
     const sccCells = new Set(writes);
-    const sccControllers = (opts.controllers ?? []).filter((c2) => c2.controls.some((cell3) => sccCells.has(cell3)));
+    const sccControllers = (opts.controllers ?? []).filter((c2) => c2.controls.some((cell2) => sccCells.has(cell2)));
     const STALL = 6, IMPROVE = 1e-9;
     let converged = false, plateaued = false;
     let bestScalar = Infinity, stall = 0, last = 0;
@@ -12469,6 +12716,7 @@ async function schedule(ops, store, opts = {}) {
         await runOp2(o);
       for (const ctrl of sccControllers)
         ctrl.step({ store, iteration: it, violations: [] });
+      opts.onSweep?.({ iteration: it, cells: writes });
       const r = residual(store, writes, snap);
       last = r.max;
       if (r.max <= epsilon) {
@@ -12500,12 +12748,12 @@ var SCALAR2 = "scalar";
 function snapshotScalars(store, cells) {
   const m4 = /* @__PURE__ */ new Map();
   for (const c2 of cells) {
-    const cell3 = store.get(c2);
-    if (cell3.kind === SCALAR2) {
-      if (typeof cell3.value === "number")
-        m4.set(c2, cell3.value);
-    } else if (cell3.value !== void 0) {
-      m4.set(c2, JSON.stringify(cell3.value));
+    const cell2 = store.get(c2);
+    if (cell2.kind === SCALAR2) {
+      if (typeof cell2.value === "number")
+        m4.set(c2, cell2.value);
+    } else if (cell2.value !== void 0) {
+      m4.set(c2, JSON.stringify(cell2.value));
     }
   }
   return m4;
@@ -12514,17 +12762,17 @@ function residual(store, cells, snap) {
   let scalar = 0;
   let relChanged = false;
   for (const c2 of cells) {
-    const cell3 = store.get(c2);
-    if (cell3.kind === SCALAR2) {
-      if (typeof cell3.value !== "number")
+    const cell2 = store.get(c2);
+    if (cell2.kind === SCALAR2) {
+      if (typeof cell2.value !== "number")
         continue;
       const prev = snap.get(c2);
-      const d = typeof prev !== "number" ? Math.abs(cell3.value) : Math.abs(cell3.value - prev);
+      const d = typeof prev !== "number" ? Math.abs(cell2.value) : Math.abs(cell2.value - prev);
       if (d > scalar)
         scalar = d;
-    } else if (cell3.value !== void 0) {
+    } else if (cell2.value !== void 0) {
       const prev = snap.get(c2);
-      if (prev !== JSON.stringify(cell3.value))
+      if (prev !== JSON.stringify(cell2.value))
         relChanged = true;
     }
   }
@@ -12772,7 +13020,7 @@ async function renderSpec(spec, registries, plotId, db, opts = {}) {
       throw new Error(`this backend cannot load DuckDB extensions (${[...required2].join(", ")}) required by a SQL-pushed resolver \u2014 use the JS resolver form ({ js: (matches, mark) => \u2026 })`);
     await dbg.span("extensions", { kind: "pass", pass: "extensions" }, () => db.backend.ensureExtensions([...required2]));
   }
-  await dbg.span("execute", { kind: "pass", pass: "execute" }, () => schedule(compileOps(specs, { spec, run, measure, debug: opts.debug }, registries.ops), spec.cells, { controllers }));
+  await dbg.span("execute", { kind: "pass", pass: "execute" }, () => schedule(compileOps(specs, { spec, run, measure, debug: opts.debug }, registries.ops), spec.cells, { controllers, onSweep: opts.onSweep }));
   recordGraph(specs, "execute", dbg, registries);
   if (dbg.level >= 1)
     recordFragmentGraph(spec.cells, "fragments", dbg);
@@ -13125,9 +13373,9 @@ function inferColumnType(rows, col3) {
 }
 function inferColumnarSchema(cols) {
   const keys2 = Object.keys(cols);
-  const len3 = keys2.length === 0 ? 0 : cols[keys2[0]].length;
+  const len2 = keys2.length === 0 ? 0 : cols[keys2[0]].length;
   const rows = [];
-  for (let i = 0; i < Math.min(len3, 64); i++) {
+  for (let i = 0; i < Math.min(len2, 64); i++) {
     const r = {};
     for (const k2 of keys2)
       r[k2] = cols[k2][i];
@@ -13199,9 +13447,9 @@ var DuckDBBackend = class {
       return;
     }
     const keys2 = Object.keys(cols);
-    const len3 = keys2.length === 0 ? 0 : cols[keys2[0]].length;
+    const len2 = keys2.length === 0 ? 0 : cols[keys2[0]].length;
     const rows = [];
-    for (let i = 0; i < len3; i++) {
+    for (let i = 0; i < len2; i++) {
       const r = {};
       for (const k2 of keys2)
         r[k2] = cols[k2][i];
@@ -14554,15 +14802,15 @@ var Builder = class _Builder {
     }
     const standard_fields = 2;
     this.addInt16(vtableloc - this.object_start);
-    const len3 = (trimmed_size + standard_fields) * SIZEOF_SHORT;
-    this.addInt16(len3);
+    const len2 = (trimmed_size + standard_fields) * SIZEOF_SHORT;
+    this.addInt16(len2);
     let existing_vtable = 0;
     const vt1 = this.space;
     outer_loop:
       for (i = 0; i < this.vtables.length; i++) {
         const vt2 = this.bb.capacity() - this.vtables[i];
-        if (len3 == this.bb.readInt16(vt2)) {
-          for (let j2 = SIZEOF_SHORT; j2 < len3; j2 += SIZEOF_SHORT) {
+        if (len2 == this.bb.readInt16(vt2)) {
+          for (let j2 = SIZEOF_SHORT; j2 < len2; j2 += SIZEOF_SHORT) {
             if (this.bb.readInt16(vt1 + j2) != this.bb.readInt16(vt2 + j2)) {
               continue outer_loop;
             }
@@ -16488,39 +16736,39 @@ function unsignedBigNumToString(a3) {
 }
 var BN = class _BN {
   /** @nocollapse */
-  static new(num4, isSigned) {
+  static new(num3, isSigned) {
     switch (isSigned) {
       case true:
-        return new SignedBigNum(num4);
+        return new SignedBigNum(num3);
       case false:
-        return new UnsignedBigNum(num4);
+        return new UnsignedBigNum(num3);
     }
-    switch (num4.constructor) {
+    switch (num3.constructor) {
       case Int8Array:
       case Int16Array:
       case Int32Array:
       case BigInt64Array:
-        return new SignedBigNum(num4);
+        return new SignedBigNum(num3);
     }
-    if (num4.byteLength === 16) {
-      return new DecimalBigNum(num4);
+    if (num3.byteLength === 16) {
+      return new DecimalBigNum(num3);
     }
-    return new UnsignedBigNum(num4);
+    return new UnsignedBigNum(num3);
   }
   /** @nocollapse */
-  static signed(num4) {
-    return new SignedBigNum(num4);
+  static signed(num3) {
+    return new SignedBigNum(num3);
   }
   /** @nocollapse */
-  static unsigned(num4) {
-    return new UnsignedBigNum(num4);
+  static unsigned(num3) {
+    return new UnsignedBigNum(num3);
   }
   /** @nocollapse */
-  static decimal(num4) {
-    return new DecimalBigNum(num4);
+  static decimal(num3) {
+    return new DecimalBigNum(num3);
   }
-  constructor(num4, isSigned) {
-    return _BN.new(num4, isSigned);
+  constructor(num3, isSigned) {
+    return _BN.new(num3, isSigned);
   }
 };
 
@@ -18275,16 +18523,16 @@ Object.defineProperties(MapRow.prototype, {
 // node_modules/apache-arrow/util/vector.mjs
 var tmp;
 function clampRange(source, begin, end, then) {
-  const { length: len3 = 0 } = source;
+  const { length: len2 = 0 } = source;
   let lhs = typeof begin !== "number" ? 0 : begin;
-  let rhs = typeof end !== "number" ? len3 : end;
-  lhs < 0 && (lhs = (lhs % len3 + len3) % len3);
-  rhs < 0 && (rhs = (rhs % len3 + len3) % len3);
+  let rhs = typeof end !== "number" ? len2 : end;
+  lhs < 0 && (lhs = (lhs % len2 + len2) % len2);
+  rhs < 0 && (rhs = (rhs % len2 + len2) % len2);
   rhs < lhs && (tmp = lhs, lhs = rhs, rhs = tmp);
-  rhs > len3 && (rhs = len3);
+  rhs > len2 && (rhs = len2);
   return then ? then(source, lhs, rhs) : [lhs, rhs];
 }
-var wrapIndex = (index3, len3) => index3 < 0 ? len3 + index3 : index3;
+var wrapIndex = (index3, len2) => index3 < 0 ? len2 + index3 : index3;
 var isNaNFast = (value) => value !== value;
 function createElementComparator(search) {
   const typeofSearch = typeof search;
@@ -18511,16 +18759,16 @@ function popcnt_bit_range(data, lhs, rhs) {
 function popcnt_array(arr, byteOffset, byteLength) {
   let cnt = 0, pos = Math.trunc(byteOffset);
   const view = new DataView(arr.buffer, arr.byteOffset, arr.byteLength);
-  const len3 = byteLength === void 0 ? arr.byteLength : pos + byteLength;
-  while (len3 - pos >= 4) {
+  const len2 = byteLength === void 0 ? arr.byteLength : pos + byteLength;
+  while (len2 - pos >= 4) {
     cnt += popcnt_uint32(view.getUint32(pos));
     pos += 4;
   }
-  while (len3 - pos >= 2) {
+  while (len2 - pos >= 2) {
     cnt += popcnt_uint32(view.getUint16(pos));
     pos += 2;
   }
-  while (len3 - pos >= 1) {
+  while (len2 - pos >= 1) {
     cnt += popcnt_uint32(view.getUint8(pos));
     pos += 1;
   }
@@ -18803,7 +19051,7 @@ var MakeDataVisitor = class _MakeDataVisitor extends Visitor {
   visitStruct(props) {
     const { ["type"]: type, ["offset"]: offset = 0, ["children"]: children = [] } = props;
     const nullBitmap = toUint8Array(props["nullBitmap"]);
-    const { length = children.reduce((len3, { length: length2 }) => Math.max(len3, length2), 0), nullCount = props["nullBitmap"] ? -1 : 0 } = props;
+    const { length = children.reduce((len2, { length: length2 }) => Math.max(len2, length2), 0), nullCount = props["nullBitmap"] ? -1 : 0 } = props;
     return new Data(type, offset, length, nullCount, [void 0, void 0, nullBitmap], children);
   }
   visitUnion(props) {
@@ -19514,12 +19762,12 @@ function valueToCase(x3) {
 }
 
 // node_modules/apache-arrow/builder/buffer.mjs
-function roundLengthUpToNearest64Bytes(len3, BPE) {
-  const bytesMinus1 = Math.ceil(len3) * BPE - 1;
+function roundLengthUpToNearest64Bytes(len2, BPE) {
+  const bytesMinus1 = Math.ceil(len2) * BPE - 1;
   return (bytesMinus1 - bytesMinus1 % 64 + 64 || 64) / BPE;
 }
-function resizeArray(arr, len3 = 0) {
-  return arr.length >= len3 ? arr.subarray(0, len3) : memcpy(new arr.constructor(len3), arr, 0);
+function resizeArray(arr, len2 = 0) {
+  return arr.length >= len2 ? arr.subarray(0, len2) : memcpy(new arr.constructor(len2), arr, 0);
 }
 var BufferBuilder = class {
   constructor(bufferType, initialSize = 0, stride = 1) {
@@ -20793,8 +21041,8 @@ var Uint642 = class _Uint64 extends BaseInt64 {
     return _Uint64.fromString(typeof val === "string" ? val : val.toString(), out_buffer);
   }
   /** @nocollapse */
-  static fromNumber(num4, out_buffer = new Uint32Array(2)) {
-    return _Uint64.fromString(num4.toString(), out_buffer);
+  static fromNumber(num3, out_buffer = new Uint32Array(2)) {
+    return _Uint64.fromString(num3.toString(), out_buffer);
   }
   /** @nocollapse */
   static fromString(str2, out_buffer = new Uint32Array(2)) {
@@ -20856,8 +21104,8 @@ var Int642 = class _Int64 extends BaseInt64 {
     return _Int64.fromString(typeof val === "string" ? val : val.toString(), out_buffer);
   }
   /** @nocollapse */
-  static fromNumber(num4, out_buffer = new Uint32Array(2)) {
-    return _Int64.fromString(num4.toString(), out_buffer);
+  static fromNumber(num3, out_buffer = new Uint32Array(2)) {
+    return _Int64.fromString(num3.toString(), out_buffer);
   }
   /** @nocollapse */
   static fromString(str2, out_buffer = new Uint32Array(2)) {
@@ -20982,8 +21230,8 @@ var Int128 = class _Int128 {
     return _Int128.fromString(typeof val === "string" ? val : val.toString(), out_buffer);
   }
   /** @nocollapse */
-  static fromNumber(num4, out_buffer = new Uint32Array(4)) {
-    return _Int128.fromString(num4.toString(), out_buffer);
+  static fromNumber(num3, out_buffer = new Uint32Array(4)) {
+    return _Int128.fromString(num3.toString(), out_buffer);
   }
   /** @nocollapse */
   static fromString(str2, out_buffer = new Uint32Array(4)) {
@@ -23444,8 +23692,8 @@ var MessageReader = class {
   readMetadataLength() {
     const buf = this.source.read(PADDING);
     const bb = buf && new ByteBuffer(buf);
-    const len3 = (bb === null || bb === void 0 ? void 0 : bb.readInt32(0)) || 0;
-    return { done: len3 === 0, value: len3 };
+    const len2 = (bb === null || bb === void 0 ? void 0 : bb.readInt32(0)) || 0;
+    return { done: len2 === 0, value: len2 };
   }
   readMetadata(metadataLength) {
     const buf = this.source.read(metadataLength);
@@ -23533,8 +23781,8 @@ var AsyncMessageReader = class {
     return __awaiter(this, void 0, void 0, function* () {
       const buf = yield this.source.read(PADDING);
       const bb = buf && new ByteBuffer(buf);
-      const len3 = (bb === null || bb === void 0 ? void 0 : bb.readInt32(0)) || 0;
-      return { done: len3 === 0, value: len3 };
+      const len2 = (bb === null || bb === void 0 ? void 0 : bb.readInt32(0)) || 0;
+      return { done: len2 === 0, value: len2 };
     });
   }
   readMetadata(metadataLength) {
@@ -26196,18 +26444,18 @@ var TextLeaf = class _TextLeaf extends Text {
     return 0;
   }
   static split(text, target) {
-    let part = [], len3 = -1;
+    let part = [], len2 = -1;
     for (let line of text) {
       part.push(line);
-      len3 += line.length + 1;
+      len2 += line.length + 1;
       if (part.length == 32) {
-        target.push(new _TextLeaf(part, len3));
+        target.push(new _TextLeaf(part, len2));
         part = [];
-        len3 = -1;
+        len2 = -1;
       }
     }
-    if (len3 > -1)
-      target.push(new _TextLeaf(part, len3));
+    if (len2 > -1)
+      target.push(new _TextLeaf(part, len2));
     return target;
   }
 };
@@ -26610,14 +26858,14 @@ var ChangeDesc = class _ChangeDesc {
   */
   iterGaps(f2) {
     for (let i = 0, posA = 0, posB = 0; i < this.sections.length; ) {
-      let len3 = this.sections[i++], ins = this.sections[i++];
+      let len2 = this.sections[i++], ins = this.sections[i++];
       if (ins < 0) {
-        f2(posA, posB, len3);
-        posB += len3;
+        f2(posA, posB, len2);
+        posB += len2;
       } else {
         posB += ins;
       }
-      posA += len3;
+      posA += len2;
     }
   }
   /**
@@ -26641,11 +26889,11 @@ var ChangeDesc = class _ChangeDesc {
   get invertedDesc() {
     let sections = [];
     for (let i = 0; i < this.sections.length; ) {
-      let len3 = this.sections[i++], ins = this.sections[i++];
+      let len2 = this.sections[i++], ins = this.sections[i++];
       if (ins < 0)
-        sections.push(len3, ins);
+        sections.push(len2, ins);
       else
-        sections.push(ins, len3);
+        sections.push(ins, len2);
     }
     return new _ChangeDesc(sections);
   }
@@ -26669,15 +26917,15 @@ var ChangeDesc = class _ChangeDesc {
   mapPos(pos, assoc = -1, mode = MapMode.Simple) {
     let posA = 0, posB = 0;
     for (let i = 0; i < this.sections.length; ) {
-      let len3 = this.sections[i++], ins = this.sections[i++], endA = posA + len3;
+      let len2 = this.sections[i++], ins = this.sections[i++], endA = posA + len2;
       if (ins < 0) {
         if (endA > pos)
           return posB + (pos - posA);
-        posB += len3;
+        posB += len2;
       } else {
         if (mode != MapMode.Simple && endA >= pos && (mode == MapMode.TrackDel && posA < pos && endA > pos || mode == MapMode.TrackBefore && posA < pos || mode == MapMode.TrackAfter && endA > pos))
           return null;
-        if (endA > pos || endA == pos && assoc < 0 && !len3)
+        if (endA > pos || endA == pos && assoc < 0 && !len2)
           return pos == posA || assoc < 0 ? posB : posB + ins;
         posB += ins;
       }
@@ -26694,7 +26942,7 @@ var ChangeDesc = class _ChangeDesc {
   */
   touchesRange(from, to = from) {
     for (let i = 0, pos = 0; i < this.sections.length && pos <= to; ) {
-      let len3 = this.sections[i++], ins = this.sections[i++], end = pos + len3;
+      let len2 = this.sections[i++], ins = this.sections[i++], end = pos + len2;
       if (ins >= 0 && pos <= to && end >= from)
         return pos < from && end > to ? "cover" : true;
       pos = end;
@@ -26707,8 +26955,8 @@ var ChangeDesc = class _ChangeDesc {
   toString() {
     let result = "";
     for (let i = 0; i < this.sections.length; ) {
-      let len3 = this.sections[i++], ins = this.sections[i++];
-      result += (result ? " " : "") + len3 + (ins >= 0 ? ":" + ins : "");
+      let len2 = this.sections[i++], ins = this.sections[i++];
+      result += (result ? " " : "") + len2 + (ins >= 0 ? ":" + ins : "");
     }
     return result;
   }
@@ -26761,16 +27009,16 @@ var ChangeSet = class _ChangeSet extends ChangeDesc {
   invert(doc2) {
     let sections = this.sections.slice(), inserted = [];
     for (let i = 0, pos = 0; i < sections.length; i += 2) {
-      let len3 = sections[i], ins = sections[i + 1];
+      let len2 = sections[i], ins = sections[i + 1];
       if (ins >= 0) {
         sections[i] = ins;
-        sections[i + 1] = len3;
+        sections[i + 1] = len2;
         let index3 = i >> 1;
         while (inserted.length < index3)
           inserted.push(Text.empty);
-        inserted.push(len3 ? doc2.slice(pos, pos + len3) : Text.empty);
+        inserted.push(len2 ? doc2.slice(pos, pos + len2) : Text.empty);
       }
-      pos += len3;
+      pos += len2;
     }
     return new _ChangeSet(sections, inserted);
   }
@@ -26830,24 +27078,24 @@ var ChangeSet = class _ChangeSet extends ChangeDesc {
         while (pos < next || pos == next && iter.len == 0) {
           if (iter.done)
             break done;
-          let len3 = Math.min(iter.len, next - pos);
-          addSection(filteredSections, len3, -1);
+          let len2 = Math.min(iter.len, next - pos);
+          addSection(filteredSections, len2, -1);
           let ins = iter.ins == -1 ? -1 : iter.off == 0 ? iter.ins : 0;
-          addSection(resultSections, len3, ins);
+          addSection(resultSections, len2, ins);
           if (ins > 0)
             addInsert(resultInserted, resultSections, iter.text);
-          iter.forward(len3);
-          pos += len3;
+          iter.forward(len2);
+          pos += len2;
         }
         let end = ranges[i++];
         while (pos < end) {
           if (iter.done)
             break done;
-          let len3 = Math.min(iter.len, end - pos);
-          addSection(resultSections, len3, -1);
-          addSection(filteredSections, len3, iter.ins == -1 ? -1 : iter.off == 0 ? iter.ins : 0);
-          iter.forward(len3);
-          pos += len3;
+          let len2 = Math.min(iter.len, end - pos);
+          addSection(resultSections, len2, -1);
+          addSection(filteredSections, len2, iter.ins == -1 ? -1 : iter.off == 0 ? iter.ins : 0);
+          iter.forward(len2);
+          pos += len2;
         }
       }
     return {
@@ -26861,13 +27109,13 @@ var ChangeSet = class _ChangeSet extends ChangeDesc {
   toJSON() {
     let parts = [];
     for (let i = 0; i < this.sections.length; i += 2) {
-      let len3 = this.sections[i], ins = this.sections[i + 1];
+      let len2 = this.sections[i], ins = this.sections[i + 1];
       if (ins < 0)
-        parts.push(len3);
+        parts.push(len2);
       else if (ins == 0)
-        parts.push([len3]);
+        parts.push([len2]);
       else
-        parts.push([len3].concat(this.inserted[i >> 1].toJSON()));
+        parts.push([len2].concat(this.inserted[i >> 1].toJSON()));
     }
     return parts;
   }
@@ -26957,19 +27205,19 @@ var ChangeSet = class _ChangeSet extends ChangeDesc {
     return new _ChangeSet(sections, inserted);
   }
 };
-function addSection(sections, len3, ins, forceJoin = false) {
-  if (len3 == 0 && ins <= 0)
+function addSection(sections, len2, ins, forceJoin = false) {
+  if (len2 == 0 && ins <= 0)
     return;
   let last = sections.length - 2;
   if (last >= 0 && ins <= 0 && ins == sections[last + 1])
-    sections[last] += len3;
-  else if (last >= 0 && len3 == 0 && sections[last] == 0)
+    sections[last] += len2;
+  else if (last >= 0 && len2 == 0 && sections[last] == 0)
     sections[last + 1] += ins;
   else if (forceJoin) {
-    sections[last] += len3;
+    sections[last] += len2;
     sections[last + 1] += ins;
   } else
-    sections.push(len3, ins);
+    sections.push(len2, ins);
 }
 function addInsert(values2, sections, value) {
   if (value.length == 0)
@@ -26986,20 +27234,20 @@ function addInsert(values2, sections, value) {
 function iterChanges(desc, f2, individual) {
   let inserted = desc.inserted;
   for (let posA = 0, posB = 0, i = 0; i < desc.sections.length; ) {
-    let len3 = desc.sections[i++], ins = desc.sections[i++];
+    let len2 = desc.sections[i++], ins = desc.sections[i++];
     if (ins < 0) {
-      posA += len3;
-      posB += len3;
+      posA += len2;
+      posB += len2;
     } else {
       let endA = posA, endB = posB, text = Text.empty;
       for (; ; ) {
-        endA += len3;
+        endA += len2;
         endB += ins;
         if (ins && inserted)
           text = text.append(inserted[i - 2 >> 1]);
         if (individual || i == desc.sections.length || desc.sections[i + 1] < 0)
           break;
-        len3 = desc.sections[i++];
+        len2 = desc.sections[i++];
         ins = desc.sections[i++];
       }
       f2(posA, endA, posB, endB, text);
@@ -27015,15 +27263,15 @@ function mapSet(setA, setB, before, mkSet = false) {
     if (a3.done && b2.len || b2.done && a3.len) {
       throw new Error("Mismatched change set lengths");
     } else if (a3.ins == -1 && b2.ins == -1) {
-      let len3 = Math.min(a3.len, b2.len);
-      addSection(sections, len3, -1);
-      a3.forward(len3);
-      b2.forward(len3);
+      let len2 = Math.min(a3.len, b2.len);
+      addSection(sections, len2, -1);
+      a3.forward(len2);
+      b2.forward(len2);
     } else if (b2.ins >= 0 && (a3.ins < 0 || inserted == a3.i || a3.off == 0 && (b2.len < a3.len || b2.len == a3.len && !before))) {
-      let len3 = b2.len;
+      let len2 = b2.len;
       addSection(sections, b2.ins, -1);
-      while (len3) {
-        let piece = Math.min(a3.len, len3);
+      while (len2) {
+        let piece = Math.min(a3.len, len2);
         if (a3.ins >= 0 && inserted < a3.i && a3.len <= piece) {
           addSection(sections, 0, a3.ins);
           if (insert2)
@@ -27031,15 +27279,15 @@ function mapSet(setA, setB, before, mkSet = false) {
           inserted = a3.i;
         }
         a3.forward(piece);
-        len3 -= piece;
+        len2 -= piece;
       }
       b2.next();
     } else if (a3.ins >= 0) {
-      let len3 = 0, left2 = a3.len;
+      let len2 = 0, left2 = a3.len;
       while (left2) {
         if (b2.ins == -1) {
           let piece = Math.min(left2, b2.len);
-          len3 += piece;
+          len2 += piece;
           left2 -= piece;
           b2.forward(piece);
         } else if (b2.ins == 0 && b2.len < left2) {
@@ -27049,7 +27297,7 @@ function mapSet(setA, setB, before, mkSet = false) {
           break;
         }
       }
-      addSection(sections, len3, inserted < a3.i ? a3.ins : 0);
+      addSection(sections, len2, inserted < a3.i ? a3.ins : 0);
       if (insert2 && inserted < a3.i)
         addInsert(insert2, sections, a3.text);
       inserted = a3.i;
@@ -27079,24 +27327,24 @@ function composeSets(setA, setB, mkSet = false) {
     } else if (a3.done || b2.done) {
       throw new Error("Mismatched change set lengths");
     } else {
-      let len3 = Math.min(a3.len2, b2.len), sectionLen = sections.length;
+      let len2 = Math.min(a3.len2, b2.len), sectionLen = sections.length;
       if (a3.ins == -1) {
         let insB = b2.ins == -1 ? -1 : b2.off ? 0 : b2.ins;
-        addSection(sections, len3, insB, open);
+        addSection(sections, len2, insB, open);
         if (insert2 && insB)
           addInsert(insert2, sections, b2.text);
       } else if (b2.ins == -1) {
-        addSection(sections, a3.off ? 0 : a3.len, len3, open);
+        addSection(sections, a3.off ? 0 : a3.len, len2, open);
         if (insert2)
-          addInsert(insert2, sections, a3.textBit(len3));
+          addInsert(insert2, sections, a3.textBit(len2));
       } else {
         addSection(sections, a3.off ? 0 : a3.len, b2.off ? 0 : b2.ins, open);
         if (insert2 && !b2.off)
           addInsert(insert2, sections, b2.text);
       }
-      open = (a3.ins > len3 || b2.ins >= 0 && b2.len > len3) && (open || sections.length > sectionLen);
-      a3.forward2(len3);
-      b2.forward(len3);
+      open = (a3.ins > len2 || b2.ins >= 0 && b2.len > len2) && (open || sections.length > sectionLen);
+      a3.forward2(len2);
+      b2.forward(len2);
     }
   }
 }
@@ -27127,26 +27375,26 @@ var SectionIter = class {
     let { inserted } = this.set, index3 = this.i - 2 >> 1;
     return index3 >= inserted.length ? Text.empty : inserted[index3];
   }
-  textBit(len3) {
+  textBit(len2) {
     let { inserted } = this.set, index3 = this.i - 2 >> 1;
-    return index3 >= inserted.length && !len3 ? Text.empty : inserted[index3].slice(this.off, len3 == null ? void 0 : this.off + len3);
+    return index3 >= inserted.length && !len2 ? Text.empty : inserted[index3].slice(this.off, len2 == null ? void 0 : this.off + len2);
   }
-  forward(len3) {
-    if (len3 == this.len)
+  forward(len2) {
+    if (len2 == this.len)
       this.next();
     else {
-      this.len -= len3;
-      this.off += len3;
+      this.len -= len2;
+      this.off += len2;
     }
   }
-  forward2(len3) {
+  forward2(len2) {
     if (this.ins == -1)
-      this.forward(len3);
-    else if (len3 == this.ins)
+      this.forward(len2);
+    else if (len2 == this.ins)
       this.next();
     else {
-      this.ins -= len3;
-      this.off += len3;
+      this.ins -= len2;
+      this.off += len2;
     }
   }
 };
@@ -31891,11 +32139,11 @@ var TextStream = class {
     this.textOff = 0;
     this.cursor = doc2.iter();
   }
-  skip(len3) {
-    if (this.textOff + len3 <= this.text.length) {
-      this.textOff += len3;
+  skip(len2) {
+    if (this.textOff + len2 <= this.text.length) {
+      this.textOff += len2;
     } else {
-      this.skipCount += len3 - (this.text.length - this.textOff);
+      this.skipCount += len2 - (this.text.length - this.textOff);
       this.text = "";
       this.textOff = 0;
     }
@@ -31907,8 +32155,8 @@ var TextStream = class {
       if (done)
         throw new Error("Ran out of text content when drawing inline views");
       this.text = value;
-      let len3 = this.textOff = Math.min(maxLen, value.length);
-      return lineBreak ? null : value.slice(0, len3);
+      let len2 = this.textOff = Math.min(maxLen, value.length);
+      return lineBreak ? null : value.slice(0, len2);
     }
     let end = Math.min(this.text.length, this.textOff + maxLen);
     let chars = this.text.slice(this.textOff, end);
@@ -32039,10 +32287,10 @@ var TileUpdate = class {
       let next = i < changes.length ? changes[i++] : null;
       let skipA = next ? next.fromA : this.old.root.length;
       if (skipA > posA) {
-        let len3 = skipA - posA;
-        this.preserve(len3, !i, !next);
+        let len2 = skipA - posA;
+        this.preserve(len2, !i, !next);
         posA = skipA;
-        posB += len3;
+        posB += len2;
       }
       if (!next)
         break;
@@ -34934,7 +35182,7 @@ var HeightMapGap = class _HeightMapGap extends HeightMap {
       if (measured.from > offset)
         nodes.push(new _HeightMapGap(measured.from - offset - 1).updateHeight(oracle, offset));
       while (pos <= end && measured.more) {
-        let len3 = oracle.doc.lineAt(pos).length;
+        let len2 = oracle.doc.lineAt(pos).length;
         if (nodes.length)
           nodes.push(null);
         let height = measured.heights[measured.index++], above = 0;
@@ -34946,10 +35194,10 @@ var HeightMapGap = class _HeightMapGap extends HeightMap {
           singleHeight = height;
         else if (Math.abs(height - singleHeight) >= Epsilon)
           singleHeight = -2;
-        let line = new HeightMapText(len3, height, above);
+        let line = new HeightMapText(len2, height, above);
         line.outdated = false;
         nodes.push(line);
-        pos += len3 + 1;
+        pos += len2 + 1;
       }
       if (pos <= end)
         nodes.push(null, new _HeightMapGap(end - pos).updateHeight(oracle, pos));
@@ -35126,11 +35374,11 @@ var NodeBuilder2 = class _NodeBuilder {
       let breaks = deco.widget ? deco.widget.lineBreaks : 0;
       if (height < 0)
         height = this.oracle.lineHeight;
-      let len3 = to - from;
+      let len2 = to - from;
       if (deco.block) {
-        this.addBlock(new HeightMapBlock(len3, height, deco));
-      } else if (len3 || breaks || height >= relevantWidgetHeight) {
-        this.addLineDeco(height, breaks, len3);
+        this.addBlock(new HeightMapBlock(len2, height, deco));
+      } else if (len2 || breaks || height >= relevantWidgetHeight) {
+        this.addLineDeco(height, breaks, len2);
       }
     } else if (to > from) {
       this.span(from, to);
@@ -40702,15 +40950,15 @@ var TreeBuffer = class _TreeBuffer {
   */
   slice(startI, endI, from) {
     let b2 = this.buffer;
-    let copy = new Uint16Array(endI - startI), len3 = 0;
+    let copy = new Uint16Array(endI - startI), len2 = 0;
     for (let i = startI, j2 = 0; i < endI; ) {
       copy[j2++] = b2[i++];
       copy[j2++] = b2[i++] - from;
       let to = copy[j2++] = b2[i++] - from;
       copy[j2++] = b2[i++] - startI;
-      len3 = Math.max(len3, to);
+      len2 = Math.max(len2, to);
     }
-    return new _TreeBuffer(copy, len3, this.set);
+    return new _TreeBuffer(copy, len2, this.set);
   }
 };
 function checkSide(side, pos, from, to) {
@@ -44657,8 +44905,8 @@ var segmenter = typeof Intl != "undefined" && Intl.Segmenter ? /* @__PURE__ */ n
 function interestingNode(state, node, bracketProp) {
   if (node.type.prop(bracketProp))
     return true;
-  let len3 = node.to - node.from;
-  return len3 && (len3 > 2 || /[^\s,.;:]/.test(state.sliceDoc(node.from, node.to))) || node.firstChild;
+  let len2 = node.to - node.from;
+  return len2 && (len2 > 2 || /[^\s,.;:]/.test(state.sliceDoc(node.from, node.to))) || node.firstChild;
 }
 function moveBySyntax(state, start, forward) {
   let pos = syntaxTree(state).resolveInner(start.head);
@@ -45657,8 +45905,8 @@ var matchHighlighter = /* @__PURE__ */ ViewPlugin.fromClass(class {
       check = state.charCategorizer(range.head);
       query = state.sliceDoc(word.from, word.to);
     } else {
-      let len3 = range.to - range.from;
-      if (len3 < conf.minSelectionLength || len3 > 200)
+      let len2 = range.to - range.from;
+      if (len2 < conf.minSelectionLength || len2 > 200)
         return Decoration.none;
       if (conf.wholeWords) {
         query = state.sliceDoc(range.from, range.to);
@@ -46580,27 +46828,27 @@ var FuzzyMatcher = class {
     let direct = word.indexOf(this.pattern);
     if (direct == 0)
       return this.ret(word.length == this.pattern.length ? 0 : -100, [0, this.pattern.length]);
-    let len3 = chars.length, anyTo = 0;
+    let len2 = chars.length, anyTo = 0;
     if (direct < 0) {
-      for (let i = 0, e = Math.min(word.length, 200); i < e && anyTo < len3; ) {
+      for (let i = 0, e = Math.min(word.length, 200); i < e && anyTo < len2; ) {
         let next = codePointAt2(word, i);
         if (next == chars[anyTo] || next == folded[anyTo])
           any[anyTo++] = i;
         i += codePointSize2(next);
       }
-      if (anyTo < len3)
+      if (anyTo < len2)
         return null;
     }
     let preciseTo = 0;
     let byWordTo = 0, byWordFolded = false;
     let adjacentTo = 0, adjacentStart = -1, adjacentEnd = -1;
     let hasLower = /[a-z]/.test(word), wordAdjacent = true;
-    for (let i = 0, e = Math.min(word.length, 200), prevType = 0; i < e && byWordTo < len3; ) {
+    for (let i = 0, e = Math.min(word.length, 200), prevType = 0; i < e && byWordTo < len2; ) {
       let next = codePointAt2(word, i);
       if (direct < 0) {
-        if (preciseTo < len3 && next == chars[preciseTo])
+        if (preciseTo < len2 && next == chars[preciseTo])
           precise[preciseTo++] = i;
-        if (adjacentTo < len3) {
+        if (adjacentTo < len2) {
           if (next == chars[adjacentTo] || next == folded[adjacentTo]) {
             if (adjacentTo == 0)
               adjacentStart = i;
@@ -46621,15 +46869,15 @@ var FuzzyMatcher = class {
       prevType = type;
       i += codePointSize2(next);
     }
-    if (byWordTo == len3 && byWord[0] == 0 && wordAdjacent)
+    if (byWordTo == len2 && byWord[0] == 0 && wordAdjacent)
       return this.result(-100 + (byWordFolded ? -200 : 0), byWord, word);
-    if (adjacentTo == len3 && adjacentStart == 0)
+    if (adjacentTo == len2 && adjacentStart == 0)
       return this.ret(-200 - word.length + (adjacentEnd == word.length ? 0 : -100), [0, adjacentEnd]);
     if (direct > -1)
       return this.ret(-700 - word.length, [direct, direct + this.pattern.length]);
-    if (adjacentTo == len3)
+    if (adjacentTo == len2)
       return this.ret(-200 + -700 - word.length, [adjacentStart, adjacentEnd]);
-    if (byWordTo == len3)
+    if (byWordTo == len2)
       return this.result(-100 + (byWordFolded ? -200 : 0) + -700 + (wordAdjacent ? 0 : -1100), byWord, word);
     return chars.length == 2 ? null : this.result((any[0] ? -700 : 0) + -200 + -1100, any, word);
   }

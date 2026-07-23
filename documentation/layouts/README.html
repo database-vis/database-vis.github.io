@@ -38,57 +38,62 @@
       
         
         
-        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        <li><a href="../features/README.html">Overview</a></li>
         
       
         
         
-        <li><a href="../features/README.html#channels">Channels</a></li>
+        <li><a href="../features/plots.html">Plots and marks</a></li>
         
       
         
         
-        <li><a href="../features/README.html#scales">Scales</a></li>
+        <li><a href="../features/channels.html">Channels</a></li>
         
       
         
         
-        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        <li><a href="../features/scales.html">Scales</a></li>
         
       
         
         
-        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        <li><a href="../features/layouts.html">Layouts</a></li>
         
       
         
         
-        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        <li><a href="../features/frame.html">The frame</a></li>
         
       
         
         
-        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        <li><a href="../features/join-paths.html">Join paths</a></li>
         
       
         
         
-        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        <li><a href="../features/facets.html">Facets and nesting</a></li>
         
       
         
         
-        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        <li><a href="../features/via.html">Via</a></li>
         
       
         
         
-        <li><a href="../features/README.html#data">Data</a></li>
+        <li><a href="../features/subplots.html">Subplots</a></li>
         
       
         
         
-        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        <li><a href="../features/data.html">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/debugging.html">Debugging</a></li>
         
       
       </ul>
@@ -376,7 +381,7 @@ already-solved geometry: <code>fitText</code> reads each label's box (<code>w</c
 solve a font size; <code>grid-stack</code> packs items into the content box. Refine outputs are pixels —
 they never pass back through the affine.</li>
 <li><strong>Resolver</strong> — <em>a matched SET → one value or shape per row.</em> Not a placement stage at all: a
-resolver rides a <a href="../features/README.html#cross-mark-and-cross-table-references"><code>via()</code></a> join,
+resolver rides a <a href="../features/via.html"><code>via()</code></a> join,
 reducing each anchor row's set of matched referent rows to a single derived quantity. Scalar
 resolvers mint a number (<code>mode</code>, <code>range</code>, <code>extentUnion</code>); <strong>geometry</strong> resolvers mint a shape —
 <code>convex</code>/<code>bbox</code> reduce a borrowed point set to a polygon the <a href="hull.html"><code>hull</code></a> mark draws.
@@ -391,7 +396,7 @@ browser, and the plot bounding-box op). Listed here for the complete picture, no
 <p>Three of the four close the frame's fixpoint: <strong>produce</strong> emits normalized coordinates → the
 affine places them → <strong>refine</strong> nudges the placed pixels → <strong>measure</strong> reads the result back into
 size demands that re-solve the arrangement, until it settles (see
-<a href="../architecture.html">Architecture</a> and <a href="../features/README.html#the-frame">The frame</a>). <strong>Resolver</strong>
+<a href="../architecture.html">Architecture</a> and <a href="../features/frame.html">The frame</a>). <strong>Resolver</strong>
 is orthogonal — a data reduction over a join, not a placement stage in that loop.</p>
 <h2 id="built-in-layouts">Built-in layouts</h2>
 <table>

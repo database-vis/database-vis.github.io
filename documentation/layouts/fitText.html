@@ -38,57 +38,62 @@
       
         
         
-        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        <li><a href="../features/README.html">Overview</a></li>
         
       
         
         
-        <li><a href="../features/README.html#channels">Channels</a></li>
+        <li><a href="../features/plots.html">Plots and marks</a></li>
         
       
         
         
-        <li><a href="../features/README.html#scales">Scales</a></li>
+        <li><a href="../features/channels.html">Channels</a></li>
         
       
         
         
-        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        <li><a href="../features/scales.html">Scales</a></li>
         
       
         
         
-        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        <li><a href="../features/layouts.html">Layouts</a></li>
         
       
         
         
-        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        <li><a href="../features/frame.html">The frame</a></li>
         
       
         
         
-        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        <li><a href="../features/join-paths.html">Join paths</a></li>
         
       
         
         
-        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        <li><a href="../features/facets.html">Facets and nesting</a></li>
         
       
         
         
-        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        <li><a href="../features/via.html">Via</a></li>
         
       
         
         
-        <li><a href="../features/README.html#data">Data</a></li>
+        <li><a href="../features/subplots.html">Subplots</a></li>
         
       
         
         
-        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        <li><a href="../features/data.html">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/debugging.html">Debugging</a></li>
         
       
       </ul>
@@ -376,7 +381,7 @@ const bars = v.bar(revenue, {
 });
 // Borrow each bar's SOLVED box; anchor/baseline center the label inside it.
 v.text(revenue, {
-  ...bars.via(eq(&quot;category&quot;, &quot;category&quot;)).pick({ x: &quot;x&quot;, y: &quot;y&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
+  ...bars.via(&quot;category&quot;).pick({ x: &quot;x&quot;, y: &quot;y&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
   ...fitText().pick(&quot;fontSize&quot;, &quot;rotate&quot;),
   text: field(&quot;category&quot;),
   anchor: &quot;middle&quot;, baseline: &quot;middle&quot;, fill: &quot;#fff&quot;,
@@ -513,7 +518,7 @@ const rects = v.rect(revenue, {
   fill: ordinal(&quot;category&quot;), stroke: &quot;#fff&quot;,
 });
 v.text(revenue, {
-  ...rects.via(eq(&quot;category&quot;, &quot;category&quot;)).pick({ x: &quot;x&quot;, y: &quot;y&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
+  ...rects.via(&quot;category&quot;).pick({ x: &quot;x&quot;, y: &quot;y&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
   ...fitText().pick(&quot;fontSize&quot;),
   text: field(&quot;category&quot;), anchor: &quot;middle&quot;, baseline: &quot;middle&quot;, fill: &quot;#333&quot;,
 });
@@ -523,7 +528,7 @@ return v;
 <h3 id="rotate-to-fit-a-tall-narrow-box">Rotate to fit a tall, narrow box</h3>
 <p>Rotation is on by default, so narrow tall boxes rotate automatically. Pick <code>rotate</code> too and apply it:</p>
 <pre data-lang="js"><code class="language-js">v.text(revenue, {
-  ...bars.via(eq(&quot;category&quot;, &quot;category&quot;), center).pick({ x: &quot;cx&quot;, y: &quot;cy&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
+  ...bars.via(&quot;category&quot;, center).pick({ x: &quot;cx&quot;, y: &quot;cy&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
   ...fitText().pick(&quot;fontSize&quot;, &quot;rotate&quot;),
   text: field(&quot;category&quot;), anchor: &quot;middle&quot;, baseline: &quot;middle&quot;, fill: &quot;#fff&quot;,
 });
@@ -532,7 +537,7 @@ return v;
 <h3 id="pin-horizontal">Pin horizontal</h3>
 <p>Turn rotation off when you never want sideways text:</p>
 <pre data-lang="js"><code class="language-js">v.text(revenue, {
-  ...bars.via(eq(&quot;category&quot;, &quot;category&quot;), center).pick({ x: &quot;cx&quot;, y: &quot;cy&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
+  ...bars.via(&quot;category&quot;, center).pick({ x: &quot;cx&quot;, y: &quot;cy&quot;, w: &quot;w&quot;, h: &quot;h&quot; }),
   ...fitText({ rotate: false }).pick(&quot;fontSize&quot;),
   text: field(&quot;category&quot;), anchor: &quot;middle&quot;, baseline: &quot;middle&quot;, fill: &quot;#fff&quot;,
 });
@@ -567,7 +572,7 @@ text: field(&quot;name&quot;),
 </code></pre>
 <h3 id="override-the-box-columns">Override the box columns</h3>
 <p>If the borrowed box columns are not named <code>w</code>/<code>h</code>, point <code>fitText</code> at them:</p>
-<pre data-lang="js"><code class="language-js">...someMark.via(eq(&quot;id&quot;, &quot;id&quot;)).pick({ x: &quot;cx&quot;, y: &quot;cy&quot;, w: &quot;boxW&quot;, h: &quot;boxH&quot; }),
+<pre data-lang="js"><code class="language-js">...someMark.via(&quot;id&quot;).pick({ x: &quot;cx&quot;, y: &quot;cy&quot;, w: &quot;boxW&quot;, h: &quot;boxH&quot; }),
 ...fitText({ w: &quot;boxW&quot;, h: &quot;boxH&quot; }).pick(&quot;fontSize&quot;),
 </code></pre>
 <h3 id="tighten-the-padding">Tighten the padding</h3>

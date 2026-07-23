@@ -38,57 +38,62 @@
       
         
         
-        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        <li><a href="../features/README.html">Overview</a></li>
         
       
         
         
-        <li><a href="../features/README.html#channels">Channels</a></li>
+        <li><a href="../features/plots.html">Plots and marks</a></li>
         
       
         
         
-        <li><a href="../features/README.html#scales">Scales</a></li>
+        <li><a href="../features/channels.html">Channels</a></li>
         
       
         
         
-        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        <li><a href="../features/scales.html">Scales</a></li>
         
       
         
         
-        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        <li><a href="../features/layouts.html">Layouts</a></li>
         
       
         
         
-        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        <li><a href="../features/frame.html">The frame</a></li>
         
       
         
         
-        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        <li><a href="../features/join-paths.html">Join paths</a></li>
         
       
         
         
-        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        <li><a href="../features/facets.html">Facets and nesting</a></li>
         
       
         
         
-        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        <li><a href="../features/via.html">Via</a></li>
         
       
         
         
-        <li><a href="../features/README.html#data">Data</a></li>
+        <li><a href="../features/subplots.html">Subplots</a></li>
         
       
         
         
-        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        <li><a href="../features/data.html">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/debugging.html">Debugging</a></li>
         
       
       </ul>
@@ -556,7 +561,7 @@ that keeps only within-panel edges.</p>
 db.declareFK({ fromTable: &quot;members&quot;, fromCols: [&quot;community&quot;], toTable: communities.name, toCols: [&quot;community&quot;] });
 const v = canvas(760, 360);
 const panel = v.rect(communities, { ...eqX(&quot;community&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: px(12), h: 330, fill: &quot;#f5f6fa&quot; });
-const np = panel.nest(&quot;members&quot;, { on: eq(&quot;community&quot;, &quot;community&quot;) }).dot({
+const np = panel.nest(&quot;members&quot;, { on: &quot;community&quot; }).dot({
   ...force(&quot;follows&quot;).pick(&quot;x&quot;, &quot;y&quot;), r: 6, fill: ordinal(&quot;community&quot;),
 });
 const src = np.via(eq(&quot;follows.src&quot;, &quot;members.id&quot;));

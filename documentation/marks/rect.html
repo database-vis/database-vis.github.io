@@ -38,57 +38,62 @@
       
         
         
-        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        <li><a href="../features/README.html">Overview</a></li>
         
       
         
         
-        <li><a href="../features/README.html#channels">Channels</a></li>
+        <li><a href="../features/plots.html">Plots and marks</a></li>
         
       
         
         
-        <li><a href="../features/README.html#scales">Scales</a></li>
+        <li><a href="../features/channels.html">Channels</a></li>
         
       
         
         
-        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        <li><a href="../features/scales.html">Scales</a></li>
         
       
         
         
-        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        <li><a href="../features/layouts.html">Layouts</a></li>
         
       
         
         
-        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        <li><a href="../features/frame.html">The frame</a></li>
         
       
         
         
-        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        <li><a href="../features/join-paths.html">Join paths</a></li>
         
       
         
         
-        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        <li><a href="../features/facets.html">Facets and nesting</a></li>
         
       
         
         
-        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        <li><a href="../features/via.html">Via</a></li>
         
       
         
         
-        <li><a href="../features/README.html#data">Data</a></li>
+        <li><a href="../features/subplots.html">Subplots</a></li>
         
       
         
         
-        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        <li><a href="../features/data.html">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/debugging.html">Debugging</a></li>
         
       
       </ul>
@@ -524,7 +529,7 @@ keyed layers as you like.</p>
 const v = canvas(760, 260);
 const cell = v.rect(species,
     { ...eqX(&quot;species&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: px(12), h: 236, fill: ordinal(&quot;species&quot;) })
-  .nest(&quot;penguins&quot;, { on: eq(&quot;species&quot;, &quot;species&quot;) });
+  .nest(&quot;penguins&quot;, { on: &quot;species&quot; });
 cell.dot({ x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), fill: &quot;#ffffff&quot; });
 return v;
 </code></pre>
@@ -535,7 +540,7 @@ const v = canvas(760, 260);
 v.rect(species, { ...eqX(&quot;species&quot;).pick(&quot;x&quot;, &quot;w&quot;), y: px(12), h: 236, fill: &quot;#f5f6fa&quot; })
  .dot(&quot;penguins&quot;,
    { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), fill: &quot;#4e79a7&quot; },
-   { on: eq(&quot;species&quot;, &quot;species&quot;) });
+   { on: &quot;species&quot; });
 return v;
 </code></pre>
 <p><strong>Free (per-panel) scales.</strong> <code>shared: false</code> trains a domain <em>per panel</em>, so each panel's axis spans
@@ -546,7 +551,7 @@ v.rect(species, { ...eqX(&quot;species&quot;).pick(&quot;x&quot;, &quot;w&quot;)
  .dot(&quot;penguins&quot;,
    { x: linear(&quot;bill_length_mm&quot;, { shared: false }),
      y: linear(&quot;body_mass_g&quot;,    { shared: false }), fill: &quot;#59a14f&quot; },
-   { on: eq(&quot;species&quot;, &quot;species&quot;) });
+   { on: &quot;species&quot; });
 return v;
 </code></pre>
 <p><strong>Treemap.</strong> The <code>treemap</code> layout solves <code>x,y,w,h</code> per row from a measure; the rect draws each tile.</p>

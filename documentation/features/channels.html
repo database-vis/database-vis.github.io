@@ -38,57 +38,62 @@
       
         
         
-        <li><a href="../features/README.html#plots-and-marks">Plots and marks</a></li>
+        <li><a href="../features/README.html">Overview</a></li>
         
       
         
         
-        <li><a href="../features/README.html#channels">Channels</a></li>
+        <li><a href="../features/plots.html">Plots and marks</a></li>
         
       
         
         
-        <li><a href="../features/README.html#scales">Scales</a></li>
+        <li class="active"><a href="../features/channels.html">Channels</a></li>
         
       
         
         
-        <li><a href="../features/README.html#layouts">Layouts</a></li>
+        <li><a href="../features/scales.html">Scales</a></li>
         
       
         
         
-        <li><a href="../features/README.html#the-frame">The frame</a></li>
+        <li><a href="../features/layouts.html">Layouts</a></li>
         
       
         
         
-        <li><a href="../features/README.html#join-paths">Join paths</a></li>
+        <li><a href="../features/frame.html">The frame</a></li>
         
       
         
         
-        <li><a href="../features/README.html#facets-and-nesting">Facets and nesting</a></li>
+        <li><a href="../features/join-paths.html">Join paths</a></li>
         
       
         
         
-        <li><a href="../features/README.html#cross-mark-and-cross-table-references">Via</a></li>
+        <li><a href="../features/facets.html">Facets and nesting</a></li>
         
       
         
         
-        <li><a href="../features/README.html#subplots">Subplots</a></li>
+        <li><a href="../features/via.html">Via</a></li>
         
       
         
         
-        <li><a href="../features/README.html#data">Data</a></li>
+        <li><a href="../features/subplots.html">Subplots</a></li>
         
       
         
         
-        <li><a href="../features/README.html#debugging">Debugging</a></li>
+        <li><a href="../features/data.html">Data</a></li>
+        
+      
+        
+        
+        <li><a href="../features/debugging.html">Debugging</a></li>
         
       
       </ul>
@@ -569,7 +574,7 @@ v.rect(stacks, {
 return v;
 </code></pre>
 <h2 id="via-borrowed-values">Via: borrowed values</h2>
-<p><code>via()</code> borrows values across a relational <a href="README.html#join-paths">join path</a>. The <strong>referent</strong>
+<p><code>via()</code> borrows values across a relational <a href="join-paths.html">join path</a>. The <strong>referent</strong>
 decides the space: a <strong>plot</strong> referent borrows <em>solved</em> channels → <strong>pixels</strong> (never re-placed);
 a <strong>table</strong> referent borrows <em>raw</em> columns → <strong>data</strong> (free to feed a scale). A join that can
 match several rows per mark declares a <strong>resolution</strong> (<code>{ resolve: &quot;avg&quot; }</code>, a positional form,
@@ -581,7 +586,7 @@ const species = db.table(&quot;penguins&quot;).groupby([&quot;species&quot;], {}
 const v = canvas(640, 360);
 const dots = v.dot(&quot;penguins&quot;, { x: linear(&quot;bill_length_mm&quot;), y: linear(&quot;body_mass_g&quot;), fill: ordinal(&quot;species&quot;), fillOpacity: 0.5 });
 v.text(species, {
-  ...dots.via(eq(&quot;species&quot;, &quot;species&quot;), { resolve: &quot;avg&quot; }).pick({ x: &quot;x&quot;, y: &quot;y&quot; }),
+  ...dots.via(&quot;species&quot;, { resolve: &quot;avg&quot; }).pick({ x: &quot;x&quot;, y: &quot;y&quot; }),
   text: field(&quot;species&quot;), fontSize: 12, fill: &quot;#333&quot;, anchor: &quot;middle&quot;,
 });
 return v;
